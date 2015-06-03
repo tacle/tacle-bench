@@ -8,4 +8,4 @@ See also: http://tacle.knossosnet.gr/activities/taclebench
 Getting Started
 ===============
 
-TODO: add notes
+TODO: add notes how to compile
