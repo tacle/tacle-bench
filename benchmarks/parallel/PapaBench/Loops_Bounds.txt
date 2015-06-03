@@ -1,0 +1,78 @@
+Fly_By_wire
+----------------------------------------------------
+adc_fbw.c
+---------
+function adc_init 
+	Loop for : 8 iterations
+
+
+servo.c
+-------
+function servo_init
+	Loop for : 10 iterations
+function servo_transmit
+	Loop for : 10 iterations
+
+
+uart.c
+------
+function uart_print_string
+	Loop while used once in the main function, its iterations number is estimated to 100.
+
+main.c
+------
+function to_autopilot_from_last_radio
+	Loop for : 9 iterations
+
+-----------------------------------------------------------------
+Autopilot
+-----------------------------------------------------------------
+adc.c
+-----
+function adc_init
+	Loop for : 8 iterations
+
+estimator.c
+-----------
+function estimator_update_ir_estim
+	(NORM_RAD_ANGLE)
+				while 1		while 2
+		case 1	0			0
+		case 2	0			1
+		case 3	1			0
+	(NORM_RAD_ANGLE)
+				while 1		while 2
+		case 1	0			0
+		case 2	0			1
+		case 3	1			0
+
+mainloop.c
+----------
+function main
+	the first while Loop has at most 31 iterations
+
+nav.c
+-----
+
+function nav_home
+	(Macro NormCourse)
+				while 1		while 2
+		case 1	0			0
+		case 2	0			1-2
+		case 3	1-2			0
+
+function auto_nav
+	(Macro Goto3D / CircleXY / NormCourse)
+				while 1		while 2
+		case 1	0			0
+		case 2	0			1
+		case 3	1			0
+
+pid.c
+-----
+function course_pid_run
+	(macro NORM_RAD_ANGLE)
+				while 1		while 2
+		case 1	0			0
+		case 2	0			1
+		case 3	1			0

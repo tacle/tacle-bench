@@ -1,0 +1,68 @@
+PapaBench for the WCET computation
+==================================
+
+The Paparazzi Real-Time Application
+-----------------------------------
+
+PapaBench was extracted from an actual embedded real-time system, called Paparazzi, which drives an UAV (Unmanned Aerial Vehicle). To stay closer to the embedded running environment (for example, to preserve the memory mapping), we have kept the code organization almost unchanged compared to the original project.
+
+There are two programs, called fbw (for Fly By Wire) and autopilot, each running on its own processor with its own local separated memory space and its own input / output peripherals. The communication between both processors is performed thanks to a Serial Peripheral Interconnect link with no straight effect on the memory space of each other.
+
+Both programs have the same overall code structure. First, the initialization of the program is performed using classical non-real-time code. Then, the main control loop starts and runs uninterrupted until the shutdown of the system. This loop is in charge of calling tasks according to their time constraints (mainly their execution frequency) and according to some externals events.
+
+To prove the real-time behaviour of the system, we have to measure the Worst-Case Execution Time of each task and to check that the sum of the different tasks WCETs fits in the control loop period. In the Paparazzi implementation, both applications have a main loop period of about 30 ms.
+
+
+
+Papabench: 19 tasks = 19 functions = 19 WCETs
+---------------------------------------------
+
+As presented in the previous section, PapaBench is built around two programs representing an actual real-time system running on two different processors. Each program implements an infinite control loop that calls the tasks performing the UAV drive.
+
+Consequently, the running time of the "main" functions of each Papabench program cannot be computed. However, Papabench is still useful for WCET experimentation considering the execution time of the tasks called from the control loop.
+
+In Papabench, the entry point of a task is a C function which is called from the control loop. In turn, each task function may develop its own program call tree to achieve its work. Usually, WCET analysis is applied on a whole program. With Papabench, WCET analysis must be made on the functions which are the 13 tasks of the application.
+
+The tables below shows the list of tasks and their matching C function entry point.
+
+    * FBW
+
+Identifier  C Entry Point Function 	     Description
+T1 	        check_failsafe_task 	     Checks if the system must switch to Failsafe mode
+T2          check_mega128_values_task 	 Receives MCU0 values
+T3 	        send_data_to_autopilot_task  Send information to MCU0
+T4 	        servo_transmit               Transmits the Servos\u2019 commands
+T5 	        test_ppm_task                Decodes the Radio-Command orders
+
+    * Autopilot
+
+Identifier 	C Entry Point Function 	Description
+T5 	        altitude_control_task 	Controls the airframe altitude Control
+T6 	        climb_control_task 	    Controls the airframe Climb
+T7 	        link_fbw_send 	        Sends the flight commands to MCU1
+T8 	        navigation_task 	    Computes the next position of the airframe
+T9 	        radio_control_task 	    Manages the Radio orders
+T10         receive_gps_data_task 	Decodes the GPS Signals
+T11         reporting_task 	        Reports the flight information to the ground station
+T12         stabilisation_task 	    Ensure the airframe Stabilization
+
+In addition, both applications uses several interruption routines listed in the following tables.
+
+    * FBW
+
+Identifier 	C Entry Point Function 	Description
+I1 	        __vector_5 	            Radio interrupt
+I2 	        __vector_6 	            Servo interrupt
+I3 	        __vector_10 	        SPI interrupt
+
+    * Autopilot
+
+Identifier 	C Entry Point Function 	     Description
+I4 	        __vector_5 	                 Modem interrupt
+I5 	        __vector_12	                 SPI interrupt
+I6 	        __vector_17                  SPI interrupt
+I7 	        __vector_30                  GPS interrupt
+
+One may also consider calculating the WCET of these routines.
+
+For more details on the Papabench benchmark, please refer to PapaBench : A Free Real-Time Benchmark. In: 6th Workshop on Worst-Case Execution Time Analysis, Dresden, 04/07/2006.

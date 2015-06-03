@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core:AadlSpec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://core" xmlns:property="http://property">
+  <packageSpec name="Data_Types">
+    <aadlPublic>
+      <dataType name="Integer">
+        <properties>
+          <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Source_Data_Size]">
+            <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Size_Units]/unitLiteral[@name=Bits]" valueString="8" value="8" base="10"/>
+          </propertyAssociation>
+        </properties>
+      </dataType>
+      <dataType name="Boolean">
+        <properties>
+          <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Source_Data_Size]">
+            <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Size_Units]/unitLiteral[@name=Bits]" valueString="8" value="8" base="10"/>
+          </propertyAssociation>
+        </properties>
+      </dataType>
+      <dataType name="Integer_16">
+        <properties>
+          <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Source_Data_Size]">
+            <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Size_Units]/unitLiteral[@name=Bits]" valueString="16" value="16" base="10"/>
+          </propertyAssociation>
+        </properties>
+      </dataType>
+      <dataType name="Float">
+        <properties>
+          <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Source_Data_Size]">
+            <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Size_Units]/unitLiteral[@name=Bits]" valueString="32" value="32" base="10"/>
+          </propertyAssociation>
+        </properties>
+      </dataType>
+      <subprogramType name="Get_Integer">
+        <features>
+          <parameter name="Result" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+        </features>
+      </subprogramType>
+      <subprogramType name="Set_Integer">
+        <features>
+          <parameter name="Int" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+        </features>
+      </subprogramType>
+      <subprogramType name="Get_Integer16">
+        <features>
+          <parameter name="Result" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+        </features>
+      </subprogramType>
+      <subprogramType name="Set_Integer16">
+        <features>
+          <parameter name="Int" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+        </features>
+      </subprogramType>
+      <dataType name="Lat_Long">
+        <comment>-- le type Lat_long est une structure de donnees pour stocker les </comment>
+        <comment>-- longitudes et latitudes</comment>
+        <features>
+          <subprogram name="Get_Degs" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_Degs" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_Mins" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_Mins" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_Secs" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_Secs" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+        </features>
+      </dataType>
+      <dataImpl name="Lat_Long.Generic" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Lat_Long]">
+        <subcomponents>
+          <dataSubcomponent name="Degs" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="Mins" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="Secs" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+        </subcomponents>
+      </dataImpl>
+      <dataType name="Position">
+        <comment>-- The Position type specifies a position</comment>
+      </dataType>
+      <dataImpl name="Position.simple" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Position]">
+        <comment>-- This data type represents the position</comment>
+        <subcomponents>
+          <dataSubcomponent name="Latitude" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Lat_Long.Generic]"/>
+          <dataSubcomponent name="Longitude" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Lat_Long.Generic]"/>
+        </subcomponents>
+      </dataImpl>
+      <dataImpl name="Position.GPS" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Position]" extend="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.simple]">
+        <comment>-- The data type that represents GPS sensor data</comment>
+        <subcomponents>
+          <dataSubcomponent name="Altitude" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="Cap" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+        </subcomponents>
+      </dataImpl>
+      <dataType name="Stream_Element"/>
+      <dataImpl name="Stream_Element.Generic" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Stream_Element]">
+        <properties>
+          <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Source_Data_Size]">
+            <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Size_Units]/unitLiteral[@name=Bits]" valueString="8" value="8" base="10"/>
+          </propertyAssociation>
+        </properties>
+      </dataImpl>
+      <dataType name="Tab"/>
+      <dataType name="Tableau" extend="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Tab]">
+        <features>
+          <subprogram name="Get_Data0" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data0" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data1" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data1" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data2" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data2" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data3" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data3" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data4" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data4" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data5" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data5" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data6" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data6" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data7" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data7" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Data8" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Data8" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+        </features>
+      </dataType>
+      <dataImpl name="Tableau.Generic" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Tableau]">
+        <comment>--etc selon le parametre RADIO_CTL_NB = 9 du fichier link_autopilot.h</comment>
+        <comment>--Valeur de RADIO_CTL_NB se trouve dans radio.h</comment>
+        <comment>--qui est egale a PPM_NB_OF_PULSE de ppm.h</comment>
+        <subcomponents>
+          <dataSubcomponent name="data_0" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_1" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_2" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_3" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_4" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_5" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_6" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_7" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="data_8" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+        </subcomponents>
+      </dataImpl>
+      <dataType name="TabServos" extend="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Tab]">
+        <features>
+          <subprogram name="Get_MotorL" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_MotorL" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_MotorR" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_MotorR" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_AileronL" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_AileronL" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_AileronR" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_AileronR" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Rudder" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Rudder" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+          <subprogram name="Get_Elevator" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer16]"/>
+          <subprogram name="Set_Elevator" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer16]"/>
+        </features>
+      </dataType>
+      <dataImpl name="TabServos.Impl" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=TabServos]">
+        <subcomponents>
+          <dataSubcomponent name="MotorL" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="MotorR" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="AileronL" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="AileronR" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="Rudder" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+          <dataSubcomponent name="Elevator" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer_16]"/>
+        </subcomponents>
+      </dataImpl>
+      <dataType name="inter_mcu_msg">
+        <features>
+          <subprogram name="Set_Ppm" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_Ppm" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_Status" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_Status" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_NbErr" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_NbErr" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+          <subprogram name="Set_Vsupply" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Set_Integer]"/>
+          <subprogram name="Get_Vsupply" subprogramClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/subprogramType[@name=Get_Integer]"/>
+        </features>
+      </dataType>
+      <dataImpl name="Inter_mcu_msg.Generic" compType="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=inter_mcu_msg]">
+        <subcomponents>
+          <dataSubcomponent name="channels" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]"/>
+          <dataSubcomponent name="ppm_cpt" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="satus" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="nb_err" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+          <dataSubcomponent name="vsupply" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+        </subcomponents>
+      </dataImpl>
+    </aadlPublic>
+  </packageSpec>
+</core:AadlSpec>

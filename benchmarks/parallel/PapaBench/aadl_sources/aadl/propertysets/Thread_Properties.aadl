@@ -1,0 +1,10 @@
+property set Thread_Properties is
+
+Non_Preemptive : constant aadlinteger =>0;
+System_Preemption : constant aadlinteger =>1;
+Time_Sharing_Preemption : constant aadlinteger => 2;
+
+Preemption : enumeration (Non_Preemptive,System_Preemption,Time_Sharing_Preemption)
+	applies to (thread);
+Entrypoints: list of Compute_Entrypoint applies to (thread);
+end Thread_Properties;

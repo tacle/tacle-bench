@@ -1,0 +1,816 @@
+Archive member included because of file (symbol)
+
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+                              class.o (__adddf3)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+                              class.o (__muldf3)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+                              class.o (__fixunsdfsi)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+                              class.o (__truncdfsf2)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+                              class.o (__addsf3)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+                              class.o (__mulsf3)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+                              class.o (__gtsf2)
+c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+                              health.o (memcpy)
+
+Allocating common symbols
+Common symbol       size              file
+
+event_queue         0x118             telem.o
+science_data        0x63b4            telem.o
+s_w_reset           0x4               hw_if.o
+ADC_result          0xa               measure.o
+write_checksum      0x1               tc_hand.o
+failed_data_address
+                    0x2               hw_if.o
+telemetry_data      0x84              telem.o
+reference_checksum  0x1               hw_if.o
+memory_mode         0x4               hw_if.o
+telemetry_end_pointer
+                    0x4               telem.o
+free_slot_index     0x4               telem.o
+TC_state            0x4               tc_hand.o
+address_MSB         0x1               tc_hand.o
+read_memory_checksum
+                    0x1               telem.o
+confirm_hit_result  0x1               measure.o
+address_LSB         0x1               tc_hand.o
+code_checksum       0x1               health.o
+failed_code_address
+                    0x2               hw_if.o
+telemetry_pointer   0x4               telem.o
+event_queue_length  0x4               telem.o
+test_level          0x4               measure.o
+memory_transfer_buffer
+                    0x20              tc_hand.o
+previous_TC         0x4               tc_hand.o
+internal_time       0x4               health.o
+TC_look_up          0x80              tc_hand.o
+EA                  0x1               harness.o
+max_events          0x4               telem.o
+test_channel        0x1               measure.o
+forbidden_area      0x100             hw_if.o
+memory_type         0x4               tc_hand.o
+code_not_patched    0x1               hw_if.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+MEM_ROM_VECTORS  0x00000000         0x00000040
+MEM_ROM          0x00000040         0x0007ffc0
+MEM_RAM          0x40000000         0x00008000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a
+LOAD c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libnosys.a
+                0x40007ffc                __ASYST_STACK_TOP = 0x40007ffc
+                0x00000000                __ASYST_HEAP_SIZE = 0x0
+
+.vectors        0x00000000       0x20
+ *(.vectors)
+ .vectors       0x00000000       0x20 intvec.o
+
+.text           0x00000040     0x8778
+                0x00000040                __ASYST_TEXT_START = .
+ *(.text)
+ .text          0x00000040        0x4 intvec.o
+ .text          0x00000044       0x44 crt0.o
+                0x00000044                __asyst_start
+ .text          0x00000088      0x198 crt_asyst.o
+                0x0000015c                __asyst_memcpy_byte
+                0x00000088                __asyst_memset_byte
+                0x000000a8                __asyst_memset_uint
+                0x00000180                __asyst_memcpy
+                0x000001cc                __asyst_main
+                0x00000134                __asyst_memcpy_uint
+                0x000000c8                __asyst_memset
+ .text          0x00000220      0x17c cpulib.o
+                0x00000244                cpulib_go_fast
+                0x00000314                cpulib_blink_led
+                0x000002c4                cpulib_flash_led
+                0x00000220                cpulib_init_cpu
+                0x0000029c                cpulib_set_led
+ .text          0x0000039c      0x368 class.o
+                0x000004a0                CalculateQualityNumber
+                0x00000414                Init_SU_Settings
+                0x0000039c                RoughLogarithm
+                0x00000458                InitClassification
+                0x000003c0                GetQualityTerm
+                0x00000584                ClassifyEvent
+ .text          0x00000704        0x0 classtab.o
+ .text          0x00000704       0x40 debie.o
+                0x00000704                main
+ .text          0x00000744     0x3518 harness.o
+                0x00000ab0                Set_AD_Delay
+                0x00000ec4                Enable_Hit_Trigger
+                0x0000076c                DisableInterrupt
+                0x000008f8                Read_TC_MSB
+                0x00002b84                StartSystem
+                0x00000c8c                End_Of_ADC
+                0x00000780                WaitInterrupt
+                0x00000eec                Hit_Trigger_Flag
+                0x00000770                SetInterruptMask
+                0x00000784                SendTaskMail
+                0x00000ad4                Random_AD_Delay
+                0x00001b34                Monitor_Health
+                0x000011b4                Clear_Errors
+                0x00000a6c                Next
+                0x00000d98                Set_DAC_Output
+                0x00000b7c                Start_Conversion
+                0x00000b78                Update_ADC_Channel_Reg
+                0x00000f70                Set_Test_Pulse_Level
+                0x00000d68                Report_End_Of_ADC_Count
+                0x00000744                WaitInterval
+                0x00000928                Write_TM_MSB
+                0x00000918                Write_TM_LSB
+                0x000008f0                TestMemSeq
+                0x00000a90                Next_Rand
+                0x000008e0                TestMemBits
+                0x00000948                Clear_TC_Timer_Overflow_Flag
+                0x00000764                AttachInterrupt
+                0x00000750                ShortDelay
+                0x000007f4                WaitMail
+                0x00001088                Reboot
+                0x00000f3c                Rise_Time_Counter
+                0x000008e8                TestMemData
+                0x00000efc                Event_Flag
+                0x00000e0c                Random_Event
+                0x00000f80                V_Down
+                0x000009b8                Set_AD_Nominal
+                0x00000d7c                Get_Result
+                0x00000768                EnableInterrupt
+                0x00003c34                CreateTask
+                0x00000f1c                Get_LSB1_Counter
+                0x00000fa8                Call_Patch
+                0x0000087c                Check_Current
+                0x000007d4                isr_send_message
+                0x00000d9c                Sim_Self_Test_Trigger
+                0x000013b0                TM_Tests
+                0x00000c78                Report_Start_Conversion_Count
+                0x0000095c                Set_TC_Timer_Overflow_Flag
+                0x00003c1c                Short_Value
+                0x00000908                Read_TC_LSB
+                0x00000fa4                SignalPeakDetectorReset
+                0x00000fac                Check_Type_Size
+                0x00000970                Set_AD_Unlimited
+                0x00000f0c                Get_MSB_Counter
+                0x00000f6c                Set_SU_Self_Test_Ch
+                0x00001084                Report_Event_Histo
+                0x00001b70                SU_Self_Test_Tests
+                0x00000f2c                Get_LSB2_Counter
+                0x00000ed8                Disable_Hit_Trigger
+                0x00000f4c                Trigger_Source_0
+                0x00000938                TC_Timer_Overflow_Flag
+                0x00002748                Monitoring_Task_Tests
+                0x00000778                ResetInterruptMask
+                0x00000748                WaitTimeout
+                0x0000074c                SetTimeSlice
+                0x00000f5c                Trigger_Source_1
+ .text          0x00003c5c     0x1444 health.o
+                0x00003da4                UpdateTime
+                0x00004bb8                HighVoltageCurrent
+                0x00004040                Set_SU_TriggerLevels
+                0x00004b38                InitHealthMonitoring
+                0x00003d60                Set_SU_Error
+                0x000040a4                RestoreSettings
+                0x00004900                MeasureTemperature
+                0x00004640                Read_AD_Channel
+                0x000048fc                DPU_SelfTest
+                0x00004e38                HandleHealthMonitoring
+                0x00003c5c                Clear_RTX_Errors
+                0x00003dd4                VoltageFailure
+                0x00003c88                SetSoftwareError
+                0x00003dbc                UpdatePeriodCounter
+                0x000043ac                SelfTestChannel
+                0x00003d44                SetErrorStatus
+                0x00004854                Monitor_DPU_Voltage
+                0x00004e9c                Boot
+                0x00004c34                SelfTest_SU
+                0x00003cd0                ClearModeStatusError
+                0x0000473c                MeasureVoltage
+                0x00004c7c                Monitor
+                0x00003ce8                SetMode
+                0x00004138                DelayAwhile
+                0x00003ca0                ClearSoftwareError
+                0x0000456c                TemperatureFailure
+                0x00003ef8                ExceedsLimit
+                0x00003cb4                SetModeStatusError
+                0x00004e88                HealthMonitoringTask
+                0x000046fc                DAC_SelfTest
+                0x000045a4                Convert_AD
+                0x00003d08                GetMode
+                0x00004ab0                InitSystem
+                0x00003d1c                Clear_SU_Error
+                0x00003f20                Monitor_SU_Voltage
+                0x000049cc                CalculateChecksum
+                0x000041b8                ExecuteChannelTest
+                0x00003d90                ClearErrorStatus
+                0x00004b50                LowVoltageCurrent
+ .text          0x000050a0      0x844 hw_if.o
+                0x000051f8                EnableAnalogSwitch
+                0x000052ac                GetVoltageStatus
+                0x00005288                ResetPeakDetector
+                0x000053c8                Switch_SU_Off
+                0x000051cc                DisableAnalogSwitch
+                0x000056ac                CopyProgramCode
+                0x00005864                Init_DPU
+                0x00005260                SelectStartSwitchLevel
+                0x000050b8                SignalMemoryErrors
+                0x00005814                InitCode_RAM
+                0x000050a0                GetResetClass
+                0x000055bc                PatchCode
+                0x00005148                SetMemoryConfiguration
+                0x000056f8                Check_RAM
+                0x000052d0                SetTestPulseLevel
+                0x000057b8                InitData_RAM
+                0x0000516c                SelectSelfTestChannel
+                0x00005220                SelectTriggerSwitchLevel
+                0x0000557c                ReadDelayCounters
+                0x000052d8                SetTriggerLevel
+                0x0000556c                ReadRiseTimeCounter
+                0x00005498                Switch_SU_On
+                0x00005168                ResetDelayCounters
+                0x00005158                GetMemoryConfiguration
+ .text          0x000058e4      0x594 measure.o
+                0x00005c6c                HandleHitTrigger
+                0x00005aac                HandleAcquisition
+                0x00005c58                AcquisitionTask
+                0x000059f8                SetSensorUnitOff
+                0x000058e4                InitAcquisitionTask
+                0x00005e64                HitTriggerTask
+                0x00005a5c                Start_SU_SwitchingOn
+                0x000059a4                Update_SU_State
+                0x00005e50                InitHitTriggerTask
+                0x0000590c                Switch_SU_State
+                0x00005988                ReadSensorUnit
+ .text          0x00005e78       0x34 target.o
+                0x00005ea4                Get_Code_Byte
+                0x00005e8c                Get_Data_Byte
+                0x00005e78                Data_Pointer
+                0x00005e88                Set_Data_Byte
+ .text          0x00005eac     0x13f8 tc_hand.o
+                0x00006068                Set_TC_Error
+                0x0000681c                ExecuteCommand
+                0x00006184                UpdateTarget
+                0x00006ee8                TelecommandExecutionTask
+                0x00006c14                MemoryPatch
+                0x00006080                WriteMemory
+                0x00006da8                HandleTelecommand
+                0x00006028                PatchExecCommandOk
+                0x00005eac                InitTC_LookUp
+                0x00006efc                TC_InterruptService
+                0x0000612c                InitTelecommandTask
+ .text          0x000072a4      0x46c telem.o
+                0x000075f4                TM_InterruptService
+                0x00007404                RecordEvent
+                0x000072f0                FindMinQualityRecord
+                0x000072a4                GetFreeRecord
+                0x000072d4                GetElapsedTime
+                0x0000738c                IncrementCounters
+                0x000075e0                ResetEventQueueLength
+                0x000074fc                ClearEvents
+ .text          0x00007710      0x400 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+                0x00007aa4                __floatdidf
+                0x00007a24                __floatsidf
+                0x000079fc                __aeabi_ui2d
+                0x00007710                __aeabi_drsub
+                0x00007a50                __extendsfdf2
+                0x0000771c                __adddf3
+                0x000079fc                __floatunsidf
+                0x0000771c                __aeabi_dadd
+                0x00007a90                __aeabi_ul2d
+                0x00007718                __aeabi_dsub
+                0x00007a90                __floatundidf
+                0x00007a24                __aeabi_i2d
+                0x00007aa4                __aeabi_l2d
+                0x00007a50                __aeabi_f2d
+                0x00007718                __subdf3
+ .text          0x00007b10      0x470 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+                0x00007d7c                __aeabi_ddiv
+                0x00007b10                __aeabi_dmul
+                0x00007d7c                __divdf3
+                0x00007b10                __muldf3
+ .text          0x00007f80       0x54 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+                0x00007f80                __fixunsdfsi
+                0x00007f80                __aeabi_d2uiz
+ .text          0x00007fd4       0xa0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+                0x00007fd4                __aeabi_d2f
+                0x00007fd4                __truncdfsf2
+ .text          0x00008074      0x2ac c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+                0x00008080                __aeabi_fadd
+                0x0000807c                __subsf3
+                0x00008244                __aeabi_i2f
+                0x0000807c                __aeabi_fsub
+                0x00008274                __floatdisf
+                0x00008244                __floatsisf
+                0x00008264                __floatundisf
+                0x0000823c                __aeabi_ui2f
+                0x00008274                __aeabi_l2f
+                0x00008264                __aeabi_ul2f
+                0x00008074                __aeabi_frsub
+                0x0000823c                __floatunsisf
+                0x00008080                __addsf3
+ .text          0x00008320      0x2f8 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+                0x000084b8                __divsf3
+                0x000084b8                __aeabi_fdiv
+                0x00008320                __mulsf3
+                0x00008320                __aeabi_fmul
+ .text          0x00008618       0xf8 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+                0x000086fc                __aeabi_fcmpgt
+                0x00008620                __lesf2
+                0x00008628                __nesf2
+                0x000086e8                __aeabi_fcmpge
+                0x00008618                __gtsf2
+                0x000086d4                __aeabi_fcmple
+                0x00008628                __eqsf2
+                0x00008628                __cmpsf2
+                0x00008620                __ltsf2
+                0x00008698                __aeabi_cfcmple
+                0x00008618                __gesf2
+                0x000086ac                __aeabi_fcmpeq
+                0x00008688                __aeabi_cfrcmple
+                0x000086c0                __aeabi_fcmplt
+                0x00008698                __aeabi_cfcmpeq
+ .text          0x00008710       0xa8 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+                0x00008710                memcpy
+ *(.text.*)
+ *(.glue_7t)
+ .glue_7t       0x000087b8        0x0 intvec.o
+ .glue_7t       0x000087b8        0x0 crt0.o
+ .glue_7t       0x000087b8        0x0 crt_asyst.o
+ .glue_7t       0x000087b8        0x0 cpulib.o
+ .glue_7t       0x000087b8        0x0 class.o
+ .glue_7t       0x000087b8        0x0 classtab.o
+ .glue_7t       0x000087b8        0x0 debie.o
+ .glue_7t       0x000087b8        0x0 harness.o
+ .glue_7t       0x000087b8        0x0 health.o
+ .glue_7t       0x000087b8        0x0 hw_if.o
+ .glue_7t       0x000087b8        0x0 measure.o
+ .glue_7t       0x000087b8        0x0 target.o
+ .glue_7t       0x000087b8        0x0 tc_hand.o
+ .glue_7t       0x000087b8        0x0 telem.o
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .glue_7t       0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+ *(.glue_7)
+ .glue_7        0x000087b8        0x0 intvec.o
+ .glue_7        0x000087b8        0x0 crt0.o
+ .glue_7        0x000087b8        0x0 crt_asyst.o
+ .glue_7        0x000087b8        0x0 cpulib.o
+ .glue_7        0x000087b8        0x0 class.o
+ .glue_7        0x000087b8        0x0 classtab.o
+ .glue_7        0x000087b8        0x0 debie.o
+ .glue_7        0x000087b8        0x0 harness.o
+ .glue_7        0x000087b8        0x0 health.o
+ .glue_7        0x000087b8        0x0 hw_if.o
+ .glue_7        0x000087b8        0x0 measure.o
+ .glue_7        0x000087b8        0x0 target.o
+ .glue_7        0x000087b8        0x0 tc_hand.o
+ .glue_7        0x000087b8        0x0 telem.o
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .glue_7        0x000087b8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+ *(.init)
+ *(.fini)
+ *(.gnu.linkonce.t*)
+                0x000087b8                __ASYST_TEXT_END = .
+                0x000087b8                . = ALIGN (0x4)
+                0x000087b8                __ASYST_CTOR_START = .
+ *(.ctors)
+                0x000087b8                __ASYST_CTOR_END = .
+                0x000087b8                . = ALIGN (0x4)
+                0x000087b8                __ASYST_DTOR_START = .
+ *(.dtors)
+                0x000087b8                __ASYST_DTOR_END = .
+
+.vfp11_veneer   0x00000000        0x0
+ .vfp11_veneer  0x00000000        0x0 intvec.o
+ .vfp11_veneer  0x00000000        0x0 crt0.o
+ .vfp11_veneer  0x00000000        0x0 crt_asyst.o
+ .vfp11_veneer  0x00000000        0x0 cpulib.o
+ .vfp11_veneer  0x00000000        0x0 class.o
+ .vfp11_veneer  0x00000000        0x0 classtab.o
+ .vfp11_veneer  0x00000000        0x0 debie.o
+ .vfp11_veneer  0x00000000        0x0 harness.o
+ .vfp11_veneer  0x00000000        0x0 health.o
+ .vfp11_veneer  0x00000000        0x0 hw_if.o
+ .vfp11_veneer  0x00000000        0x0 measure.o
+ .vfp11_veneer  0x00000000        0x0 target.o
+ .vfp11_veneer  0x00000000        0x0 tc_hand.o
+ .vfp11_veneer  0x00000000        0x0 telem.o
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .vfp11_veneer  0x00000000        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+
+.rodata         0x000087b8      0x184
+                0x000087b8                . = ALIGN (0x4)
+ *(.rodata)
+ .rodata        0x000087b8      0x13f harness.o
+ *fill*         0x000088f7        0x1 00
+ .rodata        0x000088f8       0x24 health.o
+ .rodata        0x0000891c        0x1 hw_if.o
+                0x0000891c                checksum_nullifier
+ *(.rodata.*)
+ *fill*         0x0000891d        0x3 00
+ .rodata.str1.4
+                0x00008920       0x1c harness.o
+ *(.rdata)
+ *(.rdata.*)
+ *(.sdata2)
+ *(.sdata2.*)
+ *(.gnu.linkonce.r*)
+
+.data           0x40000000      0x1e8 load address 0x0000893c
+                0x40000000                . = ALIGN (0x4)
+                0x40000000                __ASYST_DATA_START = .
+                0x0000893c                __ASYST_DATA_LOAD = LOADADDR (.data)
+ *(.data)
+ .data          0x40000000        0x0 intvec.o
+ .data          0x40000000        0x0 crt0.o
+ .data          0x40000000        0x0 crt_asyst.o
+ .data          0x40000000        0x0 cpulib.o
+ .data          0x40000000        0x0 class.o
+ .data          0x40000000      0x100 classtab.o
+                0x40000000                event_class
+ .data          0x40000100        0x0 debie.o
+ .data          0x40000100       0xac harness.o
+                0x40000100                switch_su_cmd
+ .data          0x400001ac       0x14 health.o
+                0x400001ac                temp_meas_count
+                0x400001bc                health_mon_round
+                0x400001b4                checksum_count
+                0x400001b0                voltage_meas_count
+                0x400001b8                ADC_channel_register
+ .data          0x400001c0        0x4 hw_if.o
+                0x400001c0                analog_switch_bit
+ .data          0x400001c4       0x10 measure.o
+                0x400001cc                hit_task
+                0x400001c4                hit_budget
+                0x400001c8                hit_budget_left
+                0x400001d0                acq_task
+ .data          0x400001d4        0x0 target.o
+ .data          0x400001d4       0x14 tc_hand.o
+                0x400001d4                SU_config
+                0x400001e4                TC_task
+ .data          0x400001e8        0x0 telem.o
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .data          0x400001e8        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+ *(.data.*)
+ *(.sdata)
+ *(.sdata.*)
+ *(.gnu.linkonce.d*)
+                0x400001e8                __ASYST_DATA_END = .
+
+.bss            0x400001e8     0x6854
+                0x400001e8                . = ALIGN (0x4)
+                0x400001e8                __ASYST_BSS_START = .
+ *(.bss)
+ .bss           0x400001e8        0x0 intvec.o
+ .bss           0x400001e8        0x0 crt0.o
+ .bss           0x400001e8        0x0 crt_asyst.o
+ .bss           0x400001e8        0x4 cpulib.o
+ .bss           0x400001ec        0x0 class.o
+ .bss           0x400001ec        0x0 classtab.o
+ .bss           0x400001ec        0x0 debie.o
+ .bss           0x400001ec       0xb4 harness.o
+ .bss           0x400002a0        0x1 health.o
+                0x400002a0                self_test_flag
+ .bss           0x400002a1        0x2 hw_if.o
+                0x400002a2                SU_self_test_channel
+                0x400002a1                SU_ctrl_register
+ *fill*         0x400002a3        0x1 00
+ .bss           0x400002a4       0x34 measure.o
+                0x400002a8                SU_state
+                0x400002a4                self_test_SU_number
+ .bss           0x400002d8        0x0 target.o
+ .bss           0x400002d8       0x18 tc_hand.o
+                0x400002dc                memory_buffer_index
+                0x400002d8                TC_timeout
+ .bss           0x400002f0        0x0 telem.o
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .bss           0x400002f0        0x0 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+ *(.bss.*)
+ *(.sbss)
+ *(.sbss.*)
+ *(COMMON)
+ COMMON         0x400002f0        0x1 harness.o
+                0x400002f0                EA
+ *fill*         0x400002f1        0x3 00
+ COMMON         0x400002f4        0x8 health.o
+                0x400002f4                code_checksum
+                0x400002f8                internal_time
+ COMMON         0x400002fc      0x10f hw_if.o
+                0x400002fc                s_w_reset
+                0x40000300                failed_data_address
+                0x40000302                reference_checksum
+                0x40000304                memory_mode
+                0x40000308                failed_code_address
+                0x4000030a                forbidden_area
+                0x4000040a                code_not_patched
+ *fill*         0x4000040b        0x1 00
+ COMMON         0x4000040c       0x11 measure.o
+                0x4000040c                ADC_result
+                0x40000416                confirm_hit_result
+                0x40000418                test_level
+                0x4000041c                test_channel
+ *fill*         0x4000041d        0x3 00
+ COMMON         0x40000420       0xb4 tc_hand.o
+                0x40000420                write_checksum
+                0x40000424                TC_state
+                0x40000428                address_MSB
+                0x40000429                address_LSB
+                0x4000042a                memory_transfer_buffer
+                0x4000044c                previous_TC
+                0x40000450                TC_look_up
+                0x400004d0                memory_type
+ COMMON         0x400004d4     0x6568 telem.o
+                0x400004d4                event_queue
+                0x400005ec                science_data
+                0x400069a0                telemetry_data
+                0x40006a24                telemetry_end_pointer
+                0x40006a28                free_slot_index
+                0x40006a2c                read_memory_checksum
+                0x40006a30                telemetry_pointer
+                0x40006a34                event_queue_length
+                0x40006a38                max_events
+ *(.gnu.linkonce.b*)
+                0x40006a3c                __ASYST_BSS_END = .
+                0x40006a3c                end = ALIGN (0x4)
+
+.heap           0x40006a3c        0x0
+                0x40006a3c                . = ALIGN (0x4)
+                0x40006a3c                __ASYST_HEAP_START = .
+                0x40006a3c                . = (. + __ASYST_HEAP_SIZE)
+LOAD intvec.o
+LOAD crt0.o
+LOAD crt_asyst.o
+LOAD cpulib.o
+LOAD class.o
+LOAD classtab.o
+LOAD debie.o
+LOAD harness.o
+LOAD health.o
+LOAD hw_if.o
+LOAD measure.o
+LOAD target.o
+LOAD tc_hand.o
+LOAD telem.o
+START GROUP
+LOAD c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a
+LOAD c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a
+END GROUP
+OUTPUT(debie1.exe elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x10
+ .ARM.attributes
+                0x00000000       0x10 intvec.o
+ .ARM.attributes
+                0x00000010       0x10 crt0.o
+ .ARM.attributes
+                0x00000020       0x10 crt_asyst.o
+ .ARM.attributes
+                0x00000030       0x10 cpulib.o
+ .ARM.attributes
+                0x00000040       0x10 class.o
+ .ARM.attributes
+                0x00000050       0x10 classtab.o
+ .ARM.attributes
+                0x00000060       0x10 debie.o
+ .ARM.attributes
+                0x00000070       0x10 harness.o
+ .ARM.attributes
+                0x00000080       0x10 health.o
+ .ARM.attributes
+                0x00000090       0x10 hw_if.o
+ .ARM.attributes
+                0x000000a0       0x10 measure.o
+ .ARM.attributes
+                0x000000b0       0x10 target.o
+ .ARM.attributes
+                0x000000c0       0x10 tc_hand.o
+ .ARM.attributes
+                0x000000d0       0x10 telem.o
+ .ARM.attributes
+                0x000000e0       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubdf3.o)
+ .ARM.attributes
+                0x000000f0       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivdf3.o)
+ .ARM.attributes
+                0x00000100       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_fixunsdfsi.o)
+ .ARM.attributes
+                0x00000110       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_truncdfsf2.o)
+ .ARM.attributes
+                0x00000120       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_addsubsf3.o)
+ .ARM.attributes
+                0x00000130       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_muldivsf3.o)
+ .ARM.attributes
+                0x00000140       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2\libgcc.a(_cmpsf2.o)
+ .ARM.attributes
+                0x00000150       0x10 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)
+
+.debug_line     0x00000000     0x1b8f
+ .debug_line    0x00000000       0x6f intvec.o
+ .debug_line    0x0000006f       0x66 crt0.o
+ .debug_line    0x000000d5       0x97 crt_asyst.o
+ .debug_line    0x0000016c       0x8a cpulib.o
+ .debug_line    0x000001f6      0x110 class.o
+ .debug_line    0x00000306       0x31 classtab.o
+ .debug_line    0x00000337       0x67 debie.o
+ .debug_line    0x0000039e      0x8dc harness.o
+ .debug_line    0x00000c7a      0x4fd health.o
+ .debug_line    0x00001177      0x24c hw_if.o
+ .debug_line    0x000013c3      0x1dc measure.o
+ .debug_line    0x0000159f       0x4d target.o
+ .debug_line    0x000015ec      0x460 tc_hand.o
+ .debug_line    0x00001a4c      0x143 telem.o
+
+.debug_info     0x00000000     0x6005
+ .debug_info    0x00000000       0x9b intvec.o
+ .debug_info    0x0000009b       0x9d crt0.o
+ .debug_info    0x00000138      0x2e4 crt_asyst.o
+ .debug_info    0x0000041c       0xd1 cpulib.o
+ .debug_info    0x000004ed      0x6d2 class.o
+ .debug_info    0x00000bbf       0x91 classtab.o
+ .debug_info    0x00000c50       0x94 debie.o
+ .debug_info    0x00000ce4     0x1886 harness.o
+ .debug_info    0x0000256a      0xfdd health.o
+ .debug_info    0x00003547      0xb5c hw_if.o
+ .debug_info    0x000040a3      0x9d5 measure.o
+ .debug_info    0x00004a78      0x147 target.o
+ .debug_info    0x00004bbf      0xc19 tc_hand.o
+ .debug_info    0x000057d8      0x82d telem.o
+
+.debug_abbrev   0x00000000     0x11b9
+ .debug_abbrev  0x00000000       0x12 intvec.o
+ .debug_abbrev  0x00000012       0x14 crt0.o
+ .debug_abbrev  0x00000026      0x130 crt_asyst.o
+ .debug_abbrev  0x00000156       0x90 cpulib.o
+ .debug_abbrev  0x000001e6      0x16d class.o
+ .debug_abbrev  0x00000353       0x56 classtab.o
+ .debug_abbrev  0x000003a9       0x5b debie.o
+ .debug_abbrev  0x00000404      0x361 harness.o
+ .debug_abbrev  0x00000765      0x1ee health.o
+ .debug_abbrev  0x00000953      0x222 hw_if.o
+ .debug_abbrev  0x00000b75      0x1ea measure.o
+ .debug_abbrev  0x00000d5f       0xc7 target.o
+ .debug_abbrev  0x00000e26      0x1bd tc_hand.o
+ .debug_abbrev  0x00000fe3      0x1d6 telem.o
+
+.debug_aranges  0x00000000      0x1a8
+ .debug_aranges
+                0x00000000       0x28 intvec.o
+ .debug_aranges
+                0x00000028       0x20 crt0.o
+ .debug_aranges
+                0x00000048       0x20 crt_asyst.o
+ .debug_aranges
+                0x00000068       0x20 cpulib.o
+ .debug_aranges
+                0x00000088       0x20 class.o
+ .debug_aranges
+                0x000000a8       0x20 debie.o
+ .debug_aranges
+                0x000000c8       0x20 harness.o
+ .debug_aranges
+                0x000000e8       0x20 health.o
+ .debug_aranges
+                0x00000108       0x20 hw_if.o
+ .debug_aranges
+                0x00000128       0x20 measure.o
+ .debug_aranges
+                0x00000148       0x20 target.o
+ .debug_aranges
+                0x00000168       0x20 tc_hand.o
+ .debug_aranges
+                0x00000188       0x20 telem.o
+
+.debug_ranges   0x00000000       0x58
+ .debug_ranges  0x00000000       0x20 intvec.o
+ .debug_ranges  0x00000020       0x38 harness.o
+
+.debug_frame    0x00000000     0x1198
+ .debug_frame   0x00000000       0x9c crt_asyst.o
+ .debug_frame   0x0000009c       0x70 cpulib.o
+ .debug_frame   0x0000010c       0x9c class.o
+ .debug_frame   0x000001a8       0x2c debie.o
+ .debug_frame   0x000001d4      0x680 harness.o
+ .debug_frame   0x00000854      0x3b8 health.o
+ .debug_frame   0x00000c0c      0x210 hw_if.o
+ .debug_frame   0x00000e1c      0x12c measure.o
+ .debug_frame   0x00000f48       0x58 target.o
+ .debug_frame   0x00000fa0      0x11c tc_hand.o
+ .debug_frame   0x000010bc       0xdc telem.o
+
+.debug_loc      0x00000000     0x2359
+ .debug_loc     0x00000000      0x1de crt_asyst.o
+ .debug_loc     0x000001de       0x3e cpulib.o
+ .debug_loc     0x0000021c      0x1be class.o
+ .debug_loc     0x000003da       0x1f debie.o
+ .debug_loc     0x000003f9      0xa0e harness.o
+ .debug_loc     0x00000e07      0x7ad health.o
+ .debug_loc     0x000015b4      0x510 hw_if.o
+ .debug_loc     0x00001ac4      0x278 measure.o
+ .debug_loc     0x00001d3c       0x6e target.o
+ .debug_loc     0x00001daa      0x3bc tc_hand.o
+ .debug_loc     0x00002166      0x1f3 telem.o
+
+.debug_pubnames
+                0x00000000     0x12e8
+ .debug_pubnames
+                0x00000000       0xa9 crt_asyst.o
+ .debug_pubnames
+                0x000000a9       0x76 cpulib.o
+ .debug_pubnames
+                0x0000011f       0x91 class.o
+ .debug_pubnames
+                0x000001b0       0x22 classtab.o
+ .debug_pubnames
+                0x000001d2       0x1b debie.o
+ .debug_pubnames
+                0x000001ed      0x525 harness.o
+ .debug_pubnames
+                0x00000712      0x3b6 health.o
+ .debug_pubnames
+                0x00000ac8      0x2f6 hw_if.o
+ .debug_pubnames
+                0x00000dbe      0x1a4 measure.o
+ .debug_pubnames
+                0x00000f62       0x59 target.o
+ .debug_pubnames
+                0x00000fbb      0x1be tc_hand.o
+ .debug_pubnames
+                0x00001179      0x16f telem.o
+
+.debug_str      0x00000000     0x21b1
+ .debug_str     0x00000000      0x1c4 crt_asyst.o
+                                0x1db (size before relaxing)
+ .debug_str     0x000001c4       0x88 cpulib.o
+                                 0xf9 (size before relaxing)
+ .debug_str     0x0000024c      0x611 class.o
+                                0x710 (size before relaxing)
+ .debug_str     0x0000085d       0x11 classtab.o
+                                 0xf3 (size before relaxing)
+ .debug_str     0x0000086e        0xe debie.o
+                                 0xe9 (size before relaxing)
+ .debug_str     0x0000087c      0xb1c harness.o
+                               0x1134 (size before relaxing)
+ .debug_str     0x00001398      0x59b health.o
+                                0xd8d (size before relaxing)
+ .debug_str     0x00001933      0x39f hw_if.o
+                                0x9f0 (size before relaxing)
+ .debug_str     0x00001cd2      0x15d measure.o
+                                0x948 (size before relaxing)
+ .debug_str     0x00001e2f       0x45 target.o
+                                0x150 (size before relaxing)
+ .debug_str     0x00001e74      0x253 tc_hand.o
+                                0xaff (size before relaxing)
+ .debug_str     0x000020c7       0xea telem.o
+                                0x825 (size before relaxing)
+
+.comment        0x00000000       0xea
+ .comment       0x00000000       0x12 crt_asyst.o
+ .comment       0x00000012       0x12 cpulib.o
+ .comment       0x00000024       0x12 class.o
+ .comment       0x00000036       0x12 classtab.o
+ .comment       0x00000048       0x12 debie.o
+ .comment       0x0000005a       0x12 harness.o
+ .comment       0x0000006c       0x12 health.o
+ .comment       0x0000007e       0x12 hw_if.o
+ .comment       0x00000090       0x12 measure.o
+ .comment       0x000000a2       0x12 target.o
+ .comment       0x000000b4       0x12 tc_hand.o
+ .comment       0x000000c6       0x12 telem.o
+ .comment       0x000000d8       0x12 c:/ifdev/2007/gcc/arm/bin/../lib/gcc/arm-elf/4.2.2/../../../../arm-elf/lib\libc.a(lib_a-memcpy.o)

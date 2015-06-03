@@ -1,0 +1,24 @@
+
+# Architecture selection
+#	Uncomment the line matching your architecture and your machine
+#	Targets marked -alone- does not embed the CRT0 and minimal libc
+#	and the matching .conf file may be tuned.
+
+#CONF=powerpc-elf-alone
+#CONF=powerpc-linux-gnu
+#CONF=arm-elf
+#CONF=arm-elf-alone
+CONF=tricore-alone
+
+# Tools
+CC		= @WCCBIN@
+LD		= @WCCBIN@ 
+SIZE	= $(ARCH)size
+OBJCOPY	= $(ARCH)objcopy
+OBJDUMP = $(ARCH)objdump -d
+
+
+# Other configuration
+USER_CFLAGS		= -O0 -I @abs_srcdir@/../../PapaBench/avr/include/avr
+USER_LDFLAGS	=
+

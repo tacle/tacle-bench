@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core:AadlSpec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://core" xmlns:property="http://property" name="paparazzi_Old Version">
+  <busType name="Device_Bus">
+    <comment>-- le projet paprazzi s'interesse a la realisation </comment>
+    <comment>-- d'un micro-drone autonome a bas cout.</comment>
+    <comment>-- le systeme embarque est constitue de</comment>
+    <comment>-- 1.recepteurs (HF(pour radio commande)</comment>
+    <comment>-- 2.capteurs infrarouge et GPS</comment>
+    <comment>-- 3.camera video</comment>
+    <comment>-- 4.modem</comment>
+    <comment>-- 5.emetteur</comment>
+    <comment>-- 6.deux microcontroleurs (MCU0, MCU1)</comment>
+    <comment>--voir le fichier listes des taches pour corriger ce fichier AADL</comment>
+    <comment>---------------------------------------------------------------</comment>
+    <comment>-- We model a bus that connects our devices to the processor</comment>
+  </busType>
+  <busImpl name="Device_Bus.MCU0" compType="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Device_Bus]"/>
+  <busImpl name="Device_Bus.MCU1" compType="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Device_Bus]"/>
+  <deviceType name="Compteur">
+    <features>
+      <dataPort name="Cde_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]"/>
+      <dataPort name="Data_Gaz_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Data_Elev_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Data_AilL_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Data_AilR_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU1]"/>
+    </features>
+  </deviceType>
+  <deviceType name="Servo">
+    <features>
+      <dataPort name="Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <busAccess name="Dev_bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU1]">
+        <comment>--Cde_Output : out event data port; -- new data type?</comment>
+      </busAccess>
+    </features>
+  </deviceType>
+  <deviceType name="Recepteur">
+    <features>
+      <dataPort name="RC_Data_Input">
+        <comment>--RC_Input : in event data port;</comment>
+        <comment>--RC_Output : out event data port;</comment>
+      </dataPort>
+      <eventPort name="RC_Evt_Input">
+        <comment>-- new data type?</comment>
+      </eventPort>
+      <dataPort name="Cdes_Output" direction="out">
+        <comment>-- -- -- -- -- -- -- -- -- new</comment>
+      </dataPort>
+      <eventPort name="Error_Evt_Output" direction="out">
+        <comment>-- new data type?</comment>
+      </eventPort>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU1]"/>
+    </features>
+  </deviceType>
+  <threadType name="Reception_Decodage">
+    <comment>--this thread gets the data from the Radio Commande (RC)</comment>
+    <comment>--il definit les interruptions provenant de la RC</comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Dispatch_Protocol]">
+        <propertyValue xsi:type="property:EnumValue" enumLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Supported_Dispatch_Protocols]/enumLiteral[@name=Periodic]"/>
+      </propertyAssociation>
+    </properties>
+    <features>
+      <dataPort name="Data_RC_Input"/>
+      <dataPort name="Data_Decoded_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>-- -- -- new data type?</comment>
+      </dataPort>
+    </features>
+  </threadType>
+  <threadImpl name="Reception_Decodage.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Reception_Decodage]">
+    <comment>--properties</comment>
+    <comment>--Period =></comment>
+  </threadImpl>
+  <threadType name="Pilotage_Servo_Cdes">
+    <comment>--this thread gets the flight parameters and transmit them to the Counter </comment>
+    <features>
+      <dataPort name="Data_Cp_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]"/>
+      <dataPort name="Param_Vol_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>--Cp :Compteur</comment>
+      </dataPort>
+    </features>
+  </threadType>
+  <threadImpl name="Pilotage_Servo_Cdes.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Pilotage_Servo_Cdes]">
+    <comment>--properties</comment>
+    <comment>--Period => ??????????????????</comment>
+  </threadImpl>
+  <threadType name="Receive_Send_Data_MCU0">
+    <comment>--this thread sends data to and receives data from MCU0</comment>
+    <features>
+      <dataPort name="MCU1_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]"/>
+      <eventDataPort name="MCU1_Send_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]"/>
+      <eventDataPort name="AP_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--updated</comment>
+      </eventDataPort>
+      <eventPort name="AP_Evt_Output" direction="out">
+        <comment>--updated</comment>
+      </eventPort>
+      <dataPort name="AP_Rec_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>--updated</comment>
+      </dataPort>
+    </features>
+  </threadType>
+  <threadImpl name="Receive_Send_Data_MCU0.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]">
+    <comment>--properties </comment>
+    <comment>--Period =></comment>
+  </threadImpl>
+  <processType name="RecepteurCde_PilotageServo">
+    <features>
+      <dataPort name="Radio_Cdes_Input"/>
+      <eventDataPort name="AP_Cdes_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]"/>
+      <eventPort name="Radio_Evt_Input">
+        <comment>--Autopilot Input --updated</comment>
+      </eventPort>
+      <eventDataPort name="Cdes_Vol_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--RC erreur</comment>
+        <comment>--AP_Evt_Input : in event port;</comment>
+      </eventDataPort>
+      <dataPort name="Cde_Serv_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>--updated --data transmission to MCU0</comment>
+      </dataPort>
+    </features>
+  </processType>
+  <processImpl name="RecepteurCde_PilotageServo.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]">
+    <connections>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Dec_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/dataPort[@name=Radio_Cdes_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Reception_Decodage]/features/dataPort[@name=Data_RC_Input]"/>
+      <eventDataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/eventDataPort[@name=AP_Data_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventDataPort[@name=AP_Cdes_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Pilot_Serv_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/dataPort[@name=AP_Rec_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Pilotage_Servo_Cdes]/features/dataPort[@name=Param_Vol_Input]">
+        <comment>--new --updated</comment>
+      </dataConnection>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=auto]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Pilot_Serv_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Pilotage_Servo_Cdes]/features/dataPort[@name=Data_Cp_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/dataPort[@name=Cde_Serv_Output]">
+        <comment>--new</comment>
+        <comment>--on annule ce lien car les parametres de la Radio commande</comment>
+        <comment>--doivent etre transmis a MCU0 pour obtenir en retour les </comment>
+        <comment>--parametres de vol</comment>
+        <comment>--data port Rec_Dec_Th.Data_Decoded_Output->Pilot_Serv_Th.Param_Vol_Input in modes(manual);</comment>
+      </dataConnection>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Dec_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Reception_Decodage]/features/dataPort[@name=Data_Decoded_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/dataPort[@name=MCU1_Data_Input]"/>
+      <eventDataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventDataPort[@name=Cdes_Vol_Output]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/eventDataPort[@name=MCU1_Send_Output]"/>
+    </connections>
+    <modes>
+      <comment>--updated</comment>
+      <mode name="manual" state="INITIAL"/>
+      <mode name="auto"/>
+      <mode name="failsafe"/>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=auto]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventPort[@name=Radio_Evt_Input]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]">
+        <comment>-- Transitions</comment>
+        <comment>-- Specify the transitions between modes, use the following syntax:</comment>
+        <comment>-- &lt;INITIAL_MODE> -[ &lt;EVENT> ]-> &lt;FINAL_MODE></comment>
+      </modeTransition>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=auto]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/eventPort[@name=AP_Evt_Output]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]"/>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=manual]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/modes/mode[@name=failsafe]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventPort[@name=Radio_Evt_Input] /aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU0]/features/eventPort[@name=AP_Evt_Output]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]"/>
+    </modes>
+    <subcomponents>
+      <threadSubcomponent name="Rec_Dec_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Reception_Decodage.Impl]"/>
+      <threadSubcomponent name="Rec_Send_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Receive_Send_Data_MCU0.Impl]"/>
+      <threadSubcomponent name="Pilot_Serv_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Pilotage_Servo_Cdes.Impl]"/>
+    </subcomponents>
+  </processImpl>
+  <processorType name="Proc_MCU1">
+    <features>
+      <busAccess name="Mem_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU1]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU1]"/>
+    </features>
+  </processorType>
+  <processorImpl name="Proc_MCU1.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU1]">
+    <comment>-- AADL processor = microprocessor + scheduler</comment>
+    <comment>--RMS (Rate Monotonic Scheduling) est un FPS </comment>
+    <comment>--(Fixed Priority Scheduling) </comment>
+    <comment>--chaque tache a une priorite fixe</comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Scheduling_Protocol]">
+        <propertyValue xsi:type="property:EnumValue" enumLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Supported_Scheduling_Protocols]/enumLiteral[@name=RMS]"/>
+      </propertyAssociation>
+    </properties>
+  </processorImpl>
+  <memoryType name="Ram_MCU1">
+    <comment>-- We model the RAM to bind our processes and threads</comment>
+    <features>
+      <busAccess name="Mem_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU1]"/>
+    </features>
+  </memoryType>
+  <busType name="Mem_Bus_MCU1">
+    <comment>-- We model a data bus that links processors and memories</comment>
+  </busType>
+  <systemType name="MCU1">
+    <comment>-- MCU1 est charge de la Reception des ordres de la radio-commande,</comment>
+    <comment>-- la communication avec MCU0 et le pilotage des servos commandes</comment>
+    <features>
+      <dataPort name="RC_Data_Input"/>
+      <eventPort name="RC_Evt_Input">
+        <comment>---------------new</comment>
+      </eventPort>
+      <eventDataPort name="AP_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--------new</comment>
+      </eventDataPort>
+      <eventDataPort name="D_MCU1_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--AP: autopilot --updated</comment>
+        <comment>--AP_Evt_Input : in event port;--Erreur Autopilot --updated</comment>
+        <comment>--RC_Evt_Output : out event port;--Erreur Radio Cde --updated</comment>
+      </eventDataPort>
+      <busAccess name="Bus_Con" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=SPI]">
+        <comment>-- updated</comment>
+      </busAccess>
+    </features>
+  </systemType>
+  <systemImpl name="MCU1.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]">
+    <properties>
+      <comment>--event port Recpt_dv.Error_Evt_Output->RC_Evt_Output;--updated</comment>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Actual_Processor_Binding]" appliesTo="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]">
+        <comment>--to bind the Proc_RcptCde_PilotServ to the memory Ram and the processor MCU1_P</comment>
+        <comment>--using predeclared properties</comment>
+        <propertyValue xsi:type="property:ReferenceValue" referenceElement="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processorSubcomponent[@name=MCU1_P]"/>
+      </propertyAssociation>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Actual_Memory_Binding]" appliesTo="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]">
+        <propertyValue xsi:type="property:ReferenceValue" referenceElement="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/memorySubcomponent[@name=Ram]"/>
+      </propertyAssociation>
+    </properties>
+    <connections>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processorSubcomponent[@name=MCU1_P]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU1]/features/busAccess[@name=Mem_Bus]">
+        <comment>--bus connections </comment>
+      </busAccessConnection>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processorSubcomponent[@name=MCU1_P]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU1]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/memorySubcomponent[@name=Ram]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/memoryType[@name=Ram_MCU1]/features/busAccess[@name=Mem_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Recpt_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_Gaz_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/busAccess[@name=Dev_bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_Elevator_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/busAccess[@name=Dev_bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_AileronL_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/busAccess[@name=Dev_bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_AileronR_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/busAccess[@name=Dev_bus]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Recpt_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/dataPort[@name=RC_Data_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]/features/dataPort[@name=RC_Data_Input]">
+        <comment>--port connections</comment>
+      </dataConnection>
+      <eventConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Recpt_dv]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]/features/eventPort[@name=RC_Evt_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/eventPort[@name=RC_Evt_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Recpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]/features/dataPort[@name=Cdes_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/dataPort[@name=Radio_Cdes_Input]"/>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventDataPort[@name=AP_Cdes_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/eventDataPort[@name=AP_Data_Input]"/>
+      <eventConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Recpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/eventPort[@name=Radio_Evt_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]/features/eventPort[@name=Error_Evt_Output]">
+        <comment>--updated</comment>
+      </eventConnection>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/processSubcomponent[@name=Proc_RcptCde_PilotServ]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=RecepteurCde_PilotageServo]/features/dataPort[@name=Cde_Serv_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/dataPort[@name=Cde_Input]">
+        <comment>--event port AP_Evt_Input->Proc_RcptCde_PilotServ.AP_Evt_Input;--updated</comment>
+      </dataConnection>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_Gaz_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/dataPort[@name=Data_Gaz_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/dataPort[@name=Data_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_Elevator_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/dataPort[@name=Data_Elev_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/dataPort[@name=Data_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_AileronL_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/dataPort[@name=Data_AilL_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/dataPort[@name=Data_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Cpt_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]/subcomponents/deviceSubcomponent[@name=Ser_AileronR_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]/features/dataPort[@name=Data_AilR_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]/features/dataPort[@name=Data_Input]"/>
+    </connections>
+    <subcomponents>
+      <processorSubcomponent name="MCU1_P" classifier="/aadlSpec[@name=paparazzi_Old Version]/processorImpl[@name=Proc_MCU1.Impl]">
+        <comment>--declare all the needed subcomponents to the system</comment>
+      </processorSubcomponent>
+      <memorySubcomponent name="Ram" classifier="/aadlSpec[@name=paparazzi_Old Version]/memoryType[@name=Ram_MCU1]"/>
+      <busSubcomponent name="Mem_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU1]"/>
+      <busSubcomponent name="Dev_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU1]"/>
+      <deviceSubcomponent name="Recpt_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Recepteur]"/>
+      <deviceSubcomponent name="Cpt_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compteur]"/>
+      <deviceSubcomponent name="Ser_Gaz_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]"/>
+      <deviceSubcomponent name="Ser_Elevator_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]"/>
+      <deviceSubcomponent name="Ser_AileronL_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]"/>
+      <deviceSubcomponent name="Ser_AileronR_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Servo]">
+        <comment>--Aileron Left</comment>
+      </deviceSubcomponent>
+      <processSubcomponent name="Proc_RcptCde_PilotServ" classifier="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=RecepteurCde_PilotageServo.Impl]">
+        <comment>--Aileron Right</comment>
+      </processSubcomponent>
+    </subcomponents>
+  </systemImpl>
+  <deviceType name="Pression">
+    <comment>-----------------------------------------------------------------</comment>
+    <comment>--determine la pression </comment>
+    <features>
+      <dataPort name="P_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <deviceType name="Tension">
+    <comment>--determine la tension</comment>
+    <features>
+      <comment>-- Alimentation</comment>
+      <dataPort name="T_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <deviceType name="Compas">
+    <features>
+      <dataPort name="Compas_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]">
+        <comment>-- new data type?</comment>
+      </busAccess>
+    </features>
+  </deviceType>
+  <deviceType name="Vitesse_Air">
+    <comment>--determine la vitesse de l'air</comment>
+    <features>
+      <dataPort name="V_Air_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <deviceType name="Camera_Video">
+    <comment>--filme le trajet de la mission</comment>
+    <features>
+      <dataPort name="Video_Output" direction="out"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]">
+        <comment>-- new data type?</comment>
+      </busAccess>
+    </features>
+  </deviceType>
+  <deviceType name="Emetteur">
+    <comment>-- transmet les donnees a la station sol</comment>
+    <features>
+      <dataPort name="Video_Input"/>
+      <eventDataPort name="Trans_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--data type?</comment>
+      </eventDataPort>
+      <dataPort name="Trans_Data_Output" direction="out">
+        <comment>--new --updated</comment>
+      </dataPort>
+      <dataPort name="Video_Output" direction="out"/>
+      <busAccess name="Modem_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Modem]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <deviceType name="GPS">
+    <comment>-- determine la position du drone </comment>
+    <features>
+      <eventPort name="Error_Output" direction="out"/>
+      <dataPort name="GPS_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Stream_Element.Generic]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <deviceType name="InfraRed">
+    <features>
+      <eventPort name="Error_Output" direction="out"/>
+      <dataPort name="IR_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Stream_Element.Generic]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </deviceType>
+  <busType name="Modem">
+    <comment>-- relie le systeme MCU0 a la station sol</comment>
+    <comment>--ce qui permit la transmission de donnes</comment>
+  </busType>
+  <threadType name="Data_Acquisition_GPS">
+    <comment>-- Ce thread recoit les sigaux GPS et les transforme </comment>
+    <comment>-- en donnees utilisables</comment>
+    <features>
+      <dataPort name="GPS_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Stream_Element.Generic]"/>
+      <dataPort name="GPS_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.GPS]"/>
+    </features>
+  </threadType>
+  <threadImpl name="Data_Acquisition_GPS.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]">
+    <comment>--4hz </comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Period]">
+        <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Time_Units]/unitLiteral[@name=Ms]" valueString="250" value="250" base="10"/>
+      </propertyAssociation>
+    </properties>
+  </threadImpl>
+  <threadType name="Simple_Mission">
+    <comment>-- recoit les parametres </comment>
+    <comment>-- des differents composants et prepare la mission</comment>
+    <comment>-- Att : Attitude</comment>
+    <comment>--RC_Data_Output : out data port Data_Types::Tableau.Generic;--utilisee en mode manual voir p.34 article</comment>
+    <features>
+      <dataPort name="GPS_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.GPS]">
+        <comment>--new</comment>
+        <comment>--RC_Data_Input : in data port Data_Types::Tableau.Generic;--RC : Radio Commande</comment>
+      </dataPort>
+      <dataPort name="T_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="P_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]">
+        <comment>-- T : Tension</comment>
+      </dataPort>
+      <dataPort name="Compas_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>-- P: Pression</comment>
+      </dataPort>
+      <dataPort name="V_Air_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Cap_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]">
+        <comment>--V : Vitesse</comment>
+      </dataPort>
+      <dataPort name="Alt_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+    </features>
+  </threadType>
+  <threadImpl name="Simple_Mission.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]">
+    <comment>--20 hertz;</comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Period]">
+        <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Time_Units]/unitLiteral[@name=Ms]" valueString="50" value="50" base="10"/>
+      </propertyAssociation>
+    </properties>
+  </threadImpl>
+  <threadType name="Altitude_Control">
+    <comment>--Controle l'altitude</comment>
+    <features>
+      <dataPort name="S_Miss_Alt_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="GPS_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.GPS]">
+        <comment>--Attitude transmie par Simple mission pour controle</comment>
+      </dataPort>
+      <dataPort name="S_Miss_Cap_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Cap_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Alt_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+    </features>
+  </threadType>
+  <threadType name="Climb_Control">
+    <comment>--controle la montee</comment>
+    <features>
+      <dataPort name="GPS_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.GPS]">
+        <comment>--new</comment>
+      </dataPort>
+      <dataPort name="Montee_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <dataPort name="Montee_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>-- data fournie par le thread Navigation en mode auto et par Control by RC en mode manuel</comment>
+      </dataPort>
+    </features>
+  </threadType>
+  <threadType name="Navigation">
+    <comment>--controle la navigation de l'avion</comment>
+    <comment>--fourni par le GPS</comment>
+    <features>
+      <dataPort name="AC_Cap_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="AC_Alt_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]">
+        <comment>--AC: Attitude_Control</comment>
+      </dataPort>
+      <dataPort name="Angle_Roulis_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>--AC: Attitude_Control</comment>
+      </dataPort>
+      <dataPort name="Angle_Tangage_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <dataPort name="Taux_Montee_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+    </features>
+  </threadType>
+  <threadImpl name="Navigation.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]">
+    <comment>--Ce thread est declenche a la frequence des informations delivrees </comment>
+    <comment>--par le GPS</comment>
+    <comment>--4 hertz; </comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Period]">
+        <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Time_Units]/unitLiteral[@name=Ms]" valueString="250" value="250" base="10"/>
+      </propertyAssociation>
+    </properties>
+  </threadImpl>
+  <threadType name="Stabilisation">
+    <comment>-- Controle la stabilisation et transmet les donnees a MCU1</comment>
+    <features>
+      <comment>-- + Data transmission to MCU1</comment>
+      <dataPort name="Roulis_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>--new</comment>
+      </dataPort>
+      <dataPort name="Tangage_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>--(fourni par la nav en mode auto et par Ctrl_By_RC en mode manuel)</comment>
+      </dataPort>
+      <dataPort name="CC_Montee_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]">
+        <comment>--fourni par la nav en mode auto et par Ctrl_By_RC en mode manuel)</comment>
+      </dataPort>
+      <dataPort name="IR_Input">
+        <comment>--Taux de montee fourni par le Th Climb Control</comment>
+      </dataPort>
+      <dataPort name="Param_Vol_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>-- IR: Infra red</comment>
+        <comment>-- Param_Vol : Gaz_Output ,Prof_Output,AileronL_Output,AileronR_Output</comment>
+      </dataPort>
+    </features>
+  </threadType>
+  <threadImpl name="Stabilisation.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]">
+    <comment>--20 hertz; </comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Period]">
+        <propertyValue xsi:type="property:IntegerValue" unitLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Time_Units]/unitLiteral[@name=Ms]" valueString="50" value="50" base="10"/>
+      </propertyAssociation>
+    </properties>
+  </threadImpl>
+  <threadType name="Receive_Send_Data_MCU1">
+    <comment>--this thread recoit les donnees de MCU1 en mode manuel </comment>
+    <comment>-- updated</comment>
+    <features>
+      <eventDataPort name="RC_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]"/>
+      <dataPort name="RC_Rec_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>-- updated</comment>
+      </dataPort>
+      <eventPort name="RC_Evt_Output" direction="out"/>
+      <dataPort name="MCU0_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]">
+        <comment>--updated (juste pour le changement de mode)</comment>
+      </dataPort>
+      <eventDataPort name="MCU0_Send_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]"/>
+    </features>
+  </threadType>
+  <threadImpl name="Receive_Send_Data_MCU1.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]">
+    <comment>--properties</comment>
+    <comment>--Period => ??????</comment>
+  </threadImpl>
+  <threadType name="Control_By_Radio_Cde">
+    <features>
+      <dataPort name="RC_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Tableau.Generic]"/>
+      <dataPort name="Angle_Roulis_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <dataPort name="Angle_Tangage_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <dataPort name="Gaz_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+    </features>
+  </threadType>
+  <processType name="Nav_Stab_Control_Proc">
+    <comment>--updated</comment>
+    <features>
+      <eventDataPort name="MCU1_Data_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--MCU1_Evt_Input : in event port;--Erreur Radio Cde --updated</comment>
+      </eventDataPort>
+      <dataPort name="GPS_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Stream_Element.Generic]">
+        <comment>--updated --Param Radio_Cde (mode manuel)</comment>
+      </dataPort>
+      <eventPort name="GPS_Evt_Input"/>
+      <dataPort name="IR_Input"/>
+      <dataPort name="P_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]">
+        <comment>-- new data type</comment>
+      </dataPort>
+      <dataPort name="T_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataPort name="Compas_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Float]"/>
+      <dataPort name="V_Air_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]">
+        <comment>-- new data types</comment>
+      </dataPort>
+      <eventDataPort name="Trans_MCU0_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>-- donnees transmies a MCU1</comment>
+      </eventDataPort>
+      <eventDataPort name="Trans_Sol_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>-- updated</comment>
+        <comment>-- donnees transmies a la station sol</comment>
+      </eventDataPort>
+    </features>
+  </processType>
+  <processImpl name="Nav_Stab_Control_Proc.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]">
+    <comment>--updated</comment>
+    <connections>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Ctrl_By_RC_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/dataPort[@name=RC_Rec_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Control_By_Radio_Cde]/features/dataPort[@name=RC_Data_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Ctrl_By_RC_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Control_By_Radio_Cde]/features/dataPort[@name=Angle_Roulis_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=Roulis_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Ctrl_By_RC_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Control_By_Radio_Cde]/features/dataPort[@name=Angle_Tangage_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=Tangage_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Ctrl_By_RC_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Climb_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Control_By_Radio_Cde]/features/dataPort[@name=Gaz_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Climb_Control]/features/dataPort[@name=Montee_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Data_Acq_Filt_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]/features/dataPort[@name=GPS_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=GPS_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Data_Acq_Filt_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Alt_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]/features/dataPort[@name=GPS_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]/features/dataPort[@name=GPS_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Data_Acq_Filt_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Climb_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]/features/dataPort[@name=GPS_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Climb_Control]/features/dataPort[@name=GPS_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Alt_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=Cap_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]/features/dataPort[@name=S_Miss_Cap_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Alt_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=Alt_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]/features/dataPort[@name=S_Miss_Alt_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Alt_Ctrl_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Nav_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]/features/dataPort[@name=Cap_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]/features/dataPort[@name=AC_Cap_Input]">
+        <comment>--en mode manuel c'est le thread Control by radio commande qui fournit les donnees</comment>
+        <comment>--au thread stabilisation</comment>
+        <comment>--data port S_Mission_Th.RC_Data_Output->Stab_Th.RC_Data_Input in modes(manual);</comment>
+        <comment>--data port Rec_Send_Th.RC_Rec_Output->S_Mission_Th.RC_Data_Input in modes(manual);</comment>
+      </dataConnection>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Alt_Ctrl_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Nav_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]/features/dataPort[@name=Alt_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]/features/dataPort[@name=AC_Alt_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Nav_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Climb_Ctrl_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]/features/dataPort[@name=Taux_Montee_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Climb_Control]/features/dataPort[@name=Montee_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Climb_Ctrl_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Climb_Control]/features/dataPort[@name=Montee_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=CC_Montee_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Nav_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]/features/dataPort[@name=Angle_Roulis_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=Roulis_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Nav_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Navigation]/features/dataPort[@name=Angle_Tangage_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=Tangage_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=IR_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=IR_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Stab_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Stabilisation]/features/dataPort[@name=Param_Vol_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/dataPort[@name=MCU0_Data_Input]"/>
+      <eventDataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=Trans_MCU0_Output]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/eventDataPort[@name=MCU0_Send_Output]"/>
+      <eventDataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=Trans_Sol_Output]" src="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/eventDataPort[@name=MCU0_Send_Output]">
+        <comment>--updated</comment>
+      </eventDataConnection>
+      <eventDataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/eventDataPort[@name=RC_Data_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=MCU1_Data_Input]">
+        <comment>--new--updated</comment>
+      </eventDataConnection>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=P_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=P_Input]">
+        <comment>--updated</comment>
+      </dataConnection>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=T_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=T_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=Compas_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=Compas_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=S_Mission_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=V_Air_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Simple_Mission]/features/dataPort[@name=V_Air_Input]"/>
+      <dataConnection inModes="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" srcContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Data_Acq_Filt_Th]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=GPS_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]/features/dataPort[@name=GPS_Input]"/>
+    </connections>
+    <modes>
+      <mode name="manual" state="INITIAL"/>
+      <mode name="auto"/>
+      <mode name="home"/>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/eventPort[@name=RC_Evt_Output]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th]">
+        <comment>--Transition entre les modes</comment>
+      </modeTransition>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=auto]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventPort[@name=GPS_Evt_Input]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]">
+        <comment>--updated</comment>
+      </modeTransition>
+      <modeTransition srcMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=manual]" dstMode="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/modes/mode[@name=home]" triggerEventPort="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Receive_Send_Data_MCU1]/features/eventPort[@name=RC_Evt_Output] /aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventPort[@name=GPS_Evt_Input]" triggerEventPortContext="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]/subcomponents/threadSubcomponent[@name=Rec_Send_Th] /aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]"/>
+    </modes>
+    <subcomponents>
+      <comment>--new</comment>
+      <threadSubcomponent name="Data_Acq_Filt_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Data_Acquisition_GPS]"/>
+      <threadSubcomponent name="S_Mission_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Simple_Mission.Impl]"/>
+      <threadSubcomponent name="Alt_Ctrl_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Altitude_Control]"/>
+      <threadSubcomponent name="Nav_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Navigation.Impl]"/>
+      <threadSubcomponent name="Climb_Ctrl_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Climb_Control]"/>
+      <threadSubcomponent name="Stab_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Stabilisation.Impl]"/>
+      <threadSubcomponent name="Rec_Send_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadImpl[@name=Receive_Send_Data_MCU1.Impl]"/>
+      <threadSubcomponent name="Ctrl_By_RC_Th" classifier="/aadlSpec[@name=paparazzi_Old Version]/threadType[@name=Control_By_Radio_Cde]"/>
+      <dataSubcomponent name="D_AP_Destination" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Position.simple]">
+        <comment>--the internal data that will store the autopilot settings</comment>
+      </dataSubcomponent>
+      <dataSubcomponent name="D_AP_Airspeed" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+      <dataSubcomponent name="D_AP_Altitude" classifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataType[@name=Integer]"/>
+    </subcomponents>
+  </processImpl>
+  <processorType name="Proc_MCU0">
+    <features>
+      <busAccess name="Mem_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU0]"/>
+      <busAccess name="Dev_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+    </features>
+  </processorType>
+  <processorImpl name="Proc_MCU0.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU0]">
+    <comment>--RMS (Rate Monotonic Scheduling) est un FPS (Fixed Priority Scheduling) </comment>
+    <comment>--chaque tache a une priorite fixe</comment>
+    <properties>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Scheduling_Protocol]">
+        <propertyValue xsi:type="property:EnumValue" enumLiteral="/aadlSpec[@name=AADL_Project]/propertySet[@name=AADL_Project]/propertyType[@name=Supported_Scheduling_Protocols]/enumLiteral[@name=RMS]"/>
+      </propertyAssociation>
+    </properties>
+  </processorImpl>
+  <memoryType name="Ram_MCU0">
+    <features>
+      <busAccess name="Mem_Bus" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU0]"/>
+    </features>
+  </memoryType>
+  <busType name="Mem_Bus_MCU0"/>
+  <systemType name="MCU0">
+    <comment>-- MCU0 est charge de la Stabilisation, </comment>
+    <comment>-- la navigation, la communication avec MCU1</comment>
+    <comment>-- et la transmission des parametres de vol</comment>
+    <features>
+      <eventDataPort name="D_MCU1_Input" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]"/>
+      <eventDataPort name="D_MCU0_Output" direction="out" dataClassifier="/aadlSpec[@name=Data_Types]/packageSpec[@name=Data_Types]/aadlPublic/dataImpl[@name=Inter_mcu_msg.Generic]">
+        <comment>--updated</comment>
+        <comment>--E_MCU1_Input : in event port;--updated</comment>
+      </eventDataPort>
+      <busAccess name="Bus_Con" direction="required" busClassifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=SPI]">
+        <comment>--updated</comment>
+        <comment>--E_MCU0_Output : out event port;--updated</comment>
+      </busAccess>
+    </features>
+  </systemType>
+  <systemImpl name="MCU0.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]">
+    <properties>
+      <comment>--updated</comment>
+      <comment>--event port GPS_dv.Error_Output->E_MCU0_Output; --updated</comment>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Actual_Processor_Binding]" appliesTo="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]">
+        <comment>-- pour relier le processus a la memeoire et au processeur</comment>
+        <propertyValue xsi:type="property:ReferenceValue" referenceElement="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processorSubcomponent[@name=Proc_0]"/>
+      </propertyAssociation>
+      <propertyAssociation propertyDefinition="/aadlSpec[@name=AADL_Properties]/propertySet[@name=AADL_Properties]/propertyDefinition[@name=Actual_Memory_Binding]" appliesTo="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]">
+        <propertyValue xsi:type="property:ReferenceValue" referenceElement="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/memorySubcomponent[@name=Ram]"/>
+      </propertyAssociation>
+    </properties>
+    <connections>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processorSubcomponent[@name=Proc_0]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU0]/features/busAccess[@name=Mem_Bus]">
+        <comment>-- bus connections</comment>
+      </busAccessConnection>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/memorySubcomponent[@name=Ram]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Mem_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/memoryType[@name=Ram_MCU0]/features/busAccess[@name=Mem_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processorSubcomponent[@name=Proc_0]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/processorType[@name=Proc_MCU0]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=P_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Pression]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=T_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Tension]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Compas_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compas]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=V_Air_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Vitesse_Air]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Cam_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Camera_Video]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Emet_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Emetteur]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Modem_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Emet_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Modem_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Emetteur]/features/busAccess[@name=Modem_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=GPS_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=GPS]/features/busAccess[@name=Dev_Bus]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=IR_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=InfraRed]/features/busAccess[@name=Dev_Bus]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=P_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Pression]/features/dataPort[@name=P_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=P_Input]">
+        <comment>--ports connections</comment>
+      </dataConnection>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=T_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Tension]/features/dataPort[@name=T_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=T_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Compas_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compas]/features/dataPort[@name=Compas_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=Compas_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=V_Air_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Vitesse_Air]/features/dataPort[@name=V_Air_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=V_Air_Input]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=GPS_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=GPS]/features/dataPort[@name=GPS_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/dataPort[@name=GPS_Input]"/>
+      <eventConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=GPS_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventPort[@name=GPS_Evt_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=GPS]/features/eventPort[@name=Error_Output]"/>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Emet_dv]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Emetteur]/features/eventDataPort[@name=Trans_Data_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=Trans_Sol_Output]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Cam_dv]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/deviceSubcomponent[@name=Emet_dv]" src="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Camera_Video]/features/dataPort[@name=Video_Output]" dst="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Emetteur]/features/dataPort[@name=Video_Input]">
+        <comment>--updated</comment>
+      </dataConnection>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" dst="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=MCU1_Data_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]/features/eventDataPort[@name=D_MCU1_Input]"/>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]/subcomponents/processSubcomponent[@name=N_S_C_proc]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]/features/eventDataPort[@name=D_MCU0_Output]" src="/aadlSpec[@name=paparazzi_Old Version]/processType[@name=Nav_Stab_Control_Proc]/features/eventDataPort[@name=Trans_MCU0_Output]">
+        <comment>--updated</comment>
+        <comment>--event port E_MCU1_Input->N_S_C_proc.MCU1_Evt_Input; --updated</comment>
+      </eventDataConnection>
+    </connections>
+    <subcomponents>
+      <processorSubcomponent name="Proc_0" classifier="/aadlSpec[@name=paparazzi_Old Version]/processorImpl[@name=Proc_MCU0.Impl]"/>
+      <memorySubcomponent name="Ram" classifier="/aadlSpec[@name=paparazzi_Old Version]/memoryType[@name=Ram_MCU0]"/>
+      <busSubcomponent name="Mem_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Mem_Bus_MCU0]"/>
+      <deviceSubcomponent name="P_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Pression]"/>
+      <deviceSubcomponent name="T_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Tension]"/>
+      <deviceSubcomponent name="Compas_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Compas]"/>
+      <deviceSubcomponent name="V_Air_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Vitesse_Air]"/>
+      <deviceSubcomponent name="Cam_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Camera_Video]"/>
+      <deviceSubcomponent name="Emet_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=Emetteur]"/>
+      <deviceSubcomponent name="GPS_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=GPS]"/>
+      <deviceSubcomponent name="IR_dv" classifier="/aadlSpec[@name=paparazzi_Old Version]/deviceType[@name=InfraRed]"/>
+      <busSubcomponent name="Dev_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busImpl[@name=Device_Bus.MCU0]"/>
+      <busSubcomponent name="Modem_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=Modem]"/>
+      <processSubcomponent name="N_S_C_proc" classifier="/aadlSpec[@name=paparazzi_Old Version]/processImpl[@name=Nav_Stab_Control_Proc.Impl]"/>
+    </subcomponents>
+  </systemImpl>
+  <busType name="SPI">
+    <comment>----------------------------------------------------------------</comment>
+    <comment>-- we model a bus to link the systems</comment>
+  </busType>
+  <systemType name="Systeme_Paparazzi">
+    <comment>--the embedded system</comment>
+    <features>
+      <dataPort name="RC_Data_Input"/>
+      <eventPort name="RC_Evt_Input"/>
+    </features>
+  </systemType>
+  <systemImpl name="Systeme_Paparazzi.Impl" compType="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=Systeme_Paparazzi]">
+    <comment>--updated</comment>
+    <comment>--event port MCU1_sys.RC_Evt_Output->MCU0_sys.E_MCU1_Input;--updated</comment>
+    <connections>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU0_sys]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]/features/busAccess[@name=Bus_Con]"/>
+      <busAccessConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU1_sys]" src="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/busSubcomponent[@name=Dev_Bus]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/busAccess[@name=Bus_Con]"/>
+      <dataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU1_sys]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=Systeme_Paparazzi]/features/dataPort[@name=RC_Data_Input]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/dataPort[@name=RC_Data_Input]"/>
+      <eventConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU1_sys]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/eventPort[@name=RC_Evt_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=Systeme_Paparazzi]/features/eventPort[@name=RC_Evt_Input]"/>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU0_sys]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU1_sys]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/eventDataPort[@name=AP_Data_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]/features/eventDataPort[@name=D_MCU0_Output]"/>
+      <eventDataConnection srcContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU1_sys]" dstContext="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=Systeme_Paparazzi.Impl]/subcomponents/systemSubcomponent[@name=MCU0_sys]" dst="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU0]/features/eventDataPort[@name=D_MCU1_Input]" src="/aadlSpec[@name=paparazzi_Old Version]/systemType[@name=MCU1]/features/eventDataPort[@name=D_MCU1_Output]">
+        <comment>--updated</comment>
+        <comment>--event port MCU0_sys.E_MCU0_Output->MCU1_sys.AP_Evt_Input;--updated</comment>
+      </eventDataConnection>
+    </connections>
+    <subcomponents>
+      <systemSubcomponent name="MCU0_sys" classifier="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU0.Impl]"/>
+      <systemSubcomponent name="MCU1_sys" classifier="/aadlSpec[@name=paparazzi_Old Version]/systemImpl[@name=MCU1.Impl]"/>
+      <busSubcomponent name="Dev_Bus" classifier="/aadlSpec[@name=paparazzi_Old Version]/busType[@name=SPI]"/>
+    </subcomponents>
+  </systemImpl>
+</core:AadlSpec>

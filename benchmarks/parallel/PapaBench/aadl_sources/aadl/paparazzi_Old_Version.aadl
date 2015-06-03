@@ -1,0 +1,677 @@
+-- le projet paprazzi s'interesse a la realisation 
+-- d'un micro-drone autonome a bas cout.
+-- le systeme embarque est constitue de
+-- 1.recepteurs (HF(pour radio commande)
+-- 2.capteurs infrarouge et GPS
+-- 3.camera video
+-- 4.modem
+-- 5.emetteur
+-- 6.deux microcontroleurs (MCU0, MCU1)
+
+--voir le fichier listes des taches pour corriger ce fichier AADL
+
+---------------------------------------------------------------
+-- We model a bus that connects our devices to the processor
+bus Device_Bus
+end Device_Bus;
+
+bus implementation Device_Bus.MCU0
+end Device_Bus.MCU0;
+
+bus implementation Device_Bus.MCU1
+end Device_Bus.MCU1;
+
+device Compteur
+features
+	Cde_Input : in data port Data_Types::Tableau.Generic;
+	Data_Gaz_Output : out data port Data_Types::Integer;
+	Data_Elev_Output : out data port Data_Types::Integer;
+	Data_AilL_Output : out data port Data_Types::Integer;
+	Data_AilR_Output : out data port Data_Types::Integer;
+	Dev_Bus : requires bus access Device_Bus.MCU1;
+end Compteur;
+
+device Servo
+features
+	Data_Input : in data port Data_Types::Integer;
+	--Cde_Output : out event data port; -- new data type?
+	Dev_bus : requires bus access Device_Bus.MCU1;
+end Servo;
+
+device Recepteur
+features
+	--RC_Input : in event data port;
+	--RC_Output : out event data port;
+	RC_Data_Input : in data port ; -- new data type?
+	RC_Evt_Input : in event port; -- -- -- -- -- -- -- -- -- new
+	Cdes_Output : out data port; -- new data type?
+	Error_Evt_Output : out event port;
+	Dev_Bus : requires bus access Device_Bus.MCU1;
+end Recepteur;
+
+
+--this thread gets the data from the Radio Commande (RC)
+--il definit les interruptions provenant de la RC
+thread Reception_Decodage
+features
+	Data_RC_Input : in data port;-- -- -- new data type?
+	Data_Decoded_Output: out data port Data_Types::Tableau.Generic;
+properties
+	Dispatch_Protocol => periodic;
+end Reception_Decodage;
+
+thread implementation Reception_Decodage.Impl
+--properties
+	--Period =>
+end Reception_Decodage.Impl;
+
+--this thread gets the flight parameters and transmit them to the Counter 
+thread Pilotage_Servo_Cdes
+features
+	Data_Cp_Output : out data port Data_Types::Tableau.Generic;--Cp :Compteur
+	Param_Vol_Input : in data port Data_Types::Tableau.Generic;
+end Pilotage_Servo_Cdes;
+
+thread implementation Pilotage_Servo_Cdes.Impl
+--properties
+	--Period => ??????????????????
+end Pilotage_Servo_Cdes.Impl;
+
+--this thread sends data to and receives data from MCU0
+thread Receive_Send_Data_MCU0
+features
+	MCU1_Data_Input : in data port Data_Types::Tableau.Generic;
+	MCU1_Send_Output : out event data port Data_Types::Inter_mcu_msg.Generic;--updated
+	AP_Data_Input : in event data port Data_Types::Inter_mcu_msg.Generic;--updated
+	AP_Evt_Output : out event port;--updated
+	AP_Rec_Output : out data port Data_Types::Tableau.Generic;
+end Receive_Send_Data_MCU0;
+
+thread implementation Receive_Send_Data_MCU0.Impl
+--properties 
+	--Period =>
+end Receive_Send_Data_MCU0.Impl;
+
+process RecepteurCde_PilotageServo
+features
+	Radio_Cdes_Input : in data port;
+	AP_Cdes_Input : in event data port Data_Types::Inter_mcu_msg.Generic;--Autopilot Input --updated
+	Radio_Evt_Input : in event port;--RC erreur
+	--AP_Evt_Input : in event port;
+	Cdes_Vol_Output : out event data port Data_Types::Inter_mcu_msg.Generic;--updated --data transmission to MCU0
+	Cde_Serv_Output : out data port Data_Types::Tableau.Generic;
+end RecepteurCde_PilotageServo;
+
+process implementation RecepteurCde_PilotageServo.Impl
+subcomponents
+	Rec_Dec_Th : thread Reception_Decodage.Impl;
+	Rec_Send_Th	: thread Receive_Send_Data_MCU0.Impl;
+	Pilot_Serv_Th : thread Pilotage_Servo_Cdes.Impl;
+	
+connections
+	data port Radio_Cdes_Input->Rec_Dec_Th.Data_RC_Input in modes(manual);
+	event data port AP_Cdes_Input->Rec_Send_Th.AP_Data_Input in modes (auto,manual);--new --updated
+	data port Rec_Send_Th.AP_Rec_Output->Pilot_Serv_Th.Param_Vol_Input in modes(auto,manual);--new
+	--on annule ce lien car les parametres de la Radio commande
+	--doivent etre transmis a MCU0 pour obtenir en retour les 
+	--parametres de vol
+	--data port Rec_Dec_Th.Data_Decoded_Output->Pilot_Serv_Th.Param_Vol_Input in modes(manual);
+	data port Pilot_Serv_Th.Data_Cp_Output->Cde_SerV_Output in modes(manual,auto);
+	data port Rec_Dec_Th.Data_Decoded_Output->Rec_Send_Th.MCU1_Data_Input in modes(manual);
+	event data port Rec_Send_Th.MCU1_Send_Output->Cdes_Vol_Output in modes(manual); --updated
+modes
+	manual : initial mode;
+	auto : mode;
+	failsafe: mode;
+	-- Transitions
+	-- Specify the transitions between modes, use the following syntax:
+	-- <INITIAL_MODE> -[ <EVENT> ]-> <FINAL_MODE>
+	manual-[Radio_Evt_Input]->auto;
+	auto-[Rec_Send_Th.AP_Evt_Output]->manual;
+	manual-[Radio_Evt_Input,Rec_Send_Th.AP_Evt_Output]->Failsafe;
+end RecepteurCde_PilotageServo.Impl;
+
+processor Proc_MCU1
+features
+	Mem_Bus : requires bus access Mem_Bus_MCU1;
+	Dev_Bus : requires bus access Device_Bus.MCU1;
+end Proc_MCU1;
+
+-- AADL processor = microprocessor + scheduler
+processor implementation Proc_MCU1.Impl
+properties
+	Scheduling_Protocol => RMS;
+	--RMS (Rate Monotonic Scheduling) est un FPS 
+	--(Fixed Priority Scheduling) 
+	--chaque tache a une priorite fixe
+end Proc_MCU1.Impl;
+
+-- We model the RAM to bind our processes and threads
+memory Ram_MCU1
+features
+	Mem_Bus : requires bus access Mem_Bus_MCU1;
+end Ram_MCU1;
+
+-- We model a data bus that links processors and memories
+bus Mem_Bus_MCU1
+end Mem_Bus_MCU1;
+
+-- MCU1 est charge de la Reception des ordres de la radio-commande,
+-- la communication avec MCU0 et le pilotage des servos commandes
+
+system MCU1
+features
+	RC_Data_Input : in data port;---------------new
+	RC_Evt_Input : in event port; --------new
+	AP_Data_Input : in event data port Data_Types::Inter_mcu_msg.Generic;--AP: autopilot --updated
+	--AP_Evt_Input : in event port;--Erreur Autopilot --updated
+	--RC_Evt_Output : out event port;--Erreur Radio Cde --updated
+	D_MCU1_Output : out event data port Data_Types::Inter_mcu_msg.Generic;-- updated
+	Bus_Con : requires bus access  SPI;
+end MCU1;
+
+system implementation MCU1.Impl
+subcomponents
+	--declare all the needed subcomponents to the system
+	MCU1_P : processor Proc_MCU1.Impl;
+	Ram : memory Ram_MCU1;
+	Mem_Bus : bus Mem_Bus_MCU1;
+	Dev_Bus : bus Device_Bus.MCU1;
+	Recpt_dv : device Recepteur;
+	Cpt_dv : device Compteur;
+	Ser_Gaz_dv : device Servo;
+	Ser_Elevator_dv : device Servo;
+	Ser_AileronL_dv : device Servo;--Aileron Left
+	Ser_AileronR_dv : device Servo;--Aileron Right
+	Proc_RcptCde_PilotServ : process RecepteurCde_PilotageServo.Impl;
+connections
+	--bus connections 
+	bus access Mem_Bus -> MCU1_P.Mem_Bus;
+	bus access Dev_Bus -> MCU1_P.Dev_Bus;
+	bus access Mem_Bus -> Ram.Mem_Bus;
+	bus access Dev_Bus -> Recpt_dv.Dev_Bus;
+	bus access Dev_Bus -> Cpt_dv.Dev_Bus;
+	bus access Dev_Bus -> Ser_Gaz_dv.Dev_Bus;
+	bus access Dev_Bus -> Ser_Elevator_dv.Dev_Bus;
+	bus access Dev_Bus -> Ser_AileronL_dv.Dev_Bus;
+	bus access Dev_Bus -> Ser_AileronR_dv.Dev_Bus;
+
+	--port connections
+	data port RC_Data_Input->Recpt_dv.RC_Data_Input;
+	event port RC_Evt_Input->Recpt_dv.RC_Evt_Input;
+	data port Recpt_dv.Cdes_Output->Proc_RcptCde_PilotServ.Radio_Cdes_Input;
+	event data port AP_Data_Input->Proc_RcptCde_PilotServ.AP_Cdes_Input; --updated
+	event port Recpt_dv.Error_Evt_Output->Proc_RcptCde_PilotServ.Radio_Evt_Input;
+	--event port AP_Evt_Input->Proc_RcptCde_PilotServ.AP_Evt_Input;--updated
+	data port Proc_RcptCde_PilotServ.Cde_Serv_Output->Cpt_dv.Cde_Input;
+	data port Cpt_dv.Data_Gaz_Output->Ser_Gaz_dv.Data_Input;
+	data port Cpt_dv.Data_Elev_Output->Ser_Elevator_dv.Data_Input;
+	data port Cpt_dv.Data_AilL_Output->Ser_AileronL_dv.Data_Input;
+	data port Cpt_dv.Data_AilR_Output->Ser_AileronR_dv.Data_Input;
+	--event port Recpt_dv.Error_Evt_Output->RC_Evt_Output;--updated
+
+properties 
+	--to bind the Proc_RcptCde_PilotServ to the memory Ram and the processor MCU1_P
+	--using predeclared properties
+	Actual_Processor_Binding =>reference MCU1_P applies to Proc_RcptCde_PilotServ;
+	Actual_Memory_Binding =>reference Ram applies to Proc_RcptCde_PilotServ;
+end MCU1.Impl;
+-----------------------------------------------------------------
+--determine la pression 
+device Pression
+features 
+	P_Output : out data port Data_Types::Integer;
+	Dev_Bus : requires bus access Device_Bus.MCU0; 
+end Pression;
+
+--determine la tension
+device Tension -- Alimentation
+features
+	T_Output : out data port Data_Types::Integer;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end Tension;
+
+device Compas 
+features
+	Compas_Output : out data port Data_Types::Float;-- new data type?
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end compas;
+
+--determine la vitesse de l'air
+device Vitesse_Air
+features
+	V_Air_Output : out data port Data_Types::Integer;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end Vitesse_Air;
+
+--filme le trajet de la mission
+device Camera_Video
+features
+	Video_Output : out data port; -- new data type?
+	Dev_Bus : requires bus access Device_bus.MCU0;
+end Camera_Video;
+
+-- transmet les donnees a la station sol
+device Emetteur
+features
+	Video_Input : in data port;--data type?
+	Trans_Data_Input : in event data port Data_Types::Inter_mcu_msg.Generic; --new --updated
+	Trans_Data_Output : out data port;
+	Video_Output : out data port;
+	Modem_Bus : requires bus access Modem;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end Emetteur;
+
+-- determine la position du drone 
+device GPS
+features
+	Error_Output : out event port;
+	GPS_Output : out data port Data_Types::Stream_Element.Generic;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end GPS;
+
+device InfraRed
+features
+	Error_Output : out event port;
+	IR_Output : out data port Data_Types::Stream_Element.Generic;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end InfraRed;
+
+-- relie le systeme MCU0 a la station sol
+--ce qui permit la transmission de donnes
+bus Modem
+end Modem;
+
+-- Ce thread recoit les sigaux GPS et les transforme 
+-- en donnees utilisables
+thread Data_Acquisition_GPS
+features
+	GPS_Input : in data port Data_Types::Stream_Element.Generic;
+	GPS_Output : out data port Data_Types::Position.GPS;
+end Data_Acquisition_GPS;
+
+thread implementation Data_Acquisition_GPS.Impl
+properties
+	period => 250ms; --4hz 
+end Data_Acquisition_GPS.Impl;
+
+-- recoit les parametres 
+-- des differents composants et prepare la mission
+thread Simple_Mission
+features
+--new
+	--RC_Data_Input : in data port Data_Types::Tableau.Generic;--RC : Radio Commande
+	GPS_Input : in data port Data_Types::Position.GPS;
+	T_Input : in data port Data_Types::Integer;-- T : Tension
+	P_Input : in data port Data_Types::Integer;-- P: Pression
+	Compas_Input : in data port Data_Types::Float;
+	V_Air_Input : in data port Data_Types::Integer;--V : Vitesse
+	Cap_Output : out data port Data_Types::Integer;
+	Alt_Output : out data port Data_Types::Integer;-- Att : Attitude
+	--RC_Data_Output : out data port Data_Types::Tableau.Generic;--utilisee en mode manual voir p.34 article
+end Simple_Mission;
+
+thread implementation Simple_Mission.Impl
+properties
+	Period => 50ms; --20 hertz;
+end Simple_Mission.Impl;
+
+--Controle l'altitude
+thread Altitude_Control
+features
+	S_Miss_Alt_Input : in data port Data_Types::Integer;--Attitude transmie par Simple mission pour controle
+	GPS_Input : in data port Data_Types::Position.GPS;
+	S_Miss_Cap_Input : in data port Data_Types::Integer;
+	Cap_Output : out data port Data_Types::Integer;	
+	Alt_Output : out data port Data_Types::Integer;
+end Altitude_Control;
+
+--controle la montee
+thread Climb_Control
+features
+--new
+	GPS_Input : in data port Data_Types::Position.GPS;
+	Montee_Input : in data port Data_Types::Float;-- data fournie par le thread Navigation en mode auto et par Control by RC en mode manuel
+	Montee_Output : out data port Data_Types::Float;
+end Climb_Control;
+
+--controle la navigation de l'avion
+thread Navigation
+features
+	AC_Cap_Input: in data port Data_Types::Integer;--AC: Attitude_Control
+	AC_Alt_Input: in data port Data_Types::Integer;--AC: Attitude_Control
+	Angle_Roulis_Output : out data port Data_Types::Float;
+	Angle_Tangage_Output : out data port Data_Types::Float;
+	Taux_Montee_Output: out data port Data_Types::Float; --fourni par le GPS
+end Navigation;
+
+--Ce thread est declenche a la frequence des informations delivrees 
+--par le GPS
+thread implementation Navigation.Impl
+properties
+	Period => 250 ms;--4 hertz; 
+end Navigation.Impl;
+
+-- Controle la stabilisation et transmet les donnees a MCU1
+thread Stabilisation -- + Data transmission to MCU1
+features
+--new
+	Roulis_Input : in data port Data_Types::Float;--(fourni par la nav en mode auto et par Ctrl_By_RC en mode manuel)
+	Tangage_Input : in data port Data_Types::Float;--fourni par la nav en mode auto et par Ctrl_By_RC en mode manuel)
+	CC_Montee_Input : in data port Data_Types::Float;--Taux de montee fourni par le Th Climb Control
+	IR_Input : in data port;-- IR: Infra red
+	-- Param_Vol : Gaz_Output ,Prof_Output,AileronL_Output,AileronR_Output
+	Param_Vol_Output : out data port Data_Types::Tableau.Generic;
+end Stabilisation;
+
+thread implementation Stabilisation.Impl
+properties
+	Period => 50 ms;--20 hertz; 
+end Stabilisation.Impl;
+
+--this thread recoit les donnees de MCU1 en mode manuel 
+thread Receive_Send_Data_MCU1
+features
+	RC_Data_Input : in event data port Data_Types::Inter_mcu_msg.Generic;-- updated
+	RC_Rec_Output : out data port Data_Types::Tableau.Generic;
+	RC_Evt_Output : out event port;--updated (juste pour le changement de mode)
+	MCU0_Data_Input : in data port Data_Types::Tableau.Generic;
+	MCU0_Send_Output : out event data port Data_Types::Inter_mcu_msg.Generic;-- updated
+end Receive_Send_Data_MCU1;
+
+thread implementation Receive_Send_Data_MCU1.Impl
+--properties
+	--Period => ??????
+end Receive_Send_Data_MCU1.Impl;
+
+thread Control_By_Radio_Cde
+features
+	RC_Data_Input : in data port Data_Types::Tableau.Generic;
+	Angle_Roulis_Output : out data port Data_Types::Float; 
+	Angle_Tangage_Output : out data port Data_Types::Float;
+	Gaz_Output : out data port Data_Types::Float;
+end Control_By_Radio_Cde;
+
+process Nav_Stab_Control_Proc
+features
+	--MCU1_Evt_Input : in event port;--Erreur Radio Cde --updated
+	MCU1_Data_Input : in event data port Data_Types::Inter_mcu_msg.Generic;--updated --Param Radio_Cde (mode manuel)
+	GPS_Input : in data port Data_Types::Stream_Element.Generic;
+	GPS_Evt_Input : in event port;
+	IR_Input : in data port; -- new data type
+	P_Input : in data port Data_Types::Integer;
+	T_Input : in data port Data_Types :: Integer;
+	Compas_Input : in data port Data_Types::Float; -- new data types
+	V_Air_Input : in data port Data_Types:: Integer;
+	-- donnees transmies a MCU1
+	Trans_MCU0_Output: out event data port Data_Types::Inter_mcu_msg.Generic;-- updated
+	-- donnees transmies a la station sol
+	Trans_Sol_Output : out event data port Data_Types::Inter_mcu_msg.Generic;--updated
+end Nav_Stab_Control_Proc;
+
+process implementation Nav_Stab_Control_Proc.Impl
+--new
+subcomponents
+	Data_Acq_Filt_Th : thread Data_Acquisition_GPS;
+	S_Mission_Th : thread Simple_Mission.Impl;
+	Alt_Ctrl_Th : thread Altitude_Control;
+	Nav_Th : thread Navigation.Impl;
+	Climb_Ctrl_Th : thread Climb_Control;
+	Stab_Th : thread Stabilisation.Impl;
+	Rec_Send_Th : thread Receive_Send_Data_MCU1.Impl;
+	Ctrl_By_RC_Th: thread Control_By_Radio_Cde;
+	
+	--the internal data that will store the autopilot settings
+	D_AP_Destination : data Data_Types::Position.Simple;
+	D_AP_Airspeed : data Data_Types::Integer;
+	D_AP_Altitude : data Data_Types::Integer;
+connections 
+	data port Rec_Send_Th.RC_Rec_Output->Ctrl_By_RC_Th.RC_Data_Input in modes (manual);
+	data port Ctrl_By_RC_Th.Angle_Roulis_Output->Stab_Th.Roulis_Input in modes (manual);
+	data port Ctrl_By_RC_Th.Angle_Tangage_Output->Stab_Th.Tangage_Input in modes (manual);	
+	data port Ctrl_By_RC_Th.Gaz_Output->Climb_Ctrl_Th.Montee_Input in modes (manual);
+	
+	data port Data_Acq_Filt_Th.GPS_Output->S_Mission_Th.GPS_Input in modes(auto,home);
+	data port Data_Acq_Filt_Th.GPS_Output->Alt_Ctrl_Th.GPS_Input in modes(auto,home);
+	data port Data_Acq_Filt_Th.GPS_Output->Climb_Ctrl_Th.GPS_Input in modes(auto,home);
+	
+	data port S_Mission_Th.Cap_Output->Alt_Ctrl_Th.S_Miss_Cap_Input in modes(auto,home);
+	data port S_Mission_Th.Alt_Output->Alt_Ctrl_Th.S_Miss_Alt_Input in modes(auto,home);
+	--en mode manuel c'est le thread Control by radio commande qui fournit les donnees
+	--au thread stabilisation
+	--data port S_Mission_Th.RC_Data_Output->Stab_Th.RC_Data_Input in modes(manual);
+	--data port Rec_Send_Th.RC_Rec_Output->S_Mission_Th.RC_Data_Input in modes(manual);
+	
+	data port Alt_Ctrl_Th.Cap_Output->Nav_Th.AC_Cap_Input in modes(auto,home);
+	data port Alt_Ctrl_Th.Alt_Output->Nav_Th.AC_Alt_Input in modes(auto,home);
+	
+	data port Nav_Th.Taux_Montee_Output->Climb_Ctrl_Th.Montee_Input in modes(auto,home);
+	data port Climb_Ctrl_Th.Montee_Output->Stab_Th.CC_Montee_Input in modes (auto, home, manual);
+	data port Nav_Th.Angle_Roulis_Output->Stab_Th.Roulis_Input in modes(auto, home);
+	data port Nav_Th.Angle_Tangage_Output->Stab_Th.Tangage_Input in modes(auto, home);
+	data port IR_Input->Stab_Th.IR_Input in modes(manual, auto, home);
+	
+	data port Stab_Th.Param_Vol_Output->Rec_Send_Th.MCU0_Data_Input in modes(auto,home,manual);
+	event data port Rec_Send_Th.MCU0_Send_Output->Trans_MCU0_Output in modes(auto,home,manual);--updated
+	event data port Rec_Send_Th.MCU0_Send_Output->Trans_Sol_Output in modes(auto,home,manual);--new--updated
+	event data port MCU1_Data_Input->Rec_Send_Th.RC_Data_Input in modes(manual);--updated
+	
+	data port P_Input->S_Mission_Th.P_Input in modes(manual, auto, home);
+	data port T_Input->S_Mission_Th.T_input in modes(manual, auto, home);
+	data port Compas_Input->S_Mission_Th.Compas_Input in modes(manual, auto, home);
+	data port V_Air_Input->S_Mission_Th.V_Air_Input in modes(manual, auto, home);
+	data port GPS_Input->Data_Acq_Filt_Th.GPS_Input in modes(manual, auto, home);
+modes
+	manual : initial mode;
+	auto : mode;
+	home : mode;
+	--Transition entre les modes
+	manual-[Rec_Send_Th.RC_Evt_Output]->auto;--updated
+	auto-[GPS_Evt_Input]->manual;
+	manual-[Rec_Send_Th.RC_Evt_Output,GPS_Evt_Input]->home;--updated
+end Nav_Stab_Control_Proc.Impl;
+
+processor Proc_MCU0
+features
+	Mem_Bus : requires bus access Mem_Bus_MCU0;
+	Dev_Bus : requires bus access Device_Bus.MCU0;
+end Proc_MCU0;
+
+processor implementation Proc_MCU0.Impl
+properties
+	Scheduling_Protocol => RMS;
+	--RMS (Rate Monotonic Scheduling) est un FPS (Fixed Priority Scheduling) 
+	--chaque tache a une priorite fixe
+end Proc_MCU0.Impl;
+
+memory Ram_MCU0
+features 
+	Mem_Bus : requires bus access Mem_Bus_MCU0;
+end Ram_MCU0;
+
+bus Mem_Bus_MCU0
+end Mem_Bus_MCU0;
+
+-- MCU0 est charge de la Stabilisation, 
+-- la navigation, la communication avec MCU1
+-- et la transmission des parametres de vol
+
+system MCU0
+features	
+	D_MCU1_Input : in event data port Data_Types::Inter_mcu_msg.Generic;--updated
+	--E_MCU1_Input : in event port;--updated
+	D_MCU0_Output : out event data port Data_Types::Inter_mcu_msg.Generic;--updated
+	--E_MCU0_Output : out event port;--updated
+	Bus_Con : requires bus access SPI;
+end MCU0;
+
+system implementation MCU0.Impl
+subcomponents
+	Proc_0 : processor Proc_MCU0.Impl;
+	Ram    : memory Ram_MCU0;
+	Mem_Bus: bus Mem_Bus_MCU0;
+	P_dv : device Pression;
+	T_dv : device Tension;
+	Compas_dv : device Compas;
+	V_Air_dv : device Vitesse_Air;
+	Cam_dv : device Camera_Video;
+	Emet_dv : device Emetteur;
+	GPS_dv : device GPS;
+	IR_dv : device InfraRed;
+	Dev_Bus : bus Device_Bus.MCU0;
+	Modem_Bus : bus Modem;
+	N_S_C_proc : process Nav_Stab_Control_Proc.Impl;
+connections
+	-- bus connections
+	bus access Mem_Bus->Proc_0.Mem_Bus;
+	bus access Mem_Bus->Ram.Mem_Bus;
+	
+	bus access Dev_Bus->Proc_0.Dev_Bus;
+	bus access Dev_Bus->P_dv.Dev_Bus;
+	bus access Dev_Bus->T_dv.Dev_Bus;
+	bus access Dev_Bus->Compas_dv.Dev_Bus;
+	bus access Dev_Bus->V_Air_dv.Dev_Bus;
+	bus access Dev_Bus->Cam_dv.Dev_Bus;
+	bus access Dev_Bus->Emet_dv.Dev_Bus;
+	bus access Modem_Bus->Emet_dv.Modem_Bus;
+	bus access Dev_Bus->GPS_dv.Dev_Bus;
+	bus access Dev_Bus->IR_dv.Dev_Bus;
+		
+	--ports connections
+	data port P_dv.P_Output->N_S_C_proc.P_Input;
+	data port T_dv.T_Output->N_S_C_proc.T_Input;
+	data port Compas_dv.Compas_Output->N_S_C_proc.Compas_Input;
+	data port V_Air_dv.V_Air_Output->N_S_C_proc.V_Air_Input;
+	data port GPS_dv.GPS_Output->N_S_C_proc.GPS_Input;
+	event port GPS_dv.Error_Output->N_S_C_proc.GPS_Evt_Input;
+
+	event data port N_S_C_proc.Trans_Sol_Output->Emet_dv.Trans_Data_Input;--updated
+	data port Cam_dv.Video_Output->Emet_dv.Video_Input;
+	
+	event data port D_MCU1_Input->N_S_C_proc.MCU1_Data_Input;--updated
+	--event port E_MCU1_Input->N_S_C_proc.MCU1_Evt_Input; --updated
+	
+	event data port N_S_C_proc.Trans_MCU0_Output->D_MCU0_Output;--updated
+	--event port GPS_dv.Error_Output->E_MCU0_Output; --updated
+	
+properties
+	-- pour relier le processus a la memeoire et au processeur
+	Actual_Processor_Binding => reference Proc_0 applies to N_S_C_Proc;
+	Actual_Memory_Binding => reference Ram applies to N_S_C_Proc;
+end MCU0.Impl;
+----------------------------------------------------------------
+-- we model a bus to link the systems
+bus SPI
+end SPI;
+
+--the embedded system
+system Systeme_Paparazzi
+features
+	RC_Data_Input : in data port;
+	RC_Evt_Input : in event port;
+end Systeme_Paparazzi;
+
+system implementation Systeme_Paparazzi.Impl
+subcomponents
+	MCU0_sys : system MCU0.Impl;
+	MCU1_sys : system MCU1.Impl;
+	Dev_Bus : bus SPI;
+connections
+	bus access Dev_Bus->MCU0_Sys.Bus_Con;
+	bus access Dev_Bus->MCU1_Sys.Bus_Con;
+	
+	data port RC_Data_Input->MCU1_sys.RC_Data_Input;
+	event port RC_Evt_Input->MCU1_sys.RC_Evt_Input;
+	
+	event data port MCU0_sys.D_MCU0_Output->MCU1_sys.AP_Data_Input;--updated
+	--event port MCU0_sys.E_MCU0_Output->MCU1_sys.AP_Evt_Input;--updated
+	
+	event data port MCU1_sys.D_MCU1_Output->MCU0_sys.D_MCU1_Input;--updated
+	--event port MCU1_sys.RC_Evt_Output->MCU0_sys.E_MCU1_Input;--updated
+end Systeme_Paparazzi.Impl;
+
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+-- Satation Sol
+--bus Device_Bus_Sol
+--end Device_Bus_Sol;
+
+--device Radio_Cde
+--features
+--	PA_Evt_Output : out event port;
+--	Cde_Output : out  data port; -- le type de donnees??
+--	Connecteur_Bus : requires bus access Device_Bus_Sol; -- ? juste ? faux?	
+--end Radio_Cde;
+
+-- Magnetoscope
+--device Magnetoscope
+--features
+--	Video_Input : in data port;
+--	Connection_Bus : requires bus access Device_Bus_Sol;
+--end Magnetoscope;
+
+-- Laptop
+--processor Laptop_Proc
+--end Laptop_Proc;
+
+--thread Affichage_Param_Vol_Th
+--end Affichage_Param_Vol_Th;
+
+--thread Affichage_Mission_Trajet_Th
+--end Affichage_Mission_Trajet_Th;
+
+--thread Affichage_Mes_Aeronef_Th
+--end Affichage_Mes_Aeronef_Th;
+
+--process Affichage_Resultats
+--end Affichage_Resultats;
+
+--processor Proc_Lap
+--end Proc_Lap;
+
+--memory Ram_Lap
+--end Ram_Lap;
+
+--bus Mem_Bus_Lap
+--end Mem_Bus_Lap;
+
+---process implementation Affichage_Resultats.Impl
+--end Affichage_Resultats.Impl;
+
+--system Laptop_Sys
+--end Laptop_Sys;
+
+--system implementation Laptop_Sys.Impl
+--end Laptop_Sys.Impl;
+
+-- Satation Sol
+--system Station_Sol_Sys
+--features
+--	PA_Evt_Output : out event port;
+--	Radio_Cde_Output : out  data port;
+--	Mission_Trajet_Input : in data port;
+--	Mes_Aeronef_Input : in data port;
+--	Param_Vol_Input : in data port; 
+--	Video_Input : in data port;
+--	Connection_Network : requires bus access Network;
+--end Station_Sol_Sys;
+
+--system implementation Station_Sol_Sys.Impl
+--subcomponents
+--	Lap_Sys : system Laptop_Sys;
+--	Mag_dv : device Magnetoscope;
+--	Radio_dv : device Radio_Cde;
+--	Dev_Bus : bus Device_Bus_Sol;
+	
+--end Station_Sol_Sys.Impl;
+
+-- Systeme complet 
+--bus Network
+--end Network;
+
+--system Paparazzi_System
+
+--end Paparazzi_System;
+

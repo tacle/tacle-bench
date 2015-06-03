@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core:AadlSpec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://core" xmlns:property="http://property">
+  <propertySet name="Thread_Properties">
+    <propertyConstant name="Non_Preemptive" propertyTypeReference="/aadlSpec[@name=Thread_Properties]/propertySet[@name=Thread_Properties]/propertyConstant[@name=Non_Preemptive]/propertyType">
+      <propertyType xsi:type="property:Aadlinteger"/>
+      <constantValue xsi:type="property:IntegerValue" valueString="0" base="10"/>
+    </propertyConstant>
+    <propertyConstant name="System_Preemption" propertyTypeReference="/aadlSpec[@name=Thread_Properties]/propertySet[@name=Thread_Properties]/propertyConstant[@name=System_Preemption]/propertyType">
+      <propertyType xsi:type="property:Aadlinteger"/>
+      <constantValue xsi:type="property:IntegerValue" valueString="1" value="1" base="10"/>
+    </propertyConstant>
+    <propertyConstant name="Time_Sharing_Preemption" propertyTypeReference="/aadlSpec[@name=Thread_Properties]/propertySet[@name=Thread_Properties]/propertyConstant[@name=Time_Sharing_Preemption]/propertyType">
+      <propertyType xsi:type="property:Aadlinteger"/>
+      <constantValue xsi:type="property:IntegerValue" valueString="2" value="2" base="10"/>
+    </propertyConstant>
+    <propertyDefinition name="Preemption">
+      <propertyType xsi:type="property:EnumType">
+        <enumLiteral name="Non_Preemptive"/>
+        <enumLiteral name="System_Preemption"/>
+        <enumLiteral name="Time_Sharing_Preemption"/>
+      </propertyType>
+      <appliesto>thread</appliesto>
+    </propertyDefinition>
+    <propertyDefinition name="Entrypoints" list="true">
+      <appliesto>thread</appliesto>
+    </propertyDefinition>
+  </propertySet>
+</core:AadlSpec>

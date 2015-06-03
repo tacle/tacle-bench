@@ -1,0 +1,98 @@
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(__asyst_start)
+
+/*
+Memory layout for NXP LPC2138:
+- 512 KiB FLASH from 0x00000000 to 0x0007ffff
+-  32 KiB SRAM  from 0x40000000 to 0x40007fff
+*/
+
+MEMORY
+{
+  MEM_ROM_VECTORS    : 
+    ORIGIN = 0x00000000,                                        LENGTH = 0x00000040
+  MEM_ROM            : 
+    ORIGIN = ORIGIN(MEM_ROM_VECTORS) + LENGTH(MEM_ROM_VECTORS), LENGTH = 512k - LENGTH(MEM_ROM_VECTORS)
+  MEM_RAM            : 
+    ORIGIN = 0x40000000,                                        LENGTH = 32k
+}
+__ASYST_STACK_TOP = ORIGIN(MEM_RAM) + LENGTH(MEM_RAM) - 4;
+__ASYST_HEAP_SIZE = 0x0;
+
+SECTIONS
+{
+  .vectors :                    /* vector table */
+  {
+    *(.vectors)
+  } > MEM_ROM_VECTORS
+  
+  .text : 
+  {
+    __ASYST_TEXT_START = .;     /* executable code */
+    *(.text)                   
+    *(.text.*)
+    *(.glue_7t) *(.glue_7)
+    *(.init)                    
+    *(.fini)                        
+    *(.gnu.linkonce.t*)
+    __ASYST_TEXT_END = .;      
+    
+    . = ALIGN(4);
+    __ASYST_CTOR_START = .;    /* constructors */   
+    *(.ctors)
+    __ASYST_CTOR_END = .;
+    
+    . = ALIGN(4);
+    __ASYST_DTOR_START = .;    /* destructors */
+    *(.dtors)
+    __ASYST_DTOR_END = .;
+  } > MEM_ROM
+  
+  .rodata :
+  {
+    . = ALIGN(4);
+    *(.rodata)                  /* read-only data */
+    *(.rodata.*)     
+    *(.rdata)                   
+    *(.rdata.*)                  
+    *(.sdata2)                  /* small constant data */
+    *(.sdata2.*)
+    *(.gnu.linkonce.r*)
+  } > MEM_ROM
+
+  .data :
+  {
+    . = ALIGN(4);
+    __ASYST_DATA_START  = .;            /* start of the data */
+    __ASYST_DATA_LOAD = LOADADDR(.data);
+    *(.data)                            /* data */
+    *(.data.*)
+    *(.sdata)                           /* small data */
+    *(.sdata.*)
+    *(.gnu.linkonce.d*)
+    __ASYST_DATA_END  = .;              /* end of the data */
+  } >MEM_RAM AT>MEM_ROM
+  
+  .bss (NOLOAD) :
+  {
+    . = ALIGN(4);
+    __ASYST_BSS_START = .;       /* start of the bss */
+    *(.bss) 
+    *(.bss.*)
+    *(.sbss)   
+    *(.sbss.*)
+    *(COMMON)          
+    *(.gnu.linkonce.b*)          
+    __ASYST_BSS_END = .;         /* end of the bss */
+    end = ALIGN(4) ;
+  } > MEM_RAM
+  
+  .heap (NOLOAD) :
+  {
+    . = ALIGN(4);
+    __ASYST_HEAP_START  = .;     /* start of the heap */
+    . += __ASYST_HEAP_SIZE;  
+  } > MEM_RAM 
+
+}
