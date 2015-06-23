@@ -1,0 +1,106 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{soul}
+
+\title{Review Tackle Bench}
+
+\author{Jörg Mische}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document will contain the first review of the tackle bench regarding the 
+topic DSP filters.
+\end{abstract}
+
+
+\section{Integer DSP Filters}
+
+\begin{itemize}
+	\item \st{SPstone\_fixed\_point/convolution\_fixed}
+	\item \st{DSPstone\_fixed\_point/fft\_16\_7}
+	\item \st{DSPstone\_fixed\_point/fft\_16\_13}
+	\item \st{DSPstone\_fixed\_point/fft\_1024\_7}
+	\item DSPstone\_fixed\_point/fft\_1024\_13
+	\item DSPstone\_fixed\_point/iir\_biquad\_N\_sections\_fixed
+	\item \st{DSPstone\_fixed\_point/iir\_biquad\_one\_section\_fixed}
+	\item DSPstone\_fixed\_point/lms\_fixed
+	\item MRTC/edn
+	\item MRTC/fdct
+	\item MRTC/fft1
+	\item MRTC/fir
+	\item MRTC/fjdctint
+	\item MRTC/lms
+\end{itemize}
+
+
+
+\subsection{DSPstone\_fixed\_point/convolution\_fixed}
+	REMOVE: Extremely simple loop, part of FIR-filters
+\subsection{DSPstone\_fixed\_point/fft\_16\_7}
+	REMOVE: same algorithm as DSPstone\_fixed\_point/fft\_16\_13, only one loop is missing
+\subsection{DSPstone\_fixed\_point/fft\_16\_13}
+	REMOVE: same algorithm as DSPstone\_fixed\_point/fft\_16\_7, one additional loop and more bits per entry
+\subsection{DSPstone\_fixed\_point/fft\_1024\_7}
+	REMOVE: same algorithm as DSPstone\_fixed\_point/fft\_16\_7, but larger matrix
+\subsection{DSPstone\_fixed\_point/fft\_1024\_13}
+	KEEP: same algorithm, but largest workload
+
+	TO BE DISCUSSED: Alternatively keep smaller workload?
+\subsection{DSPstone\_fixed\_point/fir2dim\_fixed}
+	KEEP: two dimensional FIR
+\subsection{DSPstone\_fixed\_point/fir\_fixed}
+	REMOVE: very simple, part of DSPstone\_fixed\_point/lms\_fixed, MRTC/fir is more complex
+\subsection{DSPstone\_fixed\_point/iir\_biquad\_N\_sections\_fixed}
+	KEEP
+\subsection{DSPstone\_fixed\_point/iir\_biquad\_one\_section\_fixed}
+	REMOVE: no loops, one iteration of DSPstone\_fixed\_point/iir\_biquad\_N\_sections\_fixed
+\subsection{DSPstone\_fixed\_point/lms\_fixed}
+	REMOVE: very simple, MRTC/lms is more complex
+\subsection{MRTC/edn}
+	KEEP: several filters (including DCT, FIR and IIR)
+\subsection{MRTC/fdct}
+	TO BE DISCUSSED: very similar to MRTC/fjdctint, strange code parts here (multiplications with constants)
+\subsection{MRTC/fft1}
+	KEEP: Different implementation from DSPstone (other loops, arrays instead of pointers)
+\subsection{MRTC/fir}
+	KEEP: One dimensional FIR, more complex than DSPstone\_fixed\_point/fir\_fixed
+\subsection{MRTC/fjdctint}
+	KEEP: Discrete Cosine Transform, MRTC/fdct is very similar
+\subsection{MRTC/lms}
+	KEEP: Least Mean Square approximation
+
+
+
+
+\section{Floating Point DSP Filters}
+
+\begin{itemize}
+	\item DSPstone\_floating\_point/convolution\_float
+	\item DSPstone\_floating\_point/fir2dim\_float
+	\item DSPstone\_floating\_point/fir\_float
+	\item DSPstone\_floating\_point/iir\_biquad\_N\_sections\_float
+	\item DSPstone\_floating\_point/iir\_biquad\_one\_section\_float
+	\item DSPstone\_floating\_point/lms\_float
+	\item StreamIt/filterbank
+\end{itemize}
+	TO BE DISCUSSED: The DSPstone\_floating\_point programs are identical to
+	the fixed variants, the only difference is a ``\#define TYPE float''.
+	Shall we keep both versions or provide a mechanism to switch between
+	integer and floating point? The floating point versions are the newer
+	ones, therefore these should be taken.
+
+\subsection{StreamIt/filterbank}
+	KEEP: Real floating point benchmark
+
+    
+
+\end{document}

@@ -1,0 +1,179 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{soul}
+
+\title{Review Tackle Bench}
+
+\author{Peter Hellinckx, Yorick De Bock}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document will contain the first review of the tackle bench regarding the topics.
+\begin{itemize}
+\item arithmetic benchmarks
+\item matrix benchmarks    
+\end{itemize}
+
+\end{abstract}
+
+\section{Arithmetic benchmarks}
+
+\begin{itemize}
+	\item  DSPstone\_fixed\_point/complex\_multiply\_fixed
+	\item  \st{DSPstone\_fixed\_point/complex\_update\_fixed}
+	\item  \st{DSPstone\_fixed\_point/dot\_product\_fixed}
+	\item  DSPstone\_fixed\_point/n\_complex\_updates\_fixed
+ 	\item  DSPstone\_fixed\_point/n\_real\_updates\_fixed
+	\item  \st{DSPstone\_fixed\_point/real\_update\_fixed}
+	\item  DSPstone\_floating\_point/complex\_multiply\_float
+	\item  \st{DSPstone\_floating\_point/complex\_update\_float}
+	\item  \st{DSPstone\_floating\_point/dot\_product\_float}
+	\item  DSPstone\_floating\_point/n\_complex\_updates\_float
+	\item  DSPstone\_floating\_point/n\_real\_updates\_float
+	\item  \st{DSPstone\_floating\_point/real\_update\_float}
+	\item  MISC/ammunition
+    	\begin{itemize}
+            \item bits\_test (7 tests)
+            \item arithm\_test (35 tests)     
+        \end{itemize}
+	\item  MRTC/expint
+    \item  MRTC/fac
+    \item  MRTC/fibcal
+    \item  MRTC/prime
+    \item  MRTC/qurt
+    \item  \st{MRTC/sqrt}
+	\item  MRTC/st
+	\item  MiBench/basicmath\_small
+    	\begin{itemize}
+        	\item solvecubic
+            \item isqrt
+            \item memcpy
+            \item rad2deg
+            \item deg2rad
+            \item conversions
+            
+        \end{itemize}
+    	
+\end{itemize}
+
+\subsection{DSPstone\_fixed\_point/complex\_multiply\_fixed}
+	TO BE DISCUSSED: I would keep this one to test the elementary multiplication of a complex number. Then again it strongly resembles a D2 matrix mult (DSPstone\_fixed\_point/matrix1\_fixed).
+    
+\subsection{DSPstone\_fixed\_point/complex\_update\_fixed}
+	REMOVE: Can be removed as it is part of DSPstone\_fixed\_point/n\_complex\_updates\_fixed
+    
+\subsection{DSPstone\_fixed\_point/dot\_product\_fixed}
+	REMOVE: Can be removed as it is part of DSPstone\_fixed\_point/matrix1\_fixed
+
+\subsection{DSPstone\_fixed\_point/n\_complex\_updates\_fixed}
+	KEEP: This benchmark can be configured to include DSPstone\_fixed\_point/complex\_update\_fixed 
+
+\subsection{DSPstone\_fixed\_point/n\_real\_updates\_fixed}
+	KEEP: This benchmark can be configured to include DSPstone\_fixed\_point/real\_update\_fixed
+    
+\subsection{DSPstone\_fixed\_point/real\_update\_fixed}
+	REMOVE: Can be removed as it is part of DSPstone\_fixed\_point/n\_real\_updates\_fixed
+    
+
+\subsection{DSPstone\_floating\_point/complex\_multiply\_floating}
+	TO BE DISCUSSED: I would keep this one to test the elementary multiplication of a complex number. Then again it strongly resembles a D2 matrix mult (DSPstone\_fixed\_point/matrix1\_fixed).
+    
+\subsection{DSPstone\_floating\_point/complex\_update\_floating}
+	REMOVE: Can be removed as it is part of DSPstone\_floating\_point/n\_complex\_updates\_floating
+    
+\subsection{DSPstone\_floating\_point/dot\_product\_floating}
+	REMOVE: Can be removed as it is part of DSPstone\_floating\_point/matrix1\_floating
+
+\subsection{DSPstone\_floating\_point/n\_complex\_updates\_floating}
+	KEEP: This benchmark can be configured to include DSPstone\_floating\_point/complex\_update\_floating 
+
+\subsection{DSPstone\_floating\_point/n\_real\_update\_floating}
+	KEEP: This benchmark can be configured to include  DSPstone\_floating\_point/real\_update
+    
+\subsection{DSPstone\_floating\_point/real\_update\_floating}
+	REMOVE: Can be removed as it is part of DSPstone\_floating\_point/n\_real\_updates\_floating
+
+    
+\subsection{MISC/ammunition}   
+	KEEP: Integer library addressing overflow. It contains 7 bits (mem) tests and 35 useful arithmetic tests (overflow). It can probably be scaled down but not removed.
+    
+	\subsubsection{bits}
+    	KEEP:Unique benchmark on mem actions
+    \subsubsection{arithm}
+    	KEEP:Unique benchmark on overflow
+        
+\subsection{MRTC/expint}
+	KEEP: Unique
+\subsection{MRTC/fac}
+	KEEP: Unique
+\subsection{MRTC/fibcal}
+	KEEP: Unique
+\subsection{MRTC/prime}
+	KEEP:Unique
+\subsection{MRTC/qurt}
+	KEEP: Unique
+\subsection{MRTC/sqrt}
+	REMOVE: Code available in MRTC/qurt and MRTC/st
+\subsection{MRTC/st}
+	KEEP: Unique
+\subsection{MiBench/basicmath\_small}
+    \subsubsection{solvecubic}
+    	KEEP:Unique
+    \subsubsection{isqrt}
+    	KEEP:Unique
+    \subsubsection{memcpy}
+    	KEEP: necessary for other benchmarks
+    \subsubsection{rad2deg}
+    	KEEP: unique
+    \subsubsection{deg2rad}
+    	KEEP: Unique
+    \subsubsection{conversions}
+    	KEEP: Unique
+    
+
+\section{Matrix benchmarks}
+
+\begin{itemize}
+	\item \st{DSPstone\_fixed\_point/matrix1x3\_fixed}
+	\item DSPstone\_fixed\_point/matrix1\_fixed
+	\item \st{DSPstone\_floating\_point/matrix1x3\_float}
+	\item DSPstone\_floating\_point/matrix1\_float
+	\item MRTC/countnegative
+    \item MRTC/ludcmp
+    \item MRTC/matmult
+    \item MRTC/minver
+\end{itemize}
+
+  \subsection{DSPstone\_fixed\_point/matrix1x3\_fixed}
+      REMOVE: Can be removed as it is part of DSPstone\_fixed\_point/matrix1\_fixed
+    
+    
+  \subsection{DSPstone\_fixed\_point/matrix1\_fixed}
+      KEEP: This benchmark can be configured to include DSPstone\_fixed\_point/matrix1x3\_fixed and DSPstone\_fixed\_point/dot\_product\_fixed
+
+
+  \subsection{DSPstone\_floating\_point/matrix1x3\_float}
+  REMOVE: Can be removed as it is part of DSPstone\_float\_point/matrix1\_float
+  \subsection{DSPstone\_floating\_point/matrix1\_float}
+  KEEP: This benchmark can be configured to include DSPstone\_float\_point/matrix1x3\_float and DSPstone\_float\_point/dot\_product\_float
+  
+  \subsection{MRTC/countnegative}
+  	KEEP: Unique function and matrix is 2 dimensional array
+  \subsection{MRTC/ludcmp}
+  	KEEP: Unique function and matrix is 2 dimensional array
+  \subsection{MRTC/matmult}
+  	KEEP: Resembles DSPstone\_fixed\_point/matrix1\_fixed BUT array is 2 dimensional in this case
+  \subsection{MRTC/minver}
+  	KEEP: Floating point matrix inversion
+
+
+\end{document}

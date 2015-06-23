@@ -1,0 +1,57 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{soul}
+
+\title{Review TACLeBench}
+
+\author{Heiko Falk}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document will contain the first review of the TACLeBench code regarding the
+topic image coding/encoding algorithms.
+\end{abstract}
+
+
+\section{Image Coding/Encoding}
+
+\begin{itemize}
+        \item MediaBench/cjpeg\_jpe6b\_transupp
+        \item MediaBench/cjpeg\_jpeg6b\_wrbmp
+        \item MediaBench/epic
+        \item \st{MediaBench/h264dec\_ldecode\_block}
+        \item MediaBench/h264dec\_ldecode\_macroblock
+        \item MediaBench/mpeg2
+        \item MiBench/susan
+\end{itemize}
+
+
+\subsection{MediaBench/cjpeg\_jpe6b\_transupp}
+  KEEP: Lots of true image processing, rotating and mirroring. Looks unique and useful. \\
+  TODO: At end of C source code, quite some 100's of lines are commented out. Is this also the case in the original MediaBench code? If not, why is it commented out here\dots?
+\subsection{MediaBench/cjpeg\_jpeg6b\_wrbmp}
+  KEEP: Routines to write JPEG images into some buffer in memory. Looks unique and useful, is definitely not redundant with MediaBench/cjpeg\_jpe6b\_transupp. \\
+  TODO: Again, lots of code are commented out at the end. Is this intentional?
+\subsection{MediaBench/epic}
+  KEEP: Pretty complex and unique code (many original C files merged into a single one, input data defined as {\tt extern} and put in separate compilation unit, size of input arrays left open, deeply-nested and regular loops, lots of DSP code. epic is known to be a stress-test for timing analyzers and compiler optimizations. \\
+  TODO: Includes matrix transpose kernels, convolution filter and DSP code. We need to check whether we can kick out some of the trivial matrix and DSPStone kernels in favor of this one.
+\subsection{MediaBench/h264dec\_ldecode\_block}
+  REMOVE: Code of rather low complexity (loop nesting level of approx. 3 only, not too complex code with many array references, only a little bit of arithmetic -- mostly addition/subtraction, a few divisions or modulos; again lots of code commented out, contains lots of pre-initialized global arrays directly in the C source code), by far not as complex as epic above.
+\subsection{MediaBench/h264dec\_ldecode\_macroblock}
+  KEEP: Much more complex code and completely different code as compared to the previous h264 benchmark, more control flow (if-else), more deeply nested loops; basically, 1 fat C function doing the whole work.
+\subsection{MediaBench/mpeg2}
+  KEEP: Completely different algorithm than anything else in this category, should definitely be kept; code structured in various functions, with complex control flow and quite deeply nested loops inside. \\
+  TODO: Input data (fat!!! arrays) directly encoded in C source file, which makes $>$ 67,000 lines of the 69,000 lines of the entire code.
+\subsection{MiBench/susan}
+  KEEP: Unique algorithm that is not comparable with anything else in this category (complex medical image processing algorithm, including inlined library calls for input/output handling and {\tt memcpy}; quite some sequences with straight-line code)
+
+\end{document}

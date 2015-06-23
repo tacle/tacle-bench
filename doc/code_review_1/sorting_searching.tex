@@ -1,0 +1,61 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{soul}
+
+\title{Review Tackle Bench}
+
+\author{Sebastian Altmeyer}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document will contain the first review of the tackle bench regarding the topic sorting and searching.
+\end{abstract}
+
+\section{Sorting}
+
+\begin{itemize}
+	\item  MRTC/bsort100
+	\item  MRTC/insertsort
+	\item  MRTC/qsort-exam ??
+	\item  MiBench/qsort ??
+	\item  StreamIt/bitonic
+\end{itemize}
+
+\subsection{MRTC/bsort100}
+	KEEP: Unique
+\subsection{MRTC/insertsort}
+	KEEP: Unique
+\subsection{MRTC/qsort-exam}
+\subsection{MiBench/qsort}
+	TO BE DISCUSSED: 'qsort' and 'qsort-exam' differ in the data type: 'qsort-exam' sorts floats, 'qsort' sorts char arrays or long ints. 'qsort' also seems to contain superfluous functions. I propose to either merge all, or keep all in separated files.
+\subsection{StreamIt/bitonic}
+	KEEP: Unique
+
+
+\section{Searching}
+
+\begin{itemize}
+	\item  MRTC/binarysearch
+	\item  MRTC/select
+	\item  MiBench/bitcount ??
+\end{itemize}
+
+\subsection{MRTC/binarysearch}
+	KEEP: Unique
+\subsection{MRTC/select}
+	KEEP: Unique
+\subsection{MiBench/bitcount}
+	TO BE DISCUSSED: contains (at least) 4 different implementations of a bit counter, each one in a different c-file. It is somehow strange to have all in one benchmark, but then again, they are very very small. Againm we can merge all in one file and one benchmark, or separate all and create 4 benchmarks. The first option seems better to me.
+
+    
+
+\end{document}
