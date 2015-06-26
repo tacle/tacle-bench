@@ -1,6 +1,24 @@
 /*
 
-  Generic TACLeBench header, to be invented by Martin.    :)
+  This program is part of the TACLeBench benchmark suit.
+  Version V 1.x
+
+  Name: st
+
+  Author: unknown
+
+  Function: st is a statistics program.
+    This program computes for two arrays of numbers the sum, the mean,
+    the variance, and standard deviation.  It then determines the
+    correlation coefficient between the two arrays.
+
+  Source: MRTC (maybe a link such as: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/st/st.c?)
+
+  Changes: a brief summary of major functional changes (not formatting)
+
+  License: general open-source
+
+  If applicable, original copyright statement.
 
 */
 
