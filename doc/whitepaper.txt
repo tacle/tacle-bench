@@ -1,3 +1,12 @@
 This is a plain text starting point to collect stuff.
 
 Next step: document selection of benchmarks and why
+
+
+Open issues:
+
+There is an issue with size_t definition in a benchmark (e.g., bitcnt).
+Definition of size_t (and similar) may give trouble when including
+other include files. We do not want library definitions in benchmarks.
+However, I think it would be cleaner to include stddef.h instead
+of defining size_t in a benchmark. That should be ok for all C compiler.

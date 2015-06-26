@@ -1,0 +1,41 @@
+#
+# This is an option file for the "astyle" source code formatting tool. The
+# options which are set here should model the WCC coding guidelines as close as
+# possible. Astyle can then be invoked in the following way:
+#
+# astyle --options=hacking.astylerc <input file>
+#
+# The command can be easily integrated into vim and emacs such that it filters
+# the text in the editor. In vim this can be done by setting the 'equalprg'
+# option and using '=' to format the selected area (visual mode) or the given
+# range (command mode).
+#
+
+# Bracket Style Options:
+--style=kr
+
+# Tab Options:
+--indent=spaces=2
+
+# Indentation Options:
+--indent-classes
+--indent-switches
+--indent-cases
+--indent-preproc-cond
+
+# Padding Options:
+--pad-oper
+--pad-header
+--pad-paren-in
+--align-pointer=name
+
+# Formatting Options:
+--break-elseifs
+--remove-brackets
+--convert-tabs
+--remove-comment-prefix
+--max-code-length=80
+--break-after-logical
+
+# Other Options:
+--lineend=linux
