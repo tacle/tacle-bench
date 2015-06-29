@@ -1,0 +1,160 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{soul}
+
+\title{Review TACLeBench}
+
+\author{Martin Schoeberl}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document will contain the first review of the TACLeBench code regarding the
+topic coding/encoding algorithms.
+\end{abstract}
+
+
+\section{Coding/Encoding}
+
+\begin{itemize}
+        \item \st{DSPstone\_fixed\_point/adpcm\_g721\_board\_test}
+        \item \st{DSPstone\_fixed\_point/adpcm\_g721\_verify}
+        \item MISC/codecs\_codhuff
+        \item \st{MISC/codecs\_codrle1}
+        \item MISC/codecs\_dcodhuff
+        \item \st{MISC/codecs\_dcodrle1}
+        \item MISC/g721\_encode
+        \item \st{MISC/g723\_encode}
+        \item MRTC/adpcm\_decoder
+        \item MRTC/adpcm\_encoder
+        \item \st{MRTC/compressdata}
+        \item \st{MRTC/crc}
+        \item MRTC/ndes
+        \item MediaBench/gsm
+        \item \st{MediaBench/gsm\_decode}
+        \item \st{MediaBench/gsm\_encode}
+        \item MiBench/rijndael\_decoder
+        \item MiBench/rijndael\_encoder
+        \item \st{MiBench/sha}
+        \item \st{NetBench/md5}
+        \item StreamIt/audiobeam
+        \item StreamIt/fmref
+\end{itemize}
+
+
+\subsection{DSPstone\_fixed\_point/adpcm\_g721\_board\_test}
+
+ADPCM 721 encoding and decoding of 32 samples. \\
+REMOVE: Duplication. Not so nice license. \\
+TODO: maybe there is some work to do.
+
+\subsection{DSPstone\_fixed\_point/adpcm\_g721\_verify}
+
+Basically the same as the above, just verifying the results. \\
+REMOVE: Duplication of g712\_board\_test.
+
+\subsection{MISC/codecs\_codhuff}
+
+Huffman encoding. \\
+KEEP: Different form all ADPCM code. \\
+TODO: Merge with dcodhuff.
+
+\subsection{MISC/codecs\_codrle1}
+
+REMOVE: Too tiny. Maybe keep in kernel.
+
+\subsection{MISC/codecs\_dcodhuff}
+
+Huffman encoding. \\
+KEEP: if merged with Huffman encoding. \\
+TODO: merge with encoding to call encoding and decoding on the data.
+
+\subsection{MISC/codecs\_dcodrle1}
+
+REMOVE: too tiny. If kept as kernel, merge with codrle1.
+
+\subsection{MISC/g721\_encode}
+
+ADOCM 721 encoding, similar to above. But nicer license. \\
+KEEP: maybe.
+
+\subsection{MISC/g723\_encode}
+
+REMOVE: Basically the same source as g721\_encode.
+
+\subsection{MRTC/adpcm\_decoder}
+
+ADPCM 722 decoding of 2 samples. Similar functionality as 
+DSPstone, but different algorithms. \\
+KEEP: keep, but adapt: larger sample size and merge with encoder.
+
+\subsection{MRTC/adpcm\_encoder}
+
+ADPCM 722 encoding of 2 samples. Similar functionality as 
+DSPstone, but different algorithms. \\
+KEEP: keep, but adapt: larger sample size and merge with decoder.
+
+\subsection{MRTC/compressdata}
+
+REMOVE: too small benchmark. Maybe keep in a kernels category.
+
+\subsection{MRTC/crc}
+
+REMOVE: too small benchmark. Maybe keep in a kernels category.
+
+\subsection{MRTC/ndes}
+
+Encryption, but not clear what it exactly does and where it comes from.
+KEEP: but better be in a kernel category. \\
+TODO: need to be checked agains other encryption benchmarks.
+
+\subsection{MediaBench/gsm}
+
+GSM encoding and decoding. \\
+KEEP:
+\subsection{MediaBench/gsm\_decode}
+
+GSM decode. \\
+REMOVE: included in gsm.
+
+\subsection{MediaBench/gsm\_encode}
+
+GSM encode. \\
+REMOVE: included in gsm.
+
+\subsection{MiBench/rijndael\_decoder}
+
+AES decoder. \\
+KEEP: merge with encoder. Need to be checked against other en/decryption code.
+
+\subsection{MiBench/rijndael\_encoder}
+
+AES encoder. \\
+KEEP: merge with decoder. Need to be checked against other en/decryption code.
+
+\subsection{MiBench/sha}
+
+REMOVE: another crypto code, small code. Maybe keep in kernel category.
+
+\subsection{NetBench/md5}
+
+REMOVE: another small kernel. Maybe keep in kernel category.
+
+\subsection{StreamIt/audiobeam}
+
+KEEP: Looks interesting and different from the others.
+TODO: Find a description and the original source.
+
+\subsection{StreamIt/fmref}
+
+KEEP: Looks interesting and different from the others. Maybe this belongs to kernel category.
+TODO: Find a description and the original source.
+
+\end{document}
