@@ -1,6 +1,6 @@
 /*
 
-  This program is part of the TACLeBench benchmark suit.
+  This program is part of the TACLeBench benchmark suite.
   Version V 1.x
 
   Name: st
@@ -9,16 +9,15 @@
 
   Function: st is a statistics program.
     This program computes for two arrays of numbers the sum, the mean,
-    the variance, and standard deviation.  It then determines the
+    the variance, and standard deviation. It then determines the
     correlation coefficient between the two arrays.
 
-  Source: MRTC (maybe a link such as: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/st/st.c?)
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/st/st.c
 
   Changes: a brief summary of major functional changes (not formatting)
 
   License: general open-source
-
-  If applicable, original copyright statement.
 
 */
 
@@ -29,16 +28,15 @@
 
 void st_initSeed();
 long st_randomInteger();
-void st_initialize( volatile float * );
+void st_initialize( float * );
 void st_init();
 int st_return( float, float, float, float, float );
 float st_fabs( float );
 float st_sqrtf( float );
 float st_square( float );
-void st_calc_Sum_Mean( volatile float *, float *, float * );
-void st_calc_Var_Stddev( volatile float *, float, float *, float * );
-void st_calc_LinCorrCoef( volatile float *, volatile float *, float, float,
-                          float * );
+void st_calc_Sum_Mean( float *, float *, float * );
+void st_calc_Var_Stddev( float *, float, float *, float * );
+void st_calc_LinCorrCoef( float *, float *, float, float, float * );
 void st_main();
 int main( void );
 
@@ -48,7 +46,7 @@ int main( void );
 */
 
 volatile int st_seed;
-volatile float st_arrayA[ 1000 ], st_arrayB[ 1000 ];
+float st_arrayA[ 1000 ], st_arrayB[ 1000 ];
 float st_sumA, st_sumB;
 float st_meanA, st_meanB, st_varA, st_varB, st_stddevA, st_stddevB, st_coef;
 
@@ -60,7 +58,7 @@ float st_meanA, st_meanB, st_varA, st_varB, st_stddevA, st_stddevB, st_coef;
 /*
   st_initSeed initializes the seed used in the "random" number generator.
 */
-void st_initSeed ()
+void st_initSeed()
 {
   st_seed = 0;
 }
@@ -76,7 +74,7 @@ long st_randomInteger()
 }
 
 
-void st_initialize( volatile float *array )
+void st_initialize( float *array )
 {
   register int i;
 
@@ -159,7 +157,7 @@ float st_square( float x )
   Algorithm core functions
 */
 
-void st_calc_Sum_Mean( volatile float *array, float *sum, float *mean )
+void st_calc_Sum_Mean( float *array, float *sum, float *mean )
 {
   int i;
 
@@ -172,8 +170,7 @@ void st_calc_Sum_Mean( volatile float *array, float *sum, float *mean )
 }
 
 
-void st_calc_Var_Stddev( volatile float *array, float mean, float *var,
-                         float *stddev )
+void st_calc_Var_Stddev( float *array, float mean, float *var, float *stddev )
 {
   int i;
   float diffs = 0.0f;
@@ -187,8 +184,8 @@ void st_calc_Var_Stddev( volatile float *array, float mean, float *var,
 }
 
 
-void st_calc_LinCorrCoef( volatile float *arrayA, volatile float *arrayB,
-                          float meanA, float meanB, float *coef )
+void st_calc_LinCorrCoef( float *arrayA, float *arrayB, float meanA,
+                          float meanB, float *coef )
 {
   int i;
   float numerator = 0.0f, Aterm = 0.0f, Bterm = 0.0f;

@@ -9,15 +9,8 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
 - Removed obsolete preprocessor macro MAX from line 3
 - Removed comment describing purpose of benchmark from lines 6-10
 - Renamed global variable Seed to st_Seed, declared st_Seed as volatile
-- Declared argument of function Initialize as volatile in order to reflect the
-  volatile character of global variable st_Seed
-- Renamed global variable ArrayA to st_ArrayA, declared st_ArrayA as
-  volatile
-- Renamed global variable ArrayB to st_ArrayB, declared st_ArrayB as
-  volatile
-- Declared first argument of functions Calc_Sum_Mean, Calc_Var_Stddev and
-  Calc_LinCorrCoef as volatile in order to reflect the volatile character of
-  the global variables above
+- Renamed global variable ArrayA to st_ArrayA
+- Renamed global variable ArrayB to st_ArrayB
 - Renamed global variable SumA to st_SumA
 - Renamed global variable SumB to st_SumB
 - Removed global variable Coef, reinserted previous local variable Coef that
@@ -96,3 +89,4 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+- Added general TACLeBench header to beginning of source code
