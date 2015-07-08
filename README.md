@@ -10,7 +10,7 @@ Getting Started
 
 All benchmarks are self-contained and can be compiled just with
 
-    cc/geec/clang *.c
+    cc/gcc/clang *.c
 
 Current Status
 ==============
