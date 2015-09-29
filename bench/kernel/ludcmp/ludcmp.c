@@ -57,8 +57,6 @@
 **                 (from the book C Programming for EEs by Hyun Soon Ahn)
 */
 
-#define double long
-
 /* Forward function prototypes */
 int  ludcmp( /* int nmax, */ int n, double eps);
 
