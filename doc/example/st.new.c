@@ -30,7 +30,7 @@ void st_initSeed();
 long st_randomInteger();
 void st_initialize( float * );
 void st_init();
-int st_return( float, float, float, float, float );
+int st_return();
 float st_fabs( float );
 float st_sqrtf( float );
 float st_square( float );
@@ -92,10 +92,9 @@ void st_init()
 }
 
 
-int st_return( float meanA, float meanB, float stddevA, float stddevB,
-               float coef )
+int st_return()
 {
-  float checksum = meanA + meanB + stddevA + stddevB + coef;
+  float checksum = st_meanA + st_meanB + st_stddevA + st_stddevB + st_coef;
   return ( ( int ) checksum );
 }
 
@@ -222,5 +221,5 @@ int main( void )
   st_init();
   st_main();
 
-  return ( st_return( st_meanA, st_meanB, st_stddevA, st_stddevB, st_coef ) );
+  return ( st_return() );
 }
