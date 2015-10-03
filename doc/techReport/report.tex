@@ -1,0 +1,106 @@
+\documentclass[a4paper,10pt]{scrartcl}
+\usepackage[utf8]{inputenc}
+
+\usepackage{ifthen}
+\usepackage{amssymb}
+\usepackage{amsbsy,natbib}
+\usepackage{amsfonts,amsmath,bm}
+\usepackage{graphicx,fancybox,amssymb}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\RequirePackage{graphics,epsf}
+
+\usepackage[backgroundcolor=none,linecolor=none,textsize=footnotesize,textwidth=0.75in]{todonotes}
+
+
+\begin{document}
+
+\title{TACLeBench 2.0}
+\subtitle{Technical Report}
+
+
+\author{
+% % 1st. author
+% \alignauthor Author 1\\
+%        \affaddr{Affiliation 1}\\
+% % 2nd. author
+% \alignauthor Author 1\\
+%        \affaddr{Affiliation 1}\\
+% % 3rd. author
+% \alignauthor Author 1\\
+%        \affaddr{Affiliation 1}\\
+% % 4th. author
+% \and
+% \alignauthor Author 1\\
+%        \affaddr{Affiliation 1}\\
+% % 5th. author
+% \alignauthor Author 1\\
+%        \affaddr{Affiliation 1}
+}
+
+
+
+\maketitle
+\todo[inline]{Determine list of authors (TACLeBench mailing list?)}
+
+\begin{abstract}
+\end{abstract}
+
+
+\section{Introduction}
+
+\section{How to use the TACLeBench}
+\todo[inline]{A kind of manual on how to compile and analyze the benchmarks}
+
+\section{Benchmark Selection}
+The original set of benchmark, \textit{TACLeBench 1.0} is an unstructured combination of other benchmark suites listed in Table~\ref{tab:benchSources}. 
+The initial selection contained $102?$ benchmarks.
+Not only does such this large collection encourage cherry-picking of the benchmark results, it also contains duplicates or meaningless benchmarks.
+We have therefore cleaned the initial collection and removed a benchmark from version 1.0 to 2.0, if one or more of the following criteria applied:
+\begin{enumerate}[(1)]
+ \item Too small, too simple
+ \item Part of other benchmark
+ \item Duplicate of another benchmark
+ \item Too similar to another benchmark
+ \item Combination of other existing benchmarks
+ \item Corrupt code
+ \item License issues
+\end{enumerate}
+\todo[inline]{We probably need to provide examples of the different criteria (especially the first one) and also explain which of the duplicates benchmarks were removed}
+
+\begin{table}[ht]
+\begin{tabular}{|l|}
+\hline
+{M{\"a}lardalen} {WCET} Benchmarks  \\ \url{www.mrtc.mdh.se/projects/wcet/benchmarks.html}\\\hline
+MiBench Version 1.0 			\\ \url{wwweb.eecs.umich.edu/mibench} \\\hline
+StreamIt Benchmarks 			\\ \url{groups.csail.mit.edu/cag/streamit} \\\hline
+MediaBench II Benchmark 		\\ \url{euler.slu.edu/~fritts/mediabench} \\\hline
+DSPStone				\\ \url{www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone} \\\hline
+Debbie Benchmark			\\ \url{www.tidorum.fi} \\\hline
+PapaBench				\\ \url{wiki.paparazziuav.org/wiki/Main_Page} \\\hline
+\end{tabular}
+\caption{Benchmark Sources for the TACLeBench 1.0}
+\label{tab:benchSources}
+\end{table}
+
+\section{Common Code Format}
+\todo[inline]{Explain which code format we have selected, that we have unified all benchmarks}
+
+\section{Benchmark License}
+\todo[inline]{Explanation of the benchmarks license}
+
+\section{Release Procedure}
+\todo[inline]{We need to explain the procedure of adding new benchmarks to TACLeBench.}
+
+\section{Conclusions}\label{sec:Conclusions}
+
+
+\bibliographystyle{plain}
+% \bibliography{bibliography}
+
+\clearpage
+
+
+
+\end{document}
