@@ -27,8 +27,8 @@
   Forward declaration of functions
 */
 
-void bs_init();
-int bs_return();
+void bs_init( void );
+int bs_return( void );
 int bs_binary_search( int );
 void bs_main( void );
 int main( void );
@@ -52,7 +52,7 @@ int bs_result;
   Initialization- and return-value-related functions
 */
 
-void bs_init()
+void bs_init( void )
 {
   bs_data[ 0 ].key = 1;
   bs_data[ 0 ].value = 100;
@@ -87,7 +87,7 @@ void bs_init()
 }
 
 
-int bs_return()
+int bs_return( void )
 {
   return( bs_result );
 }
