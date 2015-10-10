@@ -1,5 +1,5 @@
 #include "wcclibm.h"
-#include "qsort.h"
+#include "quicksort.h"
 #include "wccstdlib.h"
 
 #define NUM_STRINGS 681

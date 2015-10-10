@@ -1,4 +1,4 @@
-#include "qsort.h"
+#include "quicksort.h"
 
 static int wccstrcmp ( const char * str1, const char * str2 )
 {
@@ -10,7 +10,7 @@ static int wccstrcmp ( const char * str1, const char * str2 )
     }
     pos++;
   }
-  
+
   if ( str1[pos] != 0 ) {
     return 1;
   } else {
@@ -23,7 +23,7 @@ static int wccstrcmp ( const char * str1, const char * str2 )
 int compare_strings(const char *elem1, const char *elem2)
 {
   int result;
-  
+
   result = wccstrcmp(elem1, elem2);
 
   return (result < 0) ? 1 : ((result == 0) ? 0 : -1);
