@@ -1,95 +1,145 @@
-/*************************************************************************/
-/*                                                                       */
-/*   SNU-RT Benchmark Suite for Worst Case Timing Analysis               */
-/*   =====================================================               */
-/*                              Collected and Modified by S.-S. Lim      */
-/*                                           sslim@archi.snu.ac.kr       */
-/*                                         Real-Time Research Group      */
-/*                                        Seoul National University      */
-/*                                                                       */
-/*                                                                       */
-/*        < Features > - restrictions for our experimental environment   */
-/*                                                                       */
-/*          1. Completely structured.                                    */
-/*               - There are no unconditional jumps.                     */
-/*               - There are no exit from loop bodies.                   */
-/*                 (There are no 'break' or 'return' in loop bodies)     */
-/*          2. No 'switch' statements.                                   */
-/*          3. No 'do..while' statements.                                */
-/*          4. Expressions are restricted.                               */
-/*               - There are no multiple expressions joined by 'or',     */
-/*                'and' operations.                                      */
-/*          5. No library calls.                                         */
-/*               - All the functions needed are implemented in the       */
-/*                 source file.                                          */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
-/*                                                                       */
-/*  FILE: bs.c                                                           */
-/*  SOURCE : Public Domain Code                                          */
-/*                                                                       */
-/*  DESCRIPTION :                                                        */
-/*                                                                       */
-/*     Binary search for the array of 15 integer elements.               */
-/*                                                                       */
-/*  REMARK :                                                             */
-/*                                                                       */
-/*  EXECUTION TIME :                                                     */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: binarysearch
+
+  Author: unknown
+
+  Function: binarysearch performs binary search in an array of 15 integer
+    elements.
+    This program is completely structured (no unconditional jumps, no exits
+    from loop bodies), and does not contain switch statements, no do-while
+    loops.
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/bs/bs.c
+
+  Changes:
+
+  License: general open-source
+
+*/
 
 
+/*
+  Forward declaration of functions
+*/
 
-struct DATA {
-  int  key;
-  int  value;
+void bs_init();
+int bs_return();
+int bs_binary_search( int );
+void bs_main( void );
+int main( void );
+
+
+/*
+  Declaration of global variables
+*/
+
+struct bs_DATA {
+  int key;
+  int value;
 };
 
-struct DATA data[15] = { {1, 100}, {5,200}, {6, 300}, {7, 700}, {8, 900},
-                         {9, 250}, {10, 400}, {11, 600}, {12, 800}, {13, 1500},
-                         [10]={14, 1200}, {15, 110}, {16, 140}, {17, 133}, {18, 10} };
+struct bs_DATA bs_data[ 15 ];
 
-int cnt1 = 0;
+int bs_result;
 
 
-extern int binary_search( int );
+/*
+  Initialization- and return-value-related functions
+*/
 
-
-int main( void )
+void bs_init()
 {
-  return binary_search( 8 );
+  bs_data[ 0 ].key = 1;
+  bs_data[ 0 ].value = 100;
+  bs_data[ 1 ].key = 5;
+  bs_data[ 1 ].value = 200;
+  bs_data[ 2 ].key = 6;
+  bs_data[ 2 ].value = 300;
+  bs_data[ 3 ].key = 7;
+  bs_data[ 3 ].value = 700;
+  bs_data[ 4 ].key = 8;
+  bs_data[ 4 ].value = 900;
+  bs_data[ 5 ].key = 9;
+  bs_data[ 5 ].value = 250;
+  bs_data[ 6 ].key = 10;
+  bs_data[ 6 ].value = 400;
+  bs_data[ 7 ].key = 11;
+  bs_data[ 7 ].value = 600;
+  bs_data[ 8 ].key = 12;
+  bs_data[ 8 ].value = 800;
+  bs_data[ 9 ].key = 13;
+  bs_data[ 9 ].value = 1500;
+  bs_data[ 10 ].key = 14;
+  bs_data[ 10 ].value = 1200;
+  bs_data[ 11 ].key = 15;
+  bs_data[ 11 ].value = 110;
+  bs_data[ 12 ].key = 16;
+  bs_data[ 12 ].value = 140;
+  bs_data[ 13 ].key = 17;
+  bs_data[ 13 ].value = 133;
+  bs_data[ 14 ].key = 18;
+  bs_data[ 14 ].value = 10;
 }
 
 
-int binary_search( int x )
+int bs_return()
+{
+  return( bs_result );
+}
+
+
+/*
+  Algorithm core functions
+*/
+
+int bs_binary_search( int x )
 {
   int fvalue, mid, up, low;
-
 
   low = 0;
   up = 14;
   fvalue = -1;
 
+  _Pragma( "loopbound min 1 max 4" )
+  while ( low <= up ) {
+    mid = ( low + up ) >> 1;
 
-  _Pragma("loopbound min 4 max 4")
-  while (low <= up) {
-    mid = (low + up) >> 1;
-
-    if ( data[mid].key == x ) {  /* found */
+    if ( bs_data[ mid ].key == x ) {
+      /* Item found */
       up = low - 1;
-      fvalue = data[mid].value;
+      fvalue = bs_data[ mid ].value;
     } else
 
-    if ( data[mid].key > x ) {  /* not found */
+    if ( bs_data[ mid ].key > x )
+      /* Item not found */
       up = mid - 1;
-    } else {
+    else
       low = mid + 1;
-    }
-    
-    cnt1++;
   }
-  return fvalue;
+
+  return( fvalue );
 }
 
+
+/*
+  Main functions
+*/
+
+void _Pragma ( "entrypoint" ) bs_main( void )
+{
+  bs_result = bs_binary_search( 8 );
+}
+
+
+int main( void )
+{
+  bs_init();
+  bs_main();
+
+  return( bs_return() );
+}
