@@ -69,6 +69,7 @@ void uart1_transmit(const unsigned char data ) {
 
 void uart0_print_string(const uint8_t* s) {
   uint8_t i = 0;
+  _Pragma("loopbound min 0 max 0" )
   while (s[i]) {
     uart0_transmit(s[i]);
     i++;

@@ -57,7 +57,9 @@ double pp_sin(double x)
 	int sign;
 
 	xi = x; sign = 1;
+  _Pragma("loopbound min 0 max 0" )
 	while (xi < -1.57079632679489661923) xi += 6.28318530717958647692;
+  _Pragma("loopbound min 0 max 0" )
 	while (xi > 4.71238898038468985769) xi -= 6.28318530717958647692;
 	if (xi > 1.57079632679489661923) {
 		xi -= 3.141592653589793238462643;
@@ -84,6 +86,7 @@ double pp_sqrt(double n)
 	x = ldexp(m, e/2);
 	
 	/* perform the computation */
+  _Pragma( "loopbound min 5 max 5 )
 	for(i = 0; i < SQRT_PRECISION; i++)
 		x = (x + n / x) / 2;
 	return x;
