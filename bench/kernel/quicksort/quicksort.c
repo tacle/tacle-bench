@@ -1,47 +1,237 @@
-#include "wcclibm.h"
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: quicksort
+
+  Author: Matthew R. Guthaus
+
+  Function: quicksort applies a recursive quicksort algorithm to two different
+    input sets.
+
+  Source: MiBench
+          http://wwweb.eecs.umich.edu/mibench
+
+  Changes:
+
+  License: GPL
+
+*/
+
+
+/*
+  Include section
+*/
+
 #include "quicksort.h"
-#include "wccstdlib.h"
+#include "quicksortlibm.h"
+#include "quicksortstdlib.h"
 
-#define NUM_STRINGS 681
-#define NUM_VECTORS 1000
 
-extern const char *input_string[NUM_STRINGS];
-extern const unsigned int input_vector[NUM_VECTORS*3];
+/*
+  Forward declaration of functions
+*/
 
-int main( void ) {
-  struct my3DVertexStruct vectors[NUM_VECTORS];
-  char strings[NUM_STRINGS][STRING_LENGTH];
+void quicksort_init( void );
+int quicksort_return( void );
+void quicksort_str( char *, unsigned long, unsigned long );
+void quicksort_vec( char *, unsigned long, unsigned long );
+void quicksort_main( void );
+int main( void );
+
+
+/*
+  Declaration of global variables
+*/
+
+extern volatile char *quicksort_input_string[ 681 ];
+char quicksort_strings[ 681 ][ 20 ];
+
+extern volatile unsigned int quicksort_input_vector[ 1000 * 3 ];
+struct quicksort_3DVertexStruct quicksort_vectors[ 1000 ];
+
+
+/*
+  Initialization- and return-value-related functions
+*/
+
+void quicksort_init( void )
+{
   unsigned int i, j;
-  unsigned int x,y,z;
+  unsigned int x, y, z;
   unsigned int read_counter = 0;
 
-  // Init arrays
+
+  /* Init arrays */
   _Pragma( "loopbound min 681 max 681" )
-  for ( i = 0; i < NUM_STRINGS; i++ ) {
-    _Pragma( "loopbound min 2 max 13" )
-    for ( j = 0; j < STRING_LENGTH - 1; j++ ) {
-      strings[i][j] = input_string[i][j];
-      if ( input_string[i][j] == '\0' ) {
+  for ( i = 0; i < 681; i++ ) {
+    _Pragma( "loopbound min 1 max 20" )
+    for ( j = 0; j < 20 - 1; j++ ) {
+      quicksort_strings[ i ][ j ] = quicksort_input_string[ i ][ j ];
+
+      if ( quicksort_input_string[ i ][ j ] == '\0' )
         break;
-      }
     }
-    // Terminate with '\0' anyways
-    strings[i][STRING_LENGTH - 1] = '\0';
+
+    /* Terminate with '\0' anyways. */
+    quicksort_strings[ i ][ 20 - 1 ] = '\0';
   }
+
   _Pragma( "loopbound min 1000 max 1000" )
-  for ( i = 0; i < NUM_VECTORS; i++ ) {
-    x = vectors[i].x = input_vector[read_counter++];
-	  y = vectors[i].y = input_vector[read_counter++];
-	  z = vectors[i].z = input_vector[read_counter++];
-	  vectors[i].distance = sqrt( pow( x, 2 ) + pow( y, 2 ) + pow( z, 2 ) );
+  for ( i = 0; i < 1000; i++ ) {
+    x = quicksort_vectors[ i ].x = quicksort_input_vector[ read_counter++ ];
+    y = quicksort_vectors[ i ].y = quicksort_input_vector[ read_counter++ ];
+    z = quicksort_vectors[ i ].z = quicksort_input_vector[ read_counter++ ];
+
+    quicksort_vectors[ i ].distance =
+      quicksort_sqrt(
+        quicksort_pow( x, 2 ) + quicksort_pow( y, 2 ) + quicksort_pow( z, 2 ) );
   }
+}
+
+
+int quicksort_return( void )
+{
+  int checksum = 0;
+
+  checksum +=
+    quicksort_strings[ 42 ][ 1 ] +
+    quicksort_vectors[ 42 ].x + quicksort_vectors[ 42 ].y +
+    quicksort_vectors[ 42 ].z;
+
+  return( checksum );
+}
+
+
+/*
+  Algorithm core functions
+*/
+
+void quicksort_str( char *a, unsigned long n, unsigned long es )
+{
+  long j;
+  char *pi, *pj, *pn;
+
+
+  _Pragma( "loopbound min 0 max 31" )
+  while ( n > 1 ) {
+    if ( n > 10 )
+      pi = quicksort_pivot_strings( a, n, es );
+    else
+      pi = a + ( n >> 1 ) * es;
+
+    quicksort_swapi( a, pi, es );
+    pi = a;
+    pn = a + n * es;
+    pj = pn;
+
+    _Pragma( "loopbound min 1 max 170" )
+    while ( 1 ) {
+      _Pragma( "loopbound min 1 max 26" )
+      do
+        pi += es;
+      while ( ( pi < pn ) && ( quicksort_compare_strings( pi, a ) < 0 ) );
+
+      _Pragma( "loopbound min 1 max 49" )
+      do
+        pj -= es;
+      while ( ( pj > a ) && ( quicksort_compare_strings( pj, a ) > 0 ) );
+
+      if ( pj < pi )
+        break;
+
+      quicksort_swapi( pi, pj, es );
+    }
+
+    quicksort_swapi( a, pj, es );
+    j = ( pj - a ) / es;
+    n = n - j - 1;
+
+    if ( j >= n ) {
+      quicksort_str( a, j, es );
+      a += ( j + 1 ) * es;
+    } else {
+      quicksort_str( a + ( j + 1 ) * es, n, es );
+      n = j;
+    }
+  }
+}
+
+
+void quicksort_vec( char *a, unsigned long n, unsigned long es )
+{
+  long j;
+  char *pi, *pj, *pn;
+
+
+  _Pragma( "loopbound min 0 max 15" )
+  while ( n > 1 ) {
+    if ( n > 10 )
+      pi = quicksort_pivot_vectors( a, n, es );
+    else
+      pi = a + ( n >> 1 ) * es;
+
+    quicksort_swapi( a, pi, es );
+    pi = a;
+    pn = a + n * es;
+    pj = pn;
+
+    _Pragma( "loopbound min 1 max 250" )
+    while ( 1 ) {
+      _Pragma( "loopbound min 1 max 51" )
+      do
+        pi += es;
+      while ( ( pi < pn ) && ( quicksort_compare_vectors( pi, a ) < 0 ) );
+
+      _Pragma( "loopbound min 1 max 27" )
+      do
+        pj -= es;
+      while ( ( pj > a ) && ( quicksort_compare_vectors( pj, a ) > 0 ) );
+
+      if ( pj < pi )
+        break;
+
+      quicksort_swapi( pi, pj, es );
+    }
+
+    quicksort_swapi( a, pj, es );
+    j = ( pj - a ) / es;
+    n = n - j - 1;
+
+    if ( j >= n ) {
+      quicksort_vec( a, j, es );
+      a += ( j + 1 ) * es;
+    } else {
+      quicksort_vec( a + ( j + 1 ) * es, n, es );
+      n = j;
+    }
+  }
+}
+
+
+/*
+  Main functions
+*/
+
+void _Pragma ( "entrypoint" ) quicksort_main( void )
+{
   _Pragma( "marker recursivecall" )
-  _Pragma( "flowrestriction 1*qsorts_strings <= 521*recursivecall" )
-  qsorts_strings(*strings, NUM_STRINGS, sizeof(char[STRING_LENGTH]));
+  _Pragma( "flowrestriction 1*quicksort_str <= 521*recursivecall" )
+  quicksort_str( *quicksort_strings, 681, sizeof( char[ 20 ] ) );
 
   _Pragma( "marker recursivecall2" )
-  _Pragma( "flowrestriction 1*qsorts_vectors <= 650*recursivecall2" )
-  qsorts_vectors( (char*)vectors, NUM_VECTORS, sizeof(struct my3DVertexStruct) );
+  _Pragma( "flowrestriction 1*quicksort_vec <= 650*recursivecall2" )
+  quicksort_vec(
+    ( char * ) quicksort_vectors, 1000,
+    sizeof( struct quicksort_3DVertexStruct ) );
+}
 
-  return 0;
+
+int main( void )
+{
+  quicksort_init();
+  quicksort_main();
+
+  return ( quicksort_return() );
 }

@@ -1,9 +1,7 @@
-#ifndef __QSORT_H
-#define __QSORT_H
+#ifndef __QUICKSORT_H
+#define __QUICKSORT_H
 
-#define STRING_LENGTH 20
-
-struct my3DVertexStruct {
+struct quicksort_3DVertexStruct {
   unsigned int x, y, z;
   double distance;
 };

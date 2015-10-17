@@ -16,10 +16,7 @@
 #ifndef _MATH_PRIVATE_H_
 #define _MATH_PRIVATE_H_
 
-#include "wcclibm.h"
-
-//#include <endian.h>
-//#include <sys/types.h>
+#include "quicksortlibm.h"
 
 /* A representation of a double as a union. */
 union ieee754_double
@@ -57,37 +54,15 @@ union ieee754_double
    time, not at run time; I don't see much benefit to selecting
    endianness at run time.  */
 
-/* A union which permits us to convert between a double and two 32 bit
-   ints.  */
-
-/* #if __FLOAT_WORD_ORDER == BIG_ENDIAN */
-/* #warning USING Big Endian float word order */
-/* typedef union */
-/* { */
-/*   double value; */
-/*   struct */
-/*   { */
-/*     u_int16_t msw; */
-/*     u_int16_t lsw; */
-/*   } parts; */
-/* } ieeeDoubleShapeType; */
-
-/* #endif */
-
-/* #if __FLOAT_WORD_ORDER == LITTLE_ENDIAN */
-/* #warning USING Little Endian float word order */
-
 typedef union
 {
   double value;
   struct
   {
-    u_int16_t lsw;
-    u_int16_t msw;
+    unsigned short lsw;
+    unsigned short msw;
   } parts;
 } ieeeDoubleShapeType;
-
-/* #endif */
 
 /* Get two 32 bit ints from a double.  */
 
@@ -153,7 +128,7 @@ typedef union
 typedef union
 {
   float value;
-  u_int32_t word;
+  unsigned int word;
 } ieee_float_shape_type;
 
 /* Get a 32 bit int from a float.  */
