@@ -1,0 +1,15 @@
+File: bitonic.c
+Original provenience: StreamIt benchmark suite,
+	 	      http://groups.csail.mit.edu/cag/streamit/results/bitonic/code/c/
+
+2015-10-20:
+- Removed original header comment, replaced by TACLeBench header.
+- Added prefix "bitonic_"/"BITONIC_" to all global symbols
+- adjusted names of bitonicSort and bitonicMerge functions to
+  bitonic_*.
+- Replaced initialization code by TACLeBench-compliant initialization code.
+- Added new function quicksort_return producing a checksum as return value.
+- Added new function quicksort_main according to TACLeBench guidelines.
+  quicksort_main is annotated as entry-point for timing analysis.
+- Applied code formatting according to TACLeBench rules.
+
