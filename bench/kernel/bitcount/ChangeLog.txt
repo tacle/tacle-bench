@@ -1,0 +1,76 @@
+File: bitcnt_1.c
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Changed function bit_count to bitcount_bit_count
+- Applied Code Style 
+
+File: bitcnt_2.c
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Changed function bitcount to bitcount_bitcount
+- Applied Code Style 
+
+File: bitcnt_3.c
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Changed function {name} to bitcount_{name}
+- Changed global variable bits to bitcount_bits
+- Added the bitcount_init3() function to initialize bitcount_bits during the init fase
+- Applied Code Style 
+
+
+File: bitcnt_4.c
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Changed function {name} to bitcount_{name}
+- Changed global variable bits to bitcount_bits
+- Added the bitcount_init4() function to initialize bitcount_bits during the init fase
+- Applied Code Style 
+
+File: bitcount.c
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Changed global variable _randseed to bitcount_randseed
+- Changed function {name} to bitcount_{name}
+- Changed external functions to new name
+- Moved local variables of main to global variables
+- Added bitcount_init function to initialize global variables
+- Added bitcount_main function for the calculations
+- Added bitcount_main function for the return value
+- Applied Code Style 
+
+
+
+File: bitops.h
+Original provenience: 
+
+2015-10-12:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Removed unused defines
+- Removed typedef unsigned int size_t ==> no references
+- Replaced CHAR_BIT with value 8 and removed the define 
+- Applied Code Style 
+
+
+File: sniptype.h
+Original provenience: 
+
+2015-10-12:
+- Removed file, no usage of the definations and typedefs
+
