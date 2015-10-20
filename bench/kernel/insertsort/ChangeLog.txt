@@ -1,0 +1,7 @@
+- Added general TACLeBench header to beginning of source code
+- Removed #ifdef DEBUG till #endif
+- Declaration of global variable unsigned int a[11] changed the variable name to insertion_a[11] as well as for iters_i, min_i, max_i, iters_a, min_a, max_a;
+- Created insertsort_initialize(), insertsort_init() and insertsort_return();
+- Removed all PROFILINGs
+
+

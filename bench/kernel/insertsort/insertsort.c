@@ -1,122 +1,126 @@
-/* Remove the following #define for actual WCET analyses! */
 /*
-#define PROFILING
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: insertsort
+
+  Author: unknown
+
+  Function: Insertion sort for 10 integer numbers.
+     The integer array insertsort_a[] is initialized in main function.
+     Input-data dependent nested loop with worst-case of
+     (n^2)/2 iterations (triangular loop).
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/insertsort/insertsort.c
+
+  Changes: a brief summary of major functional changes (not formatting)
+
+  License: general open-source
+
 */
 
-#ifdef PROFILING
 #include <stdio.h>
-#endif
+
+/*
+  Forward declaration of functions
+*/
+void insertsort_initialize(unsigned int* array);
+void insertsort_init(void);
+int insertsort_return(void);
+void insertsort_main(void);
+int main( void );
+
+/*
+  Declaration of global variables
+*/
+unsigned int insertsort_a[11];
+int insertsort_iters_i = 0, insertsort_min_i = 100000, insertsort_max_i = 0;
+int insertsort_iters_a = 0, insertsort_min_a = 100000, insertsort_max_a = 0;
+
+/*
+  Initialization- and return-value-related functions
+*/
+
+void insertsort_initialize(unsigned int* array)
+{
+
+    register int i;
+    _Pragma( "loopbound min 10 max 10" )
+    for ( i = 0; i < 10; i++ )
+        insertsort_a[i] = array[i];
+
+}
 
 
-/*************************************************************************/
-/*                                                                       */
-/*   SNU-RT Benchmark Suite for Worst Case Timing Analysis               */
-/*   =====================================================               */
-/*                              Collected and Modified by S.-S. Lim      */
-/*                                           sslim@archi.snu.ac.kr       */
-/*                                         Real-Time Research Group      */
-/*                                        Seoul National University      */
-/*                                                                       */
-/*                                                                       */
-/*        < Features > - restrictions for our experimental environment   */
-/*                                                                       */
-/*          1. Completely structured.                                    */
-/*               - There are no unconditional jumps.                     */
-/*               - There are no exit from loop bodies.                   */
-/*                 (There are no 'break' or 'return' in loop bodies)     */
-/*          2. No 'switch' statements.                                   */
-/*          3. No 'do..while' statements.                                */
-/*          4. Expressions are restricted.                               */
-/*               - There are no multiple expressions joined by 'or',     */
-/*                'and' operations.                                      */
-/*          5. No library calls.                                         */
-/*               - All the functions needed are implemented in the       */
-/*                 source file.                                          */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
-/*                                                                       */
-/*  FILE: insertsort.c                                                   */
-/*  SOURCE : Public Domain Code                                          */
-/*                                                                       */
-/*  DESCRIPTION :                                                        */
-/*                                                                       */
-/*     Insertion sort for 10 integer numbers.                            */
-/*     The integer array a[] is initialized in main function.            */
-/*									 */
-/*  COMMENTS: Input-data dependent nested loop with worst-case of        */
-/*   	      (n^2)/2 iterations (triangular loop).		         */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
+void insertsort_init()
+{
+    unsigned int a[11] = {0, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+    insertsort_initialize(a);
+}
+
+int insertsort_return()
+{
+    return 0;
+}
 
 
-#ifdef DEBUG
-int cnt1, cnt2;
-#endif
+/*
+  Main functions
+*/
 
-unsigned int a[11];
+
+void _Pragma( "entrypoint" ) insertsort_main()
+{
+    int  i,j, temp;
+    i = 2;
+
+    insertsort_iters_i = 0;
+
+    _Pragma("loopbound min 9 max 9")
+    while(i <= 10) {
+
+        insertsort_iters_i++;
+
+        j = i;
+
+        insertsort_iters_a = 0;
+
+        _Pragma("loopbound min 1 max 9")
+        while (insertsort_a[j] < insertsort_a[j-1])
+        {
+            insertsort_iters_a++;
+
+            temp = insertsort_a[j];
+            insertsort_a[j] = insertsort_a[j-1];
+            insertsort_a[j-1] = temp;
+            j--;
+        }
+
+        if ( insertsort_iters_a < insertsort_min_a )
+            insertsort_min_a = insertsort_iters_a;
+        if ( insertsort_iters_a > insertsort_max_a )
+            insertsort_max_a = insertsort_iters_a;
+
+        i++;
+    }
+
+    if ( insertsort_iters_i < insertsort_min_i )
+        insertsort_min_i = insertsort_iters_i;
+    if ( insertsort_iters_i > insertsort_max_i )
+        insertsort_max_i = insertsort_iters_i;
+
+
+    printf( "i-loop: [%d, %d]\n", insertsort_min_i, insertsort_max_i );
+    printf( "a-loop: [%d, %d]\n", insertsort_min_a, insertsort_max_a );
+
+}
 
 int main( void )
 {
-  int  i,j, temp;
-
-  #ifdef PROFILING
-  /* Profiling variables. Remove for actual WCET analyses. */
-  int iters_i = 0, min_i = 100000, max_i = 0;
-  int iters_a = 0, min_a = 100000, max_a = 0;
-  #endif
-
-  a[0] = 0;   /* assume all data is positive */
-  a[1] = 11; a[2]=10;a[3]=9; a[4]=8; a[5]=7; a[6]=6; a[7]=5;
-  a[8] =4; a[9]=3; a[10]=2;
-  i = 2;
-  #ifdef PROFILING
-  iters_i = 0;
-  #endif
-  _Pragma("loopbound min 9 max 9")
-  while(i <= 10){
-    #ifdef PROFILING
-    iters_i++;
-    #endif
-    
-    j = i;
-    #ifdef PROFILING
-    iters_a = 0;
-    #endif
-    _Pragma("loopbound min 1 max 9")
-    while (a[j] < a[j-1])
-    {
-      #ifdef PROFILING
-      iters_a++;
-      #endif
-      temp = a[j];
-      a[j] = a[j-1];
-      a[j-1] = temp;
-      j--;
-    }
-    
-    #ifdef PROFILING
-    if ( iters_a < min_a )
-      min_a = iters_a;
-    if ( iters_a > max_a )
-      max_a = iters_a;
-    #endif
-    
-    i++;
-  }
-
-  #ifdef PROFILING
-  if ( iters_i < min_i )
-    min_i = iters_i;
-  if ( iters_i > max_i )
-    max_i = iters_i;
-  #endif
-
-  #ifdef PROFILING
-  printf( "i-loop: [%d, %d]\n", min_i, max_i );
-  printf( "a-loop: [%d, %d]\n", min_a, max_a );
-  #endif
-    
-  return 0;
+    insertsort_init();
+    insertsort_main();
+    return (insertsort_return());
 }
+
