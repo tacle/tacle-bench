@@ -1,0 +1,17 @@
+File: ndes.c
+Original provenience: 
+
+2015-10-21:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Renamed functions to {name} to ndes_{name}
+- Renamed globale variables to {name} to ndes_{name}
+- Renamed structs to {name} to ndes_{name}
+- Removed the profiling code
+- Added forward decleration of functions
+- Added ndes_main function
+- Added ndes_init function
+- Initialize ndes_ipc1 and ndes_ipc2 in ndes_init function
+- int main variables to global variables for the ndes_init function
+- Applied Code Style 
+
