@@ -106,6 +106,40 @@ We welcome the use of this software as a component of commercial products.
 No royalty is required, but we do ask for an acknowledgement in product
 documentation, as described under LEGAL ISSUES.
 
+Lossless image transformation routines. These routines work on DCT coefficient
+arrays and thus do not require any lossy decompression or recompression of the
+image. Thanks to Guido Vollbeding for the initial design and code of this
+feature.
+
+Horizontal flipping is done in-place, using a single top-to-bottom pass through
+the virtual source array. It will thus be much the fastest option for images
+larger than main memory.
+
+The other routines require a set of destination virtual arrays, so they need
+twice as much memory as jpegtran normally does. The destination arrays are
+always written in normal scan order (top to bottom) because the virtual array
+manager expects this. The source arrays will be scanned in the corresponding
+order, which means multiple passes through the source arrays for most of the
+transforms. That could result in much thrashing if the image is larger than main
+memory.
+
+Some notes about the operating environment of the individual transform routines:
+1. Both the source and destination virtual arrays are allocated from the source
+   JPEG object, and therefore should be manipulated by calling the source's
+   memory manager.
+2. The destination's component count should be used. It may be smaller than the
+   source's when forcing to grayscale.
+3. Likewise the destination's sampling factors should be used. When forcing to
+   grayscale the destination's sampling factors will be all 1, and we may as
+   well take that as the effective iMCU size.
+4. When "trim" is in effect, the destination's dimensions will be the trimmed
+   values but the source's will be untrimmed.
+5. All the routines assume that the source and destination buffers are padded
+   out to a full iMCU boundary. This is true, although for the source buffer it
+   is an undocumented property of jdcoefct.c.
+Notes 2,3,4 boil down to this: generally we should use the destination's
+dimensions and ignore the source's.
+
 
 LEGAL ISSUES
 ============
