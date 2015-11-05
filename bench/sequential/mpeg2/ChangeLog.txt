@@ -1,0 +1,35 @@
+File: mpeg2.c
+Original provenience: MediaBench II benchmark suite,
+                      http://euler.slu.edu/~fritts/mediabench (mirror)
+
+2015-11-05:
+- Removed original header comment, replaced by TACLeBench header.
+- Removed unnecessary preprocessor macros, integrated required preprocessor
+  macros directly in the source code.
+- Added prefix "mpeg2_" to all global symbols.
+- Added explicit forward declarations of functions.
+- Added TACLeBench-compliant initialization code.
+- Added new function mpeg2_return producing a checksum as return value.
+- Added new function mpeg2_main according to TACLeBench guidelines.
+  mpeg2_main is annotated as entry-point for timing analysis.
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: bs_) followed by lowercase letter (e.g., bs_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
