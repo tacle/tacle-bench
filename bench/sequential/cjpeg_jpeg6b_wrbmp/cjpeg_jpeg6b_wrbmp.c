@@ -1,518 +1,228 @@
 /*
- * wrbmp.c
- *
- * Copyright (C) 1994-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains routines to write output images in Microsoft "BMP"
- * format (MS Windows 3.x and OS/2 1.x flavors).
- * Either 8-bit colormapped or 24-bit full-color format can be written.
- * No compression is supported.
- *
- * These routines may need modification for non-Unix environments or
- * specialized applications.  As they stand, they assume output to
- * an ordinary stdio stream.
- *
- * This code contributed by James Arthur Boucher.
- */
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: cjpeg_jpeg6b_wrbmp.c
+
+  Author: Thomas G. Lane.
+
+  Function: This file contains routines to write output images in Microsoft "BMP"
+  format (MS Windows 3.x and OS/2 1.x flavors).
+  Either 8-bit colormapped or 24-bit full-color format can be written.
+  No compression is supported.
+
+  These routines may need modification for non-Unix environments or
+  specialized applications.  As they stand, they assume output to
+  an ordinary stdio stream.
+
+  Source: Independent JPEG Group's software
 
 
-// Common decls for cjpeg/djpeg applications
+  Changes: a brief summary of major functional changes (not formatting)
+
+  License: general open-source
+
+*/
+
 #include "cdjpeg.h"
 
-#ifdef BMP_SUPPORTED
-/*
- * To support 12-bit JPEG data, we'd have to scale output down to 8 bits.
- * This is not yet implemented.
- */
-
-#if BITS_IN_JSAMPLE != 8
-  Sorry, this code only copes with 8-bit JSAMPLEs. /* deliberate syntax err */
-#endif
+#ifdef CJPEG_JPEG6B_WRBMP_BMP_SUPPORTED
 
 /*
- * Since BMP stores scanlines bottom-to-top, we have to invert the image
- * from JPEG's top-to-bottom order.  To do this, we save the outgoing data
- * in a virtual array during put_pixel_row calls, then actually emit the
- * BMP file during finish_output.  The virtual array contains one JSAMPLE per
- * pixel if the output is grayscale or colormapped, three if it is full color.
- */
-
-/* Private version of data destination object */
-
-typedef struct {
-  struct djpeg_dest_struct pub;	/* public fields */
-
-  boolean is_os2;		/* saves the OS2 format request flag */
-
-  jvirt_sarray_ptr whole_image;	/* needed to reverse row order */
-  JDIMENSION data_width;	/* JSAMPLEs per row */
-  JDIMENSION row_width;		/* physical width of one row in the BMP file */
-  int pad_bytes;		/* number of padding bytes needed per row */
-  JDIMENSION cur_output_row;	/* next row# to write to virtual array */
-} bmp_dest_struct;
-
-typedef bmp_dest_struct * bmp_dest_ptr;
-
-extern JSAMPLE test_image[];
-extern JSAMPLE color_map[];
-extern unsigned char colormap[3][256];
-
-/* Modifications to this benchmark:
-   "putc" replaced by "putc_modified" to not write the output data to a
-   file but to an array "output_array".
+  Declaration of global variables
 */
-unsigned char output_array[6144];
+typedef struct {
+  struct cjpeg_jpeg6b_wrbmp_djpeg_dest_struct pub; /* public fields */
+  cjpeg_jpeg6b_wrbmp_boolean is_os2;   /* saves the OS2 format request flag */
+  cjpeg_jpeg6b_wrbmp_jvirt_sarray_ptr
+  whole_image; /* needed to reverse row order */
+  CJPEG_JPEG6B_WRBMP_JDIMENSION data_width;  /* JSAMPLEs per row */
+  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  row_width;   /* physical width of one row in the BMP file */
+  int pad_bytes;    /* number of padding bytes needed per row */
+  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  cur_output_row;  /* next row# to write to virtual array */
+} cjpeg_jpeg6b_wrbmp_bmp_dest_struct;
 
-/* Function prototypes. */
-void finish_output_bmp(j_decompress_ptr cinfo, djpeg_dest_ptr dinfo);
-void write_colormap(j_decompress_ptr cinfo, bmp_dest_ptr dest, int map_colors, int map_entry_size,int cMap);
-int putc_modified( int character );
+typedef cjpeg_jpeg6b_wrbmp_bmp_dest_struct *cjpeg_jpeg6b_wrbmp_bmp_dest_ptr;
+extern unsigned char cjpeg_jpeg6b_wrbmp_colormap[3][256];
+unsigned char cjpeg_jpeg6b_wrbmp_output_array[6144];
+static unsigned char *cjpeg_jpeg6b_wrbmp_jpeg_stream /*= cjpeg_jpeg6b_wrbmp_output_array*/;
 
-struct jpeg_decompress_struct jpeg_dec;
-struct djpeg_dest_struct     djpeg_dest;
-bmp_dest_struct                bmp_dest;
+struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_1;
+struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_2;
+struct cjpeg_jpeg6b_wrbmp_djpeg_dest_struct
+  cjpeg_jpeg6b_wrbmp_djpeg_dest;
+cjpeg_jpeg6b_wrbmp_bmp_dest_struct    cjpeg_jpeg6b_wrbmp_bmp_dest;
 
-static unsigned char *stream = output_array;
 
-int putc_modified( int character )
+/*
+  Forward declaration of functions
+*/
+void cjpeg_jpeg6b_wrbmp_initInput( void );
+void cjpeg_jpeg6b_wrbmp_finish_output_bmp( cjpeg_jpeg6b_wrbmp_j_decompress_ptr
+    cinfo, cjpeg_jpeg6b_wrbmp_djpeg_dest_ptr dinfo );
+void cjpeg_jpeg6b_wrbmp_write_colormap( cjpeg_jpeg6b_wrbmp_j_decompress_ptr
+                                        cinfo,
+                                        cjpeg_jpeg6b_wrbmp_bmp_dest_ptr dest, int map_colors, int map_entry_size,
+                                        int cMap );
+int cjpeg_jpeg6b_wrbmp_putc_modified( int character );
+void cjpeg_jpeg6b_wrbmp_init();
+void cjpeg_jpeg6b_wrbmp_main();
+int cjpeg_jpeg6b_wrbmp_return();
+int main();
+
+/*
+   Initialization functions
+*/
+void cjpeg_jpeg6b_wrbmp_init()
 {
-  *(stream) = character;
+  cjpeg_jpeg6b_wrbmp_initInput();
 
-  ++stream;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_1.progress                = 0;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_1.output_height           = 30;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_1.actual_number_of_colors = 256;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_1.out_color_components    = 2;
+
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_2.progress                = 0;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_2.output_height           = 30;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_2.actual_number_of_colors = 256;
+  cjpeg_jpeg6b_wrbmp_jpeg_dec_2.out_color_components    = 3;
+
+  cjpeg_jpeg6b_wrbmp_jpeg_stream = cjpeg_jpeg6b_wrbmp_output_array;
+
+}
+
+/*
+   Calculation functions
+*/
+int cjpeg_jpeg6b_wrbmp_putc_modified( int character )
+{
+  *( cjpeg_jpeg6b_wrbmp_jpeg_stream ) = character;
+
+  ++cjpeg_jpeg6b_wrbmp_jpeg_stream;
 
   return character;
 }
 
-
-int main( void )
+void cjpeg_jpeg6b_wrbmp_finish_output_bmp( cjpeg_jpeg6b_wrbmp_j_decompress_ptr
+    cinfo,
+    cjpeg_jpeg6b_wrbmp_djpeg_dest_ptr dinfo )
 {
-  int i;
+  CJPEG_JPEG6B_WRBMP_JDIMENSION row;
+  cjpeg_jpeg6b_wrbmp_cd_progress_ptr progress =
+    ( cjpeg_jpeg6b_wrbmp_cd_progress_ptr ) cinfo->progress;
 
-  jpeg_dec.progress                = NULL;
-  jpeg_dec.output_height           = 30;
-  jpeg_dec.actual_number_of_colors = 256;
-  jpeg_dec.out_color_components    = 3;
-
-  finish_output_bmp( &jpeg_dec, &djpeg_dest );
-
-  // Test different scenarios.
-  write_colormap(    &jpeg_dec, &bmp_dest, 768, 4, 1 );
-  
-  jpeg_dec.out_color_components    = 2;
-  write_colormap(    &jpeg_dec, &bmp_dest, 768, 4, 1 );
- 
-  return 0;
-}
-
-
-void finish_output_bmp(j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
-{
-  bmp_dest_ptr dest = (bmp_dest_ptr) dinfo;
-  register FILE * outfile = dest->pub.output_file;
-  JSAMPARRAY image_ptr;
-  register JSAMPROW data_ptr;
-  JDIMENSION row;
-  register JDIMENSION col;
-  cd_progress_ptr progress = (cd_progress_ptr) cinfo->progress;
-
-  int i = 0;
-
-  // Write the header and colormap
-
-  //if (dest->is_os2)
-  //  write_os2_header(cinfo, dest);
-  //else
-  //  write_bmp_header(cinfo, dest);
-  
   // Write the file body from our virtual array
-  _Pragma("loopbound min 30 max 30")
-  for (row = cinfo->output_height; row > 0; --row) {
-    if (progress != NULL) {
-      progress->pub.pass_counter = (long)(cinfo->output_height - row);
-      progress->pub.pass_limit = (long) cinfo->output_height;
-//      (*progress->pub.progress_monitor) ((j_common_ptr) cinfo);
+  _Pragma( "loopbound min 30 max 30" )
+  for ( row = cinfo->output_height; row > 0; --row ) {
+    if ( progress != 0 ) {
+      progress->pub.pass_counter = ( long )( cinfo->output_height - row );
+      progress->pub.pass_limit = ( long ) cinfo->output_height;
     }
-    //image_ptr = (*cinfo->mem->access_virt_sarray)
-    //((j_common_ptr) cinfo, dest->whole_image, row-1, (JDIMENSION) 1, FALSE);
-    //data_ptr = image_ptr[0];
   }
 
-  if (progress != NULL)
+  if ( progress != 0 )
     progress->completed_extra_passes++;
-
-  // Make sure we wrote the output file OK
-  //fflush(outfile);
-  //if (ferror(outfile))
-    //ERREXIT(cinfo, JERR_FILE_WRITE);
 }
 
-
-/*
- * Write the colormap.
- * Windows uses BGR0 map entries; OS/2 uses BGR entries.
- */
-void write_colormap(j_decompress_ptr cinfo, bmp_dest_ptr dest,
-                    int map_colors, int map_entry_size,int cMap )
+void cjpeg_jpeg6b_wrbmp_write_colormap( cjpeg_jpeg6b_wrbmp_j_decompress_ptr
+                                        cinfo,
+                                        cjpeg_jpeg6b_wrbmp_bmp_dest_ptr dest,
+                                        int map_colors, int map_entry_size, int cMap )
 {
-//JSAMPARRAY colormap = cinfo->colormap;
-//JSAMPARRAY colormap = color_map;
+
   int num_colors = cinfo->actual_number_of_colors;
-//FILE * outfile = dest->pub.output_file;
   int i;
 
-  if (cMap != 0) {
-    if (cinfo->out_color_components == 3) {
+  if ( cMap != 0 ) {
+
+    if ( cinfo->out_color_components == 3 ) {
       // Normal case with RGB colormap
-      _Pragma("loopbound min 256 max 256")
-      for (i = 0; i < num_colors; i++) {
-        putc_modified(GETJSAMPLE(colormap[2][i]));
-        putc_modified(GETJSAMPLE(colormap[1][i]));
-        putc_modified(GETJSAMPLE(colormap[0][i]));
-        //putc(GETJSAMPLE(colormap[2][i]), outfile);
-        //putc(GETJSAMPLE(colormap[1][i]), outfile);
-        //putc(GETJSAMPLE(colormap[0][i]), outfile);
-        if (map_entry_size == 4)
-          putc_modified(0);
-          //putc(0, outfile);
-        }
-      } else {
+      _Pragma( "loopbound min 256 max 256" )
+      for ( i = 0; i < num_colors; i++ ) {
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[2][i] ) );
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[1][i] ) );
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[0][i] ) );
+
+        if ( map_entry_size == 4 )
+          cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
+      }
+    } else {
       // Grayscale colormap (only happens with grayscale quantization)
-      _Pragma("loopbound min 256 max 256")
-      for (i = 0; i < num_colors; i++) {
-        putc_modified(GETJSAMPLE(colormap[2][i]));
-        putc_modified(GETJSAMPLE(colormap[1][i]));
-        putc_modified(GETJSAMPLE(colormap[0][i]));
-        //putc(GETJSAMPLE(colormap[2][i]), outfile);
-        //putc(GETJSAMPLE(colormap[1][i]), outfile);
-        //putc(GETJSAMPLE(colormap[0][i]), outfile);
-        if (map_entry_size == 4)
-          putc_modified(0);
-//          //putc(0, outfile);
+      _Pragma( "loopbound min 256 max 256" )
+      for ( i = 0; i < num_colors; i++ ) {
+
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[2][i] ) );
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[1][i] ) );
+        cjpeg_jpeg6b_wrbmp_putc_modified( CJPEG_JPEG6B_WRBMP_GETJSAMPLE(
+                                            cjpeg_jpeg6b_wrbmp_colormap[0][i] ) );
+
+        if ( map_entry_size == 4 )
+          cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
       }
     }
   } else {
     // If no colormap, must be grayscale data.  Generate a linear "map".
-    _Pragma("loopbound min 256 max 256")
-    for (i = 0; i < 256; i++) {
-      putc_modified(i);
-      putc_modified(i);
-      putc_modified(i);
-      //putc(i, outfile);
-      //putc(i, outfile);
-      //putc(i, outfile);
-      if (map_entry_size == 4)
-        putc_modified(0);
-        //putc(0, outfile);
+    _Pragma( "loopbound min 256 max 256" )
+    for ( i = 0; i < 256; i++ ) {
+      cjpeg_jpeg6b_wrbmp_putc_modified( i );
+      cjpeg_jpeg6b_wrbmp_putc_modified( i );
+      cjpeg_jpeg6b_wrbmp_putc_modified( i );
+
+      if ( map_entry_size == 4 )
+        cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
     }
   }
 
   // Pad colormap with zeros to ensure specified number of colormap entries.
-  //if (i > map_colors)
-    //ERREXIT1(cinfo, JERR_TOO_MANY_COLORS, i);
-  _Pragma("loopbound min 512 max 512")
-  for (; i < map_colors; i++) {
-    putc_modified(0);
-    putc_modified(0);
-    putc_modified(0);
-    //putc(0, outfile);
-    //putc(0, outfile);
-    //putc(0, outfile);
-    if (map_entry_size == 4)
-      putc_modified(0);
-      //putc(0, outfile);
+  _Pragma( "loopbound min 512 max 512" )
+  for ( ; i < map_colors; i++ ) {
+    cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
+    cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
+    cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
+
+    if ( map_entry_size == 4 )
+      cjpeg_jpeg6b_wrbmp_putc_modified( 0 );
   }
 }
 
-
-// Forward declarations
-/*
-LOCAL(void) write_colormap
-	JPP((j_decompress_ptr cinfo, bmp_dest_ptr dest,
-	     int map_colors, int map_entry_size));
-*/
-
-/*
- * Write some pixel data.
- * In this module rows_supplied will always be 1.
- */
-/*
-METHODDEF(void)
-put_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
-		JDIMENSION rows_supplied)
-// This version is for writing 24-bit pixels
+void cjpeg_jpeg6b_wrbmp_main()
 {
-  bmp_dest_ptr dest = (bmp_dest_ptr) dinfo;
-  JSAMPARRAY image_ptr;
-  register JSAMPROW inptr, outptr;
-  register JDIMENSION col;
-  int pad;
+  cjpeg_jpeg6b_wrbmp_finish_output_bmp( &cjpeg_jpeg6b_wrbmp_jpeg_dec_1,
+                                        &cjpeg_jpeg6b_wrbmp_djpeg_dest );
+  cjpeg_jpeg6b_wrbmp_write_colormap(    &cjpeg_jpeg6b_wrbmp_jpeg_dec_1,
+                                        &cjpeg_jpeg6b_wrbmp_bmp_dest, 768, 4, 1 );
 
-  // Access next row in virtual array
-  image_ptr = (*cinfo->mem->access_virt_sarray)
-    ((j_common_ptr) cinfo, dest->whole_image,
-     dest->cur_output_row, (JDIMENSION) 1, TRUE);
-  dest->cur_output_row++;
-
-  // Transfer data.  Note destination values must be in BGR order
-  // (even though Microsoft's own documents say the opposite).
-  inptr = dest->pub.buffer[0];
-  outptr = image_ptr[0];
-  for (col = cinfo->output_width; col > 0; col--) {
-    outptr[2] = *inptr++;	// can omit GETJSAMPLE() safely
-    outptr[1] = *inptr++;
-    outptr[0] = *inptr++;
-    outptr += 3;
-  }
-
-  // Zero out the pad bytes.
-  pad = dest->pad_bytes;
-  while (--pad >= 0)
-    *outptr++ = 0;
+  cjpeg_jpeg6b_wrbmp_finish_output_bmp( &cjpeg_jpeg6b_wrbmp_jpeg_dec_2,
+                                        &cjpeg_jpeg6b_wrbmp_djpeg_dest );
+  cjpeg_jpeg6b_wrbmp_write_colormap(    &cjpeg_jpeg6b_wrbmp_jpeg_dec_2,
+                                        &cjpeg_jpeg6b_wrbmp_bmp_dest, 768, 4, 1 );
 }
-*/
 
-/*
-METHODDEF(void)
-put_gray_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
-	       JDIMENSION rows_supplied)
-// This version is for grayscale OR quantized color output
+int cjpeg_jpeg6b_wrbmp_return()
 {
-  bmp_dest_ptr dest = (bmp_dest_ptr) dinfo;
-  JSAMPARRAY image_ptr;
-  register JSAMPROW inptr, outptr;
-  register JDIMENSION col;
-  int pad;
-
-  // Access next row in virtual array
-  image_ptr = (*cinfo->mem->access_virt_sarray)
-    ((j_common_ptr) cinfo, dest->whole_image,
-     dest->cur_output_row, (JDIMENSION) 1, TRUE);
-  dest->cur_output_row++;
-
-  // Transfer data.
-  inptr = dest->pub.buffer[0];
-  outptr = image_ptr[0];
-  for (col = cinfo->output_width; col > 0; col--) {
-    *outptr++ = *inptr++;	// can omit GETJSAMPLE() safely
-  }
-
-  // Zero out the pad bytes.
-  pad = dest->pad_bytes;
-  while (--pad >= 0)
-    *outptr++ = 0;
+  return 0;
 }
-*/
 
-/*
- * Startup: normally writes the file header.
- * In this module we may as well postpone everything until finish_output.
- */
-/*
-METHODDEF(void)
-start_output_bmp (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
+int main( void )
 {
-  // no work here
+	int i=0;
+	for(i=0;i<10;i++)
+	{
+		cjpeg_jpeg6b_wrbmp_init();
+  	   cjpeg_jpeg6b_wrbmp_main();
+	}
+  return ( cjpeg_jpeg6b_wrbmp_return() );
 }
-*/
-
-/*
- * Finish up at the end of the file.
- *
- * Here is where we really output the BMP file.
- *
- * First, routines to write the Windows and OS/2 variants of the file header.
- */
-/*
-LOCAL(void)
-write_bmp_header (j_decompress_ptr cinfo, bmp_dest_ptr dest)
-// Write a Windows-style BMP file header, including colormap if needed
-{
-  char bmpfileheader[14];
-  char bmpinfoheader[40];
-#define PUT_2B(array,offset,value)  \
-	(array[offset] = (char) ((value) & 0xFF), \
-	 array[offset+1] = (char) (((value) >> 8) & 0xFF))
-#define PUT_4B(array,offset,value)  \
-	(array[offset] = (char) ((value) & 0xFF), \
-	 array[offset+1] = (char) (((value) >> 8) & 0xFF), \
-	 array[offset+2] = (char) (((value) >> 16) & 0xFF), \
-	 array[offset+3] = (char) (((value) >> 24) & 0xFF))
-  INT32 headersize, bfSize;
-  int bits_per_pixel, cmap_entries;
-
-  // Compute colormap size and total file size
-  if (cinfo->out_color_space == JCS_RGB) {
-    if (cinfo->quantize_colors) {
-      // Colormapped RGB
-      bits_per_pixel = 8;
-      cmap_entries = 256;
-    } else {
-      // Unquantized, full color RGB
-      bits_per_pixel = 24;
-      cmap_entries = 0;
-    }
-  } else {
-    // Grayscale output.  We need to fake a 256-entry colormap.
-    bits_per_pixel = 8;
-    cmap_entries = 256;
-  }
-  // File size
-  headersize = 14 + 40 + cmap_entries * 4; // Header and colormap
-  bfSize = headersize + (INT32) dest->row_width * (INT32) cinfo->output_height;
-  
-  // Set unused fields of header to 0
-  MEMZERO(bmpfileheader, SIZEOF(bmpfileheader));
-  MEMZERO(bmpinfoheader, SIZEOF(bmpinfoheader));
-
-  // Fill the file header
-  bmpfileheader[0] = 0x42;	// first 2 bytes are ASCII 'B', 'M'
-  bmpfileheader[1] = 0x4D;
-  PUT_4B(bmpfileheader, 2, bfSize); // bfSize
-  // we leave bfReserved1 & bfReserved2 = 0
-  PUT_4B(bmpfileheader, 10, headersize); // bfOffBits
-
-  // Fill the info header (Microsoft calls this a BITMAPINFOHEADER)
-  PUT_2B(bmpinfoheader, 0, 40);	// biSize
-  PUT_4B(bmpinfoheader, 4, cinfo->output_width); // biWidth
-  PUT_4B(bmpinfoheader, 8, cinfo->output_height); // biHeight
-  PUT_2B(bmpinfoheader, 12, 1);	// biPlanes - must be 1
-  PUT_2B(bmpinfoheader, 14, bits_per_pixel); // biBitCount
-  // we leave biCompression = 0, for none
-  // we leave biSizeImage = 0; this is correct for uncompressed data
-  if (cinfo->density_unit == 2) { // if have density in dots/cm, then
-    PUT_4B(bmpinfoheader, 24, (INT32) (cinfo->X_density*100)); // XPels/M
-    PUT_4B(bmpinfoheader, 28, (INT32) (cinfo->Y_density*100)); // XPels/M
-  }
-  PUT_2B(bmpinfoheader, 32, cmap_entries); // biClrUsed
-  // we leave biClrImportant = 0
-
-  if (JFWRITE(dest->pub.output_file, bmpfileheader, 14) != (size_t) 14)
-    ERREXIT(cinfo, JERR_FILE_WRITE);
-  if (JFWRITE(dest->pub.output_file, bmpinfoheader, 40) != (size_t) 40)
-    ERREXIT(cinfo, JERR_FILE_WRITE);
-
-  if (cmap_entries > 0)
-    write_colormap(cinfo, dest, cmap_entries, 4);
-}
-*/
-
-/*
-LOCAL(void)
-write_os2_header (j_decompress_ptr cinfo, bmp_dest_ptr dest)
-// Write an OS2-style BMP file header, including colormap if needed
-{
-  char bmpfileheader[14];
-  char bmpcoreheader[12];
-  INT32 headersize, bfSize;
-  int bits_per_pixel, cmap_entries;
-
-  // Compute colormap size and total file size
-  if (cinfo->out_color_space == JCS_RGB) {
-    if (cinfo->quantize_colors) {
-      // Colormapped RGB
-      bits_per_pixel = 8;
-      cmap_entries = 256;
-    } else {
-      // Unquantized, full color RGB
-      bits_per_pixel = 24;
-      cmap_entries = 0;
-    }
-  } else {
-    // Grayscale output.  We need to fake a 256-entry colormap.
-    bits_per_pixel = 8;
-    cmap_entries = 256;
-  }
-  // File size
-  headersize = 14 + 12 + cmap_entries * 3; // Header and colormap
-  bfSize = headersize + (INT32) dest->row_width * (INT32) cinfo->output_height;
-  
-  // Set unused fields of header to 0
-  MEMZERO(bmpfileheader, SIZEOF(bmpfileheader));
-  MEMZERO(bmpcoreheader, SIZEOF(bmpcoreheader));
-
-  // Fill the file header
-  bmpfileheader[0] = 0x42;	// first 2 bytes are ASCII 'B', 'M'
-  bmpfileheader[1] = 0x4D;
-  PUT_4B(bmpfileheader, 2, bfSize); // bfSize
-  // we leave bfReserved1 & bfReserved2 = 0
-  PUT_4B(bmpfileheader, 10, headersize); // bfOffBits
-
-  // Fill the info header (Microsoft calls this a BITMAPCOREHEADER)
-  PUT_2B(bmpcoreheader, 0, 12);	// bcSize
-  PUT_2B(bmpcoreheader, 4, cinfo->output_width); // bcWidth
-  PUT_2B(bmpcoreheader, 6, cinfo->output_height); // bcHeight
-  PUT_2B(bmpcoreheader, 8, 1);	// bcPlanes - must be 1
-  PUT_2B(bmpcoreheader, 10, bits_per_pixel); // bcBitCount
-
-  if (JFWRITE(dest->pub.output_file, bmpfileheader, 14) != (size_t) 14)
-    ERREXIT(cinfo, JERR_FILE_WRITE);
-  if (JFWRITE(dest->pub.output_file, bmpcoreheader, 12) != (size_t) 12)
-    ERREXIT(cinfo, JERR_FILE_WRITE);
-
-  if (cmap_entries > 0)
-    write_colormap(cinfo, dest, cmap_entries, 3);
-}
-*/
-
-/*
- * The module selection routine for BMP format output.
- */
-/*
-GLOBAL(djpeg_dest_ptr)
-jinit_write_bmp (j_decompress_ptr cinfo, boolean is_os2)
-{
-  bmp_dest_ptr dest;
-  JDIMENSION row_width;
-
-  // Create module interface object, fill in method pointers
-  dest = (bmp_dest_ptr)
-      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				  SIZEOF(bmp_dest_struct));
-  dest->pub.start_output = start_output_bmp;
-  dest->pub.finish_output = finish_output_bmp;
-  dest->is_os2 = is_os2;
-
-  if (cinfo->out_color_space == JCS_GRAYSCALE) {
-    dest->pub.put_pixel_rows = put_gray_rows;
-  } else if (cinfo->out_color_space == JCS_RGB) {
-    if (cinfo->quantize_colors)
-      dest->pub.put_pixel_rows = put_gray_rows;
-    else
-      dest->pub.put_pixel_rows = put_pixel_rows;
-  } else {
-    ERREXIT(cinfo, JERR_BMP_COLORSPACE);
-  }
-
-  // Calculate output image dimensions so we can allocate space
-  jpeg_calc_output_dimensions(cinfo);
-
-  // Determine width of rows in the BMP file (padded to 4-byte boundary).
-  row_width = cinfo->output_width * cinfo->output_components;
-  dest->data_width = row_width;
-  while ((row_width & 3) != 0) row_width++;
-  dest->row_width = row_width;
-  dest->pad_bytes = (int) (row_width - dest->data_width);
-
-  // Allocate space for inversion array, prepare for write pass
-  dest->whole_image = (*cinfo->mem->request_virt_sarray)
-    ((j_common_ptr) cinfo, JPOOL_IMAGE, FALSE,
-     row_width, cinfo->output_height, (JDIMENSION) 1);
-  dest->cur_output_row = 0;
-  if (cinfo->progress != NULL) {
-    cd_progress_ptr progress = (cd_progress_ptr) cinfo->progress;
-    progress->total_extra_passes++; // count file input as separate pass
-  }
-
-  // Create decompressor output buffer.
-  dest->pub.buffer = (*cinfo->mem->alloc_sarray)
-    ((j_common_ptr) cinfo, JPOOL_IMAGE, row_width, (JDIMENSION) 1);
-  dest->pub.buffer_height = 1;
-
-  return (djpeg_dest_ptr) dest;
-}
-*/
 
 #endif /* BMP_SUPPORTED */
 
