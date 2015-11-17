@@ -215,12 +215,8 @@ int cjpeg_jpeg6b_wrbmp_return()
 
 int main( void )
 {
-	int i=0;
-	for(i=0;i<10;i++)
-	{
-		cjpeg_jpeg6b_wrbmp_init();
-  	   cjpeg_jpeg6b_wrbmp_main();
-	}
+  cjpeg_jpeg6b_wrbmp_init();
+  cjpeg_jpeg6b_wrbmp_main();
   return ( cjpeg_jpeg6b_wrbmp_return() );
 }
 
