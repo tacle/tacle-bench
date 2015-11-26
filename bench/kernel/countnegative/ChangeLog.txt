@@ -1,0 +1,22 @@
+File: countnegative.c
+Original provenience: Mälardalen benchmark suite, www.mrtc.....
+
+2015-11-26:
+- Changed return type of InitSeed, Initialize, and Test to void
+  because the result was ignored anyway
+- Prefixed all functions and global variables with "countnegative_"
+- Added new function countnegative_return computing a checksum as
+  return value
+- Separated initialization (called from countnegative_init) from
+  actual computation (called from countnegative_main), remove
+  pointless function countnegative_test afterwards
+- Reordered functions in source code: initialization- and
+  return-value-related functions first, followed by algorithm core
+  function, followed by main functions
+- Eliminated definition of macro WORSTCASE and kept only the relevant
+  part of the related #ifdef block
+- Removed comments that referred to MAXSIZE being 100 (instead of 20)
+- Made countnegative_seed volatile
+- Changed C++ style comments to C style comments
+- Applied code formatting with astyle as in the example
+- Added general TACLeBench header to beginning of source code

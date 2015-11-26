@@ -1,76 +1,101 @@
-/* Original test file cnt.c comes from the MRTC WCET benchmark.
-  
-   Description: 
-   Counts non-negative numbers in a matrix.	
-   
-   Comments:
-   Nested loops, well-structured code.
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: countnegative
+
+  Author: unknown
+
+  Function: Counts negative and non-negative numbers in a
+    matrix. Features nested loops, well-structured code.
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/cnt/cnt.c
+
+  Changes: changed split between initialization and computation
+
+  License: ???
+
 */
 
+/*
+  The dimension of the matrix
+*/
 #define MAXSIZE 20
-#define WORSTCASE 1
 
-// Typedefs
+/*
+  Type definition for the matrix
+*/
 typedef int matrix [MAXSIZE][MAXSIZE];
 
-// Forwards declarations
+/*
+  Forward declaration of functions
+*/
+void countnegative_initSeed( void );
+int countnegative_randomInteger( void );
+void countnegative_initialize( matrix );
+void countnegative_init( void );
+int countnegative_return( void );
+void countnegative_sum( matrix );
+void countnegative_main( void );
 int main( void );
-int Test( matrix );
-int Initialize( matrix );
-int InitSeed( void );
-void Sum( matrix );
-int RandomInteger( void );
 
-// Globals
-int Seed;
-matrix Array;
-int Postotal, Negtotal, Poscnt, Negcnt;
+/*
+  Globals
+*/
+volatile int countnegative_seed;
+matrix countnegative_array;
+int countnegative_postotal, countnegative_negtotal;
+int countnegative_poscnt, countnegative_negcnt;
 
-// The main function
-int main ( void )
+/*
+  Initializes the seed used in the random number generator.
+*/
+void countnegative_initSeed ( void )
 {
-  InitSeed();
-  
-  Test( Array );
-  
-  return 0;
+  countnegative_seed = 0;
 }
 
-
-int Test( matrix Array )
+/*
+  Generates random integers between 0 and 8094
+*/
+int countnegative_randomInteger( void )
 {
-  Initialize( Array );
-
-  Sum( Array );
-
-  return 0;
+  countnegative_seed = ( ( countnegative_seed * 133 ) + 81 ) % 8095;
+  return  countnegative_seed;
 }
 
-
-// Intializes the given array with random integers.
-int Initialize( matrix Array )
+/*
+  Initializes the given array with random integers.
+*/
+void countnegative_initialize( matrix Array )
 {
   register int OuterIndex, InnerIndex;
 
-  _Pragma("loopbound min 20 max 20")
-  for ( OuterIndex = 0; OuterIndex < MAXSIZE; OuterIndex++ ) //100 + 1
-    _Pragma("loopbound min 20 max 20")
-    for ( InnerIndex = 0; InnerIndex < MAXSIZE; InnerIndex++ ) { //100 + 1
-      Array[OuterIndex][InnerIndex] = RandomInteger();
-    }
-
-  return 0;
+  _Pragma( "loopbound min 20 max 20" )
+  for ( OuterIndex = 0; OuterIndex < MAXSIZE; OuterIndex++ )
+    _Pragma( "loopbound min 20 max 20" )
+    for ( InnerIndex = 0; InnerIndex < MAXSIZE; InnerIndex++ )
+      Array[OuterIndex][InnerIndex] =  countnegative_randomInteger();
 }
 
-
-// Initializes the seed used in the random number generator.
-int InitSeed ( void )
+void countnegative_init( void )
 {
-  Seed = 0;
-  return 0;
+  countnegative_initSeed();
+  countnegative_initialize( countnegative_array );
 }
 
-void Sum( matrix Array )
+int countnegative_return( void )
+{
+  int checksum = ( countnegative_postotal +
+                   countnegative_poscnt +
+                   countnegative_negtotal +
+                   countnegative_negcnt );
+  return checksum;
+}
+
+void countnegative_sum( matrix Array )
 {
   register int Outer, Inner;
 
@@ -79,35 +104,36 @@ void Sum( matrix Array )
   int Pcnt = 0;
   int Ncnt = 0;
 
-  _Pragma("loopbound min 20 max 20")
-  for (Outer = 0; Outer < MAXSIZE; Outer++) //Maxsize = 100
-    _Pragma("loopbound min 20 max 20")
-    for (Inner = 0; Inner < MAXSIZE; Inner++)
-#ifdef WORSTCASE
-      if (Array[Outer][Inner] >= 0) {
-#else
-      if (Array[Outer][Inner] < 0) {
-#endif
-	Ptotal += Array[Outer][Inner];
-	Pcnt++;
-      }
-      else {
-	Ntotal += Array[Outer][Inner];
-	Ncnt++;
+  _Pragma( "loopbound min 20 max 20" )
+  for ( Outer = 0; Outer < MAXSIZE; Outer++ )
+    _Pragma( "loopbound min 20 max 20" )
+    for ( Inner = 0; Inner < MAXSIZE; Inner++ )
+      if ( Array[Outer][Inner] >= 0 ) {
+        Ptotal += Array[Outer][Inner];
+        Pcnt++;
+      } else {
+        Ntotal += Array[Outer][Inner];
+        Ncnt++;
       }
 
-  Postotal = Ptotal;
-  Poscnt = Pcnt;
-  Negtotal = Ntotal;
-  Negcnt = Ncnt;
+  countnegative_postotal = Ptotal;
+  countnegative_poscnt = Pcnt;
+  countnegative_negtotal = Ntotal;
+  countnegative_negcnt = Ncnt;
 }
 
-
-// Generates random integers between 0 and 8095
-int RandomInteger( void )
+/*
+  The main function
+*/
+void countnegative_main ( void )
 {
-   Seed = ((Seed * 133) + 81) % 8095;
-   return Seed;
+  countnegative_sum(  countnegative_array );
 }
 
+int main( void )
+{
+  countnegative_init();
+  countnegative_main();
 
+  return ( countnegative_return() );
+}
