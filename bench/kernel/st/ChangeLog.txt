@@ -1,0 +1,92 @@
+File: st.c
+Original provenience: Mälardalen benchmark suite, www.mrtc.....
+
+2015-06-08:
+- Removed comment "/* stats.c */" from line 1
+- Added generic TACLeBench header to line 1
+- Replaced all occurrences of preprocessor macro MAX by value 1000
+  (lines 75, 78, 95, 98, 111, 139)
+- Removed obsolete preprocessor macro MAX from line 3
+- Removed comment describing purpose of benchmark from lines 6-10
+- Renamed global variable Seed to st_Seed, declared st_Seed as volatile
+- Renamed global variable ArrayA to st_ArrayA
+- Renamed global variable ArrayB to st_ArrayB
+- Renamed global variable SumA to st_SumA
+- Renamed global variable SumB to st_SumB
+- Removed global variable Coef, reinserted previous local variable Coef that
+  was commented out in function main and elsewhere in order to keep the
+  argument lists of some functions smaller than 6
+- Replaced Coef by *Coef in last line of function Calc_LinCorrCoef due to
+  previous change
+- Removed comment "/* Coef used globally */" from function Calc_LinCorrCoef
+- Removed comment "/* Coef will have to be used globally in Calc_LinCorrCoef
+  since it would be beyond the 6 registers used for passing parameters */"  from
+  function main
+- Renamed function my_fabs to st_fabs
+- Renamed function my_sqrtf to st_sqrtf
+- Renamed function InitSeed to st_InitSeed
+- Renamed function Calc_Sum_Mean to st_Calc_Sum_Mean
+- Renamed function Square to st_Square
+- Renamed function Calc_Var_Stddev to st_Calc_Var_Stddev
+- Renamed function Calc_LinCorrCoef to st_Calc_LinCorrCoef
+- Renamed function RandomInteger to st_RandomInteger
+- Renamed function Initialize to st_Initialize
+- Added new function st_Init completely encapsulating all initialization-
+  related issues according to TACLeBench guidelines. st_Init by itself only
+  calls st_InitSeed and invokes st_Initialize on global arrays st_ArrayA and
+  st_ArrayB
+- Removed both calls to st_Initialize from function main
+- Replaced call of st_InitSeed in main by call of st_Init
+- Replaced string "8095" by "8094" in the comment documenting function
+  st_RandomInteger
+- Removed the division by 8095.0f from line
+  "array[ i ] = i + st_randomInteger() / 8095.0f" in function st_initialize.
+  i ranges from 0 to 999, values returned by st_randomInteger range from 0 to
+  8094. The sum of i and st_randomInteger thus ranges from 0 to 9093. Dividing
+  numbers from this interval by 8095.0f has the effect that array[ i ] is
+  initialized only with values 0.0f or 1.0f which is way too limited.
+- Added new function st_main according to TACLeBench guidelines. st_main
+  contains the declaration of local variables MeanA, MeanB, VarA, VarB,
+  StddevA, StddevB and Coef and calls st_calc_Sum_Mean, st_Calc_Var_Stddev
+  and st_Calc_LinCorrCoef as the original main did.
+  st_main is annotated as entry-point for timing analysis.
+- Removed declaration of local variables from function main, replaced calls
+  of st_Calc_Sum_Mean, st_Calc_Var_Stddev and st_Calc_LinCorrCoef in main by
+  a call to st_main
+- Removed local variables meanA, meanB, varA, varB, stddevA, stddevB, coef from
+  function st_main, added them as global variables st_meanA, st_meanB, st_varA,
+  st_varB, st_stddevA, st_stddevB, st_coef
+  Adjusted function st_main such that the new global variables are used, in
+  order to enable explicit return value computation of the entire benchmark
+- Added new function st_return computing a checksum as return value
+- Adjusted function main such that it calls st_return to produce a return value
+  for testing
+- Added forward declarations of all functions before the declarations of global
+  variables
+- Reordered functions in source code: initialization- and return-value-related
+  functions first, followed by arithmetic math functions, followed by algorithm
+  core functions, followed by main functions
+- Applied code formatting according to the following rules
+  (incomplete, to be discussed; I basically used astyle with the attached
+   options file):
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: st_) followed by lowercase letter (e.g., st_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+- Added general TACLeBench header to beginning of source code
