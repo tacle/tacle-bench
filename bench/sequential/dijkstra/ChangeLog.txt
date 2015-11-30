@@ -1,0 +1,35 @@
+File: dijkstra.c
+Original provenience: network section of MiBench
+
+2015-11-30:
+- Replaced "NULL" with "0", remove #include of glibc_common.h
+- Removed commented code referring to variable "qKill"
+- Made ch, i, iPrev, iNode, iCost and iDist local variables
+- Stripped (inconsistently applied) Hungarian notation, replaced
+  prefix "q" with prefix "queue" for global variables, renamed
+  "next_in" to "queueNext" and "qNew" to "newItem"
+- Initialize queueHead statically (like queueCount and queueNext)
+- Prefixed all functions and global variables with "dijkstra_",
+  renaming "dijkstra" to "dijkstra_find"
+- Calculate a checksum in dijkstra_main, return its value in new
+  function dijkstra_return
+- Added (empty) function dijkstra_init and a main function
+- Reordered functions in source code: initialization- and
+  return-value-related functions first, followed by algorithm core
+  functions, followed by main functions
+- Added function prototypes
+- Applied code formatting with astyle as in the example
+- Added general TACLeBench header to beginning of source code
+
+Files: input.h, input.c
+Original provenience: network section of MiBench
+
+2015-11-30:
+- Prefix global variable "AdjMatrix" with "dijkstra_"
+- Applied code formatting with astyle as in the example
+
+File: glibc_common.h
+Original provenience: network section of MiBench
+
+2015-11-30:
+- Removed file

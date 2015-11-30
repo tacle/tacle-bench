@@ -1,113 +1,153 @@
-// LICENSE: GPL. This file comes from the network section of the MiBench
+/*
 
-#include "glibc_common.h"
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: dijkstra
+
+  Author: unknown
+
+  Function: dijkstra finds the shortest path between nodes in a graph
+
+  Source: network section of MiBench
+
+  Changes: made some variables local, compute checksum
+
+  License: GPL
+
+*/
+
 #include "input.h"
 
+/*
+  Definitions of symbolic constants
+*/
 #define NONE 9999
 #define OUT_OF_MEMORY -1
-
-
-struct _NODE
-{
-  int iDist;
-  int iPrev;
-};
-
-struct _QITEM
-{
-  int iNode;
-  int iDist;
-  int iPrev;
-  struct _QITEM *qNext;
-};
-
-struct _QITEM *qHead;
-
-int g_qCount = 0;
-struct _NODE rgnNodes[NUM_NODES];
-int ch;
-int iPrev, iNode;
-int i, iCost, iDist;
-
 #define QUEUE_SIZE 1000
 
-struct _QITEM qitems[QUEUE_SIZE];
-int next_in = 0;
+/*
+  Type declarations
+*/
+struct _NODE {
+  int dist;
+  int prev;
+};
 
-int enqueue(int iNode, int iDist, int iPrev)
+struct _QITEM {
+  int node;
+  int dist;
+  int prev;
+  struct _QITEM *next;
+};
+
+/*
+  Global variable definitions
+*/
+struct _NODE dijkstra_rgnNodes[NUM_NODES];
+
+int dijkstra_queueCount = 0;
+int dijkstra_queueNext = 0;
+struct _QITEM *dijkstra_queueHead = ( struct _QITEM * )0;
+struct _QITEM dijkstra_queueItems[QUEUE_SIZE];
+
+int dijkstra_checksum = 0;
+
+/*
+  Forward declaration of functions
+*/
+void dijkstra_init( void );
+int dijkstra_return( void );
+int dijkstra_enqueue( int node, int dist, int prev );
+void dijkstra_dequeue( int *node, int *dist, int *prev );
+int dijkstra_qcount( void );
+int dijkstra_find( int chStart, int chEnd );
+void dijkstra_main( void );
+int main( void );
+
+void dijkstra_init( void )
 {
-  struct _QITEM *qNew = &qitems[next_in];
+}
 
-  struct _QITEM *qLast = qHead;
+int dijkstra_return( void )
+{
+  return dijkstra_checksum;
+}
 
-  if (++next_in >= QUEUE_SIZE) {
+int dijkstra_enqueue( int node, int dist, int prev )
+{
+  struct _QITEM *newItem = &dijkstra_queueItems[dijkstra_queueNext];
+  struct _QITEM *last = dijkstra_queueHead;
+
+  if ( ++dijkstra_queueNext >= QUEUE_SIZE )
     return OUT_OF_MEMORY;
-  }
-  qNew->iNode = iNode;
-  qNew->iDist = iDist;
-  qNew->iPrev = iPrev;
-  qNew->qNext = (void*)NULL;
+  newItem->node = node;
+  newItem->dist = dist;
+  newItem->prev = prev;
+  newItem->next = ( void * )0;
 
-  if (!qLast) {
-    qHead = qNew;
-  }
+  if ( !last )
+    dijkstra_queueHead = newItem;
   else {
+    /* TODO: where does this magic loop bound come from? */
     _Pragma( "loopbound min 0 max 313" )
-    while (qLast->qNext)
-      qLast = qLast->qNext;
-    qLast->qNext = qNew;
+    while ( last->next )
+      last = last->next;
+    last->next = newItem;
   }
-  g_qCount++;
+  dijkstra_queueCount++;
   return 0;
 }
 
-void dequeue(int *piNode, int *piDist, int *piPrev)
+void dijkstra_dequeue( int *node, int *dist, int *prev )
 {
-  //struct _QITEM *qKill = qHead;
-
-  if (qHead) {
-    *piNode = qHead->iNode;
-    *piDist = qHead->iDist;
-    *piPrev = qHead->iPrev;
-    qHead = qHead->qNext;
-    //    my_free(qKill);
-    g_qCount--;
+  if ( dijkstra_queueHead ) {
+    *node = dijkstra_queueHead->node;
+    *dist = dijkstra_queueHead->dist;
+    *prev = dijkstra_queueHead->prev;
+    dijkstra_queueHead = dijkstra_queueHead->next;
+    dijkstra_queueCount--;
   }
 }
 
-int qcount(void)
+int dijkstra_qcount( void )
 {
-  return(g_qCount);
+  return ( dijkstra_queueCount );
 }
 
-int dijkstra(int chStart, int chEnd)
+int dijkstra_find( int chStart, int chEnd )
 {
+  int ch;
+  int prev, node;
+  int cost, dist;
+  int i;
+
   _Pragma( "loopbound min 100 max 100" )
-  for (ch = 0; ch < NUM_NODES; ch++) {
-    rgnNodes[ch].iDist = NONE;
-    rgnNodes[ch].iPrev = NONE;
+  for ( ch = 0; ch < NUM_NODES; ch++ ) {
+    dijkstra_rgnNodes[ch].dist = NONE;
+    dijkstra_rgnNodes[ch].prev = NONE;
   }
 
-  if (chStart == chEnd) {
-  }
-  else {
-    rgnNodes[chStart].iDist = 0;
-    rgnNodes[chStart].iPrev = NONE;
+  if ( chStart == chEnd ) {
+  } else {
+    dijkstra_rgnNodes[chStart].dist = 0;
+    dijkstra_rgnNodes[chStart].prev = NONE;
 
-    if (enqueue (chStart, 0, NONE) == OUT_OF_MEMORY)
+    if ( dijkstra_enqueue ( chStart, 0, NONE ) == OUT_OF_MEMORY )
       return OUT_OF_MEMORY;
 
+    /* TODO: where does this magic loop bound come from? */
     _Pragma( "loopbound min 618 max 928" )
-    while (qcount() > 0) {
-      dequeue (&iNode, &iDist, &iPrev);
+    while ( dijkstra_qcount() > 0 ) {
+      dijkstra_dequeue ( &node, &dist, &prev );
       _Pragma( "loopbound min 100 max 100" )
-      for (i = 0; i < NUM_NODES; i++) {
-        if ((iCost = AdjMatrix[iNode][i]) != NONE) {
-          if ((NONE == rgnNodes[i].iDist) ||
-                  (rgnNodes[i].iDist > (iCost + iDist))) {
-            rgnNodes[i].iDist = iDist + iCost;
-            rgnNodes[i].iPrev = iNode;
-            if (enqueue (i, iDist + iCost, iNode) == OUT_OF_MEMORY)
+      for ( i = 0; i < NUM_NODES; i++ ) {
+        if ( ( cost = dijkstra_AdjMatrix[node][i] ) != NONE ) {
+          if ( ( NONE == dijkstra_rgnNodes[i].dist ) ||
+               ( dijkstra_rgnNodes[i].dist > ( cost + dist ) ) ) {
+            dijkstra_rgnNodes[i].dist = dist + cost;
+            dijkstra_rgnNodes[i].prev = node;
+            if ( dijkstra_enqueue ( i, dist + cost, node ) == OUT_OF_MEMORY )
               return OUT_OF_MEMORY;
           }
         }
@@ -117,20 +157,27 @@ int dijkstra(int chStart, int chEnd)
   return 0;
 }
 
-int main()
+void dijkstra_main( void )
 {
-  int i,j;
+  int i, j;
 
-  qHead = (void*)NULL;
-  /* finds 10 shortest paths between nodes */
+  /* finds 20 shortest paths between nodes */
   _Pragma( "loopbound min 20 max 20" )
-  for (i=0,j=NUM_NODES/2;i<20;i++,j++) {
-    j=j%NUM_NODES;
-    if (dijkstra(i,j) == OUT_OF_MEMORY)
-      return OUT_OF_MEMORY;
-    next_in = 0;
+  for ( i = 0, j = NUM_NODES / 2; i < 20; i++, j++ ) {
+    j = j % NUM_NODES;
+    if ( dijkstra_find( i, j ) == OUT_OF_MEMORY ) {
+      dijkstra_checksum += OUT_OF_MEMORY;
+      return;
+    } else
+      dijkstra_checksum += dijkstra_rgnNodes[j].dist;
+    dijkstra_queueNext = 0;
   }
-  
-  return 0;
 }
 
+int main( void )
+{
+  dijkstra_init();
+  dijkstra_main();
+
+  return ( dijkstra_return() );
+}
