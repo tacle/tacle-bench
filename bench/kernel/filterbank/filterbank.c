@@ -1,21 +1,69 @@
-void begin(void);
-void FBCore(float r[256], float y[256], float H[8][32], float F[8][32]);
+/*
 
-int numiters = 2;
+  This program is part of the TACLeBench benchmark suite.
+  Version 2.0
 
-int main(void)
+  Name: filterbank
+
+  Author: unknown
+
+  Function: A program for performs some vector operations.
+
+  Source: unknown
+
+  Changes: See ChangeLog.txt
+
+  License: MIT License
+
+*/
+
+/*
+  Forward declaration of functions
+*/
+
+void filterbank_init( void );
+void filterbank_main( void );
+int filterbank_return( void );
+void filterbank_core( float r[256],
+                      float y[256],
+                      float H[8][32],
+                      float F[8][32] );
+
+
+/*
+  Declaration of global variables
+*/
+
+static int filterbank_numiters;
+
+
+/*
+  Initialization- and return-value-related functions
+*/
+
+void filterbank_init( void )
 {
-  begin();
+  filterbank_numiters = 2;
+}
+
+
+int filterbank_return( void )
+{
   return 0;
 }
 
-void begin(void)
+
+/*
+  Core benchmark functions
+*/
+
+void _Pragma( "entrypoint" ) filterbank_main( void )
 {
   float r[256];
   float y[256];
   float H[8][32];
   float F[8][32];
-  
+
   int i, j;
 
   _Pragma( "loopbound min 256 max 256" )
@@ -33,29 +81,33 @@ void begin(void)
   }
 
   _Pragma( "loopbound min 2 max 2" )
-  while (numiters-- > 0) {
-    FBCore(r, y, H, F);
+  while (filterbank_numiters-- > 0) {
+    filterbank_core(r, y, H, F);
   }
 }
 
-// the FB core gets the input vector (r) , the filter responses H and F and 
-// generates the output vector(y)
-void FBCore(float r[256], float y[256], float H[8][32], float F[8][32])
+
+/* the FB core gets the input vector (r) , the filter responses H and F and */
+/* generates the output vector(y) */
+void filterbank_core( float r[256],
+                      float y[256],
+                      float H[8][32],
+                      float F[8][32] )
 {
   int i, j, k;
-  
+
   _Pragma( "loopbound min 256 max 256" )
   for (i = 0; i < 256;i++)
     y[i] = 0;
 
   _Pragma( "loopbound min 8 max 8" )
   for (i = 0; i < 8; i++) {
-    float Vect_H[256]; //(output of the H)
-    float Vect_Dn[(int) 256 / 8]; //output of the down sampler;
-    float Vect_Up[256]; // output of the up sampler;
-    float Vect_F[256]; // this is the output of the
+    float Vect_H[256]; /* (output of the H) */
+    float Vect_Dn[(int) 256 / 8]; /* output of the down sampler; */
+    float Vect_Up[256]; /* output of the up sampler; */
+    float Vect_F[256]; /* this is the output of the */
 
-    //convolving H
+    /* convolving H */
     _Pragma( "loopbound min 256 max 256" )
     for (j = 0; j < 256; j++) {
       Vect_H[j] = 0;
@@ -65,12 +117,12 @@ void FBCore(float r[256], float y[256], float H[8][32], float F[8][32])
       }
     }
 
-    //Down Sampling
+    /* Down Sampling */
     _Pragma( "loopbound min 32 max 32" )
     for (j = 0; j < 256 / 8; j++)
       Vect_Dn[j] = Vect_H[j * 8];
 
-    //Up Sampling
+    /* Up Sampling */
     _Pragma( "loopbound min 256 max 256" )
     for (j = 0; j < 256;j++)
       Vect_Up[j] = 0;
@@ -78,7 +130,7 @@ void FBCore(float r[256], float y[256], float H[8][32], float F[8][32])
     for (j = 0; j < 256 / 8;j++)
       Vect_Up[j*8] = Vect_Dn[j];
 
-    //convolving F
+    /* convolving F */
     _Pragma( "loopbound min 256 max 256" )
     for (j = 0; j < 256; j++) {
       Vect_F[j] = 0;
@@ -88,11 +140,24 @@ void FBCore(float r[256], float y[256], float H[8][32], float F[8][32])
       }
     }
 
-    //adding the results to the y matrix
+    /* adding the results to the y matrix */
 
     _Pragma( "loopbound min 256 max 256" )
     for (j = 0; j < 256; j++) {
       y[j] += Vect_F[j];
     }
   }
+}
+
+
+/*
+  Main function
+*/
+
+int main( void )
+{
+  filterbank_init();
+  filterbank_main();
+
+  return filterbank_return();
 }
