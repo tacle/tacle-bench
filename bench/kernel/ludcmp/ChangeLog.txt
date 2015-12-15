@@ -1,0 +1,20 @@
+File: ludcmp.c
+Original provenience: SNU-RT benchmark suite, via Mälardalen benchmark
+suite, www.mrtc.....
+
+2015-11-27:
+- Removed commented-out parameter nmax
+- Made chkerr a global variable, set in the ludmp function
+- Changed return value of ludcmp to void
+- Renamed ludcmp to ludcmp_test, wrap call in new function ludcmp_main
+- Move initialization code into new function ludcmp_init
+- Compute checksum in new function ludcmp_return
+- Prefix fabs and global variables with "ludcmp_"
+- Reordered functions in source code: initialization- and
+  return-value-related functions first, followed by algorithm core
+  functions, followed by main functions
+- Applied code formatting with astyle as in the example
+
+2015-12-15:
+- Sorted out licensing terms, added general TACLeBench header to
+  beginning of source code

@@ -1,74 +1,83 @@
-/*************************************************************************/
-/*                                                                       */
-/*   SNU-RT Benchmark Suite for Worst Case Timing Analysis               */
-/*   =====================================================               */
-/*                              Collected and Modified by S.-S. Lim      */
-/*                                           sslim@archi.snu.ac.kr       */
-/*                                         Real-Time Research Group      */
-/*                                        Seoul National University      */
-/*                                                                       */
-/*                                                                       */
-/*        < Features > - restrictions for our experimental environment   */
-/*                                                                       */
-/*          1. Completely structured.                                    */
-/*               - There are no unconditional jumps.                     */
-/*               - There are no exit from loop bodies.                   */
-/*                 (There are no 'break' or 'return' in loop bodies)     */
-/*          2. No 'switch' statements.                                   */
-/*          3. No 'do..while' statements.                                */
-/*          4. Expressions are restricted.                               */
-/*               - There are no multiple expressions joined by 'or',     */
-/*                'and' operations.                                      */
-/*          5. No library calls.                                         */
-/*               - All the functions needed are implemented in the       */
-/*                 source file.                                          */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
-/*                                                                       */
-/*  FILE: ludcmp.c                                                       */
-/*  SOURCE : Turbo C Programming for Engineering                         */
-/*                                                                       */
-/*  DESCRIPTION :                                                        */
-/*                                                                       */
-/*     Simultaneous linear equations by LU decomposition.                */
-/*     The arrays a[][] and b[] are input and the array x[] is output    */
-/*     row vector.                                                       */
-/*     The variable n is the number of equations.                        */
-/*     The input arrays are initialized in function main.                */
-/*                                                                       */
-/*                                                                       */
-/*  REMARK :                                                             */
-/*                                                                       */
-/*  EXECUTION TIME :                                                     */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
-
-
-/* Changes:
- * JG 2005/12/12: Indented program. Removed unused variable nmax.
- */
-
 /*
-** Benchmark Suite for Real-Time Applications, by Sung-Soo Lim
-**
-**    III-4. ludcmp.c : Simultaneous Linear Equations by LU Decomposition
-**                 (from the book C Programming for EEs by Hyun Soon Ahn)
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: ludcmp
+
+  Author: Sung-Soo Lim
+
+  Function: Simultaneous linear equations by LU decomposition.
+
+  Source: SNU-RT Benchmark Suite, via MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/ludcmp/ludcmp.c
+
+  Changes: moved initialization into separate function
+
+  License: may be used, modified, and re-distributed freely, but
+           the SNU-RT Benchmark Suite must acknowledged
+
 */
 
-/* Forward function prototypes */
-int  ludcmp( /* int nmax, */ int n, double eps);
+/*
+  This program is derived from the SNU-RT Benchmark Suite for Worst
+  Case Timing Analysis by Sung-Soo Lim
 
+  III-4. ludcmp.c : Simultaneous Linear Equations by LU Decomposition
+                    (from the book C Programming for EEs by Hyun Soon Ahn)
+*/
 
-double          a[50][50], b[50], x[50];
+/*
+  Forward declaration of functions
+*/
 
+void ludcmp_init( void );
+int ludcmp_return( void );
+int  ludcmp_test( int n, double eps );
+void ludcmp_main( void );
+int main( void );
 
-static double fabs( double n )
+double          ludcmp_a[50][50], ludcmp_b[50], ludcmp_x[50];
+int ludcmp_chkerr;
+
+void ludcmp_init( void )
+{
+  int             i, j, n = 5;
+  double          w;
+
+  _Pragma( "loopbound min 6 max 6" )
+  for ( i = 0; i <= n; i++ ) {
+    w = 0;
+    _Pragma( "loopbound min 6 max 6" )
+    for ( j = 0; j <= n; j++ ) {
+      ludcmp_a[i][j] = ( i + 1 ) + ( j + 1 );
+
+      if ( i == j )
+        ludcmp_a[i][j] *= 10;
+      w += ludcmp_a[i][j];
+    }
+
+    ludcmp_b[i] = w;
+  }
+}
+
+int ludcmp_return( void )
+{
+  int i, n = 5;
+  double checksum = ludcmp_chkerr;
+
+  _Pragma( "loopbound min 6 max 6" )
+  for ( i = 0; i <= n; i++ )
+    checksum += ludcmp_x[i];
+
+  return ( ( int ) checksum );
+}
+
+static double ludcmp_fabs( double n )
 {
   double          f;
 
-  if (n >= 0)
+  if ( n >= 0 )
     f = n;
   else
     f = -n;
@@ -76,105 +85,85 @@ static double fabs( double n )
   return f;
 }
 
-
-int main( void )
-{
-  int             i, j/*, nmax = 50*/, n = 5, chkerr;
-  double          eps, w;
-
-  /* eps = 1.0e-6; */
-  eps = 1;
-
-  _Pragma("loopbound min 6 max 6")
-  for (i = 0; i <= n; i++) {
-    w = 0;
-    _Pragma("loopbound min 6 max 6")
-    for (j = 0; j <= n; j++) {
-      a[i][j] = (i + 1) + (j + 1);
-      
-      if (i == j) {
-	a[i][j] *= 10;
-      }
-      w += a[i][j];
-    }
-    
-    b[i] = w;
-  }
-    
-  chkerr = ludcmp( /* nmax, */ n, eps);
-
-  return 0;
-}
-
-
-int ludcmp( /* int nmax, */ int n, double eps)
+int ludcmp_test( int n, double eps )
 {
   int             i, j, k;
   double          w, y[100];
 
 
-  if (n > 99 || eps <= 0)
-    return (999);
-  
-  _Pragma("loopbound min 5 max 5")
-  for (i = 0; i < n; i++) {
-    if (fabs(a[i][i]) <= eps)
-      return (1);
-      
-    _Pragma("loopbound min 1 max 5")
-    for (j = i + 1; j <= n; j++) {
-      w = a[j][i];
-      
-      if (i != 0) {
-	_Pragma("loopbound min 1 max 4")
-	for (k = 0; k < i; k++) {
-	  w -= a[j][k] * a[k][i];
-	}
+  if ( n > 99 || eps <= 0 )
+    return ( 999 );
+
+  _Pragma( "loopbound min 5 max 5" )
+  for ( i = 0; i < n; i++ ) {
+    if ( ludcmp_fabs( ludcmp_a[i][i] ) <= eps )
+      return ( 1 );
+
+    _Pragma( "loopbound min 1 max 5" )
+    for ( j = i + 1; j <= n; j++ ) {
+      w = ludcmp_a[j][i];
+
+      if ( i != 0 ) {
+        _Pragma( "loopbound min 1 max 4" )
+        for ( k = 0; k < i; k++ )
+          w -= ludcmp_a[j][k] * ludcmp_a[k][i];
       }
-      
-      a[j][i] = w / a[i][i];
+
+      ludcmp_a[j][i] = w / ludcmp_a[i][i];
     }
-    
-    _Pragma("loopbound min 1 max 5")
-    for (j = i + 1; j <= n; j++) {
-      w = a[i + 1][j];
-      
-      _Pragma("loopbound min 1 max 5")
-      for (k = 0; k <= i; k++) {
-	w -= a[i + 1][k] * a[k][j];
-      }
-      
-      a[i + 1][j] = w;
+
+    _Pragma( "loopbound min 1 max 5" )
+    for ( j = i + 1; j <= n; j++ ) {
+      w = ludcmp_a[i + 1][j];
+
+      _Pragma( "loopbound min 1 max 5" )
+      for ( k = 0; k <= i; k++ )
+        w -= ludcmp_a[i + 1][k] * ludcmp_a[k][j];
+
+      ludcmp_a[i + 1][j] = w;
     }
   }
-  
-  y[0] = b[0];
-  
-  _Pragma("loopbound min 5 max 5")
-  for (i = 1; i <= n; i++) {
-    w = b[i];
-    
-    _Pragma("loopbound min 1 max 5")
-    for (j = 0; j < i; j++) {
-      w -= a[i][j] * y[j];
-    }
-    
+
+  y[0] = ludcmp_b[0];
+
+  _Pragma( "loopbound min 5 max 5" )
+  for ( i = 1; i <= n; i++ ) {
+    w = ludcmp_b[i];
+
+    _Pragma( "loopbound min 1 max 5" )
+    for ( j = 0; j < i; j++ )
+      w -= ludcmp_a[i][j] * y[j];
+
     y[i] = w;
   }
-  
-  x[n] = y[n] / a[n][n];
-  
-  _Pragma("loopbound min 5 max 5")
-  for (i = n - 1; i >= 0; i--) {
+
+  ludcmp_x[n] = y[n] / ludcmp_a[n][n];
+
+  _Pragma( "loopbound min 5 max 5" )
+  for ( i = n - 1; i >= 0; i-- ) {
     w = y[i];
-    
-    _Pragma("loopbound min 1 max 5")
-    for (j = i + 1; j <= n; j++) {
-      w -= a[i][j] * x[j];
-    }
-    
-    x[i] = w / a[i][i];
+
+    _Pragma( "loopbound min 1 max 5" )
+    for ( j = i + 1; j <= n; j++ )
+      w -= ludcmp_a[i][j] * ludcmp_x[j];
+
+    ludcmp_x[i] = w / ludcmp_a[i][i];
   }
-  
-  return( 0 );
+
+  return ( 0 );
+}
+
+void ludcmp_main( void )
+{
+  int n = 5;
+  double eps = 1;
+  ludcmp_chkerr = ludcmp_test( n, eps );
+}
+
+int main( void )
+{
+  ludcmp_init();
+  ludcmp_main();
+
+  return ( ludcmp_return() );
 }
