@@ -1,79 +1,70 @@
 /*
- *  benchmark program  : fft_1024_13_fixed_point
- *
- *  benchmark suite    : DSP-kernel
- *
- *  description        : benchmarking of an integer stage scaling FFT
- *
- *                      To avoid errors caused by overflow and bit growth, 
- *                      the input data is scaled. Bit growth occurs potentially
- *                      at butterfly operations, which involve a complex 
- *                      multiplication, a complex addition and a complex 
- *                      subtraction. Maximal bit growth from butterfly input 
- *                      to butterfly output is two bits. 
- *
- *                      The input data includes enough extra sign bits, called 
- *                      guard bits, to ensure that bit growth never results in 
- *                      overflow (Rabiner and Gold, 1975). Data can grow by a
- *                      maximum factor of 2.4 from butterfly input to output
- *                      (two bits of grow). However, a data value cannot grow by
- *                      maximum amount in two consecutive stages. 
- *                      The number of guard bits necessary to compensate the 
- *                      maximum bit growth in an N-point FFT is (log_2 (N))+1).
- *  
- *                      In a 16-point FFT (requires 4 stages), each of the 
- *                      input samples should contain 5 guard bits. The input 
- *                      data is then restricted to 10 bits, one sign bit and
- *                      nine magnitude bits, in order to prevent an
- *                      overflow from the integer multiplication with the
- *                      precalculed twiddle coefficients.
- *      
- *                      Another method to compensate bit growth is to scale the
- *                      outputs down by a factor of two unconditionally after
- *                      each stage. This approach is called unconditional scaling
- *                      
- *                      Initially, 2 guard bits are included in the input data to 
- *                      accomodate the maximum overflow in the first stage.
- *                      In each butterfly of a stage calculation, the data can 
- *                      grow into the guard bits. To prevent overflow in the next 
- *                      stage, the guard bits are replaced before the next stage is
- *                      executed by shifting the entire block of data one bit
- *                      to the right.
- * 
- *                      Input data should not be restricted to a 1.9 format.
- *                      Input data can be represented in a 1.13 format,that is
- *                      14 significant bits, one sign and 13 magnitude bits. In 
- *                      the FFT calculation, the data loses a total of (log2 N) -1 
- *                      bits because of shifting. Unconditional scaling results 
- *                      in the same number of bits lost as in the input data scaling.
- *                      However, it produces more precise results because the 
- *                      FFT starts with more precise input data. The tradeoff is
- *                      a slower FFT calculation because of the extra cycles needed
- *                      to shift the output of each stage.
- *
- *                      Input data is held on the include file "input16.dat"
- *                      or "input1024.dat" in float format (0 ... 1)
- *                      Data is transformed automatically to 1.Q fract format
- *
- *  reference code     : none
- *
- *  func. verification : comparison with known float 1024 point FFT
- *
- *  organization       : Aachen University of Technology - IS2
- *                     : DSP Tools Group
- *                     : phone   : +49(241)807887
- *                     : fax     : +49(241)8888195
- *                     : e-mail  : zivojnov@ert.rwth-aachen.de
- *
- *  author             : Juan Martinez Velarde
- *
- *  history            : 07-02-94 - creation
- *                       16-02-94 - c50 profiling
- *
- *                       $Author: ionov $
- *                       $Revision: 1.2 $
- *                       $Date: 2009-11-09 12:18:11 $
- */
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: fft
+
+  Author: Juan Martinez Velarde
+
+  Function: benchmarking of an integer stage scaling FFT
+    To avoid errors caused by overflow and bit growth, 
+    the input data is scaled. Bit growth occurs potentially
+    at butterfly operations, which involve a complex 
+    multiplication, a complex addition and a complex 
+    subtraction. Maximal bit growth from butterfly input 
+    to butterfly output is two bits. 
+  
+    The input data includes enough extra sign bits, called 
+    guard bits, to ensure that bit growth never results in 
+    overflow (Rabiner and Gold, 1975). Data can grow by a
+    maximum factor of 2.4 from butterfly input to output
+    (two bits of grow). However, a data value cannot grow by
+    maximum amount in two consecutive stages. 
+    The number of guard bits necessary to compensate the 
+    maximum bit growth in an N-point FFT is (log_2 (N))+1).
+  
+    In a 16-point FFT (requires 4 stages), each of the 
+    input samples should contain 5 guard bits. The input 
+    data is then restricted to 10 bits, one sign bit and
+    nine magnitude bits, in order to prevent an
+    overflow from the integer multiplication with the
+    precalculed twiddle coefficients.
+  
+    Another method to compensate bit growth is to scale the
+    outputs down by a factor of two unconditionally after
+    each stage. This approach is called unconditional scaling
+    
+    Initially, 2 guard bits are included in the input data to 
+    accomodate the maximum overflow in the first stage.
+    In each butterfly of a stage calculation, the data can 
+    grow into the guard bits. To prevent overflow in the next 
+    stage, the guard bits are replaced before the next stage is
+    executed by shifting the entire block of data one bit
+    to the right.
+  
+    Input data should not be restricted to a 1.9 format.
+    Input data can be represented in a 1.13 format,that is
+    14 significant bits, one sign and 13 magnitude bits. In 
+    the FFT calculation, the data loses a total of (log2 N) -1 
+    bits because of shifting. Unconditional scaling results 
+    in the same number of bits lost as in the input data scaling.
+    However, it produces more precise results because the 
+    FFT starts with more precise input data. The tradeoff is
+    a slower FFT calculation because of the extra cycles needed
+    to shift the output of each stage.
+
+  Source: DSP-Stone
+    http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone/
+
+  Original name: fft_1024_13 
+    (merged main1024_bit_reduct and fft_bit_reduct from DSP-Stone)
+
+  Changes: no major functional changes
+
+  License: general open-source
+
+*/
 
 #define STORAGE_CLASS register
 #define TYPE int
@@ -87,7 +78,7 @@
 /* precalculated twiddle factors
    for an integer 1024 point FFT
    in format 1.13 => table twidtable[2*(N_FFT-1)] ; */
-int twidtable[2046]={8192, 0, 8192, 0, 0, -8192, 8192, 0, 5792, -5792, 0, -8191, -5792, -5792, 8192, 0, 7568, -3134, 5792, -5792, 3134, -7568, 0
+int fft_twidtable[2046]={8192, 0, 8192, 0, 0, -8192, 8192, 0, 5792, -5792, 0, -8191, -5792, -5792, 8192, 0, 7568, -3134, 5792, -5792, 3134, -7568, 0
   ,-8192, -3134, -7568, -5792, -5792, -7568, -3134, 8192, 0, 8034, -1598, 7568, -3134, 6811, -4551, 5792, -5792, 4551, -6811, 3134, -7568, 1598, -8034
   ,0, -8192, -1598, -8034, -3134, -7568, -4551, -6811, -5792, -5792, -6811, -4551, -7568, -3134, -8034, -1598, 8192, 0, 8152, -802, 8034, -1598, 7839
   ,-2378, 7568, -3134, 7224, -3861, 6811, -4551, 6332, -5196, 5792, -5792, 5196, -6332, 4551, -6811, 3861, -7224, 3134, -7568, 2378, -7839, 1598, -8034
@@ -182,7 +173,7 @@ int twidtable[2046]={8192, 0, 8192, 0, 0, -8192, 8192, 0, 5792, -5792, 0, -8191,
 };
 
 /* 1024 real values as input data in float format */
-float input[1024] = {
+float fft_input[1024] = {
   0.243f, 0.323f, 0.505f, -0.176f, -0.87f, 0.353f, -0.344f, -0.443f, -0.434f, -0.32f, 0.232f, -0.454f, -0.32f, -0.323f, -0.733f, 0.54f,
   0.243f, 0.323f, 0.505f, -0.176f, -0.87f, 0.353f, -0.344f, -0.443f, -0.434f, -0.32f, 0.232f, -0.454f, -0.32f, -0.323f, -0.733f, 0.54f,
   0.243f, 0.323f, 0.505f, -0.176f, -0.87f, 0.353f, -0.344f, -0.443f, -0.434f, -0.32f, 0.232f, -0.454f, -0.32f, -0.323f, -0.733f, 0.54f,
@@ -249,11 +240,11 @@ float input[1024] = {
   0.243f, 0.323f, 0.505f, -0.176f, -0.87f, 0.353f, -0.344f, -0.443f, -0.434f, -0.32f, 0.232f, -0.454f, -0.32f, -0.323f, -0.733f, 0.54f
 };
 
-int inputfract[N_FFT];  /* will hold the transformed data */
+int fft_inputfract[N_FFT];  /* will hold the transformed data */
 
 
 /* conversion function to 1.NUMBER_OF_BITS format */
-float exp2f(float x)
+float fft_exp2f(float x)
 {
   int i;
   float ret = 2.0f;
@@ -265,8 +256,7 @@ float exp2f(float x)
   return ret;
 }
 
-
-float modff(float x, float *intpart)
+float fft_modff(float x, float *intpart)
 {
   if ( intpart ) {
     *intpart = (int)x;
@@ -275,19 +265,18 @@ float modff(float x, float *intpart)
     return x;
 }
 
-
 /* conversion function to 1.NUMBER_OF_BITS format */
-int convert(float value)
+int fft_convert(float value)
 {
   float man, t_val, frac, m, exponent = NUMBER_OF_BITS;
   int rnd_val;
   unsigned long int_val;
   unsigned long pm_val;
 
-  m = exp2f(exponent+1)  - 1;
+  m = fft_exp2f(exponent+1)  - 1;
 
   t_val = value * m ;
-  frac = modff(t_val,&man);
+  frac = fft_modff(t_val,&man);
   if (frac < 0.0f) 
     {
       rnd_val = (-1);
@@ -305,7 +294,7 @@ int convert(float value)
 }
 
 
-void float2fract()
+void fft_float2fract()
 {
   float f ; 
   int   j, i ; 
@@ -313,9 +302,9 @@ void float2fract()
   _Pragma("loopbound min 1024 max 1024")
   for (j = 0 ; j < N_FFT ; j++) 
     {
-      f = input[j];
-      i = convert(f);
-      inputfract[j] = i;
+      f = fft_input[j];
+      i = fft_convert(f);
+      fft_inputfract[j] = i;
     }
 }
 
@@ -324,7 +313,7 @@ void fft_bit_reduct(STORAGE_CLASS TYPE *int_pointer)
 {
   {
     STORAGE_CLASS TYPE i, j = 0  ; 
-    STORAGE_CLASS TYPE tmpr, max = 2, m, n = N_FFT << 1 ;           ;
+    STORAGE_CLASS TYPE tmpr, max = 2, m, n = N_FFT << 1 ;
      
     /* do the bit reversal scramble of the input data */
     _Pragma("loopbound min 1024 max 1024")
@@ -353,7 +342,7 @@ void fft_bit_reduct(STORAGE_CLASS TYPE *int_pointer)
       }
 
     {
-      STORAGE_CLASS TYPE *data_pointer = &twidtable[0] ; 
+      STORAGE_CLASS TYPE *data_pointer = &fft_twidtable[0] ; 
       STORAGE_CLASS TYPE *p, *q ; 
       STORAGE_CLASS TYPE tmpi, fr = 0, level, k, l ; 
 
@@ -412,17 +401,17 @@ void fft_bit_reduct(STORAGE_CLASS TYPE *int_pointer)
 }
 
 
-void pin_down(TYPE input_data[])
+void fft_pin_down(TYPE input_data[])
 {
-  /* conversion from input1024.dat to a 1.13 format */
+  /* conversion from input to a 1.13 format */
   
-  float2fract() ; 
+  fft_float2fract() ; 
   
   {
     int *pd, *ps, f;
 
     pd = &input_data[0];
-    ps = &inputfract[0];
+    ps = &fft_inputfract[0];
 
     _Pragma("loopbound min 1024 max 1024")
     for (f = 0; f < N_FFT; f++)
@@ -434,16 +423,25 @@ void pin_down(TYPE input_data[])
 }
 
 
-int main()
+void fft_init( TYPE input_data[] )
 {
-  TYPE input_data[2*N_FFT]; 
-
-  pin_down(&input_data[0]) ; 
-
-  fft_bit_reduct(&input_data[0]);  
-
-  return 0;
+  fft_pin_down(&input_data[0]);
 }
 
 
+void _Pragma( "entrypoint" ) fft_main( TYPE input_data[] )
+{
+  fft_bit_reduct(&input_data[0]);  
+}
 
+
+TYPE fft_input_data[2*N_FFT];
+
+int main( void )
+{
+  fft_init( fft_input_data );
+  
+  fft_main( fft_input_data );
+
+  return ( fft_input_data[0] > 0 );
+}

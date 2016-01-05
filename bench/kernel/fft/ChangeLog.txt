@@ -1,0 +1,16 @@
+File: fft.c
+Original provenience: DSP-Stone
+
+2016-01-05:
+- Rename fft_1024_13 to fft
+- Add generic TACLeBench header
+- Remove original header from DSP-Stone group
+- Remove duplicate semicolon in bit_reduct
+- Introduce fft_init (initialization of input) 
+  and fft_main (main entry point)
+- Update comments about separate input-data file
+- Add entry-point annotation to fft_main
+- Introduce non-zero return value and make input_data global to reduce impact of
+  compiler optimizations
+- Prefix the functions pin_down, float2frac, convert, exp2f and the global 
+  variables input_data, inputfract, input, twidtable with fft_
