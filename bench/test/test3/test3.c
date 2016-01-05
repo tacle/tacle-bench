@@ -14,6 +14,8 @@
   Source: Universitaet des Saarlandes, Saarbruecken, Germany
           Compiler Research Group
 
+  Original name: test3
+
   Changes:
           26-10-2007 Creation at Saarbruecken
 
