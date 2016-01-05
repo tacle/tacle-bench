@@ -5,7 +5,7 @@
 
   Name: binarysearch
 
-  Author: unknown
+  Author: S.-S. Lim <sslim@archi.snu.ac.kr>
 
   Function: binarysearch performs binary search in an array of 15 integer
     elements.
@@ -16,7 +16,9 @@
   Source: MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/bs/bs.c
 
-  Changes:
+  Original name: bs
+
+  Changes: no major functional changed
 
   License: general open-source
 
