@@ -1,0 +1,45 @@
+File: duff.c
+Original provenience: Lift Controller, see README file
+
+
+2015-12-21:
+- replaced defines, introduced 4 enums to replace #define statements 
+  (enum Direction, Sensor, Motor, Command)
+- renamed libs to fit general naming scheme: lift_io -> liftio
+- benchmark consisted of two benchmarks, test_lift and run_lift, 
+  only run_lift remains, i.e., test_lift.data.c/h and test_lift.c removed.
+- Makefile removed, file can now be compiled using 'gcc lift.c'
+- 'uint16_t' replaced by 'unsigned short int' to get rid of 'stdint.h;
+- added an additional global variable 'int checksum'
+- added function pre-fix 'lift_' to each function
+- added function int lift_return() returning the checksum and lift_init()
+- global variable checksum filled in function 'lift_ctrl_set_vals()' 
+  and initialized to 0 in 'lift_init()'
+- Added forward declarations of all functions before the declarations of global
+  variables
+- in function lift_main, explicit initialization 'int i = 0' added.
+- Re-ordered functions to fit template-order
+- Applied code formatting according to the following rules
+  (incomplete, to be discussed; I basically used astyle with the attached
+   options file):
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: st_) followed by lowercase letter (e.g., st_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+- Added general TACLeBench header to beginning of source code

@@ -1,0 +1,35 @@
+File: audiobeam.c
+Original provenience: StreamIt
+          http://groups.csail.mit.edu/cag/streamit/
+
+2015-12-29:
+- Removed original header comment, replaced by TACLeBench header.
+- Renamed libraryfiles according to TACLeBench naming scheme. 
+- Removed all preprocessor macros, integrated them directly in the source code.
+- Added prefix "audiobeam_" to all global symbols.
+- Added explicit forward declarations of functions.
+- Added an empty init function
+- Added new function audiobeam_return producing a checksum as return value.
+- Added new function audiobeam_main according to TACLeBench guidelines.
+  audiobeam_main is annotated as entry-point for timing analysis.
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: bs_) followed by lowercase letter (e.g., bs_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur

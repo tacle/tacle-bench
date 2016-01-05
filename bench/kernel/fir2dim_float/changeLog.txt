@@ -1,0 +1,45 @@
+File: fir2dim.c
+Original provenience: DSP-Stone, 
+http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone/
+
+
+2015-12-21:
+- Renamed benchmark to fir2dim
+- Renamed each function FUNC to fir2dim_FUNC
+- Added functions fir2dim_init, fir2dim_return and main
+- Added a global variable 'int fir2dim_result' to introduce a 
+  non-optimizable return value
+- Substituted all 4 defines:
+	#define STORAGE_CLASS register
+	#define TYPE          float
+	#define IMAGEDIM      4
+	#define ARRAYDIM      (IMAGEDIM + 2)
+	#define COEFFICIENTS  3
+- Added forward declarations of all functions before the declarations of global
+  variables
+- Removed return statement in void function fir2dim_main()
+- Re-ordered functions to fit template-order
+- Applied code formatting according to the following rules
+  (incomplete, to be discussed; I basically used astyle with the attached
+   options file):
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: st_) followed by lowercase letter (e.g., st_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+- Added general TACLeBench header to beginning of source code

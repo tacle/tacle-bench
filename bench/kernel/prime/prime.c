@@ -1,48 +1,115 @@
-/* MDH WCET BENCHMARK SUITE. File version $Id: prime.c,v 1.5 2011-01-10 14:46:56 falk Exp $ */
+/*
 
-/* Changes:
- * JG 2005/12/08: Prototypes added, and changed exit to retun in main.
- */
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
 
-typedef  unsigned char  bool;
-typedef  unsigned int   uint;
+  Name: prime
 
-bool divides (uint n, uint m);
-bool even (uint n);
-bool prime (uint n);
-void swap (uint* a, uint* b);
+  Author: unknown
 
-bool divides (uint n, uint m) {
-  return (m % n == 0);
+  Function: prime calculates whether numbers are prime.
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/prime/prime.c
+
+  Changes: no major functional changes
+
+  License: general open-source
+
+*/
+
+
+/*
+  Forward declaration of functions
+*/
+
+unsigned char prime_divides ( unsigned int n, unsigned int m );
+unsigned char prime_even ( unsigned int n );
+unsigned char prime_prime ( unsigned int n );
+void prime_swap ( unsigned int *a, unsigned int *b );
+void prime_init ();
+int prime_return ();
+void prime_main ();
+int main( void );
+
+
+/*
+  Declaration of global variables
+*/
+
+int prime_result;
+
+
+/*
+  Initialization- and return-value-related functions
+*/
+
+void prime_init () {}
+
+int prime_return ()
+{
+  return prime_result;
 }
 
-bool even (uint n) {
-  return (divides (2, n));
+
+/*
+  Algorithm core functions
+*/
+
+unsigned char prime_divides ( unsigned int n, unsigned int m )
+{
+  return ( m % n == 0 );
 }
 
-bool prime (uint n) {
-  uint i;
-  if (even (n))
-      return (n == 2);
-  _Pragma("loopbound min 73 max 357")
-  for (i = 3; i * i <= n; i += 2) { 
-      if (divides (i, n)) /* ai: loop here min 0 max 357 end; */
-          return 0; 
+
+unsigned char prime_even ( unsigned int n )
+{
+  return ( prime_divides ( 2, n ) );
+}
+
+
+unsigned char prime_prime ( unsigned int n )
+{
+  unsigned int i;
+  if ( prime_even ( n ) )
+    return ( n == 2 );
+  _Pragma( "loopbound min 73 max 357" )
+  for ( i = 3; i * i <= n; i += 2 ) {
+    if ( prime_divides ( i, n ) ) /* ai: loop here min 0 max 357 end; */
+      return 0;
   }
-  return (n > 1);
+  return ( n > 1 );
 }
 
-void swap (uint* a, uint* b) {
-  uint tmp = *a;
-  *a = *b; 
+
+void prime_swap ( unsigned int *a, unsigned int *b )
+{
+  unsigned int tmp = *a;
+  *a = *b;
   *b = tmp;
 }
 
-int main (void) {
-  uint x =  21649;
-  uint y = 513239;
-  swap (&x, &y);
 
-  return (!(prime(x) && prime(y)));
+/*
+  Main functions
+*/
+
+void _Pragma( "entrypoint" ) prime_main()
+{
+  unsigned int x =  21649;
+  unsigned int y = 513239;
+  prime_swap ( &x, &y );
+
+  prime_result = !( prime_prime( x ) && prime_prime( y ) );
 }
+
+
+int main( void )
+{
+  prime_init();
+  prime_main();
+
+  return ( prime_return() );
+}
+
 

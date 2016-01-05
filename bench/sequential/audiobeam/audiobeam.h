@@ -1,8 +1,27 @@
-#ifndef _MAIN_H
-#define _MAIN_H
+#ifndef AUDIOBEAM_MAIN_H
+#define AUDIOBEAM_MAIN_H
 
-#include "wcclibm.h"
-#include "wccmalloc.h"
+struct audiobeam_DataQueue {
+  float **sample_queue;
+  int head;
+  int tail;
+  unsigned char full;
+};
+
+
+struct audiobeam_Delays {
+  float **delay_values;
+  long int max_delay;
+};
+
+
+struct audiobeam_PreprocessedDelays {
+  float delay;
+  int   low;
+  int   high;
+  float offset;
+};
+
 
 #undef FLT_MAX
 #define FLT_MAX 999e999
@@ -27,34 +46,5 @@
 
 #define INTERPOLATE(low_value, high_value, offset) (((high_value-low_value)*(offset)) + low_value)
 
-
-// Queue to store the samples coming in from the data stream. The
-// queue is implemented via an array of float arrays. The head and
-// tail are kept track of using the head and tail indices.
-struct DataQueue {
-    float **sample_queue;
-    int head;
-    int tail;
-    unsigned char full;
-};
-
-
-// A struct to store delay values and some information about each delay
-struct Delays {
-    float **delay_values;
-    long int max_delay;
-};
-
-
-struct PreprocessedDelays {
-  float delay;
-  // Pre-calulated values for interpolation from delays
-  int   low;
-  int   high;
-  float offset;
-};
-
-
-
-#endif /* _MAIN_H */
+#endif
 

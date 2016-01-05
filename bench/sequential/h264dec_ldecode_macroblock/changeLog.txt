@@ -1,0 +1,41 @@
+File: h264dec_ldecode_macroblock.c
+Original provenience: 
+
+2015-12-21:
+- Filename changed to h264dec.c
+- global.h renamed to h264dec.h
+- Removed commented out includes
+- Removed all obsolete typedefs, enums and structs. Only remaining ones are 
+  struct img_par and 
+  enum SliceType
+- Renamed function decode_one_macroblock to h264dec_decode_one_macroblock
+- Function h264dec_decode_one_macroblock changed to void (i.e., removed statement return 0;)
+- Added functions h264dec_init, h264dec_return and main
+- Added forward declarations of all functions before the declarations of global
+  variables
+- Struct 'ImageParameters' renamed to 'h264dec_ImageParameters'
+- Re-ordered functions to fit template-order
+- Applied code formatting according to the following rules
+  (incomplete, to be discussed; I basically used astyle with the attached
+   options file):
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: st_) followed by lowercase letter (e.g., st_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+- Added general TACLeBench header to beginning of source code
