@@ -21,3 +21,43 @@
   and NOT in Kernighan&Ritchie style like, e.g.,
     float my_sqrtf( val )
       float val;
+- Library code (e.g. from the math or C stdlib) shall be directly included in
+  each benchmark's code base in the form of separate .c/.h files so that each
+  benchmark is fully self-contained.
+- Naming convention of benchmarks: Remove all obsolete type and size information
+  as well as obsolete further specifications from the benchmark names. E.g.
+    fft_1024_13 -> fft
+    n_complex_updates_float  -> n_complex_updates
+    basicmath_small -> basicmath
+    fir2dim <- fir2dim_float
+  Unify the names of encoder/decoder benchmarks to 'name_enc' or 'name_dec',
+  resp.:
+    h264_dec_ldecode_macroblock -> h264_dec
+    gsm_decode -> gsm_decode
+    adpcm_encoder -> adpcm_encoder
+- Each benchmark is preceeded by a generic TACLeBench header briefly describing
+  what the benchmark does, where it originally stems from, names of original
+  authors (if existing) and eventually existing original license/copyright
+  statements:
+
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: fir2dim
+
+  Author: Juan Martinez Velarde
+
+  Function: prime calculates whether numbers are prime.
+
+  Source: DSP-Stone
+          http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone/
+
+  Original name: fir2dim_float
+
+  Changes: no major functional changes
+
+  License: general open-source
+
+*/
