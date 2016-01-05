@@ -12,6 +12,8 @@
   Source: MediaBench II
           http://euler.slu.edu/~fritts/mediabench (mirror)
 
+  Original name: MPEG-2
+
   Changes: For TACLeBench, the code has been changed such that input and
     output arrays are scaled down so that the code plus its data fits to the
     memories of typical resource-constrained embedded devices.
