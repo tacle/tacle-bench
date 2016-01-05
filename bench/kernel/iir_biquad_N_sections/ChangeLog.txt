@@ -1,11 +1,11 @@
-File: iir_biquad_N_sections.c
+File: iir_biquad.c
 Original provenience: DSPstone benchmark suite (floating point),
                       http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone
 
 2015-10-10:
 - Removed original header comment, replaced by TACLeBench header.
 - Removed all preprocessor macros, integrated them directly in the source code.
-- Added prefix "iir_" to all global symbols.
+- Added prefix "iir_biquad" to all global symbols.
 - Added explicit forward declarations of functions.
 - Replaced local variables "wi", "coefficients" and "x" that store the
   benchmark's input data by global variables.
@@ -13,9 +13,9 @@ Original provenience: DSPstone benchmark suite (floating point),
   initialization code.
 - Removed second call of iir_pin_down from function iir_main since it does
   not make sense at all.
-- Added new function iir_return producing a checksum as return value.
-- Added new function iir_main according to TACLeBench guidelines. iir_main is
-  annotated as entry-point for timing analysis.
+- Added new function iir_biquad_return producing a checksum as return value.
+- Added new function iir_biquad_main according to TACLeBench guidelines.
+  iir_biquad_main is annotated as entry-point for timing analysis.
 - Applied code formatting according to the following rules
   - Lines shall not be wider than 80 characters; whenever possible, appropriate
     line breaks shall be inserted to keep lines below 80 characters
