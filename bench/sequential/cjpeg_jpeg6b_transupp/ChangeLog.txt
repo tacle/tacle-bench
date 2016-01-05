@@ -1,4 +1,4 @@
-File: cjpeg_jpeg6b_transupp.c
+File: cjpeg_transupp.c
 Original provenience: MediaBench II benchmark suite,
                       http://euler.slu.edu/~fritts/mediabench (mirror)
 

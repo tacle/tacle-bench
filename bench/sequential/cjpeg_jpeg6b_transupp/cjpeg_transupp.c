@@ -3,7 +3,7 @@
   This program is part of the TACLeBench benchmark suite.
   Version V 2.0
 
-  Name: cjpeg_jpeg6b_transupp
+  Name: cjpeg_transupp
 
   Author: Thomas G. Lane
 
@@ -16,7 +16,9 @@
   Source: MediaBench II
           http://euler.slu.edu/~fritts/mediabench (mirror)
 
-  Changes:
+  Original name: cjpeg
+
+  Changes: no major functional changes
 
   License: See the accompanying README file.
 

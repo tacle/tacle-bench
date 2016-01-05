@@ -14,7 +14,9 @@
   Source: MediaBench II
           http://euler.slu.edu/~fritts/mediabench (mirror)
 
-  Changes:
+  Original name: cjpeg
+
+  Changes: no major functional changes
 
   License: See the accompanying README file.
 
