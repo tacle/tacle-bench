@@ -13,7 +13,9 @@
   Source: MiBench
           http://wwweb.eecs.umich.edu/mibench
 
-  Changes:
+  Original name: qsort
+
+  Changes: no major functional changes
 
   License: GPL
 
