@@ -2,6 +2,11 @@ File: filterbank.c
 Original provenience: unknown 
 Source: unknown 
 
+2016-01-06:
+- Added original name to generic TACLeBench header.
+- Applied TACLeBench formatting rules via
+  astyle --options=doc/example/astylerc.txt
+
 2015-12-08:
 - Added generic TACLeBench header.
 - Introduced comments to split file in sections for forward declarations,
