@@ -2,6 +2,11 @@ File: cover.c
 Original provenience: Mälardalen benchmark suite,
 Source: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/cover/cover.c
 
+2016-01-06:
+- Added original name to generic TACLeBench header.
+- Applied TACLeBench formatting rules via
+  astyle --options=doc/example/astylerc.txt
+
 2015-12-03:
 - Replaced comment describing purpose of benchmark from lines 1-7
   with generic TACLeBench header.
