@@ -11,6 +11,8 @@
 
   Source: unknown
 
+  Original name: filterbank
+
   Changes: See ChangeLog.txt
 
   License: MIT License
@@ -81,9 +83,8 @@ void _Pragma( "entrypoint" ) filterbank_main( void )
   }
 
   _Pragma( "loopbound min 2 max 2" )
-  while ( filterbank_numiters-- > 0 ) {
+  while ( filterbank_numiters-- > 0 )
     filterbank_core( r, y, H, F );
-  }
 }
 
 
@@ -103,7 +104,7 @@ void filterbank_core( float r[ 256 ],
   _Pragma( "loopbound min 8 max 8" )
   for ( i = 0; i < 8; i++ ) {
     float Vect_H[ 256 ]; /* (output of the H) */
-    float Vect_Dn[ (int) 256 / 8 ]; /* output of the down sampler; */
+    float Vect_Dn[ ( int ) 256 / 8 ]; /* output of the down sampler; */
     float Vect_Up[ 256 ]; /* output of the up sampler; */
     float Vect_F[ 256 ]; /* this is the output of the */
 
@@ -112,9 +113,8 @@ void filterbank_core( float r[ 256 ],
     for ( j = 0; j < 256; j++ ) {
       Vect_H[ j ] = 0;
       _Pragma( "loopbound min 1 max 32" )
-      for ( k = 0; ( ( k < 32 ) & ( ( j - k ) >= 0 ) ); k++ ) {
+      for ( k = 0; ( ( k < 32 ) & ( ( j - k ) >= 0 ) ); k++ )
         Vect_H[ j ] += H[ i ][ k ] * r[ j - k ];
-      }
     }
 
     /* Down Sampling */
@@ -128,24 +128,22 @@ void filterbank_core( float r[ 256 ],
       Vect_Up[ j ] = 0;
     _Pragma( "loopbound min 32 max 32" )
     for ( j = 0; j < 256 / 8; j++ )
-      Vect_Up[ j*8 ] = Vect_Dn[ j ];
+      Vect_Up[ j * 8 ] = Vect_Dn[ j ];
 
     /* convolving F */
     _Pragma( "loopbound min 256 max 256" )
     for ( j = 0; j < 256; j++ ) {
       Vect_F[ j ] = 0;
       _Pragma( "loopbound min 1 max 32" )
-      for ( k = 0; ( ( k < 32 ) & ( ( j - k ) >= 0 ) ); k++ ) {
+      for ( k = 0; ( ( k < 32 ) & ( ( j - k ) >= 0 ) ); k++ )
         Vect_F[ j ] += F[ i ][ k ] * Vect_Up[ j - k ];
-      }
     }
 
     /* adding the results to the y matrix */
 
     _Pragma( "loopbound min 256 max 256" )
-    for ( j = 0; j < 256; j++ ) {
+    for ( j = 0; j < 256; j++ )
       y[ j ] += Vect_F[ j ];
-    }
   }
 }
 
