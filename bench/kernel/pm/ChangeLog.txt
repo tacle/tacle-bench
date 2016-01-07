@@ -1,9 +1,35 @@
-File: filterbank.c
+File: pm.c
 Original provenience: unknown 
-Source: unknown 
+Source: HPEC Challenge Benchmark Suite
+
+2016-01-07
+- Added original name to generic TACLeBench header.
+- Added forward declarations for all functions.
+- Inlined contents of file input.c (i.e. definitions of lib_data and pattern_data).
+- Renamed function main to pm_main.
+- Renamed function init to pm_init_data.
+- Renamed function clean to pm_clean.
+- Changed all //-style comments to /* */-style comments
+- Renamed function fabs_ to pm_fabs.
+- Renamed function setcoeff to pm_init_coeff.
+- Renamed pow10fpm to pm_pow10f.
+- Renamed log10fpm to pm_log10f.
+- Renamed my_floor to pm_floor.
+- Renamed my_ceil to pm_ceil.
+- Renamed my_memcpy to pm_memcpy.
+- Renamed my_memset to pm_memset.
+- Renamed function pm to pm_kernel.
+- Added function pm_init that handles the initialization of ...
+- Added function pm_return that handles the original return value of main.
+- Added new function main that first calls pm_init, then pm_main and finally returns the return value of pm_return.
+- Replaced local variables pmdata, lib, patternand result in main with global static variables pm_data, pm_lib, pm_pattern and pm_result.
+- Renamed global variables init_array_1, init_array_2, init_array_3, init_array_4, init_array_5, init_array_6, init_array_7 and init_array_8 to pm_init_array_1, pm_init_array_2, pm_init_array_3, pm_init_array_4, pm_init_array_5, pm_init_array_6, pm_init_array_7 and pm_init_array_8 and made them static.
+- Renamed global variables pow_coeff and log_coeff to pm_pow_coeff and pm_log_coeff and made them static.
+- Tested conformance to C90 via
+  clang -fsyntax-only -Weverything -Wno-unknown-pragmas -pedantic -std=c90
 
 2016-01-06:
-- Applied TACLeBench rules via
+- Applied TACLeBench formatting rules via
   astyle --options=doc/example/astylerc.txt
 
 2015-12-08:
@@ -12,8 +38,6 @@ Source: unknown
   declarations, global variables, initialization-related and 
   return-value-related functions, core benchmark functions, and main routine.
 - Moved BSD 3-clause license comment to own file license.txt.
-- Inlined contents of file input.c (i.e. definitions of lib_data and 
-  pattern_data).
 - Renamed global variables lib_data and pattern_data to pm_lib_data and 
   pm_pattern_data and made them static.
 - Renamed functions read_lib and read_pattern to pm_init_lib and

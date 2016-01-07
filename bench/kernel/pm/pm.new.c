@@ -14,6 +14,8 @@
 
   Source: HPEC Challenge Benchmark Suite, Pattern Match Kernel Benchmark
 
+  Original name: pm
+
   Changes: See ChangeLog.txt
 
   License: BSD 3-clause
@@ -70,8 +72,20 @@ void pm_init_pattern( pm_float_array_t *pattern );
 void pm_init_data( pm_data_t *pmdata,
                    pm_float_array_t *lib,
                    pm_float_array_t *pattern );
-void pm_init( void );
+void pm_init_coeff( void );
 void pm_clean( pm_data_t *pmdata );
+void pm_main( void );
+void pm_init( void );
+int pm_return( void );
+float pm_fabs( float );
+float pm_pow10f ( float );
+float pm_log10f ( float );
+float pm_floor( float );
+float pm_ceil( float );
+void pm_memcpy( void *, void *, int );
+void pm_memset( void *, int, int );
+int pm_kernel( pm_data_t *pmdata );
+
 
 /*
   Declaration of global variables
@@ -88,6 +102,20 @@ static float *pm_lib_ptr[ 60 ];
 static pm_float_array_t pm_pattern;
 static float *pm_pattern_ptr[ 60 ];
 static int pm_result;
+
+/* arrays for the pm_init_data function */
+static unsigned char pm_init_array_1[64];
+static float pm_init_array_2[21];
+static float pm_init_array_3[64];
+static float pm_init_array_4[64];
+static float pm_init_array_5[21];
+static float pm_init_array_6[21];
+static float pm_init_array_7[72];
+static float pm_init_array_8[110];
+
+/* The coefficients for the pm_log10f and pm_pow10f functions below */
+static float pm_pow_coeff[19];
+static float pm_log_coeff[16];
 
 
 /*
@@ -131,22 +159,20 @@ void pm_init_pattern( pm_float_array_t *pattern )
   pattern->datav = ( void * )pm_pattern_ptr;
 }
 
+
 /*
   Core benchmark functions
 */
 
 void _Pragma( "entrypoint" ) pm_main( void )
 {
-  pm_data_t pmdata;
-  pm_float_array_t lib, pattern;
-  unsigned int result;
-
-  pm_init_lib( &lib );
-  pm_init_pattern( &pattern );
-  pm_init_data( &pmdata, &lib, &pattern );
-  result = pm( &pmdata );
-  pm_clean( &pmdata );
+  pm_init_lib( &pm_lib );
+  pm_init_pattern( &pm_pattern );
+  pm_init_data( &pm_data, &pm_lib, &pm_pattern );
+  pm_result = pm_kernel( &pm_data );
+  pm_clean( &pm_data );
 }
+
 
 /*
   Main function
@@ -160,22 +186,8 @@ int main( void )
   return pm_return();
 }
 
-/* The coefficients for the log and pow functions below */
-float pow_coeff[19];
-float log_coeff[16];
-
-// arrays for the init function
-unsigned char init_array_1[64];
-float init_array_2[21];
-float init_array_3[64];
-float init_array_4[64];
-float init_array_5[21];
-float init_array_6[21];
-float init_array_7[72];
-float init_array_8[110];
-
-// Own implementation of fabs
-float fabs_( float n )
+/* Own implementation of fabs */
+float pm_fabs( float n )
 {
   if ( n >= 0 )
     return n;
@@ -189,44 +201,44 @@ float fabs_( float n )
    of using the float fp ones in the standard C math libary. This function
    sets up the coefficients for the single fp log and pow functions. */
 /***********************************************************************/
-void setcoeff()
+void pm_init_coeff( void )
 {
-  pow_coeff[0]  = 0.5f;             /* 1/2! */
-  pow_coeff[1]  = 0.166666667f;     /* 1/3! */
-  pow_coeff[2]  = 0.041666666f;     /* 1/4! */
-  pow_coeff[3]  = 8.333333333e-3f;
-  pow_coeff[4]  = 1.388888889e-3f;
-  pow_coeff[5]  = 1.984126984e-4f;
-  pow_coeff[6]  = 2.480158730e-5f;
-  pow_coeff[7]  = 2.755731922e-6f;
-  pow_coeff[8]  = 2.755731922e-7f;
-  pow_coeff[9]  = 2.505210839e-8f;
-  pow_coeff[10] = 2.087675699e-9f;
-  pow_coeff[11] = 1.605904384e-10f;
-  pow_coeff[12] = 1.147074560e-11f;
-  pow_coeff[13] = 7.647163732e-13f;
-  pow_coeff[14] = 4.779477332e-14f;
-  pow_coeff[15] = 2.811457254e-15f;
-  pow_coeff[16] = 1.561920697e-16f;
-  pow_coeff[17] = 8.220635247e-18f;
-  pow_coeff[18] = 4.110317623e-19f;
+  pm_pow_coeff[0]  = 0.5f;             /* 1/2! */
+  pm_pow_coeff[1]  = 0.166666667f;     /* 1/3! */
+  pm_pow_coeff[2]  = 0.041666666f;     /* 1/4! */
+  pm_pow_coeff[3]  = 8.333333333e-3f;
+  pm_pow_coeff[4]  = 1.388888889e-3f;
+  pm_pow_coeff[5]  = 1.984126984e-4f;
+  pm_pow_coeff[6]  = 2.480158730e-5f;
+  pm_pow_coeff[7]  = 2.755731922e-6f;
+  pm_pow_coeff[8]  = 2.755731922e-7f;
+  pm_pow_coeff[9]  = 2.505210839e-8f;
+  pm_pow_coeff[10] = 2.087675699e-9f;
+  pm_pow_coeff[11] = 1.605904384e-10f;
+  pm_pow_coeff[12] = 1.147074560e-11f;
+  pm_pow_coeff[13] = 7.647163732e-13f;
+  pm_pow_coeff[14] = 4.779477332e-14f;
+  pm_pow_coeff[15] = 2.811457254e-15f;
+  pm_pow_coeff[16] = 1.561920697e-16f;
+  pm_pow_coeff[17] = 8.220635247e-18f;
+  pm_pow_coeff[18] = 4.110317623e-19f;
 
-  log_coeff[0]  = 0.333333333f;     /* 1/3 */
-  log_coeff[1]  = 0.2f;             /* 1/5 */
-  log_coeff[2]  = 0.142857143f;     /* 1/7 */
-  log_coeff[3]  = 0.111111111f;     /* 1/9 */
-  log_coeff[4]  = 9.090909091e-2f;  /* 1/11 */
-  log_coeff[5]  = 7.692307692e-2f;  /* 1/13 */
-  log_coeff[6]  = 6.666666667e-2f;  /* 1/15 */
-  log_coeff[7]  = 5.882352941e-2f;  /* 1/17 */
-  log_coeff[8]  = 5.263157895e-2f;  /* 1/19 */
-  log_coeff[9]  = 4.761904762e-2f;  /* 1/21 */
-  log_coeff[10] = 4.347826087e-2f;  /* 1/23 */
-  log_coeff[11] = 0.04f;            /* 1/25 */
-  log_coeff[12] = 3.703703704e-2f;  /* 1/27 */
-  log_coeff[13] = 3.448275862e-2f;  /* 1/29 */
-  log_coeff[14] = 3.225806452e-2f;  /* 1/31 */
-  log_coeff[15] = 3.030303030e-2f;  /* 1/33 */
+  pm_log_coeff[0]  = 0.333333333f;     /* 1/3 */
+  pm_log_coeff[1]  = 0.2f;             /* 1/5 */
+  pm_log_coeff[2]  = 0.142857143f;     /* 1/7 */
+  pm_log_coeff[3]  = 0.111111111f;     /* 1/9 */
+  pm_log_coeff[4]  = 9.090909091e-2f;  /* 1/11 */
+  pm_log_coeff[5]  = 7.692307692e-2f;  /* 1/13 */
+  pm_log_coeff[6]  = 6.666666667e-2f;  /* 1/15 */
+  pm_log_coeff[7]  = 5.882352941e-2f;  /* 1/17 */
+  pm_log_coeff[8]  = 5.263157895e-2f;  /* 1/19 */
+  pm_log_coeff[9]  = 4.761904762e-2f;  /* 1/21 */
+  pm_log_coeff[10] = 4.347826087e-2f;  /* 1/23 */
+  pm_log_coeff[11] = 0.04f;            /* 1/25 */
+  pm_log_coeff[12] = 3.703703704e-2f;  /* 1/27 */
+  pm_log_coeff[13] = 3.448275862e-2f;  /* 1/29 */
+  pm_log_coeff[14] = 3.225806452e-2f;  /* 1/31 */
+  pm_log_coeff[15] = 3.030303030e-2f;  /* 1/33 */
 }
 
 /***********************************************************************/
@@ -238,7 +250,7 @@ float pm_pow10f ( float exp )
   float mul = exp * LOG10;
   float const term = exp * LOG10;
   float ans = 1.0f;
-  float const *fptr = pow_coeff;
+  float const *fptr = pm_pow_coeff;
 
   ans += mul;
   mul *= term;
@@ -291,7 +303,7 @@ float pm_log10f ( float exp )
 {
   float mul = ( exp - 1.0f ) / ( exp + 1.0f );
   float ans = 0.0f;
-  float const *fptr = log_coeff;
+  float const *fptr = pm_log_coeff;
   float const term = mul * mul;
 
   ans  = mul;
@@ -334,21 +346,21 @@ float pm_log10f ( float exp )
   return ans;
 }
 
-float my_floor( float arg )
+float pm_floor( float arg )
 {
   if ( !arg ) return 0;
   if ( arg > 0 ) return ( int )arg;
   return -( ( int )( -arg ) + 1 );
 }
 
-float my_ceil( float arg )
+float pm_ceil( float arg )
 {
   if ( !arg ) return 0;
   if ( arg > 0 ) return ( int )( arg + 1 );
   return ( int )( arg );
 }
 
-void my_memcpy( void *dest, void *src, int size )
+void pm_memcpy( void *dest, void *src, int size )
 {
   int i;
   _Pragma( "loopbound min 44 max 256" )
@@ -379,23 +391,23 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
 
   /* Equivalent to shift_size = roundf((float)profile_size / shift_ratio) */
   x = ( float )( pmdata->profile_size ) / pmdata->shift_ratio;
-  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ? ( int )my_floor( x ) :
-                       ( int )my_ceil( x );
+  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ? ( int )pm_floor( x ) :
+                       ( int )pm_ceil( x );
 
-  pmdata->template_exceed     = init_array_1;
-  pmdata->test_exceed_means   = init_array_2;
+  pmdata->template_exceed     = pm_init_array_1;
+  pmdata->test_exceed_means   = pm_init_array_2;
 
-  pmdata->template_copy       = init_array_3;
-  pmdata->test_noise_db_array = init_array_4;
+  pmdata->template_copy       = pm_init_array_3;
+  pmdata->test_noise_db_array = pm_init_array_4;
 
-  pmdata->MSE_scores          = init_array_5;
-  pmdata->mag_shift_scores    = init_array_6;
+  pmdata->MSE_scores          = pm_init_array_5;
+  pmdata->mag_shift_scores    = pm_init_array_6;
 
-  pmdata->minimum_MSE_score   = init_array_7;
-  pmdata->all_shifted_test_db = init_array_8;
+  pmdata->minimum_MSE_score   = pm_init_array_7;
+  pmdata->all_shifted_test_db = pm_init_array_8;
 
   /* Set the coefficients for the log and pow functions */
-  setcoeff();
+  pm_init_coeff();
 }
 
 /***********************************************************************/
@@ -403,32 +415,17 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
 /***********************************************************************/
 void pm_clean( pm_data_t *pmdata )
 {
-//  free(pmdata->test_exceed_means);
   pmdata->test_exceed_means = 0;
-
-//  free(pmdata->template_exceed);
   pmdata->template_exceed = 0;
-
-//  free(pmdata->template_copy);
   pmdata->template_copy = 0;
-
-//  free(pmdata->test_noise_db_array);
   pmdata->test_noise_db_array = 0;
-
-//  free(pmdata->MSE_scores);
   pmdata->MSE_scores = 0;
-
-//  free(pmdata->mag_shift_scores);
   pmdata->mag_shift_scores = 0;
-
-//  free(pmdata->minimum_MSE_score);
   pmdata->minimum_MSE_score = 0;
-
-//  free(pmdata->all_shifted_test_db);
   pmdata->all_shifted_test_db = 0;
 }
 
-void my_memset( void *s, int c, int n )
+void pm_memset( void *s, int c, int n )
 {
   int i;
   _Pragma( "loopbound min 64 max 64" )
@@ -442,7 +439,7 @@ void my_memset( void *s, int c, int n )
    that the two vectors match. This process is performed on a library of
    patterns. */
 /***********************************************************************/
-int pm( pm_data_t *pmdata )
+int pm_kernel( pm_data_t *pmdata )
 {
   const int    elsize         =
     pmdata->elsize;               /* size of a single fp number    */
@@ -493,7 +490,7 @@ int pm( pm_data_t *pmdata )
                        +          /* noise level of the test pattern */
                        pm_pow10f( test_profile_db[profile_size - 1] * 0.1f ) ) * 0.5f;
 
-  int half_shift_size = ( int )my_ceil( ( float )( shift_size ) /
+  int half_shift_size = ( int )pm_ceil( ( float )( shift_size ) /
                                         2.0f ); /* since "shift_size/2" is used a lot, so we create a var to hold it */
   int template_index, current_shift; /* indices */
   int patsize = profile_size * elsize; /* number of bytes of a pattern */
@@ -562,11 +559,11 @@ int pm( pm_data_t *pmdata )
      The all_shifted_test_db will be accessed in a sliding window manner.
   */
 
-  my_memcpy( ( void * ) all_shifted_test_db, ( void * ) test_noise_db_array,
+  pm_memcpy( ( void * ) all_shifted_test_db, ( void * ) test_noise_db_array,
              elsize * half_shift_size );
-  my_memcpy( ( void * ) ( all_shifted_test_db + half_shift_size ),
+  pm_memcpy( ( void * ) ( all_shifted_test_db + half_shift_size ),
              ( void * ) test_profile_db, elsize * profile_size );
-  my_memcpy( ( void * ) ( all_shifted_test_db + half_shift_size + profile_size ),
+  pm_memcpy( ( void * ) ( all_shifted_test_db + half_shift_size + profile_size ),
              ( void * ) test_noise_db_array, elsize * half_shift_size );
 
   /* Set the pixels to test noise in dB domain if pixel is less than test noise in dB */
@@ -634,7 +631,7 @@ int pm( pm_data_t *pmdata )
        Setting up all the constants */
 
     noise_shift  = test_peak - template_peak;
-    my_memset ( ( void * )template_exceed, 0, sizeof( char )*profile_size );
+    pm_memset ( ( void * )template_exceed, 0, sizeof( char )*profile_size );
     sum_exceed = 0.0f;
     num_template_exceed = 0;
 
@@ -710,7 +707,7 @@ int pm( pm_data_t *pmdata )
       for ( current_shift = 0; current_shift < shift_size;
             current_shift++, fptr3++ ) {
         /* Work on a copy of the template we're currently working on */
-        my_memcpy ( ( void * )template_copy, ( void * )cur_tp, patsize );
+        pm_memcpy ( ( void * )template_copy, ( void * )cur_tp, patsize );
 
         /* If there is at least one pixel in the shifted test profile
            whose value exceeds twice test noise. */
@@ -773,7 +770,7 @@ int pm( pm_data_t *pmdata )
         else {
           /* CASE 4 */
           /* Work on a copy of the template we're currently working on. */
-          my_memcpy ( ( void * )template_copy, ( void * )cur_tp, patsize );
+          pm_memcpy ( ( void * )template_copy, ( void * )cur_tp, patsize );
 
           fptr = cur_tp;
           _Pragma( "loopbound min 0 max 0" )
@@ -812,7 +809,7 @@ int pm( pm_data_t *pmdata )
     }
 
     /* Work on a copy of the template we're currently working on. */
-    my_memcpy( ( void * )template_copy, ( void * )cur_tp, patsize );
+    pm_memcpy( ( void * )template_copy, ( void * )cur_tp, patsize );
 
     mag_shift_scores_flag = 1;
 
