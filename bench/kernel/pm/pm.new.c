@@ -500,7 +500,7 @@ int pm_kernel( pm_data_t *pmdata )
   float *mag_shift_scores  = pmdata->mag_shift_scores;
 
   register float test_noise_db        = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
-                                        pm_log10f( fabs_( test_noise ) ); /* test noise in dB */
+                                        pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
   register float test_noise_db_plus_3 = test_noise_db +
                                         3.0f; /* twice test noise in the power domain, approximately +3dB */
 
@@ -671,7 +671,7 @@ int pm_kernel( pm_data_t *pmdata )
       if ( tmp1 == 0.0f )
         tmp1 = MIN_NOISE;
 
-      *fptr = 10.0f * pm_log10f( fabs_( tmp1 ) ) + test_noise_db;
+      *fptr = 10.0f * pm_log10f( pm_fabs( tmp1 ) ) + test_noise_db;
 
       /* Because many of the operations in the search for the best shift
          amount depend on knowledge of which pixels in the template
