@@ -348,14 +348,12 @@ float pm_log10f ( float exp )
 
 float pm_floor( float arg )
 {
-  if ( !arg ) return 0;
-  if ( arg > 0 ) return ( int )arg;
+  if ( arg >= 0 ) return ( int )arg;
   return -( ( int )( -arg ) + 1 );
 }
 
 float pm_ceil( float arg )
 {
-  if ( !arg ) return 0;
   if ( arg > 0 ) return ( int )( arg + 1 );
   return ( int )( arg );
 }
