@@ -29,7 +29,7 @@
 typedef struct pm_float_array_t {
   float               *data;
   void                *datav;
-  unsigned int         size[3];
+  int         size[3];
   unsigned int         ndims;
   unsigned int         rctype;
 } pm_float_array_t;
@@ -458,9 +458,9 @@ int pm_kernel( pm_data_t *pmdata )
   float *all_shifted_test_db  =
     pmdata->all_shifted_test_db;  /* the shifted test pattern      */
 
-  unsigned int
+  int
   match_index;                          /* the index of the most likely template that matches the test pattern */
-  unsigned int  min_MSE_index = shift_size +
+  int  min_MSE_index = shift_size +
                                 1;       /* the index of the range shifts with the lowest mean square error */
   unsigned int  num_template_exceed,
            num_test_exceed; /* the number of pixels exceeded the test pattern and a library template */
