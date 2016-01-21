@@ -631,7 +631,7 @@ int pm_kernel( pm_data_t *pmdata )
        Setting up all the constants */
 
     noise_shift  = test_peak - template_peak;
-    pm_memset ( ( void * )template_exceed, 0, sizeof( char )*profile_size );
+    pm_memset ( ( void * )template_exceed, 0, ((int)sizeof( char ))*profile_size );
     sum_exceed = 0.0f;
     num_template_exceed = 0;
 

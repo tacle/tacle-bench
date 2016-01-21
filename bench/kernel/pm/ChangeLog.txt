@@ -3,6 +3,7 @@ Original provenience: unknown
 Source: HPEC Challenge Benchmark Suite
 
 2016-01-21
+- Cast result of sizeof operator in call to pm_memset to int to resolve compiler warnings that "implicit conversion changes signedness".
 - Converted type of local variables match_index and min_MSE_index in pm_kernel, as well as array base type of member size in pm_float_array_t from unsigned int to int to resolve compiler warnings that "implicit conversion changes signedness".
 - Removed register storage class for local variables in pm_kernel.
 
