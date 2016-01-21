@@ -391,8 +391,8 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
 
   /* Equivalent to shift_size = roundf((float)profile_size / shift_ratio) */
   x = ( float )( pmdata->profile_size ) / pmdata->shift_ratio;
-  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ? ( int )pm_floor( x ) :
-                       ( int )pm_ceil( x );
+  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ? ( int )(pm_floor( x )) :
+                       ( int )(pm_ceil( x ));
 
   pmdata->template_exceed     = pm_init_array_1;
   pmdata->test_exceed_means   = pm_init_array_2;
@@ -490,8 +490,8 @@ int pm_kernel( pm_data_t *pmdata )
                        +          /* noise level of the test pattern */
                        pm_pow10f( test_profile_db[profile_size - 1] * 0.1f ) ) * 0.5f;
 
-  int half_shift_size = ( int )pm_ceil( ( float )( shift_size ) /
-                                        2.0f ); /* since "shift_size/2" is used a lot, so we create a var to hold it */
+  int half_shift_size = ( int )(pm_ceil( ( float )( shift_size ) /
+                                        2.0f )); /* since "shift_size/2" is used a lot, so we create a var to hold it */
   int template_index, current_shift; /* indices */
   int patsize = profile_size * elsize; /* number of bytes of a pattern */
 
