@@ -499,29 +499,29 @@ int pm_kernel( pm_data_t *pmdata )
   float *MSE_scores        = pmdata->MSE_scores;
   float *mag_shift_scores  = pmdata->mag_shift_scores;
 
-  register float test_noise_db        = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
+  float test_noise_db        = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
                                         pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
-  register float test_noise_db_plus_3 = test_noise_db +
+  float test_noise_db_plus_3 = test_noise_db +
                                         3.0f; /* twice test noise in the power domain, approximately +3dB */
 
-  register float *template_copy     = pmdata->template_copy;
-  register unsigned char *template_exceed   = pmdata->template_exceed;
-  register float *test_exceed_means = pmdata->test_exceed_means;
+  float *template_copy     = pmdata->template_copy;
+  unsigned char *template_exceed   = pmdata->template_exceed;
+  float *test_exceed_means = pmdata->test_exceed_means;
 
-  register int i, j; /* indices */
+  int i, j; /* indices */
 
-  register float
+  float
   tmp1;                          /* temporary storage for calculating the mse for range shifting */
-  register float
+  float
   sum_exceed;                    /* the sum of the test pattern pixels exceeded twice test noise */
-  register float template_exceed_mean =
+  float template_exceed_mean =
     0;      /* the mean of a template pattern pixels exceeded twice test noise */
-  register float
+  float
   weighted_MSE;                  /* temporary storage for computing the weighted MSE */
 
   /* These pointers are solely used for fast memory access */
-  register float *cur_tp, *fptr, *fptr2, *fptr3, *endptr;
-  register unsigned char *bptr;
+  float *cur_tp, *fptr, *fptr2, *fptr3, *endptr;
+  unsigned char *bptr;
 
   /* Having an array of test noise for fast copying of noise returns */
   _Pragma( "loopbound min 64 max 64" )

@@ -2,6 +2,9 @@ File: pm.c
 Original provenience: unknown 
 Source: HPEC Challenge Benchmark Suite
 
+2016-01-21
+- Removed register storage class for local variables in pm_kernel.
+
 2016-01-07
 - Added original name to generic TACLeBench header.
 - Added forward declarations for all functions.
