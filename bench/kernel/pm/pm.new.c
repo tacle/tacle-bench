@@ -430,7 +430,7 @@ void pm_memset( void *s, int c, int n )
   int i;
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < n; i++ )
-    ( ( unsigned char * )s )[i] = c;
+    ( ( unsigned char * )s )[i] = (unsigned char)c;
   return;
 }
 
