@@ -1,4 +1,15 @@
-static float pm_lib_data[ 60 ][ 64 ] = {
+/*
+  Forward declaration of global variables
+*/
+
+extern float pm_lib_data[ 60 ][ 64 ];
+extern float pm_pattern_data[ 60 ][ 64 ];
+
+
+/*
+  Definition of global variables
+*/
+float pm_lib_data[ 60 ][ 64 ] = {
 {  0.1f,  0.1f,  0.1f,  0.1f, 10.0f, 10.0f, 10.0f, 10.0f, 
   10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f,
   10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f,
@@ -480,7 +491,7 @@ static float pm_lib_data[ 60 ][ 64 ] = {
   10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f,
   10.0f, 10.0f, 10.0f, 10.0f,  0.1f,  0.1f,  0.1f,  0.1f }
 };
-static float pm_pattern_data[ 60 ][ 64 ] = {
+float pm_pattern_data[ 60 ][ 64 ] = {
 {     0.1f, 0.101009f, 0.103729f, 0.0993204f,  9.77204f,  9.95778f,    10.238f, 9.77676f,
   10.1271f,  9.87972f,  10.1102f,   9.78003f,  10.0172f,  9.59909f,   9.90138f, 10.0924f,
    9.9358f,  51.2366f,  49.3687f,   9.53496f,  9.75367f,  51.0556f,   49.8868f, 10.0758f,

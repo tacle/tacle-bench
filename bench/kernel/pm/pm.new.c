@@ -91,10 +91,14 @@ int pm_kernel( pm_data_t *pmdata );
   Declaration of global variables
 */
 
-#include "input.c" //FIXME
+/* input data */
+extern float pm_lib_data[ 60 ][ 64 ];
+extern float pm_pattern_data[ 60 ][ 64 ];
 
+/* some magic number */
 #define MIN_NOISE 1e-10f
 
+/* main data structures used by the benchmark */
 static pm_data_t pm_data;
 static pm_float_array_t pm_lib;
 static float *pm_lib_ptr[ 60 ];

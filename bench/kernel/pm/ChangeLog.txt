@@ -19,7 +19,6 @@ Source: HPEC Challenge Benchmark Suite
 2016-01-07
 - Added original name to generic TACLeBench header.
 - Added forward declarations for all functions.
-- Inlined contents of file input.c (i.e. definitions of lib_data and pattern_data).
 - Renamed function main to pm_main.
 - Renamed function init to pm_init_data.
 - Renamed function clean to pm_clean.
@@ -53,7 +52,7 @@ Source: HPEC Challenge Benchmark Suite
   return-value-related functions, core benchmark functions, and main routine.
 - Moved BSD 3-clause license comment to own file license.txt.
 - Renamed global variables lib_data and pattern_data to pm_lib_data and 
-  pm_pattern_data and made them static.
+  pm_pattern_data.
 - Renamed functions read_lib and read_pattern to pm_init_lib and
   pm_init_pattern.
 - Removed unnecessary return statements.
