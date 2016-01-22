@@ -6,6 +6,7 @@ Source: HPEC Challenge Benchmark Suite
 - Moved math functions pm_log10f, pm_pow10f, pm_fabs, pm_floor, pm_ceil into own files pm_math.h and pm_libm.c.
 - Moved associated static global variables pm_log_coeff and pm_pow_coeff into file pm_libm.c.
 - Renamed function pm_init_coeff to pm_math_init and moved its call out of pm_init_data.
+- Moved stdlib functions pm_memcpy and pm_memset into own files pm_string.h and pm_stdlib.c.
 
 2016-01-21
 - Changed pm_ceil and pm_floor such that the expression !arg is not used anymore to resolve compiler warning "implicit conversion turns floating-point number into integer". However, NaN and infinity are not handled correctly.

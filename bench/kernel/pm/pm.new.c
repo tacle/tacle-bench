@@ -27,6 +27,7 @@
 */
 
 #include "pm_math.h"
+#include "pm_string.h"
 
 
 /*
@@ -83,8 +84,6 @@ void pm_clean( pm_data_t *pmdata );
 void pm_main( void );
 void pm_init( void );
 int pm_return( void );
-void pm_memcpy( void *, void *, int );
-void pm_memset( void *, int, int );
 int pm_kernel( pm_data_t *pmdata );
 
 
@@ -184,15 +183,6 @@ int main( void )
 }
 
 
-void pm_memcpy( void *dest, void *src, int size )
-{
-  int i;
-  _Pragma( "loopbound min 44 max 256" )
-  for ( i = 0; i < size; i++ )
-    ( ( unsigned char * )dest )[i] = ( ( unsigned char * )src )[i];
-  return;
-}
-
 /***********************************************************************/
 /* Allocate and initailize the test pattern, the template library, and
    other necessary data structure. */
@@ -246,14 +236,6 @@ void pm_clean( pm_data_t *pmdata )
   pmdata->all_shifted_test_db = 0;
 }
 
-void pm_memset( void *s, int c, int n )
-{
-  int i;
-  _Pragma( "loopbound min 64 max 64" )
-  for ( i = 0; i < n; i++ )
-    ( ( unsigned char * )s )[i] = (unsigned char)c;
-  return;
-}
 
 /***********************************************************************/
 /* The pattern match kernel overlays two patterns to compute the likelihood
