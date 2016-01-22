@@ -2,8 +2,13 @@ File: pm.c
 Original provenience: unknown 
 Source: HPEC Challenge Benchmark Suite
 
+2016-01-22
+- Moved math functions pm_log10f, pm_pow10f, pm_fabs, pm_floor, pm_ceil into own files pm_math.h and pm_libm.c.
+- Moved associated static global variables pm_log_coeff and pm_pow_coeff into file pm_libm.c.
+- Renamed function pm_init_coeff to pm_math_init and moved its call out of pm_init_data.
+
 2016-01-21
-- Change pm_ceil and pm_floor such that the expression !arg is not used anymore to resolve compiler warning "implicit conversion turns floating-point number into integer". However, NaN and infinity are not handled correctly.
+- Changed pm_ceil and pm_floor such that the expression !arg is not used anymore to resolve compiler warning "implicit conversion turns floating-point number into integer". However, NaN and infinity are not handled correctly.
 - Cast results of pm_ceil and pm_floor to int instead of the functions themselves to resolve compiler warning about "cast from function call of type 'float' to non-matching type 'int'".
 - Cast parameter c of pm_memset to unsigned char to resolve compiler warning that "implicit conversion loses integer precision".
 - Cast result of sizeof operator in call to pm_memset to int to resolve compiler warnings that "implicit conversion changes signedness".
