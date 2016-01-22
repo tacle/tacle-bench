@@ -2,7 +2,7 @@ extern unsigned auGlobalFrequency[26];
 
 // This function is included here because the WCC does not
 // support function pointers
-int CompareFrequency(char *pch1, char *pch2)
+int CompareFrequency( char *pch1, char *pch2 )
 {
   return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
          ? -1 :
@@ -10,22 +10,22 @@ int CompareFrequency(char *pch1, char *pch2)
          ? 0 : 1;
 }
 
-static void swapi(char *ii, char *ij, unsigned long es)
+static void swapi( char *ii, char *ij, unsigned long es )
 {
   char *i, *j, c;
 
-  i = (char*)ii;
-  j = (char*)ij;
+  i = ( char * )ii;
+  j = ( char * )ij;
   _Pragma( "loopbound min 1 max 1" )
   do {
     c = *i;
     *i++ = *j;
     *j++ = c;
-    es -= sizeof(char);
-  } while (es != 0);
+    es -= sizeof( char );
+  } while ( es != 0 );
 }
 
-static char* pivot(char *a, unsigned long n, unsigned long es)
+static char *pivot( char *a, unsigned long n, unsigned long es )
 {
   long j;
   char *pi, *pj, *pk;
@@ -35,74 +35,73 @@ static char* pivot(char *a, unsigned long n, unsigned long es)
   j += j;
   pj = pi + j;    /* 1/2 */
   pk = pj + j;    /* 5/6 */
-  if (CompareFrequency(pi, pj) < 0) {
-    if (CompareFrequency(pi, pk) < 0) {
-      if (CompareFrequency(pj, pk) < 0)
+  if ( CompareFrequency( pi, pj ) < 0 ) {
+    if ( CompareFrequency( pi, pk ) < 0 ) {
+      if ( CompareFrequency( pj, pk ) < 0 )
         return pj;
       return pk;
     }
     return pi;
   }
-  if (CompareFrequency(pj, pk) < 0) {
-    if (CompareFrequency(pi, pk) < 0)
+  if ( CompareFrequency( pj, pk ) < 0 ) {
+    if ( CompareFrequency( pi, pk ) < 0 )
       return pi;
     return pk;
   }
   return pj;
 }
 
-static void qsorts(char *a, unsigned long n, unsigned long es)
+static void qsorts( char *a, unsigned long n, unsigned long es )
 {
   long j;
   char *pi, *pj, *pn;
   volatile unsigned int flowfactdummy = 0;
 
   _Pragma( "loopbound min 0 max 6" )
-  while (n > 1) {
-    if (n > 10) {
-      pi = pivot(a, n, es);
-    } else {
-      pi = a + (n >> 1) * es;
-    }
+  while ( n > 1 ) {
+    if ( n > 10 )
+      pi = pivot( a, n, es );
+    else
+      pi = a + ( n >> 1 ) * es;
 
-    swapi(a, pi, es);
+    swapi( a, pi, es );
     pi = a;
     pn = a + n * es;
     pj = pn;
     _Pragma( "loopbound min 1 max 11" )
-    while (1) {
+    while ( 1 ) {
       /* wcc note: this assignment expression was added to avoid assignment of
-       * multiple loop bound annotations to same loop (cf. Ticket #0002323). */
+         multiple loop bound annotations to same loop (cf. Ticket #0002323). */
       flowfactdummy++;
       _Pragma( "loopbound min 1 max 5" )
       do {
         pi += es;
-      } while (pi < pn && CompareFrequency(pi, a) < 0);
+      } while ( pi < pn && CompareFrequency( pi, a ) < 0 );
       _Pragma( "loopbound min 1 max 4" )
       do {
         pj -= es;
-      } while (pj > a && CompareFrequency(pj, a) > 0);
-      if (pj < pi)
+      } while ( pj > a && CompareFrequency( pj, a ) > 0 );
+      if ( pj < pi )
         break;
-      swapi(pi, pj, es);
+      swapi( pi, pj, es );
     }
-    swapi(a, pj, es);
-    j = (pj - a) / es;
+    swapi( a, pj, es );
+    j = ( pj - a ) / es;
 
     n = n - j - 1;
-    if (j >= n) {
-      qsorts(a, j, es);
-      a += (j + 1) * es;
+    if ( j >= n ) {
+      qsorts( a, j, es );
+      a += ( j + 1 ) * es;
     } else {
-      qsorts(a + (j + 1)*es, n, es);
+      qsorts( a + ( j + 1 )*es, n, es );
       n = j;
     }
   }
 }
 
-void wccqsort(void *va, unsigned long n, unsigned long es)
+void wccqsort( void *va, unsigned long n, unsigned long es )
 {
   _Pragma( "marker call_qsorts" )
-  qsorts((char*)va, n, es);
+  qsorts( ( char * )va, n, es );
   _Pragma( "flowrestriction 1*qsorts <= 17*call_qsorts" )
 }
