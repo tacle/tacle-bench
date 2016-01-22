@@ -3,12 +3,12 @@
   This header is part of the TACLeBench benchmark suite.
   Version 2.0
 
-  Name: pm_math.h
+  Name: pm_string.h
 
   Author: Hector Chan
           MIT Lincoln Laboratory
 
-  Function: This header contains the C math library functions used by pm. 
+  Function: This header contains the C standard library functions used by pm.
 
   Source: HPEC Challenge Benchmark Suite, Pattern Match Kernel Benchmark
 

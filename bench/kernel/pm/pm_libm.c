@@ -1,4 +1,26 @@
 /*
+
+  This file is part of the TACLeBench benchmark suite.
+  Version 2.0
+
+  Name: pm_libm.c
+
+  Author: Hector Chan
+          MIT Lincoln Laboratory
+
+  Function: This file contains the C math library functions used by pm.
+
+  Source: HPEC Challenge Benchmark Suite, Pattern Match Kernel Benchmark
+
+  Original name: pm
+
+  Changes: See ChangeLog.txt
+
+  License: BSD 3-clause
+
+*/
+
+/*
   Include section
 */
 

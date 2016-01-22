@@ -8,7 +8,7 @@
   Author: Hector Chan
           MIT Lincoln Laboratory
 
-  Function: This header contains the C math library functions used by pm. 
+  Function: This header contains the C math library functions used by pm.
 
   Source: HPEC Challenge Benchmark Suite, Pattern Match Kernel Benchmark
 
