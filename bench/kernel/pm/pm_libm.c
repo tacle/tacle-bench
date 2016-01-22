@@ -88,6 +88,7 @@ void pm_math_init( void )
   pm_log_coeff[15] = 3.030303030e-2f;  /* 1/33 */
 }
 
+
 /***********************************************************************/
 /* This single fp pow base 10 function implements the corresponding
    Taylor series.  The loop has been unrolled to save ops. */
@@ -142,6 +143,7 @@ float pm_pow10f ( float exp )
   return ans;
 }
 
+
 /***********************************************************************/
 /* This single fp log base 10 function implements the corresponding
    Taylor series. The loop has been unrolled to save ops. */
@@ -193,7 +195,7 @@ float pm_log10f ( float exp )
   return ans;
 }
 
-/* Own implementation of fabs */
+
 float pm_fabs( float n )
 {
   if ( n >= 0 )
@@ -202,11 +204,13 @@ float pm_fabs( float n )
     return -n;
 }
 
+
 float pm_floor( float arg )
 {
   if ( arg >= 0 ) return ( int )arg;
   return -( ( int )( -arg ) + 1 );
 }
+
 
 float pm_ceil( float arg )
 {

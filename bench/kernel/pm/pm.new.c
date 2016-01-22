@@ -35,39 +35,41 @@
 */
 
 typedef struct pm_float_array_t {
-  float               *data;
-  void                *datav;
-  int         size[3];
-  unsigned int         ndims;
-  unsigned int         rctype;
+  float        *data;
+  void         *datav;
+  int          size[3];
+  unsigned int ndims;
+  unsigned int rctype;
 } pm_float_array_t;
 
 
 typedef struct pm_data_t {
   float *template_profiles_db; /* the library of patterns */
-  float *test_profile_db;      /* the test pattern */
+  float *test_profile_db; /* the test pattern */
 
-  float *template_copy;        /* temporary storage for a template */
-  float *test_noise_db_array;  /* copies of test noise in an array for
-                                  fast copy */
-  float *MSE_scores;           /* the likelihood of the matching between a
-                                  range shift of the test pattern and the libary */
-  float *mag_shift_scores;     /* the likelihood of the matching between a
-                                  magnitude scaling of the test pattern and the libary */
-  float *minimum_MSE_score;    /* the likelihood of the matching between the
-                                  test pattern and the libary */
+  float *template_copy; /* temporary storage for a template */
+  float *test_noise_db_array; /* copies of test noise in an array for
+                                 fast copy */
+  float *MSE_scores; /* the likelihood of the matching between a
+                        range shift of the test pattern and the libary */
+  float *mag_shift_scores; /* the likelihood of the matching between a
+                              magnitude scaling of the test pattern and the
+                              libary */
+  float *minimum_MSE_score; /* the likelihood of the matching between the
+                               test pattern and the libary */
   float *all_shifted_test_db;  /* contains the shiftings of the test pattern */
 
-  unsigned char *template_exceed;      /* marking where a library template
-                                  exceeds twice the noise level of the test pattern */
-  float *test_exceed_means;    /* pixels where test pattern exceeds twice
-                                  its noise level */
+  unsigned char *template_exceed; /* marking where a library template
+                                     exceeds twice the noise level of
+                                     the test pattern */
+  float *test_exceed_means; /* pixels where test pattern exceeds twice
+                               its noise level */
 
-  float shift_ratio;           /* determines the number of range shifts */
-  int   shift_size;            /* the actual number of range shifts */
-  int   profile_size;          /* the length of the pattern */
-  int   num_templates;         /* the number of library templates */
-  int   elsize;                /* the size of a single fp number */
+  float shift_ratio; /* determines the number of range shifts */
+  int   shift_size; /* the actual number of range shifts */
+  int   profile_size; /* the length of the pattern */
+  int   num_templates; /* the number of library templates */
+  int   elsize; /* the size of a single fp number */
 } pm_data_t;
 
 
@@ -170,6 +172,7 @@ int pm_return( void )
   return pm_result;
 }
 
+
 /*
   Core benchmark functions
 */
@@ -236,6 +239,7 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
   pmdata->all_shifted_test_db = pm_init_array_8;
 }
 
+
 /***********************************************************************/
 /* Free up memory for all structures */
 /***********************************************************************/
@@ -259,82 +263,88 @@ void pm_clean( pm_data_t *pmdata )
 /***********************************************************************/
 int pm_kernel( pm_data_t *pmdata )
 {
-  const int    elsize         =
-    pmdata->elsize;               /* size of a single fp number    */
-  const int    shift_size     =
-    pmdata->shift_size;           /* number of shifting to the left and right of the test profile */
-  const int    profile_size   =
-    pmdata->profile_size;         /* number of pixels in a pattern */
-  const int    num_templates  =
-    pmdata->num_templates;        /* number of library patterns    */
-  float *test_profile_db      =
-    pmdata->test_profile_db;      /* the test pattern              */
+  const int elsize = pmdata->elsize; /* size of a single fp number */
+  const int shift_size = pmdata->shift_size; /* number of shifting to the
+                                                left and right of the test
+                                                profile */
+  const int profile_size =
+    pmdata->profile_size; /* number of pixels in a pattern */
+  const int num_templates =
+    pmdata->num_templates; /* number of library patterns */
+  float *test_profile_db =
+    pmdata->test_profile_db; /* the test pattern */
   float *template_profiles_db =
-    pmdata->template_profiles_db; /* the library of patterns       */
-  float *test_noise_db_array  =
-    pmdata->test_noise_db_array;  /* the noise in the test pattern in an array for fast copy */
-  float *all_shifted_test_db  =
-    pmdata->all_shifted_test_db;  /* the shifted test pattern      */
+    pmdata->template_profiles_db; /* the library of patterns */
+  float *test_noise_db_array =
+    pmdata->test_noise_db_array; /* the noise in the test pattern in an array
+                                    for fast copy */
+  float *all_shifted_test_db =
+    pmdata->all_shifted_test_db; /* the shifted test pattern */
 
-  int match_index;                /* the index of the most likely template that matches the test pattern */
-  int min_MSE_index = shift_size +
-                      1; /* the index of the range shifts with the lowest mean square error */
+  int match_index; /* the index of the most likely template that matches the
+                      test pattern */
+  int min_MSE_index = shift_size + 1; /* the index of the range shifts with
+                                         the lowest mean square error */
   unsigned int num_template_exceed,
-           num_test_exceed; /* the number of pixels exceeded the test pattern and a library template */
+           num_test_exceed; /* the number of pixels exceeded the test pattern
+                               and a library template */
 
-  unsigned char
-  mag_shift_scores_flag;    /* flag that tells if the magnitude scaling loop has been run (existed just to save ops) */
+  unsigned char mag_shift_scores_flag; /* flag that tells if the magnitude
+                                          scaling loop has been run
+                                          (existed just to save ops) */
 
   float test_peak,
-        template_peak; /* the maximum pixels of the test pattern and a library template pattern */
-  float template_noise;           /* the noise level of a library template */
+        template_peak; /* the maximum pixels of the test pattern and a library
+                          template pattern */
+  float template_noise; /* the noise level of a library template */
 
   float noise_shift,
         noise_shift2; /* temporary storage for calculating the mse for range shifting */
 
   float min_MSE, match_score; /* temporary storage for finding the minimum mse */
 
-  float sumWeights_inv = 1.0f /
-                         profile_size; /* the inverse of the weights used for calculating the mse */
-  /* Note: weights for the kernel would be application dependent. They are set to 1 for our purposes */
+  float sumWeights_inv = 1.0f / profile_size; /* the inverse of the weights
+                                                 used for calculating the mse */
+  /* Note: weights for the kernel would be application dependent.
+     They are set to 1 for our purposes */
 
-  float mag_db;                        /* the magnitude shifts in dB */
+  float mag_db; /* the magnitude shifts in dB */
   float power_shift,
-        ave_power_ratio;  /* the diff of the avg shifted test profile power to the avg template power */
-  float power_ratio;                   /* the mean power of the pixels of a template that exceeded twice test noise */
+        ave_power_ratio; /* the diff of the avg shifted test profile power to
+                            the avg template power */
+  float power_ratio; /* the mean power of the pixels of a template that exceeded
+                        twice test noise */
 
   float test_noise = ( pm_pow10f( test_profile_db[0] * 0.1f )
-                       +          /* noise level of the test pattern */
+                       + /* noise level of the test pattern */
                        pm_pow10f( test_profile_db[profile_size - 1] * 0.1f ) ) * 0.5f;
 
-  int half_shift_size = ( int )( pm_ceil( ( float )( shift_size ) /
-                                          2.0f ) ); /* since "shift_size/2" is used a lot, so we create a var to hold it */
+  /* since "shift_size/2" is used a lot, so we create a var to hold it */
+  int half_shift_size = ( int )( pm_ceil( ( float )( shift_size ) / 2.0f ) );
   int template_index, current_shift; /* indices */
   int patsize = profile_size * elsize; /* number of bytes of a pattern */
 
   float *minimum_MSE_score = pmdata->minimum_MSE_score;
-  float *MSE_scores        = pmdata->MSE_scores;
+  float *MSE_scores = pmdata->MSE_scores;
   float *mag_shift_scores  = pmdata->mag_shift_scores;
 
-  float test_noise_db        = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
-                               pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
-  float test_noise_db_plus_3 = test_noise_db +
-                               3.0f; /* twice test noise in the power domain, approximately +3dB */
+  float test_noise_db = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
+                        pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
+  float test_noise_db_plus_3 = test_noise_db + 3.0f; /* twice test noise in the
+                                             power domain, approximately +3dB */
 
-  float *template_copy     = pmdata->template_copy;
-  unsigned char *template_exceed   = pmdata->template_exceed;
+  float *template_copy = pmdata->template_copy;
+  unsigned char *template_exceed = pmdata->template_exceed;
   float *test_exceed_means = pmdata->test_exceed_means;
 
   int i, j; /* indices */
 
-  float
-  tmp1;                          /* temporary storage for calculating the mse for range shifting */
-  float
-  sum_exceed;                    /* the sum of the test pattern pixels exceeded twice test noise */
-  float template_exceed_mean =
-    0;      /* the mean of a template pattern pixels exceeded twice test noise */
-  float
-  weighted_MSE;                  /* temporary storage for computing the weighted MSE */
+  float tmp1; /* temporary storage for calculating the mse for range shifting */
+  float sum_exceed; /* the sum of the test pattern pixels exceeded twice
+                       test noise */
+  float template_exceed_mean = 0; /* the mean of a template pattern pixels
+                                     exceeded twice test noise */
+  float weighted_MSE; /* temporary storage for computing the weighted MSE */
 
   /* These pointers are solely used for fast memory access */
   float *cur_tp, *fptr, *fptr2, *fptr3, *endptr;
@@ -383,7 +393,8 @@ int pm_kernel( pm_data_t *pmdata )
   pm_memcpy( ( void * ) ( all_shifted_test_db + half_shift_size + profile_size ),
              ( void * ) test_noise_db_array, elsize * half_shift_size );
 
-  /* Set the pixels to test noise in dB domain if pixel is less than test noise in dB */
+  /* Set the pixels to test noise in dB domain if pixel is less than test
+     noise in dB */
   fptr = all_shifted_test_db + half_shift_size;
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < profile_size; i++, fptr++ ) {
@@ -417,7 +428,9 @@ int pm_kernel( pm_data_t *pmdata )
       fptr++;
     }
 
-    *fptr2++ = num_test_exceed ? sum_exceed / ( float )( num_test_exceed ) : 0.0f;
+    *fptr2++ = num_test_exceed ?
+               sum_exceed / ( float )( num_test_exceed ) :
+               0.0f;
   }
 
 
@@ -430,8 +443,6 @@ int pm_kernel( pm_data_t *pmdata )
     /* Scale the template profile we're currently working on so that its peak
        is equal to the peak of the test profile */
 
-    /* --------------------------------------------------------------------
-       template_peak = max( template_profile ) */
     fptr = cur_tp;
     template_peak = *fptr++;
     _Pragma( "loopbound min 63 max 63" )
@@ -536,8 +547,9 @@ int pm_kernel( pm_data_t *pmdata )
              template we're currently working on. */
           power_ratio = *fptr3 - template_exceed_mean;
 
-          /* Scale template values that exceed twice test noise by power ratio and
-                   set the values that are less than test noise in db to test noise in db */
+          /* Scale template values that exceed twice test noise by power ratio
+             and set the values that are less than test noise in db to test
+             noise in db */
           fptr  = template_copy;
           bptr  = template_exceed;
           _Pragma( "loopbound min 64 max 64" )
@@ -571,8 +583,6 @@ int pm_kernel( pm_data_t *pmdata )
           weighted_MSE += tmp1 * tmp1;
         }
 
-        /* ----------------------------------------------------------------
-           MSE_scores[current_shift] = weighted_MSE / sumWeights */
         MSE_scores[current_shift] = weighted_MSE * sumWeights_inv;
 
       } /* for current_shift */
@@ -635,7 +645,6 @@ int pm_kernel( pm_data_t *pmdata )
       if ( num_template_exceed ) {
         /* Compute the difference of the average shifted test profile
            power to the average template power */
-        /* ave_power_ratio = (sum_exceed / (float)(num_test_exceed)) - template_exceed_mean; */
         ave_power_ratio = test_exceed_means[min_MSE_index]
                           - template_exceed_mean;
 
@@ -644,8 +653,6 @@ int pm_kernel( pm_data_t *pmdata )
         for ( j = 0, mag_db = -5.0f; mag_db <= 5.0f; mag_db += 0.5f ) {
           power_shift = ave_power_ratio + mag_db;
 
-          /* --------------------------------------------------------------
-             template_copy = template_profiles(template_exceed) + ave_power_ratio + mag_db */
           bptr  = template_exceed;
           _Pragma( "loopbound min 64 max 64" )
           for ( i = 0; i < profile_size; i++ ) {

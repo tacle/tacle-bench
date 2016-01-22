@@ -8,7 +8,7 @@
   Author: Hector Chan
           MIT Lincoln Laboratory
 
-  Function: This header contains the C standard library functions used by pm.
+  Function: This file contains the C standard library functions used by pm.
 
   Source: HPEC Challenge Benchmark Suite, Pattern Match Kernel Benchmark
 
