@@ -107,7 +107,8 @@ void wccqsort( void *va, unsigned long n, unsigned long es )
 }
 
 
-#include "wccmalloc.h"
+#include "anagram_stdlib.h"
+#include "anagram_strings.h"
 
 /* This must be redefined for each new benchmark */
 #define HEAP_SIZE 17000

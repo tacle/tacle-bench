@@ -136,9 +136,9 @@
    steps to FindAnagram.
 */
 
-#include "wccctype.h"
-#include "wccmalloc.h"
-#include "wccstdlib.h"
+#include "anagram_ctype.h"
+#include "anagram_stdlib.h"
+#include "anagram_strings.h"
 
 #define DICTWORDS 2279
 extern char *achPhrase[3];
