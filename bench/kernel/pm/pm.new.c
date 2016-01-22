@@ -159,6 +159,17 @@ void pm_init_pattern( pm_float_array_t *pattern )
 }
 
 
+void pm_init( void )
+{
+  pm_math_init();
+}
+
+
+int pm_return(void)
+{
+  return pm_result;
+}
+
 /*
   Core benchmark functions
 */
@@ -179,7 +190,6 @@ void _Pragma( "entrypoint" ) pm_main( void )
 
 int main( void )
 {
-  pm_math_init();
   pm_init();
   pm_main();
 

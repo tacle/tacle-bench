@@ -32,7 +32,7 @@ Source: HPEC Challenge Benchmark Suite
 - Renamed my_memcpy to pm_memcpy.
 - Renamed my_memset to pm_memset.
 - Renamed function pm to pm_kernel.
-- Added function pm_init that handles the initialization of ...
+- Added function pm_init that handles the initialization of the math library functions.
 - Added function pm_return that handles the original return value of main.
 - Added new function main that first calls pm_init, then pm_main and finally returns the return value of pm_return.
 - Replaced local variables pmdata, lib, patternand result in main with global static variables pm_data, pm_lib, pm_pattern and pm_result.
