@@ -1,7 +1,7 @@
 extern unsigned auGlobalFrequency[26];
 
-// This function is included here because the WCC does not
-// support function pointers
+/* This function is included here because the WCC does not */
+/* support function pointers */
 int CompareFrequency( char *pch1, char *pch2 )
 {
   return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
@@ -109,7 +109,7 @@ void wccqsort( void *va, unsigned long n, unsigned long es )
 
 #include "wccmalloc.h"
 
-// This must be redefined for each new benchmark
+/* This must be redefined for each new benchmark */
 #define HEAP_SIZE 17000
 
 char simulated_heap[HEAP_SIZE];
@@ -117,7 +117,7 @@ unsigned int freeHeapPos;
 
 void *wccmalloc( unsigned int numberOfBytes )
 {
-  // Get a 4-byte adress for alignment purposes
+  /* Get a 4-byte adress for alignment purposes */
   unsigned int offset = ( ( unsigned int )simulated_heap + freeHeapPos ) % 4;
   if ( offset )
     freeHeapPos += 4 - offset;
