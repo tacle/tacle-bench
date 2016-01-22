@@ -1,20 +1,34 @@
 File: pm.c
-Original provenience: unknown 
+Original provenience: unknown
 Source: HPEC Challenge Benchmark Suite
 
 2016-01-22
-- Moved math functions pm_log10f, pm_pow10f, pm_fabs, pm_floor, pm_ceil into own files pm_math.h and pm_libm.c.
-- Moved associated static global variables pm_log_coeff and pm_pow_coeff into file pm_libm.c.
-- Renamed function pm_init_coeff to pm_math_init and moved its call out of pm_init_data.
-- Moved stdlib functions pm_memcpy and pm_memset into own files pm_string.h and pm_stdlib.c.
+- Moved math functions pm_log10f, pm_pow10f, pm_fabs, pm_floor, pm_ceil into
+  own files pm_math.h and pm_libm.c.
+- Moved associated static global variables pm_log_coeff and pm_pow_coeff into
+  file pm_libm.c.
+- Renamed function pm_init_coeff to pm_math_init and moved its call out of
+  pm_init_data.
+- Moved stdlib functions pm_memcpy and pm_memset into own files pm_string.h
+  and pm_stdlib.c.
 - Renamed input.c to pm_input.c
 
 2016-01-21
-- Changed pm_ceil and pm_floor such that the expression !arg is not used anymore to resolve compiler warning "implicit conversion turns floating-point number into integer". However, NaN and infinity are not handled correctly.
-- Cast results of pm_ceil and pm_floor to int instead of the functions themselves to resolve compiler warning about "cast from function call of type 'float' to non-matching type 'int'".
-- Cast parameter c of pm_memset to unsigned char to resolve compiler warning that "implicit conversion loses integer precision".
-- Cast result of sizeof operator in call to pm_memset to int to resolve compiler warnings that "implicit conversion changes signedness".
-- Converted type of local variables match_index and min_MSE_index in pm_kernel, as well as array base type of member size in pm_float_array_t from unsigned int to int to resolve compiler warnings that "implicit conversion changes signedness".
+- Changed pm_ceil and pm_floor such that the expression !arg is not used
+  anymore to resolve compiler warning "implicit conversion turns
+  floating-point number into integer". However, NaN and infinity are not
+  handled correctly.
+- Cast results of pm_ceil and pm_floor to int instead of the functions
+  themselves to resolve compiler warning about "cast from function call of
+  type 'float' to non-matching type 'int'".
+- Cast parameter c of pm_memset to unsigned char to resolve compiler warning
+  that "implicit conversion loses integer precision".
+- Cast result of sizeof operator in call to pm_memset to int to resolve
+  compiler warnings that "implicit conversion changes signedness".
+- Converted type of local variables match_index and min_MSE_index in pm_kernel,
+  as well as array base type of member size in pm_float_array_t from
+  unsigned int to int to resolve compiler warnings that "implicit conversion
+  changes signedness".
 - Removed register storage class for local variables in pm_kernel.
 
 2016-01-07
@@ -33,12 +47,20 @@ Source: HPEC Challenge Benchmark Suite
 - Renamed my_memcpy to pm_memcpy.
 - Renamed my_memset to pm_memset.
 - Renamed function pm to pm_kernel.
-- Added function pm_init that handles the initialization of the math library functions.
+- Added function pm_init that handles the initialization of the math library
+  functions.
 - Added function pm_return that handles the original return value of main.
-- Added new function main that first calls pm_init, then pm_main and finally returns the return value of pm_return.
-- Replaced local variables pmdata, lib, patternand result in main with global static variables pm_data, pm_lib, pm_pattern and pm_result.
-- Renamed global variables init_array_1, init_array_2, init_array_3, init_array_4, init_array_5, init_array_6, init_array_7 and init_array_8 to pm_init_array_1, pm_init_array_2, pm_init_array_3, pm_init_array_4, pm_init_array_5, pm_init_array_6, pm_init_array_7 and pm_init_array_8 and made them static.
-- Renamed global variables pow_coeff and log_coeff to pm_pow_coeff and pm_log_coeff and made them static.
+- Added new function main that first calls pm_init, then pm_main and finally
+  returns the return value of pm_return.
+- Replaced local variables pmdata, lib, patternand result in main with global
+  static variables pm_data, pm_lib, pm_pattern and pm_result.
+- Renamed global variables init_array_1, init_array_2, init_array_3,
+  init_array_4, init_array_5, init_array_6, init_array_7 and init_array_8 to
+  pm_init_array_1, pm_init_array_2, pm_init_array_3, pm_init_array_4,
+  pm_init_array_5, pm_init_array_6, pm_init_array_7 and pm_init_array_8 and
+  made them static.
+- Renamed global variables pow_coeff and log_coeff to pm_pow_coeff and
+  pm_log_coeff and made them static.
 - Tested conformance to C90 via
   clang -fsyntax-only -Weverything -Wno-unknown-pragmas -pedantic -std=c90
 
@@ -49,10 +71,10 @@ Source: HPEC Challenge Benchmark Suite
 2015-12-08:
 - Replaced comments in line 1-37 with generic TACLeBench header.
 - Introduced comments to split file in sections for type definition, forward
-  declarations, global variables, initialization-related and 
+  declarations, global variables, initialization-related and
   return-value-related functions, core benchmark functions, and main routine.
 - Moved BSD 3-clause license comment to own file license.txt.
-- Renamed global variables lib_data and pattern_data to pm_lib_data and 
+- Renamed global variables lib_data and pattern_data to pm_lib_data and
   pm_pattern_data.
 - Renamed functions read_lib and read_pattern to pm_init_lib and
   pm_init_pattern.
