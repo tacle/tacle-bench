@@ -165,7 +165,7 @@ void pm_init( void )
 }
 
 
-int pm_return(void)
+int pm_return( void )
 {
   return pm_result;
 }
@@ -219,8 +219,9 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
 
   /* Equivalent to shift_size = roundf((float)profile_size / shift_ratio) */
   x = ( float )( pmdata->profile_size ) / pmdata->shift_ratio;
-  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ? ( int )(pm_floor( x )) :
-                       ( int )(pm_ceil( x ));
+  pmdata->shift_size = ( ( x - ( int )( x ) ) < 0.5f ) ?
+                       ( int )( pm_floor( x ) ) :
+                       ( int )( pm_ceil( x ) );
 
   pmdata->template_exceed     = pm_init_array_1;
   pmdata->test_exceed_means   = pm_init_array_2;
@@ -275,11 +276,10 @@ int pm_kernel( pm_data_t *pmdata )
   float *all_shifted_test_db  =
     pmdata->all_shifted_test_db;  /* the shifted test pattern      */
 
-  int
-  match_index;                          /* the index of the most likely template that matches the test pattern */
-  int  min_MSE_index = shift_size +
-                                1;       /* the index of the range shifts with the lowest mean square error */
-  unsigned int  num_template_exceed,
+  int match_index;                /* the index of the most likely template that matches the test pattern */
+  int min_MSE_index = shift_size +
+                      1; /* the index of the range shifts with the lowest mean square error */
+  unsigned int num_template_exceed,
            num_test_exceed; /* the number of pixels exceeded the test pattern and a library template */
 
   unsigned char
@@ -307,8 +307,8 @@ int pm_kernel( pm_data_t *pmdata )
                        +          /* noise level of the test pattern */
                        pm_pow10f( test_profile_db[profile_size - 1] * 0.1f ) ) * 0.5f;
 
-  int half_shift_size = ( int )(pm_ceil( ( float )( shift_size ) /
-                                        2.0f )); /* since "shift_size/2" is used a lot, so we create a var to hold it */
+  int half_shift_size = ( int )( pm_ceil( ( float )( shift_size ) /
+                                          2.0f ) ); /* since "shift_size/2" is used a lot, so we create a var to hold it */
   int template_index, current_shift; /* indices */
   int patsize = profile_size * elsize; /* number of bytes of a pattern */
 
@@ -317,9 +317,9 @@ int pm_kernel( pm_data_t *pmdata )
   float *mag_shift_scores  = pmdata->mag_shift_scores;
 
   float test_noise_db        = ( test_noise == 0.0f ) ? -100.0f : 10.0f *
-                                        pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
+                               pm_log10f( pm_fabs( test_noise ) ); /* test noise in dB */
   float test_noise_db_plus_3 = test_noise_db +
-                                        3.0f; /* twice test noise in the power domain, approximately +3dB */
+                               3.0f; /* twice test noise in the power domain, approximately +3dB */
 
   float *template_copy     = pmdata->template_copy;
   unsigned char *template_exceed   = pmdata->template_exceed;
@@ -448,7 +448,8 @@ int pm_kernel( pm_data_t *pmdata )
        Setting up all the constants */
 
     noise_shift  = test_peak - template_peak;
-    pm_memset ( ( void * )template_exceed, 0, ((int)sizeof( char ))*profile_size );
+    pm_memset ( ( void * )template_exceed, 0,
+                ( ( int )sizeof( char ) )*profile_size );
     sum_exceed = 0.0f;
     num_template_exceed = 0;
 
