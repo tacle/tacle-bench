@@ -1,0 +1,41 @@
+2016-02-01:
+- Added generic TACLeBench header.
+- Removed old file header (keep some information in TACLeBench header).
+- Made array arr global, renamed to select_arr.
+- Introduced global variable select_selected, stores selected value.
+- Implemented function select_init to initialise arr
+- Implemented function select_return, returns selected value
+- Renamed function select to select_select.
+- Bugfixes in function select_select:
+  - Adjust indices l, ir to C-style arrays.
+  - Include curly braces in SWAP macro.
+  - Reset flag2 before while loop.
+- Renamed function main to select_main; stores return value of
+  select_select in select_selected. Function set as entrypoint.
+- Implemented new function main according to TACLeBench guidelines.
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific
+    prefix (here: bs_) followed by lowercase letter (e.g., bs_square)
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+
