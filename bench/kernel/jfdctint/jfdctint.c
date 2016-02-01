@@ -13,7 +13,7 @@
             pixel block [from original file documentations]
 
   Source: SNU-RT Benchmark Suite for Worst Case Timing Analysis
-    Collected and Modified by S.-S. Lim
+          Collected and Modified by S.-S. Lim
           Real-Time Research Group
           Seoul National University
 
