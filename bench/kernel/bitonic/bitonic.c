@@ -12,7 +12,7 @@
   Source: MiBench
           http://wwweb.eecs.umich.edu/mibench
 
-  Changes:
+  Changes: no major functional changes
 
   License: MIT
 
@@ -35,7 +35,7 @@ int main( void );
 */
 
 int bitonic_numiters = 10;
-int bitonic_a[32];         // the array to be sorted
+int bitonic_a[ 32 ];         // the array to be sorted
 const int BITONIC_ASCENDING = 1;
 const int BITONIC_DESCENDING = 0;
 
@@ -51,7 +51,7 @@ void bitonic_init( void )
 
   _Pragma( "loopbound min 32 max 32" )
   for ( i = 0; i < 32; i++ )
-    bitonic_a[i] = ( 32 - i );
+    bitonic_a[ i ] = ( 32 - i );
 }
 
 
@@ -59,7 +59,7 @@ int bitonic_return( void )
 {
   int checksum = 0;
 
-  checksum += bitonic_a[0] + bitonic_a[21] + bitonic_a[31];
+  checksum += bitonic_a[ 0 ] + bitonic_a[ 21 ] + bitonic_a[ 31 ];
 
   return ( checksum );
 }
@@ -76,12 +76,13 @@ int bitonic_return( void )
  **/
 void bitonic_compare( int i, int j, int dir )
 {
-  if ( dir == ( bitonic_a[i] > bitonic_a[j] ) ) {
-    int h = bitonic_a[i];
-    bitonic_a[i] = bitonic_a[j];
-    bitonic_a[j] = h;
+  if ( dir == ( bitonic_a[ i ] > bitonic_a[ j ] ) ) {
+    int h = bitonic_a[ i ];
+    bitonic_a[ i ] = bitonic_a[ j ];
+    bitonic_a[ j ] = h;
   }
 }
+
 
 /** The procedure bitonicMerge recursively sorts a bitonic sequence in
    ascending order, if dir = ASCENDING, and in descending order
@@ -101,6 +102,7 @@ void bitonic_merge( int lo, int cnt, int dir )
     bitonic_merge( lo + k, k, dir );
   }
 }
+
 
 /** Procedure bitonicSort first produces a bitonic sequence by
    recursively sorting its two halves in opposite directions, and then
