@@ -1,3 +1,6 @@
+File: jfdctint.c
+Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
+
 2016-02-01:
 - Added generic TACLeBench header.
 - Removed old file header (keep some information in TACLeBench header).
@@ -33,3 +36,18 @@
   - Operators within expressions shall be preceded and followed by one
     whitespace
 
+2016-02-03:
+- Removed all PROFILINGs.
+- Macro types replaced by actual types:
+  - Replaced INT32 with int.
+  - Replaced DCTELEM with int.
+- Removed macros:
+  - GLOBAL (useless)
+  - Unused "FIX_... FIX(..)" definitions (unused)
+  - BITS_IN_JSAMPLE (used in #ifdef...#else..., keep only #if part)
+  - SHIFT_TEMPS (empty)
+  - JPEG_INTERNALS (unused)
+  - MULTIPLY (simply multiply *)
+  - ONE (used only once)
+  - RIGHT_SHIFT (used only once)
+  
