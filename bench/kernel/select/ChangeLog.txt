@@ -1,3 +1,6 @@
+File: select.c
+Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
+
 2016-02-01:
 - Added generic TACLeBench header.
 - Removed old file header (keep some information in TACLeBench header).
@@ -39,3 +42,6 @@
   - Operators within expressions shall be preceded and followed by one
     whitespace
 
+2016-02-03:
+- Secured SWAP macro (keep the macro as it is used often).
+- Corrected loop bounds.
