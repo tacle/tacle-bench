@@ -1,0 +1,43 @@
+Files: epic.c epic_data.h epic_data.c
+Original provenience: MediaBench benchmark suite,
+                      http://euler.slu.edu/~fritts/mediabench/mb1/index.html
+
+2016-02-03:
+- Added TACLeBench header, also kept original copyright notice
+- Removed commented-out code
+- Removed seemingly unnecessary empty lines
+- Removed unused function, variable, macro and type declarations except where
+  they may help understanding the program.
+- Slightly changed wording of original comments to keep them in line with the
+  modified/removed code parts.
+- Separated epic.c to epic.c and epic.h
+- Added proper '#ifndef __EPIC_DATA_H_' and friends to epic_data.h
+- Moved around all the following so that they are in the given order just after
+the header
+  - macro definitions
+  - forward declaration of functions
+  - declaration of global variables
+- Added a new main function that first calls init function then the old main
+  function sans init
+- Annotated epic_main() as the entry point of the analysis
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific 
+  prefix (here: statemate_) followed by lowercase letter
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur

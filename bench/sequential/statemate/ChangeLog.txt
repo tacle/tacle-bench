@@ -1,0 +1,57 @@
+File: statemate.c
+Original provenience: Mälardalen benchmark suite,
+                      http://www.mrtc.mdh.se/projects/wcet/benchmarks.html
+
+2016-02-02:
+- Removed original header comment, replaced by TACLeBench header.
+- Removed macro '#define float int' and replaced each 'float' by 'int' (8 in
+  total)
+- Removed unused macro
+  - #define entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRL_copy_IDX 1
+- Removed unused variables
+  - int FH_TUERMODUL_CTRL__N_copy;
+  - int BLOCK_ERKENNUNG_CTRL__I_EIN_MAX_copy;
+  - int BLOCK_ERKENNUNG_CTRL__N_copy;
+  - char FH_TUERMODUL_CTRL__FT;
+  - char FH_TUERMODUL__COM_OPEN;
+  - char FH_TUERMODUL__COM_CLOSE;
+  - char FH_DU__S_FH_TMBFAUFCAN_copy;
+  - char FH_DU__S_FH_TMBFZUCAN_copy;
+- Moved around all the following so that they are in the given order just after
+the header
+  - macro definitions
+  - forward declarations of fuctions
+  - declarations of global variables
+- Reordered functions in source code: initialization-related functions first,
+  followed by algorithm core functions, followed by main functions
+- Added a new main function that first calls init function then the old main
+  function sans init
+- Annotated statemate_main() as the entry point of the analysis
+- Removed seemingly unnecessary empty lines
+- Changed remaining floating number literals, all being used for time related
+  comparisons, to integer literals by multiplying them by 1000 so that the 
+  code is totally floating number free. E.g: 
+  changed 'time - sc_FH_TUERMODUL_CTRL_2375_2 >= 0.5f'
+       to 'time - sc_FH_TUERMODUL_CTRL_2375_2 >= 500' 
+  Info: All time related variables were already converted to 'unsigned long'
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific 
+  prefix (here: statemate_) followed by lowercase letter
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur

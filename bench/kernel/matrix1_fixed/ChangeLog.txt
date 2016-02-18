@@ -1,0 +1,48 @@
+File: matrix1_fixed.c
+Original provenience: DSP-Stone benchmark suite,
+  http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone
+
+2016-02-09:
+- Added TACLeBench header
+- Redefined function pin_down() as returning void since the return value is
+  insignificant
+- Function pin_down() fills matrices A and B with 1s and matrix C with 0s.
+  First call to it is kept as the initilization part, but the second call at
+  the end of main function seems unnecessary, hence removed
+- Added a new main function that first calls init function then the old main
+  function sans init
+- Redefined matrices A, B and C as global variables so that they are not local
+  to new main function and can be initialized and processed with diferent
+  functions
+- Annotated matrix1_fixed_main() as the entry point of the analysis
+- Removed unnecessary dereference operator from '*p_c++;' (line TODO:XXX) to
+  remove compiler warning 'value computed not used'
+- Removed seemingly unnecessary empty lines
+- Moved around all the following so that they are in the given order just after
+  the header
+  - macro definitions
+  - forward declaration of functions
+  - declaration of global variables
+  - initialization functions
+  - main functions
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific 
+  prefix (here: statemate_) followed by lowercase letter
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur

@@ -1,5 +1,3 @@
-/* +++Date last modified: 05-Jul-1997 */
-
 #ifndef PI__H
 #define PI__H
 
