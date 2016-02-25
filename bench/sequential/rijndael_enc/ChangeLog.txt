@@ -1,0 +1,77 @@
+File: rijndael_encoder.c
+Source: security section of MiBench
+
+2016-02-26:
+- Remove commented-out code
+- Prefix functions with "rijndael_enc"
+- Compute a checksum and return it from main
+- Change return type of rijndael_enc_encfile to void
+- Move functionality from function main into functions
+  rijndael_enc_init, rijndael_enc_main, and rijndael_enc_return
+- Reordered functions in source code: initialization- and
+  return-value-related functions first, followed by algorithm core
+  functions, followed by main functions
+- Added function prototypes
+- Applied code formatting with astyle as in the example
+- Added general TACLeBench header to beginning of source code
+- Rename to rijndael_enc.c
+
+Files: aes.c, aes.h, aestab.h
+Source: security section of MiBench
+
+2016-02-26:
+- Remove unused defines UNROLL, PARTIAL_UNROLL
+- Remove defines FIXED_TABLES, FF_TABLES, ARRAYS, FOUR_TABLES,
+  FOUR_LR_TABLES, FOUR_IM_TABLES
+- Remove (undefined) define ONE_TABLE, ONE_LR_TABLE , ONE_IM_TABLE
+- Assume BLOCK_SIZE is always 16
+- Remove unused define "unused"
+- Remove INTERNAL_BYTE_ORDER, EXTERNAL_BYTE_ORDER, AES_BIG_ENDIAN,
+  AES_LITTLE_ENDIAN (assume internal == external == little endian)
+- Remove defines AES_DLL and AES_IN_CPP
+- Remove "#if defined(__cplusplus)"
+- Replace macros c_name and cf_dec with their definition
+- Remove some stale comments
+- Remove defines no_table and one_table
+- Remove prototypes for unusedfunctions decrypt and set_blk
+- Prefix all functions and global variables with "rijndael_enc"
+- Break lines in overly long macros
+- Protect macros
+- Applied code formatting with astyle as in the example
+
+Files: glibc_common.h, my_file.h
+Source: security section of MiBench
+
+2016-02-26:
+- Merge into file rijndael_enc_libc.h
+
+File: rijndael_enc_libc.h
+
+2016-02-26:
+- Replace size_t with unsigned long
+- Remove defines LITTLE_ENDIAN and NULL
+- Prefix all functions with "rijndael_enc" (instead of "my_")
+- Prefix definitions that clash with the standard library with
+  "rijndael_enc" (instead of "my_")
+- Applied code formatting with astyle as in the example
+
+Files: glibc_common.c, my_file.c
+Source: security section of MiBench
+
+2016-02-26:
+- Merge into file rijndael_enc_libc.c
+
+File: rijndael_enc_libc.c
+
+2016-02-26:
+- Replace size_t with unsigned long
+- Prefix all functions with "rijndael_enc" (instead of "my_")
+- Prefix definitions that clash with the standard library with
+  "rijndael_enc" (instead of "my_")
+- Applied code formatting with astyle as in the example
+
+File: input_small.c
+Source: security section of MiBench
+
+2016-02-26:
+- Break long lines
