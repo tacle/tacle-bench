@@ -1,0 +1,17 @@
+File: fac.c
+Original provenience: MDH WCET BENCHMARK SUITE
+
+2016-02-26:
+ - Added TACLeBench header to line 1
+ - Make s a global variable and renamed it to fac_s
+ - Make n a global variable and renamed it to fac_n
+ - Renamed function fac to fac_fac
+ - Renamed function main to fac_main
+ - Created new function main, calling fac_init, fac_main and
+   returning fac_return
+ - Changed return type of fac_main to void
+ - Move initialization code into new function fac_init
+ - Reordered functions in source code: initialization- and
+   return-value-related functions first, followed by algorithm core
+   functions, followed by main functions
+ - Applied code formatting with astyle as in the example

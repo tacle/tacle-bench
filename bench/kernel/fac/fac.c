@@ -1,31 +1,98 @@
-/* MDH WCET BENCHMARK SUITE. File version $Id: fac.c,v 1.5 2011-01-10 14:46:54 falk Exp $ */
 /*
- * Changes: CS 2006/05/19: Changed loop bound from constant to variable.
- */
 
-int fac (int n)
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
+
+  Name: fac
+
+  Author: unknown
+
+  Function: fac is a program to calculate factorials.
+    This program computes the sum of the factorials
+    from zero to five.
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/fac/fac.c
+
+  Changes: CS 2006/05/19: Changed loop bound from constant to variable.
+
+  License: general open-source
+
+*/
+
+/*
+  Forward declaration of functions
+*/
+
+int fac_fac( int n );
+void fac_init();
+int fac_return();
+void fac_main();
+int main( void );
+
+/*
+  Declaration of global variables
+*/
+
+int fac_s;
+volatile int fac_n;
+
+
+/*
+  Initialization- and return-value-related functions
+*/
+
+
+void fac_init()
 {
-  if (n == 0)
-     return 1;
-  else
-     return (n * fac (n-1));
+  fac_s = 0;
+  fac_n = 5;
 }
 
-int main (void)
+
+int fac_return()
+{
+  return fac_s;
+}
+
+
+/*
+  Arithmetic math functions
+*/
+
+
+int fac_fac ( int n )
+{
+  if ( n == 0 )
+    return 1;
+  else
+    return ( n * fac_fac ( n - 1 ) );
+}
+
+
+/*
+  Main functions
+*/
+
+
+void _Pragma( "entrypoint" ) fac_main ()
 {
   int i;
-  int s = 0;
-  volatile int n;
 
-  n = 5;
-
-  _Pragma("loopbound min 6 max 6")
-  for (i = 0;  i <= n; i++) {
-      _Pragma( "marker recursivecall" )
-      s += fac (i);
-      _Pragma( "flowrestriction 1*fac <= 6*recursivecall" )
+  _Pragma( "loopbound min 6 max 6" )
+  for ( i = 0;  i <= fac_n; i++ ) {
+    _Pragma( "marker recursivecall" )
+    fac_s += fac_fac ( i );
+    _Pragma( "flowrestriction 1*fac_fac <= 6*recursivecall" )
   }
+}
 
-  return (s);
+
+int main ( void )
+{
+  fac_init();
+  fac_main();
+
+  return ( fac_return() );
 }
 
