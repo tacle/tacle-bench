@@ -16,7 +16,7 @@
 
   Changes: CS 2006/05/19: Changed loop bound from constant to variable.
 
-  License: general open-source
+  License: public domain
 
 */
 

@@ -9,14 +9,22 @@
 
     Function: Matrix inversion for 3x3 floating point matrix.
 
-    Source: Turbo C Programming for Engineering by Hyun Soo Ahn
+    Source: SNU-RT Benchmark Suite, via MRTC
+           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/minver/minver.c
 
     Changes: a brief summary of major functional changes (not formatting)
 
-    License: general open-source
+    License:  may be used, modified, and re-distributed freely, but
+            the SNU-RT Benchmark Suite must be acknowledged
 
 */
 
+/*
+    This program is derived from the SNU-RT Benchmark Suite for Worst
+    Case Timing Analysis by Sung-Soo Lim
+
+    Original source: Turbo C Programming for Engineering by Hyun Soo Ahn
+*/
 
 /*
     Forward declaration of functions
