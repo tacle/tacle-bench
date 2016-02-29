@@ -140,6 +140,18 @@
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
+#include "anagram_compare.h"
+
+extern unsigned auGlobalFrequency[26];
+
+int CompareFrequency( char *pch1, char *pch2 )
+{
+  return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
+         ? -1 :
+         auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
+         ? 0 : 1;
+}
+
 #define DICTWORDS 2279
 extern char *achPhrase[3];
 extern char *dictionary[DICTWORDS];

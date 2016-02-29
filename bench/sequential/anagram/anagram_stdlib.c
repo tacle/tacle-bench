@@ -1,17 +1,10 @@
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
-extern unsigned auGlobalFrequency[26];
-
+/* Includes CompareFrequency */
 /* This function is included here because the WCC does not */
 /* support function pointers */
-int CompareFrequency( char *pch1, char *pch2 )
-{
-  return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
-         ? -1 :
-         auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
-         ? 0 : 1;
-}
+#include "anagram_compare.h"
 
 static void swapi( char *ii, char *ij, unsigned long es )
 {
