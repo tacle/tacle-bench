@@ -142,13 +142,19 @@
 
 #include "anagram_compare.h"
 
+/* convert letter to index */
+static int ch2i(char ch)
+{
+  return ch - 'a';
+}
+
 extern unsigned auGlobalFrequency[26];
 
 int CompareFrequency( char *pch1, char *pch2 )
 {
-  return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
+  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
          ? -1 :
-         auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
+         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
          ? 0 : 1;
 }
 
@@ -159,12 +165,9 @@ extern char *dictionary[DICTWORDS];
 typedef unsigned int Quad;              /* for building our bit mask */
 #define MASK_BITS 32                    /* number of bits in a Quad */
 #define MAX_QUADS 2                     /* controls largest phrase */
-#define MAXWORDS DICTWORDS              /* dictionary length */
 #define MAXCAND  100                    /* candidates */
 #define MAXSOL   51                     /* words in the solution */
 #define ALPHABET 26                     /* letters in the alphabet */
-#define ch2i(ch) ((ch)-'a')             /* convert letter to index */
-#define i2ch(ch) ((ch)+'a')             /* convert index to letter */
 
 /* A Word remembers the information about a candidate word. */
 typedef struct {
@@ -211,8 +214,6 @@ char *pchDictionary;                /* the dictionary is read here */
 
 void Reset( void )
 {
-  int i;
-
   anagram_bzero( ( char * )alPhrase, sizeof( Letter )*ALPHABET );
   anagram_bzero( ( char * )aqMainMask, sizeof( Quad )*MAX_QUADS );
   anagram_bzero( ( char * )aqMainSign, sizeof( Quad )*MAX_QUADS );
