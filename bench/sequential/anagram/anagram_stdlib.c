@@ -1,3 +1,6 @@
+#include "anagram_stdlib.h"
+#include "anagram_strings.h"
+
 extern unsigned auGlobalFrequency[26];
 
 /* This function is included here because the WCC does not */
@@ -27,7 +30,7 @@ static void swapi( char *ii, char *ij, unsigned long es )
 
 static char *pivot( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pk;
 
   j = n / 6 * es;
@@ -53,7 +56,7 @@ static char *pivot( char *a, unsigned long n, unsigned long es )
 
 static void qsorts( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
   volatile unsigned int flowfactdummy = 0;
 
@@ -86,7 +89,7 @@ static void qsorts( char *a, unsigned long n, unsigned long es )
       swapi( pi, pj, es );
     }
     swapi( a, pj, es );
-    j = ( pj - a ) / es;
+    j = (unsigned long)( pj - a ) / es;
 
     n = n - j - 1;
     if ( j >= n ) {
@@ -107,14 +110,11 @@ void anagram_qsort( void *va, unsigned long n, unsigned long es )
 }
 
 
-#include "anagram_stdlib.h"
-#include "anagram_strings.h"
-
 /* This must be redefined for each new benchmark */
-#define HEAP_SIZE 17000
+#define ANAGRAM_HEAP_SIZE 17000
 
-char simulated_heap[HEAP_SIZE];
-unsigned int freeHeapPos;
+static char simulated_heap[ANAGRAM_HEAP_SIZE];
+static unsigned int freeHeapPos;
 
 void *anagram_malloc( unsigned int numberOfBytes )
 {
