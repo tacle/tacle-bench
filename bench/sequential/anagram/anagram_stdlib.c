@@ -99,7 +99,7 @@ static void qsorts( char *a, unsigned long n, unsigned long es )
   }
 }
 
-void wccqsort( void *va, unsigned long n, unsigned long es )
+void anagram_qsort( void *va, unsigned long n, unsigned long es )
 {
   _Pragma( "marker call_qsorts" )
   qsorts( ( char * )va, n, es );
@@ -116,7 +116,7 @@ void wccqsort( void *va, unsigned long n, unsigned long es )
 char simulated_heap[HEAP_SIZE];
 unsigned int freeHeapPos;
 
-void *wccmalloc( unsigned int numberOfBytes )
+void *anagram_malloc( unsigned int numberOfBytes )
 {
   /* Get a 4-byte adress for alignment purposes */
   unsigned int offset = ( ( unsigned int )simulated_heap + freeHeapPos ) % 4;
@@ -127,7 +127,7 @@ void *wccmalloc( unsigned int numberOfBytes )
   return currentPos;
 }
 
-void wccbzero( char *p, unsigned long len )
+void anagram_bzero( char *p, unsigned long len )
 {
   unsigned long i;
 
