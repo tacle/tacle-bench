@@ -390,8 +390,10 @@ void fft_bit_reduct(STORAGE_CLASS TYPE *int_pointer)
             p = int_pointer;
 
             _Pragma("loopbound min 2048 max 2048")
-            for (f = 0 ; f < 2 * N_FFT; f++)
-              *p++ = *p >> 1;
+            for (f = 0 ; f < 2 * N_FFT; f++) {
+              *p = *p >> 1;
+              p++;
+            }
           }
 
           max = level;
