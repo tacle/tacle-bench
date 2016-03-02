@@ -1,3 +1,14 @@
+/*
+  Forward declaration of global variables
+*/
+
+extern char *achPhrase[3];
+extern char *dictionary[2279];
+
+
+/*
+  Definition of global variables
+*/
 char *achPhrase[3] = { "todd austin",
                        "john alledy",
                        "mary updike"

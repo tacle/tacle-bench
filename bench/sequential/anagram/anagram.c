@@ -140,6 +140,24 @@
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
+#include "anagram_compare.h"
+
+/* convert letter to index */
+static int ch2i(char ch)
+{
+  return ch - 'a';
+}
+
+extern unsigned auGlobalFrequency[26];
+
+int CompareFrequency( char *pch1, char *pch2 )
+{
+  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
+         ? -1 :
+         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
+         ? 0 : 1;
+}
+
 #define DICTWORDS 2279
 extern char *achPhrase[3];
 extern char *dictionary[DICTWORDS];
@@ -147,12 +165,9 @@ extern char *dictionary[DICTWORDS];
 typedef unsigned int Quad;              /* for building our bit mask */
 #define MASK_BITS 32                    /* number of bits in a Quad */
 #define MAX_QUADS 2                     /* controls largest phrase */
-#define MAXWORDS DICTWORDS              /* dictionary length */
 #define MAXCAND  100                    /* candidates */
 #define MAXSOL   51                     /* words in the solution */
 #define ALPHABET 26                     /* letters in the alphabet */
-#define ch2i(ch) ((ch)-'a')             /* convert letter to index */
-#define i2ch(ch) ((ch)+'a')             /* convert index to letter */
 
 /* A Word remembers the information about a candidate word. */
 typedef struct {
@@ -199,14 +214,12 @@ char *pchDictionary;                /* the dictionary is read here */
 
 void Reset( void )
 {
-  int i;
-
-  wccbzero( ( char * )alPhrase, sizeof( Letter )*ALPHABET );
-  wccbzero( ( char * )aqMainMask, sizeof( Quad )*MAX_QUADS );
-  wccbzero( ( char * )aqMainSign, sizeof( Quad )*MAX_QUADS );
-  wccbzero( ( char * )auGlobalFrequency, sizeof( unsigned )*ALPHABET );
-  wccbzero( ( char * )achByFrequency, sizeof( char )*ALPHABET );
-  wccbzero( ( char * )apwCand, sizeof( PWord )*MAXCAND );
+  anagram_bzero( ( char * )alPhrase, sizeof( Letter )*ALPHABET );
+  anagram_bzero( ( char * )aqMainMask, sizeof( Quad )*MAX_QUADS );
+  anagram_bzero( ( char * )aqMainSign, sizeof( Quad )*MAX_QUADS );
+  anagram_bzero( ( char * )auGlobalFrequency, sizeof( unsigned )*ALPHABET );
+  anagram_bzero( ( char * )achByFrequency, sizeof( char )*ALPHABET );
+  anagram_bzero( ( char * )apwCand, sizeof( PWord )*MAXCAND );
   cchPhraseLength = 0;
   cpwCand = 0;
 }
@@ -243,7 +256,7 @@ void ReadDict()
     len += strlen + 2;
   }
 
-  pchBase = pchDictionary = ( char * )wccmalloc( len );
+  pchBase = pchDictionary = ( char * )anagram_malloc( len );
 
   _Pragma( "loopbound min 2279 max 2279" )
   for ( i = 0; i < DICTWORDS; i++ ) {
@@ -253,7 +266,7 @@ void ReadDict()
 
     _Pragma( "loopbound min 1 max 5" )
     while ( dictionary[i][index] != '\0' ) {
-      if ( wccisalpha( dictionary[i][index] ) )
+      if ( anagram_isalpha( dictionary[i][index] ) )
         cLetters++;
       *pch++ = dictionary[i][index];
       index++;
@@ -281,8 +294,8 @@ void BuildMask( char *pchPhrase )
   cchPhraseLength = 0;
   _Pragma( "loopbound min 11 max 12" )
   while ( ( ch = *pchPhrase++ ) != '\0' ) {
-    if ( wccisalpha( ch ) ) {
-      ch = wcctolower( ch );
+    if ( anagram_isalpha( ch ) ) {
+      ch = anagram_tolower( ch );
       lPhrase( ch ).uFrequency++;
       cchPhraseLength++;
     }
@@ -321,7 +334,7 @@ PWord NewWord( void )
 {
   PWord pw;
 
-  pw = ( Word * )wccmalloc( sizeof( Word ) );
+  pw = ( Word * )anagram_malloc( sizeof( Word ) );
   return pw;
 }
 
@@ -347,14 +360,14 @@ void BuildWord( char *pchWord )
   PWord pw;
   int cchLength = 0;
 
-  wccbzero( ( char * )cchFrequency, sizeof( unsigned char )*ALPHABET );
+  anagram_bzero( ( char * )cchFrequency, sizeof( unsigned char )*ALPHABET );
 
   /* Build frequency table */
   _Pragma( "loopbound min 3 max 636" )
   while ( ( i = *pch++ ) != '\0' ) {
-    if ( !wccisalpha( i ) )
+    if ( !anagram_isalpha( i ) )
       continue;
-    i = ch2i( wcctolower( i ) );
+    i = ch2i( anagram_tolower( i ) );
     if ( ++cchFrequency[i] > alPhrase[i].uFrequency )
       return ;
     ++cchLength;
@@ -369,7 +382,7 @@ void BuildWord( char *pchWord )
      bitfield of frequencies.
   */
   pw = NextWord();
-  wccbzero( ( char * )( pw->aqMask ), sizeof( Quad )*MAX_QUADS );
+  anagram_bzero( ( char * )( pw->aqMask ), sizeof( Quad )*MAX_QUADS );
 
   pw->pchWord = pchWord;
   pw->cchLength = cchLength;
@@ -504,7 +517,7 @@ void SortCandidates( void )
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ )
     achByFrequency[i] = i;
-  wccqsort( achByFrequency, ALPHABET, sizeof( char ) );
+  anagram_qsort( achByFrequency, ALPHABET, sizeof( char ) );
 }
 
 int main( void )

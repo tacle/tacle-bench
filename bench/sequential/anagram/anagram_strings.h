@@ -1,7 +1,6 @@
-#ifndef _WCCMALLOC_H
-#define _WCCMALLOC_H
+#ifndef ANAGRAM_STRINGS_H
+#define ANAGRAM_STRINGS_H
 
-void *wccmalloc( unsigned int numberOfBytes );
-void wccbzero( char *p, unsigned long len );
+void anagram_bzero( char *p, unsigned long len );
 
 #endif

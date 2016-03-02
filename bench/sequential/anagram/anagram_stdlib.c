@@ -1,14 +1,10 @@
-extern unsigned auGlobalFrequency[26];
+#include "anagram_stdlib.h"
+#include "anagram_strings.h"
 
+/* Includes CompareFrequency */
 /* This function is included here because the WCC does not */
 /* support function pointers */
-int CompareFrequency( char *pch1, char *pch2 )
-{
-  return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
-         ? -1 :
-         auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
-         ? 0 : 1;
-}
+#include "anagram_compare.h"
 
 static void swapi( char *ii, char *ij, unsigned long es )
 {
@@ -27,7 +23,7 @@ static void swapi( char *ii, char *ij, unsigned long es )
 
 static char *pivot( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pk;
 
   j = n / 6 * es;
@@ -53,7 +49,7 @@ static char *pivot( char *a, unsigned long n, unsigned long es )
 
 static void qsorts( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
   volatile unsigned int flowfactdummy = 0;
 
@@ -86,7 +82,7 @@ static void qsorts( char *a, unsigned long n, unsigned long es )
       swapi( pi, pj, es );
     }
     swapi( a, pj, es );
-    j = ( pj - a ) / es;
+    j = (unsigned long)( pj - a ) / es;
 
     n = n - j - 1;
     if ( j >= n ) {
@@ -99,7 +95,7 @@ static void qsorts( char *a, unsigned long n, unsigned long es )
   }
 }
 
-void wccqsort( void *va, unsigned long n, unsigned long es )
+void anagram_qsort( void *va, unsigned long n, unsigned long es )
 {
   _Pragma( "marker call_qsorts" )
   qsorts( ( char * )va, n, es );
@@ -107,16 +103,13 @@ void wccqsort( void *va, unsigned long n, unsigned long es )
 }
 
 
-#include "anagram_stdlib.h"
-#include "anagram_strings.h"
-
 /* This must be redefined for each new benchmark */
-#define HEAP_SIZE 17000
+#define ANAGRAM_HEAP_SIZE 17000
 
-char simulated_heap[HEAP_SIZE];
-unsigned int freeHeapPos;
+static char simulated_heap[ANAGRAM_HEAP_SIZE];
+static unsigned int freeHeapPos;
 
-void *wccmalloc( unsigned int numberOfBytes )
+void *anagram_malloc( unsigned int numberOfBytes )
 {
   /* Get a 4-byte adress for alignment purposes */
   unsigned int offset = ( ( unsigned int )simulated_heap + freeHeapPos ) % 4;
@@ -127,7 +120,7 @@ void *wccmalloc( unsigned int numberOfBytes )
   return currentPos;
 }
 
-void wccbzero( char *p, unsigned long len )
+void anagram_bzero( char *p, unsigned long len )
 {
   unsigned long i;
 
