@@ -1,0 +1,7 @@
+File: n_complex_updates.c
+Original provenience: DSP-Stone
+
+2016-03-02:
+- Rename n_complex_updates_float to n_complex_updates
+- Apply code formatting with astyle as in the example
+
