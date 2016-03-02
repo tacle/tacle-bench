@@ -14,3 +14,7 @@ Original provenience: DSP-Stone
   compiler optimizations
 - Prefix the functions pin_down, float2frac, convert, exp2f and the global 
   variables input_data, inputfract, input, twidtable with fft_
+2016-03-02:
+- Fix undefined behavior due to unsequenced modification and access
+- Reformat large arrays using clang-format to 80 columns
+- Apply code formatting with astyle as in the example
