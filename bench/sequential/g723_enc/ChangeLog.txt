@@ -1,0 +1,17 @@
+File: g723_enc.c
+Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
+
+2016-02-26:
+ - Renamed file to g723_enc and removed all g721 dead code
+ - Added TACLeBench header to line 1
+ - Moved SUN license to license.txt
+ - Deleted unused code that was commented out
+ - Rename global variables prepended g721 to all global varialbe names
+ - Renamed functions prepended g721 to all function names
+ - Renamed function main to g721_main
+ - Created new function main, calling minver_init, minver_main and
+   returning minver_return
+ - Reordered functions in source code: initialization- and
+   return-value-related functions first, followed by algorithm core
+   functions, followed by main functions
+ - Applied code formatting with astyle as in the example
