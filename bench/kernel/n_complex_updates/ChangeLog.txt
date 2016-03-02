@@ -3,5 +3,10 @@ Original provenience: DSP-Stone
 
 2016-03-02:
 - Rename n_complex_updates_float to n_complex_updates
-- Apply code formatting with astyle as in the example
-
+- Add generic TACLeBench header
+- Prefix global function with benchmark name
+- Avoid accepting arbitrary number of parameters
+- Introduce return statement
+- Make variables A, B, C, D static globals
+- Split code into n_complex_updates_init and n_complex_updates_main
+- Apply code formatting with astyle
