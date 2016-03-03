@@ -73,83 +73,86 @@
 extern int overflow_bit;
 extern const unsigned char *zero_constant;
 
-extern void default_arithmetic_overflow_reaction (void);
+extern void default_arithmetic_overflow_reaction ( void );
 
 extern void
-  (*set_unsigned_integer_overflow_reaction (void (*function) (void))) (void);
-extern void (*set_integer_overflow_reaction (void (*function) (void))) (void);
+( *set_unsigned_integer_overflow_reaction ( void ( *function ) ( void ) ) ) (
+  void );
+extern void ( *set_integer_overflow_reaction ( void ( *function ) ( void ) ) ) (
+  void );
 
-extern void unsigned_integer_maximum (int size, void *result);
-extern void integer_minimum (int size, void *result);
-extern void integer_maximum (int size, void *result);
+extern void unsigned_integer_maximum ( int size, void *result );
+extern void integer_minimum ( int size, void *result );
+extern void integer_maximum ( int size, void *result );
 
-extern void add_unsigned_integer (int size, const void *op1, const void *op2,
-                                  void *result);
-extern void add_integer (int size, const void *op1, const void *op2,
-                         void *result);
-extern void subtract_unsigned_integer (int size, const void *op1,
-                                       const void *op2, void *result);
-extern void subtract_integer (int size, const void *op1, const void *op2,
-                              void *result);
-extern void multiply_unsigned_integer (int size, const void *op1,
-                                       const void *op2, void *result);
-extern void multiply_integer (int size, const void *op1, const void *op2,
-                              void *result);
-extern void divide_unsigned_integer (int size, const void *op1,
-                                     const void *op2, void *result);
-extern void divide_integer (int size, const void *op1, const void *op2,
-                            void *result);
-extern void unsigned_integer_remainder (int size, const void *op1,
-                                        const void *op2, void *result);
-extern void integer_remainder (int size, const void *op1, const void *op2,
-                               void *result);
+extern void add_unsigned_integer ( int size, const void *op1, const void *op2,
+                                   void *result );
+extern void add_integer ( int size, const void *op1, const void *op2,
+                          void *result );
+extern void subtract_unsigned_integer ( int size, const void *op1,
+                                        const void *op2, void *result );
+extern void subtract_integer ( int size, const void *op1, const void *op2,
+                               void *result );
+extern void multiply_unsigned_integer ( int size, const void *op1,
+                                        const void *op2, void *result );
+extern void multiply_integer ( int size, const void *op1, const void *op2,
+                               void *result );
+extern void divide_unsigned_integer ( int size, const void *op1,
+                                      const void *op2, void *result );
+extern void divide_integer ( int size, const void *op1, const void *op2,
+                             void *result );
+extern void unsigned_integer_remainder ( int size, const void *op1,
+    const void *op2, void *result );
+extern void integer_remainder ( int size, const void *op1, const void *op2,
+                                void *result );
 
-extern void unsigned_integer_shift_right (int size, const void *operand,
-                                          unsigned int bits, void *result);
-extern void integer_shift_right (int size, const void *operand,
-                                 unsigned int bits, void *result);
-extern void integer_shift_left (int size, const void *operand,
-                                unsigned int bits, void *result);
-extern void unsigned_integer_shift_left (int size, const void *operand,
-                                         unsigned int bits, void *result);
+extern void unsigned_integer_shift_right ( int size, const void *operand,
+    unsigned int bits, void *result );
+extern void integer_shift_right ( int size, const void *operand,
+                                  unsigned int bits, void *result );
+extern void integer_shift_left ( int size, const void *operand,
+                                 unsigned int bits, void *result );
+extern void unsigned_integer_shift_left ( int size, const void *operand,
+    unsigned int bits, void *result );
 
-extern void integer_or (int size, const void *op1,
-                        const void *op2, void *result);
-extern void unsigned_integer_or (int size, const void *op1,
-                                 const void *op2, void *result);
-extern void integer_and (int size, const void *op1,
-                         const void *op2, void *result);
-extern void unsigned_integer_and (int size, const void *op1,
-                                  const void *op2, void *result);
-extern void integer_not (int size, const void *operand, void *result);
-extern void unsigned_integer_not (int size, const void *operand, void *result);
+extern void integer_or ( int size, const void *op1,
+                         const void *op2, void *result );
+extern void unsigned_integer_or ( int size, const void *op1,
+                                  const void *op2, void *result );
+extern void integer_and ( int size, const void *op1,
+                          const void *op2, void *result );
+extern void unsigned_integer_and ( int size, const void *op1,
+                                   const void *op2, void *result );
+extern void integer_not ( int size, const void *operand, void *result );
+extern void unsigned_integer_not ( int size, const void *operand,
+                                   void *result );
 
-extern int eq_unsigned_integer (int size, const void *op1, const void *op2);
-extern int eq_integer (int size, const void *op1, const void *op2);
-extern int ne_unsigned_integer (int size, const void *op1, const void *op2);
-extern int ne_integer (int size, const void *op1, const void *op2);
-extern int gt_unsigned_integer (int size, const void *op1, const void *op2);
-extern int gt_integer (int size, const void *op1, const void *op2);
-extern int lt_unsigned_integer (int size, const void *op1, const void *op2);
-extern int lt_integer (int size, const void *op1, const void *op2);
-extern int ge_unsigned_integer (int size, const void *op1, const void *op2);
-extern int ge_integer (int size, const void *op1, const void *op2);
-extern int le_unsigned_integer (int size, const void *op1, const void *op2);
-extern int le_integer (int size, const void *op1, const void *op2);
+extern int eq_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int eq_integer ( int size, const void *op1, const void *op2 );
+extern int ne_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ne_integer ( int size, const void *op1, const void *op2 );
+extern int gt_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int gt_integer ( int size, const void *op1, const void *op2 );
+extern int lt_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int lt_integer ( int size, const void *op1, const void *op2 );
+extern int ge_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ge_integer ( int size, const void *op1, const void *op2 );
+extern int le_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int le_integer ( int size, const void *op1, const void *op2 );
 
 extern void change_unsigned_integer_size
-  (int operand_size, const void *operand, int result_size, void *result);
-extern void change_integer_size (int operand_size, const void *operand,
-                                 int result_size, void *result);
+( int operand_size, const void *operand, int result_size, void *result );
+extern void change_integer_size ( int operand_size, const void *operand,
+                                  int result_size, void *result );
 
-extern char *unsigned_integer_to_string (int size, const void *operand,
-                                         char *result);
-extern char *integer_to_string (int size, const void *operand, char *result);
+extern char *unsigned_integer_to_string ( int size, const void *operand,
+    char *result );
+extern char *integer_to_string ( int size, const void *operand, char *result );
 
-extern char *unsigned_integer_from_string (int size, const char *operand,
-                                           void *result);
-extern char *integer_from_string (int size, const char *operand,
-                                  void *result);
+extern char *unsigned_integer_from_string ( int size, const char *operand,
+    void *result );
+extern char *integer_from_string ( int size, const char *operand,
+                                   void *result );
 
 char isdigit( unsigned char c );
 int isspace( int c );

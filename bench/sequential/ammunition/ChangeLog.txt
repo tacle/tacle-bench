@@ -13,4 +13,5 @@ Original provenience: DINO programming language
 - Remove usages and comments related to the macros
     HAVE_MEMMOVE, NDEBUG, HAVE_MEMCMP
 - Remove comment related to unused NO_TEMPLATE macro
+- Apply code formatting with astyle
 

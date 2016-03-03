@@ -5,14 +5,14 @@
 
   Name: ammunition
 
-  Author: Vladimir Makarov <vmakarov@gcc.gnu.org> 
+  Author: Vladimir Makarov <vmakarov@gcc.gnu.org>
 
   Function: Tests reusable packages bits and arith
     bits: Work with bit strings (copying, moving, setting, testing, comparison).
-    arith: Implementing host machine-independently arbitrary precision integer 
-      numbers arithmetic.  The implementation of the package functions are not 
-      sufficiently efficient in order to use for run-time.  The package 
-      functions are oriented to implement constant-folding in compilers, 
+    arith: Implementing host machine-independently arbitrary precision integer
+      numbers arithmetic.  The implementation of the package functions are not
+      sufficiently efficient in order to use for run-time.  The package
+      functions are oriented to implement constant-folding in compilers,
       cross-compilers.
 
   Source: DINO programming language repository
@@ -27,40 +27,37 @@
 #include "bits.h"
 #include "arithm.h"
 
-int ammunition_atoi ( const char * str )
+int ammunition_atoi ( const char *str )
 {
   int result = 0;
   int sign = ( str[0] == '-' ? -1 : 1 );
-  
+
   int readingPos = 0;
-  if ( str[0] == '-' || str[0] == '+' ) {
+  if ( str[0] == '-' || str[0] == '+' )
     readingPos++;
-  }
   _Pragma( "loopbound min 1 max 1" )
   do {
     result *= 10;
     result += str[readingPos++] - 48;
   } while ( str[readingPos] != 0 );
-  
+
   return sign * result;
 }
 
-int ammunition_strcmp ( const char * str1, const char * str2 )
+int ammunition_strcmp ( const char *str1, const char *str2 )
 {
   int pos = 0;
   _Pragma( "loopbound min 1 max 4008" )
   while ( str1[pos] != 0 && str2[pos] != 0 ) {
-    if ( str1[pos] != str2[pos] ) {
+    if ( str1[pos] != str2[pos] )
       return str1[pos] - str2[pos];
-    }
     pos++;
   }
-  
-  if ( str1[pos] != 0 ) {
+
+  if ( str1[pos] != 0 )
     return 1;
-  } else {
+  else
     return -1;
-  }
 }
 
 int ammunition_sprintf_d( char *s, int number )
@@ -72,24 +69,24 @@ int ammunition_sprintf_d( char *s, int number )
   do {
     digits++;
     copyOfNumber /= 10;
-  } while (copyOfNumber != 0);
-  
+  } while ( copyOfNumber != 0 );
+
   unsigned char writePos = digits;
   if ( number < 0 ) {
     writePos++;
     s[0] = '-';
   }
   s[writePos] = 0;
-      
+
   copyOfNumber = number;
   _Pragma( "loopbound min 1 max 10" )
   do {
-    s[--writePos] = 48 + ( ( copyOfNumber >= 0 ? 
-            copyOfNumber : -copyOfNumber ) % 10 );
+    s[--writePos] = 48 + ( ( copyOfNumber >= 0 ?
+                             copyOfNumber : -copyOfNumber ) % 10 );
     copyOfNumber /= 10;
-  } while (copyOfNumber != 0);
-  
-  return digits + (number < 0 ? 1 : 0);
+  } while ( copyOfNumber != 0 );
+
+  return digits + ( number < 0 ? 1 : 0 );
 }
 int ammunition_sprintf_u( char *s, unsigned int number )
 {
@@ -100,22 +97,22 @@ int ammunition_sprintf_u( char *s, unsigned int number )
   do {
     digits++;
     copyOfNumber /= 10;
-  } while (copyOfNumber != 0);
-  
-  unsigned char writePos = digits; 
+  } while ( copyOfNumber != 0 );
+
+  unsigned char writePos = digits;
   s[writePos] = 0;
-      
+
   copyOfNumber = number;
   _Pragma( "loopbound min 1 max 10" )
   do {
     s[--writePos] = 48 + ( copyOfNumber % 10 );
     copyOfNumber /= 10;
-  } while (copyOfNumber != 0);
-  
+  } while ( copyOfNumber != 0 );
+
   return digits;
 }
 
-void ammunition_reset_str_bits( char* str, char* s )
+void ammunition_reset_str_bits( char *str, char *s )
 {
   int i;
   _Pragma( "loopbound min 8 max 8" )
@@ -125,7 +122,8 @@ void ammunition_reset_str_bits( char* str, char* s )
   }
 }
 
-void ammunition_reset_str_arithm( char* str, char* s, char* d, char* e, char* g )
+void ammunition_reset_str_arithm( char *str, char *s, char *d, char *e,
+                                  char *g )
 {
   int i;
   _Pragma( "loopbound min 20 max 20" )
@@ -139,11 +137,10 @@ void ammunition_reset_str_arithm( char* str, char* s, char* d, char* e, char* g 
     d[i] = 0;
     e[i] = 0;
   }
-  
+
   _Pragma( "loopbound min 6 max 6" )
-  for ( i = 0; i < 6; i++ ) {
+  for ( i = 0; i < 6; i++ )
     g[i] = 0;
-  }
 }
 
 
@@ -151,7 +148,7 @@ int ammunition_bits_test()
 {
   char str[8];
   char str1[8];
-  
+
   int result = 0;
   int i, j;
 
@@ -159,137 +156,137 @@ int ammunition_bits_test()
   ammunition_reset_str_bits( str, str1 );
 
   _Pragma( "loopbound min 64 max 64" )
-  for (i = 0; i < sizeof (str) * CHAR_BIT; i++) {
-    if (BIT (str, i)) {
+  for ( i = 0; i < sizeof ( str ) * CHAR_BIT; i++ ) {
+    if ( BIT ( str, i ) )
       result = 1;
-    }
   }
-  
+
   _Pragma( "loopbound min 64 max 64" )
-  for (i = 0; i < sizeof (str) * CHAR_BIT; i++) {
-    SET_BIT (str, i, 1);
+  for ( i = 0; i < sizeof ( str ) * CHAR_BIT; i++ ) {
+    SET_BIT ( str, i, 1 );
     _Pragma( "loopbound min 64 max 64" )
-    for (j = 0; j < sizeof (str) * CHAR_BIT; j++)
-      if (j <= i) {
-        if (BIT (str, j) == 0)
+    for ( j = 0; j < sizeof ( str ) * CHAR_BIT; j++ )
+      if ( j <= i ) {
+        if ( BIT ( str, j ) == 0 )
           result = 1;
-      } else if (BIT (str, j))
-        result = 1;
+      } else
+        if ( BIT ( str, j ) )
+          result = 1;
   }
 
   result = 0;
-  
+
   // Test 2
   ammunition_reset_str_bits( str, str1 );
 
   _Pragma( "loopbound min 64 max 64" )
-  for (i = 0; i < sizeof (str) * CHAR_BIT; i++)
-    if (!is_zero_bit_string (str, i, (sizeof (str) * CHAR_BIT - i) / 2 + 1))
+  for ( i = 0; i < sizeof ( str ) * CHAR_BIT; i++ )
+    if ( !is_zero_bit_string ( str, i, ( sizeof ( str ) * CHAR_BIT - i ) / 2 + 1 ) )
       result = 1;
-  bit_string_set (str, 13, 1, 35);
+  bit_string_set ( str, 13, 1, 35 );
   _Pragma( "loopbound min 13 max 13" )
-  for (i = 0; i < 13; i++)
-    if (!is_zero_bit_string (str, i, 13 - i))
+  for ( i = 0; i < 13; i++ )
+    if ( !is_zero_bit_string ( str, i, 13 - i ) )
       result = 1;
   _Pragma( "loopbound min 35 max 35" )
-  for (i = 13; i < 48; i++)
-    if (is_zero_bit_string (str, i, 48 - i))
+  for ( i = 13; i < 48; i++ )
+    if ( is_zero_bit_string ( str, i, 48 - i ) )
       result = 1;
   _Pragma( "loopbound min 16 max 16" )
-  for (i = 48; i < sizeof (str) * CHAR_BIT; i++)
-    if (!is_zero_bit_string (str, i, sizeof (str) * CHAR_BIT - i))
+  for ( i = 48; i < sizeof ( str ) * CHAR_BIT; i++ )
+    if ( !is_zero_bit_string ( str, i, sizeof ( str ) * CHAR_BIT - i ) )
       result = 1;
 
   result = 0;
-  
+
   // Test 3
   ammunition_reset_str_bits( str, str1 );
 
   _Pragma( "loopbound min 42 max 42" )
-  for (i = 0; i + i / 2 + 1 < sizeof (str) * CHAR_BIT; i++) {
-    bit_string_set (str, i, 1, i / 2 + 1);
-    if (!is_zero_bit_string (str, 0, i - 1))
+  for ( i = 0; i + i / 2 + 1 < sizeof ( str ) * CHAR_BIT; i++ ) {
+    bit_string_set ( str, i, 1, i / 2 + 1 );
+    if ( !is_zero_bit_string ( str, 0, i - 1 ) )
       result = 1;
-    if (is_zero_bit_string (str, i, i / 2 + 1))
+    if ( is_zero_bit_string ( str, i, i / 2 + 1 ) )
       result = 1;
-    if (!is_zero_bit_string (str, i + i / 2 + 1,
-                             sizeof (str) * CHAR_BIT - (i + i / 2 + 1)))
+    if ( !is_zero_bit_string ( str, i + i / 2 + 1,
+                               sizeof ( str ) * CHAR_BIT - ( i + i / 2 + 1 ) ) )
       result = 1;
-    bit_string_set (str, 0, 0, sizeof (str) * CHAR_BIT);
+    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
   }
 
   result = 0;
-  
+
   // Test 4
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set (str, 2, 1, 43);
-  bit_string_set (str1, 2, 1, 40);
+  bit_string_set ( str, 2, 1, 43 );
+  bit_string_set ( str1, 2, 1, 40 );
   _Pragma( "loopbound min 42 max 42" )
-  for (i = 0; i < 42; i++)
-    if (bit_string_comparison (str, i, str1, i, 42 - i) != 0)
+  for ( i = 0; i < 42; i++ )
+    if ( bit_string_comparison ( str, i, str1, i, 42 - i ) != 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
-  for (i = 0; i < 43; i++)
-    if (bit_string_comparison (str, i, str1, i, sizeof (str) * CHAR_BIT - i)
-        <= 0)
+  for ( i = 0; i < 43; i++ )
+    if ( bit_string_comparison ( str, i, str1, i, sizeof ( str ) * CHAR_BIT - i )
+         <= 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
-  for (i = 0; i < 43; i++)
-    if (bit_string_comparison (str1, i, str, i, sizeof (str) * CHAR_BIT - i)
-        >= 0)
+  for ( i = 0; i < 43; i++ )
+    if ( bit_string_comparison ( str1, i, str, i, sizeof ( str ) * CHAR_BIT - i )
+         >= 0 )
       result = 1;
 
   result = 0;
-  
+
   // Test 5
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set (str, 2, 1, 43);
+  bit_string_set ( str, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
-  for (i = 0; i + 5 < sizeof (str) * CHAR_BIT; i++) {
-    bit_string_copy (str1, i + 5, str, i, sizeof (str) * CHAR_BIT - i - 5);
-    if (bit_string_comparison (str1, i + 5, str, i,
-                               sizeof (str) * CHAR_BIT - i - 5) != 0)
+  for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
+    bit_string_copy ( str1, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( bit_string_comparison ( str1, i + 5, str, i,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 6
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set (str, 2, 1, 43);
-  bit_string_set (str1, 2, 1, 43);
+  bit_string_set ( str, 2, 1, 43 );
+  bit_string_set ( str1, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
-  for (i = 0; i + 5 < sizeof (str) * CHAR_BIT; i++) {
-    bit_string_set (str, 0, 0, sizeof (str) * CHAR_BIT);
-    bit_string_set (str, 2, 1, 43);
-    bit_string_move (str, i + 5, str, i, sizeof (str) * CHAR_BIT - i - 5);
-    if (bit_string_comparison (str, i + 5, str1, i,
-                               sizeof (str) * CHAR_BIT - i - 5) != 0)
+  for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
+    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
+    bit_string_set ( str, 2, 1, 43 );
+    bit_string_move ( str, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( bit_string_comparison ( str, i + 5, str1, i,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 7
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set (str, 2, 1, 43);
-  bit_string_set (str1, 2, 1, 43);
+  bit_string_set ( str, 2, 1, 43 );
+  bit_string_set ( str1, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
-  for (i = 0; i + 5 < sizeof (str) * CHAR_BIT; i++) {
-    bit_string_set (str, 0, 0, sizeof (str) * CHAR_BIT);
-    bit_string_set (str, 2, 1, 43);
-    bit_string_move (str, i, str, i + 5, sizeof (str) * CHAR_BIT - i - 5);
-    if (bit_string_comparison (str, i, str1, i + 5,
-                               sizeof (str) * CHAR_BIT - i - 5) != 0)
+  for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
+    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
+    bit_string_set ( str, 2, 1, 43 );
+    bit_string_move ( str, i, str, i + 5, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( bit_string_comparison ( str, i, str1, i + 5,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
-  
+
   result = 0;
-  
+
   return result;
 }
 
@@ -302,982 +299,982 @@ int ammunition_arithm_test()
   int i;
   char str [20], s[20], d[4], e[4], g[6];
 
-  integer_from_string (4, "-2147483649", d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "-2147483649", d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MIN );
-  integer_from_string (4, str, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, str) != 0)
+  integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
-  integer_from_string (4, "2147483648", d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "2147483648", d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MAX );
-  integer_from_string (4, str, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, str) != 0)
+  integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = -2000; i < 2000 ; i++) {
+  for ( i = -2000; i < 2000 ; i++ ) {
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
-    if (overflow_bit)
+    integer_from_string ( 4, str, d );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, d, s);
-    if (ammunition_strcmp (s, str) != 0)
+    integer_to_string ( 4, d, s );
+    if ( ammunition_strcmp ( s, str ) != 0 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 2
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "4294967296", d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, "4294967296", d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_u( str, UINT_MAX );
-  unsigned_integer_from_string (4, str, d);
-  if (overflow_bit)
+  unsigned_integer_from_string ( 4, str, d );
+  if ( overflow_bit )
     result = 1;
-  unsigned_integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, str) != 0)
+  unsigned_integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_strcmp (s, str) != 0)
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_strcmp ( s, str ) != 0 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 3
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_d( str, INT_MAX );
-  integer_from_string (4, str, d);
-  integer_from_string (4, "1", e);
-  add_integer (4, d, e, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, str, d );
+  integer_from_string ( 4, "1", e );
+  add_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MAX - 4 );
-  integer_from_string (4, str, d);
+  integer_from_string ( 4, str, d );
   ammunition_sprintf_d( str, 4 );
-  integer_from_string (4, str, e);
-  add_integer (4, d, e, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, e );
+  add_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
+  integer_to_string ( 4, d, s );
   ammunition_sprintf_d( str, INT_MAX );
-  if (ammunition_strcmp (s, str) != 0)
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = -2000; i < 2000 ; i++) {
+  for ( i = -2000; i < 2000 ; i++ ) {
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
+    integer_from_string ( 4, str, d );
     ammunition_sprintf_d( str, i + 1 );
-    integer_from_string (4, str, e);
-    add_integer (4, d, e, d);
-    if (overflow_bit)
+    integer_from_string ( 4, str, e );
+    add_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i + i + 1)
+    integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i + i + 1 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 4
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_u( str, UINT_MAX );
-  unsigned_integer_from_string (4, str, d);
-  unsigned_integer_from_string (4, "1", e);
-  add_unsigned_integer (4, d, e, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, str, d );
+  unsigned_integer_from_string ( 4, "1", e );
+  add_unsigned_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_u( str, UINT_MAX - 4 );
-  unsigned_integer_from_string (4, str, d);
+  unsigned_integer_from_string ( 4, str, d );
   ammunition_sprintf_u( str, 4 );
-  unsigned_integer_from_string (4, str, e);
-  add_unsigned_integer (4, d, e, d);
-  if (overflow_bit)
+  unsigned_integer_from_string ( 4, str, e );
+  add_unsigned_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  unsigned_integer_to_string (4, d, s);
+  unsigned_integer_to_string ( 4, d, s );
   ammunition_sprintf_u( str, UINT_MAX );
-  if (ammunition_strcmp (s, str) != 0)
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
+    unsigned_integer_from_string ( 4, str, d );
     ammunition_sprintf_u( str, i + 1 );
-    unsigned_integer_from_string (4, str, e);
-    add_unsigned_integer (4, d, e, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, e );
+    add_unsigned_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i + i + 1)
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i + i + 1 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 5
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_d( str, INT_MIN );
-  integer_from_string (4, str, d);
-  integer_from_string (4, "1", e);
-  subtract_integer (4, d, e, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, str, d );
+  integer_from_string ( 4, "1", e );
+  subtract_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MIN + 4 );
-  integer_from_string (4, str, d);
+  integer_from_string ( 4, str, d );
   ammunition_sprintf_d( str, 4 );
-  integer_from_string (4, str, e);
-  subtract_integer (4, d, e, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, e );
+  subtract_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
+  integer_to_string ( 4, d, s );
   ammunition_sprintf_d( str, INT_MIN );
-  if (ammunition_strcmp (s, str) != 0)
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = -2000; i < 2000 ; i++) {
+  for ( i = -2000; i < 2000 ; i++ ) {
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
+    integer_from_string ( 4, str, d );
     ammunition_sprintf_d( str, 10 - i );
-    integer_from_string (4, str, e);
-    subtract_integer (4, d, e, d);
-    if (overflow_bit)
+    integer_from_string ( 4, str, e );
+    subtract_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i + i - 10)
+    integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i + i - 10 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 6
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_u( str, UINT_MAX - 2 );
-  unsigned_integer_from_string (4, str, d);
+  unsigned_integer_from_string ( 4, str, d );
   ammunition_sprintf_u( str, UINT_MAX - 1 );
-  unsigned_integer_from_string (4, str, e);
-  subtract_unsigned_integer (4, d, e, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, str, e );
+  subtract_unsigned_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_u( str, UINT_MAX );
-  unsigned_integer_from_string (4, str, d);
-  subtract_unsigned_integer (4, d, d, d);
-  if (overflow_bit)
+  unsigned_integer_from_string ( 4, str, d );
+  subtract_unsigned_integer ( 4, d, d, d );
+  if ( overflow_bit )
     result = 1;
-  unsigned_integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "0") != 0)
+  unsigned_integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
+    unsigned_integer_from_string ( 4, str, d );
     ammunition_sprintf_u( str, i / 2 );
-    unsigned_integer_from_string (4, str, e);
-    subtract_unsigned_integer (4, d, e, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, e );
+    subtract_unsigned_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i - i / 2)
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i - i / 2 )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 7
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_d( str, INT_MAX / 2 + 1 );
-  integer_from_string (4, str, d);
-  integer_from_string (4, "2", e);
-  multiply_integer (4, d, e, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, str, d );
+  integer_from_string ( 4, "2", e );
+  multiply_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MIN / 2 - 1 );
-  integer_from_string (4, str, d);
-  integer_from_string (4, "2", e);
-  multiply_integer (4, d, e, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, str, d );
+  integer_from_string ( 4, "2", e );
+  multiply_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_d( str, INT_MAX / 3 );
-  integer_from_string (4, str, d);
+  integer_from_string ( 4, str, d );
   ammunition_sprintf_d( str, 3 );
-  integer_from_string (4, str, e);
-  multiply_integer (4, d, e, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, e );
+  multiply_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
-  ammunition_sprintf_d( str, (INT_MAX / 3) * 3 );
-  if (ammunition_strcmp (s, str) != 0)
+  integer_to_string ( 4, d, s );
+  ammunition_sprintf_d( str, ( INT_MAX / 3 ) * 3 );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   ammunition_sprintf_d( str, INT_MIN / 2 );
-  integer_from_string (4, str, d);
+  integer_from_string ( 4, str, d );
   ammunition_sprintf_d( str, 2 );
-  integer_from_string (4, str, e);
-  multiply_integer (4, d, e, d);
-  if (overflow_bit)
+  integer_from_string ( 4, str, e );
+  multiply_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  integer_to_string (4, d, s);
-  ammunition_sprintf_d( str, (INT_MIN / 2) * 2 );
-  if (ammunition_strcmp (s, str) != 0)
+  integer_to_string ( 4, d, s );
+  ammunition_sprintf_d( str, ( INT_MIN / 2 ) * 2 );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = -2000; i < 2000 ; i++) {
+  for ( i = -2000; i < 2000 ; i++ ) {
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
+    integer_from_string ( 4, str, d );
     ammunition_sprintf_d( str, i + 1000 );
-    integer_from_string (4, str, e);
-    multiply_integer (4, d, e, d);
-    if (overflow_bit)
+    integer_from_string ( 4, str, e );
+    multiply_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i * (i + 1000))
+    integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i * ( i + 1000 ) )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 8
   ammunition_reset_str_arithm( str, s, d, e, g );
 
   ammunition_sprintf_u( str, UINT_MAX / 5 + 1 );
-  unsigned_integer_from_string (4, str, d);
+  unsigned_integer_from_string ( 4, str, d );
   ammunition_sprintf_u( str, 5 );
-  unsigned_integer_from_string (4, str, e);
-  multiply_unsigned_integer (4, d, e, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, str, e );
+  multiply_unsigned_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   ammunition_sprintf_u( str, UINT_MAX / 2 );
-  unsigned_integer_from_string (4, str, d);
+  unsigned_integer_from_string ( 4, str, d );
   ammunition_sprintf_u( str, 2 );
-  unsigned_integer_from_string (4, str, e);
-  multiply_unsigned_integer (4, d, e, d);
-  if (overflow_bit)
+  unsigned_integer_from_string ( 4, str, e );
+  multiply_unsigned_integer ( 4, d, e, d );
+  if ( overflow_bit )
     result = 1;
-  unsigned_integer_to_string (4, d, s);
-  ammunition_sprintf_u( str, (UINT_MAX / 2) * 2 );
-  if (ammunition_strcmp (s, str) != 0)
+  unsigned_integer_to_string ( 4, d, s );
+  ammunition_sprintf_u( str, ( UINT_MAX / 2 ) * 2 );
+  if ( ammunition_strcmp ( s, str ) != 0 )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
+    unsigned_integer_from_string ( 4, str, d );
     ammunition_sprintf_u( str, i / 2 );
-    unsigned_integer_from_string (4, str, e);
-    multiply_unsigned_integer (4, d, e, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, e );
+    multiply_unsigned_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i * (i / 2))
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i * ( i / 2 ) )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 9
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "10", d);
-  integer_from_string (4, "0", e);
-  divide_integer (4, d, e, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "10", d );
+  integer_from_string ( 4, "0", e );
+  divide_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = -2000; i < 2000 ; i++) {
+  for ( i = -2000; i < 2000 ; i++ ) {
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
-    ammunition_sprintf_d( str, (i < 0 ? - i / 20 + 1 : - i / 20 - 1) );
-    integer_from_string (4, str, e);
-    divide_integer (4, d, e, d);
-    if (overflow_bit)
+    integer_from_string ( 4, str, d );
+    ammunition_sprintf_d( str, ( i < 0 ? - i / 20 + 1 : - i / 20 - 1 ) );
+    integer_from_string ( 4, str, e );
+    divide_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i / (i < 0 ? - i / 20 + 1 : - i / 20 - 1))
+    integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i / ( i < 0 ? - i / 20 + 1 : - i / 20 - 1 ) )
       result = 1;
     ammunition_sprintf_d( str, i );
-    integer_from_string (4, str, d);
-    divide_integer (4, d, e, e);
-    if (overflow_bit)
+    integer_from_string ( 4, str, d );
+    divide_integer ( 4, d, e, e );
+    if ( overflow_bit )
       result = 1;
-    integer_to_string (4, e, s);
-    if (ammunition_atoi (s) != i / (i < 0 ? - i / 20 + 1 : - i / 20 - 1))
+    integer_to_string ( 4, e, s );
+    if ( ammunition_atoi ( s ) != i / ( i < 0 ? - i / 20 + 1 : - i / 20 - 1 ) )
       result = 1;
   }
 
   result = 0;
-  
+
   // Test 10
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "0", e);
-  divide_unsigned_integer (4, d, e, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "0", e );
+  divide_unsigned_integer ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
+    unsigned_integer_from_string ( 4, str, d );
     ammunition_sprintf_u( str, i / 20 + 1 );
-    unsigned_integer_from_string (4, str, e);
-    divide_unsigned_integer (4, d, e, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, e );
+    divide_unsigned_integer ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i / (i / 20 + 1))
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i / ( i / 20 + 1 ) )
       result = 1;
   }
-        
+
   result = 0;
-  
+
   // Test 11
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "0", e);
-  unsigned_integer_remainder (4, d, e, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "0", e );
+  unsigned_integer_remainder ( 4, d, e, d );
+  if ( !overflow_bit )
     result = 1;
   _Pragma( "loopbound min 4000 max 4000" )
-  for (i = 0; i < 4000 ; i++) {
+  for ( i = 0; i < 4000 ; i++ ) {
     ammunition_sprintf_u( str, i );
-    unsigned_integer_from_string (4, str, d);
+    unsigned_integer_from_string ( 4, str, d );
     ammunition_sprintf_u( str, i / 20 + 1 );
-    unsigned_integer_from_string (4, str, e);
-    unsigned_integer_remainder (4, d, e, d);
-    if (overflow_bit)
+    unsigned_integer_from_string ( 4, str, e );
+    unsigned_integer_remainder ( 4, d, e, d );
+    if ( overflow_bit )
       result = 1;
-    unsigned_integer_to_string (4, d, s);
-    if (ammunition_atoi (s) != i % (i / 20 + 1))
+    unsigned_integer_to_string ( 4, d, s );
+    if ( ammunition_atoi ( s ) != i % ( i / 20 + 1 ) )
       result = 1;
   }
-  
+
   result = 0;
 
   // Test 12
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_right (4, d, 0, d);
-  unsigned_integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_right ( 4, d, 0, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_right (4, d, 32, d);
-  unsigned_integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "0") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_right ( 4, d, 32, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_right (4, d, 8, d);
-  unsigned_integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "5") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_right ( 4, d, 8, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "5" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "134890", d);
-  unsigned_integer_shift_right (4, d, 13, d);
-  unsigned_integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "16") != 0)
+  unsigned_integer_from_string ( 4, "134890", d );
+  unsigned_integer_shift_right ( 4, d, 13, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "16" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "134890", d);
-  unsigned_integer_shift_left (4, d, -13, d);
-  unsigned_integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "16") != 0)
+  unsigned_integer_from_string ( 4, "134890", d );
+  unsigned_integer_shift_left ( 4, d, -13, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "16" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 13
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "1348", d);
-  integer_shift_right (4, d, 0, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_right ( 4, d, 0, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_shift_right (4, d, 32, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "0") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_right ( 4, d, 32, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_shift_right (4, d, 8, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "5") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_right ( 4, d, 8, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "5" ) != 0 )
     result = 1;
-  integer_from_string (4, "134890", d);
-  integer_shift_right (4, d, 13, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "16") != 0)
+  integer_from_string ( 4, "134890", d );
+  integer_shift_right ( 4, d, 13, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "16" ) != 0 )
     result = 1;
-  integer_from_string (4, "134890", d);
-  integer_shift_left (4, d, -13, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "16") != 0)
+  integer_from_string ( 4, "134890", d );
+  integer_shift_left ( 4, d, -13, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "16" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_right (4, d, 0, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-1348") != 0)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_right ( 4, d, 0, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_right (4, d, 32, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "-1") != 0)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_right ( 4, d, 32, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "-1" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_right (4, d, 8, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "-6") != 0)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_right ( 4, d, 8, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "-6" ) != 0 )
     result = 1;
-  integer_from_string (4, "-134890", d);
-  integer_shift_right (4, d, 13, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "-17") != 0)
+  integer_from_string ( 4, "-134890", d );
+  integer_shift_right ( 4, d, 13, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "-17" ) != 0 )
     result = 1;
-  integer_from_string (4, "-134890", d);
-  integer_shift_left (4, d, -13, d);
-  integer_to_string (4, d, s);
-  if (!overflow_bit || ammunition_strcmp (s, "-17") != 0)
+  integer_from_string ( 4, "-134890", d );
+  integer_shift_left ( 4, d, -13, d );
+  integer_to_string ( 4, d, s );
+  if ( !overflow_bit || ammunition_strcmp ( s, "-17" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 14
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_left (4, d, 0, d);
-  unsigned_integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_left ( 4, d, 0, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_left (4, d, 22, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_left ( 4, d, 22, d );
+  if ( !overflow_bit )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_shift_left (4, d, 8, d);
-  unsigned_integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "345088") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_shift_left ( 4, d, 8, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "345088" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "134890", d);
-  unsigned_integer_shift_left (4, d, 13, d);
-  unsigned_integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1105018880") != 0)
+  unsigned_integer_from_string ( 4, "134890", d );
+  unsigned_integer_shift_left ( 4, d, 13, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1105018880" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "134890", d);
-  unsigned_integer_shift_right (4, d, -13, d);
-  unsigned_integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1105018880") != 0)
+  unsigned_integer_from_string ( 4, "134890", d );
+  unsigned_integer_shift_right ( 4, d, -13, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1105018880" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 15
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "1348", d);
-  integer_shift_left (4, d, 0, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_left ( 4, d, 0, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_shift_left (4, d, 21, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_left ( 4, d, 21, d );
+  if ( !overflow_bit )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_shift_left (4, d, 8, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "345088") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_shift_left ( 4, d, 8, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "345088" ) != 0 )
     result = 1;
-  integer_from_string (4, "134890", d);
-  integer_shift_left (4, d, 13, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1105018880") != 0)
+  integer_from_string ( 4, "134890", d );
+  integer_shift_left ( 4, d, 13, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1105018880" ) != 0 )
     result = 1;
-  integer_from_string (4, "134890", d);
-  integer_shift_right (4, d, -13, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "1105018880") != 0)
+  integer_from_string ( 4, "134890", d );
+  integer_shift_right ( 4, d, -13, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "1105018880" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_left (4, d, 0, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-1348") != 0)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_left ( 4, d, 0, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_left (4, d, 21, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_left ( 4, d, 21, d );
+  if ( !overflow_bit )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_shift_left (4, d, 8, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-345088") != 0)
+  integer_from_string ( 4, "-1348", d );
+  integer_shift_left ( 4, d, 8, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-345088" ) != 0 )
     result = 1;
-  integer_from_string (4, "-134890", d);
-  integer_shift_left (4, d, 13, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-1105018880") != 0)
+  integer_from_string ( 4, "-134890", d );
+  integer_shift_left ( 4, d, 13, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-1105018880" ) != 0 )
     result = 1;
-  integer_from_string (4, "-134890", d);
-  integer_shift_right (4, d, -13, d);
-  integer_to_string (4, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-1105018880") != 0)
+  integer_from_string ( 4, "-134890", d );
+  integer_shift_right ( 4, d, -13, d );
+  integer_to_string ( 4, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-1105018880" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 16
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (eq_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( eq_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (!eq_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( !eq_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 17
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (eq_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( eq_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!eq_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !eq_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 18
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (!ne_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( !ne_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (ne_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( ne_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 19
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!ne_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !ne_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (ne_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( ne_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 20
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (gt_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( gt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (gt_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( gt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1000000", d);
-  integer_from_string (4, "-1348", e);
-  if (gt_integer (4, d, e))
+  integer_from_string ( 4, "-1000000", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( gt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "1000000", d);
-  integer_from_string (4, "1348", e);
-  if (!gt_integer (4, d, e))
+  integer_from_string ( 4, "1000000", d );
+  integer_from_string ( 4, "1348", e );
+  if ( !gt_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 21
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (gt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( gt_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (gt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( gt_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1000000", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!gt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1000000", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !gt_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 22
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (!lt_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( !lt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (lt_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( lt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1000000", d);
-  integer_from_string (4, "-1348", e);
-  if (!lt_integer (4, d, e))
+  integer_from_string ( 4, "-1000000", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( !lt_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "1000000", d);
-  integer_from_string (4, "1348", e);
-  if (lt_integer (4, d, e))
+  integer_from_string ( 4, "1000000", d );
+  integer_from_string ( 4, "1348", e );
+  if ( lt_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 23
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!lt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !lt_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (lt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( lt_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1000000", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (lt_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1000000", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( lt_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 24
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (ge_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( ge_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (!ge_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( !ge_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1000000", d);
-  integer_from_string (4, "-1348", e);
-  if (ge_integer (4, d, e))
+  integer_from_string ( 4, "-1000000", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( ge_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "1000000", d);
-  integer_from_string (4, "1348", e);
-  if (!ge_integer (4, d, e))
+  integer_from_string ( 4, "1000000", d );
+  integer_from_string ( 4, "1348", e );
+  if ( !ge_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 25
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (ge_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( ge_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!ge_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !ge_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1000000", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!ge_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1000000", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !ge_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 26
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "-10", d);
-  integer_from_string (4, "1348", e);
-  if (!le_integer (4, d, e))
+  integer_from_string ( 4, "-10", d );
+  integer_from_string ( 4, "1348", e );
+  if ( !le_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1348", d);
-  integer_from_string (4, "-1348", e);
-  if (!le_integer (4, d, e))
+  integer_from_string ( 4, "-1348", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( !le_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "-1000000", d);
-  integer_from_string (4, "-1348", e);
-  if (!le_integer (4, d, e))
+  integer_from_string ( 4, "-1000000", d );
+  integer_from_string ( 4, "-1348", e );
+  if ( !le_integer ( 4, d, e ) )
     result = 1;
-  integer_from_string (4, "1000000", d);
-  integer_from_string (4, "1348", e);
-  if (le_integer (4, d, e))
+  integer_from_string ( 4, "1000000", d );
+  integer_from_string ( 4, "1348", e );
+  if ( le_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 27
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "10", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!le_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "10", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !le_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (!le_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( !le_unsigned_integer ( 4, d, e ) )
     result = 1;
-  unsigned_integer_from_string (4, "1000000", d);
-  unsigned_integer_from_string (4, "1348", e);
-  if (le_unsigned_integer (4, d, e))
+  unsigned_integer_from_string ( 4, "1000000", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  if ( le_unsigned_integer ( 4, d, e ) )
     result = 1;
 
   result = 0;
-  
+
   // Test 28
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "70000", d);
-  change_unsigned_integer_size (4, d, 2, d);
-  if (!overflow_bit)
+  unsigned_integer_from_string ( 4, "70000", d );
+  change_unsigned_integer_size ( 4, d, 2, d );
+  if ( !overflow_bit )
     result = 1;
-  unsigned_integer_from_string (4, "30000", d);
-  change_unsigned_integer_size (4, d, 2, d);
-  integer_to_string (2, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "30000") != 0)
+  unsigned_integer_from_string ( 4, "30000", d );
+  change_unsigned_integer_size ( 4, d, 2, d );
+  integer_to_string ( 2, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "30000" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "11230000", g);
-  change_unsigned_integer_size (4, g, 6, g);
-  integer_to_string (6, g, s);
-  if (overflow_bit || ammunition_strcmp (s, "11230000") != 0)
+  unsigned_integer_from_string ( 4, "11230000", g );
+  change_unsigned_integer_size ( 4, g, 6, g );
+  integer_to_string ( 6, g, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "11230000" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 29
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "40000", d);
-  change_integer_size (4, d, 2, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "40000", d );
+  change_integer_size ( 4, d, 2, d );
+  if ( !overflow_bit )
     result = 1;
-  integer_from_string (4, "-33000", d);
-  change_integer_size (4, d, 2, d);
-  if (!overflow_bit)
+  integer_from_string ( 4, "-33000", d );
+  change_integer_size ( 4, d, 2, d );
+  if ( !overflow_bit )
     result = 1;
-  integer_from_string (4, "30000", d);
-  change_integer_size (4, d, 2, d);
-  integer_to_string (2, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "30000") != 0)
+  integer_from_string ( 4, "30000", d );
+  change_integer_size ( 4, d, 2, d );
+  integer_to_string ( 2, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "30000" ) != 0 )
     result = 1;
-  integer_from_string (4, "-30000", d);
-  change_integer_size (4, d, 2, d);
-  integer_to_string (2, d, s);
-  if (overflow_bit || ammunition_strcmp (s, "-30000") != 0)
+  integer_from_string ( 4, "-30000", d );
+  change_integer_size ( 4, d, 2, d );
+  integer_to_string ( 2, d, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-30000" ) != 0 )
     result = 1;
-  integer_from_string (4, "11230000", g);
-  change_integer_size (4, g, 6, g);
-  integer_to_string (6, g, s);
-  if (overflow_bit || ammunition_strcmp (s, "11230000") != 0)
+  integer_from_string ( 4, "11230000", g );
+  change_integer_size ( 4, g, 6, g );
+  integer_to_string ( 6, g, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "11230000" ) != 0 )
     result = 1;
-  integer_from_string (4, "-11230000", g);
-  change_integer_size (4, g, 6, g);
-  integer_to_string (6, g, s);
-  if (overflow_bit || ammunition_strcmp (s, "-11230000") != 0)
+  integer_from_string ( 4, "-11230000", g );
+  change_integer_size ( 4, g, 6, g );
+  integer_to_string ( 6, g, s );
+  if ( overflow_bit || ammunition_strcmp ( s, "-11230000" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 30
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  unsigned_integer_or (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  unsigned_integer_or ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "0", e);
-  unsigned_integer_or (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "0", e );
+  unsigned_integer_or ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "4294967295", e);
-  unsigned_integer_or (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "4294967295") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "4294967295", e );
+  unsigned_integer_or ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "4294967295" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "96", e);
-  unsigned_integer_or (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1380") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "96", e );
+  unsigned_integer_or ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1380" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 31
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "1348", e);
-  integer_or (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "1348", e );
+  integer_or ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "0", e);
-  integer_or (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "0", e );
+  integer_or ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "-1", e);
-  integer_or (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "-1") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "-1", e );
+  integer_or ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "-1" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "96", e);
-  integer_or (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1380") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "96", e );
+  integer_or ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1380" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 32
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "1348", e);
-  unsigned_integer_and (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "1348", e );
+  unsigned_integer_and ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "0", e);
-  unsigned_integer_and (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "0") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "0", e );
+  unsigned_integer_and ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "4294967295", e);
-  unsigned_integer_and (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "4294967295", e );
+  unsigned_integer_and ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_from_string (4, "96", e);
-  unsigned_integer_and (4, d, e, e);
-  unsigned_integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "64") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_from_string ( 4, "96", e );
+  unsigned_integer_and ( 4, d, e, e );
+  unsigned_integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "64" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 33
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "1348", e);
-  integer_and (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "1348", e );
+  integer_and ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "0", e);
-  integer_and (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "0") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "0", e );
+  integer_and ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "-1", e);
-  integer_and (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "1348") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "-1", e );
+  integer_and ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "1348" ) != 0 )
     result = 1;
-  integer_from_string (4, "1348", d);
-  integer_from_string (4, "96", e);
-  integer_and (4, d, e, e);
-  integer_to_string (4, e, s);
-  if (ammunition_strcmp (s, "64") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_from_string ( 4, "96", e );
+  integer_and ( 4, d, e, e );
+  integer_to_string ( 4, e, s );
+  if ( ammunition_strcmp ( s, "64" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 34
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  unsigned_integer_from_string (4, "1348", d);
-  unsigned_integer_not (4, d, d);
-  unsigned_integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "4294965947") != 0)
+  unsigned_integer_from_string ( 4, "1348", d );
+  unsigned_integer_not ( 4, d, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "4294965947" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "0", d);
-  unsigned_integer_not (4, d, d);
-  unsigned_integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "4294967295") != 0)
+  unsigned_integer_from_string ( 4, "0", d );
+  unsigned_integer_not ( 4, d, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "4294967295" ) != 0 )
     result = 1;
-  unsigned_integer_from_string (4, "4294967295", d);
-  unsigned_integer_not (4, d, d);
-  unsigned_integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "0") != 0)
+  unsigned_integer_from_string ( 4, "4294967295", d );
+  unsigned_integer_not ( 4, d, d );
+  unsigned_integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
 
   result = 0;
-  
+
   // Test 35
   ammunition_reset_str_arithm( str, s, d, e, g );
 
-  integer_from_string (4, "1348", d);
-  integer_not (4, d, d);
-  integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "-1349") != 0)
+  integer_from_string ( 4, "1348", d );
+  integer_not ( 4, d, d );
+  integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "-1349" ) != 0 )
     result = 1;
-  integer_from_string (4, "0", d);
-  integer_not (4, d, d);
-  integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "-1") != 0)
+  integer_from_string ( 4, "0", d );
+  integer_not ( 4, d, d );
+  integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "-1" ) != 0 )
     result = 1;
-  integer_from_string (4, "-1", d);
-  integer_not (4, d, d);
-  integer_to_string (4, d, s);
-  if (ammunition_strcmp (s, "0") != 0)
+  integer_from_string ( 4, "-1", d );
+  integer_not ( 4, d, d );
+  integer_to_string ( 4, d, s );
+  if ( ammunition_strcmp ( s, "0" ) != 0 )
     result = 1;
 
   return result;
 }
 
-void ammunition_init(void)
+void ammunition_init( void )
 {
   return;
 }

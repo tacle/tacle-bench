@@ -38,7 +38,7 @@
 #endif
 #ifndef SHRT_MAX
 #define SHRT_MAX 32767
-#endif  
+#endif
 #ifndef SHRT_MIN
 #define SHRT_MIN (-32768)
 #endif
@@ -47,7 +47,7 @@
 #endif
 #ifndef INT_MAX
 #define INT_MAX 2147483647
-#endif  
+#endif
 #ifndef INT_MIN
 #define INT_MIN (-INT_MAX-1)
 #endif
@@ -75,18 +75,18 @@
       & ~(1 << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))\
      | ((bit) << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))
 
-int is_zero_bit_string (const void *start_byte, int bit_displacement,
-                        int bit_length);
-void bit_string_set (void *start_byte, int bit_displacement, int bit,
-                     int bit_length);
-void bit_string_copy (void *to, int to_bit_displacement,
-                      const void *from, int from_bit_displacement,
-                      int bit_length);
-void bit_string_move (void *to, int to_bit_displacement,
-                      const void *from, int from_bit_displacement,
-                      int bit_length);
-int bit_string_comparison (const void *str1, int bit_displacement1,
-                           const void *str2, int bit_displacement2,
-                           int bit_length);
+int is_zero_bit_string ( const void *start_byte, int bit_displacement,
+                         int bit_length );
+void bit_string_set ( void *start_byte, int bit_displacement, int bit,
+                      int bit_length );
+void bit_string_copy ( void *to, int to_bit_displacement,
+                       const void *from, int from_bit_displacement,
+                       int bit_length );
+void bit_string_move ( void *to, int to_bit_displacement,
+                       const void *from, int from_bit_displacement,
+                       int bit_length );
+int bit_string_comparison ( const void *str1, int bit_displacement1,
+                            const void *str2, int bit_displacement2,
+                            int bit_length );
 
 #endif /* #ifndef __BITS__ */
