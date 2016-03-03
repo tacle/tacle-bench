@@ -1,0 +1,16 @@
+File: ammunition.c
+Original provenience: DINO programming language
+
+2016-03-03:
+- Add generic TACLeBench header
+- Prefix global functions with benchmark name
+- Introduce volatile result variable for return statements
+- Split code into ammunition_init and ammunition_main
+- Fix compiler warnings "array subscript is of type 'char'":
+    char => unsigned char
+- Fix compiler warnings "'&&' within '||'":
+    Place additional parentheses
+- Remove usages and comments related to the macros
+    HAVE_MEMMOVE, NDEBUG, HAVE_MEMCMP
+- Remove comment related to unused NO_TEMPLATE macro
+

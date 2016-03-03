@@ -21,19 +21,6 @@
       overflow.  The overflow is fixed when result can not be
       represented by number of given size.
 
-  SPECIAL CONSIDERATION:
-        Defining macro `NDEBUG' (e.g. by option `-D' in C compiler
-      command line) during the file compilation disables to fix
-      some internal errors and errors of usage of the package.
-        The default value of macro `MAX_INTEGER_OPERAND_SIZE' can be
-      redefined with corresponding C compiler option `-D' during
-      compilation of the package.  But in any case the minimal value
-      of the macros will be 16.
-        Defining macro `HAVE_MEMMOVE' (e.g. by option -D in
-      C compiler command line) during the file compilation permits to
-      use standard C function `memmove' (file `string.h').  In
-      opposite case function `memmove' is implemented in this file.
-
 */
 
 #include "arithm.h"
@@ -74,10 +61,8 @@ int isspace( int c ) {
 
 /* This page contains functions common for all package functions. */
 
-#ifndef HAVE_MEMCPY
-
 static void *
-memcpy (void *to, const void *from, size_t size)
+ammunition_memcpy (void *to, const void *from, size_t size)
 {
   char *cto = (char *) to;
   const char *cfrom = (const char *) from;
@@ -90,12 +75,9 @@ memcpy (void *to, const void *from, size_t size)
   return to;
 }
 
-#endif /* #ifndef HAVE_MEMCPY */
-
-#ifndef HAVE_MEMSET
 
 static void *
-memset (void *to, int value, size_t size)
+ammunition_memset (void *to, int value, size_t size)
 {
   char *cto = (char *) to;
 
@@ -107,12 +89,8 @@ memset (void *to, int value, size_t size)
   return to;
 }
 
-#endif /* #ifndef HAVE_MEMSET */
-
-#ifndef HAVE_MEMCMP
-
 static int
-memcmp (const void *mem1, const void *mem2, size_t size)
+ammunition_memcmp (const void *mem1, const void *mem2, size_t size)
 {
   const unsigned char *m1 = (unsigned const char *)mem1;
   const unsigned char *m2 = (unsigned const char *)mem2;
@@ -128,22 +106,18 @@ memcmp (const void *mem1, const void *mem2, size_t size)
   return 0;
 }
 
-#endif /* #ifndef HAVE_MEMCMP */
-
-
-#ifndef HAVE_MEMMOVE
 
 /* The following function is an analog of standard C function
    `memmove'.  The function returns the first operand. */
 
 static void *
-memmove (void *s1, const void *s2, size_t n)
+ammunition_memmove (void *s1, const void *s2, size_t n)
 {
   int i;
 
-  if ((char *) s1 < (char *) s2 && (char *) s1 + n <= (char *) s2
-    || (char *) s2 < (char *) s1 && (char *) s2 + n <= (char *) s1) {
-    return (void *) memcpy (s1, s2, n);
+  if (((char *) s1 < (char *) s2 && (char *) s1 + n <= (char *) s2)
+    || ((char *) s2 < (char *) s1 && (char *) s2 + n <= (char *) s1)) {
+    return (void *) ammunition_memcpy (s1, s2, n);
   }
   if ((char *) s1 < (char *) s2 && (char *) s1 + n > (char *) s2) {
     _Pragma( "loopbound min 0 max 4" )
@@ -158,8 +132,6 @@ memmove (void *s1, const void *s2, size_t n)
   }
   return s1;
 }
-
-#endif /* #ifndef HAVE_MEMMOVE */
 
 /* The following function adds unsigned integers.  The function
    returns 1 if unsigned integer overflow is fixed, 0 otherwise.
@@ -287,7 +259,7 @@ arithmetic_unsigned_overflow_reaction (void)
 void
 unsigned_integer_maximum (int size, void *result)
 {
-  memset (result, UCHAR_MAX, (size_t) size);
+  ammunition_memset (result, UCHAR_MAX, (size_t) size);
 }
 
 /* The function creates given size minimal integer constant. */
@@ -295,7 +267,7 @@ unsigned_integer_maximum (int size, void *result)
 void
 integer_minimum (int size, void *result)
 {
-  memset (result, 0, (size_t) size);
+  ammunition_memset (result, 0, (size_t) size);
   *(unsigned char *) result = 1 << (CHAR_BIT - 1);
 }
 
@@ -304,7 +276,7 @@ integer_minimum (int size, void *result)
 void
 integer_maximum (int size, void *result)
 {
-  memset (result, UCHAR_MAX, (size_t) size);
+  ammunition_memset (result, UCHAR_MAX, (size_t) size);
   *(unsigned char *) result = UCHAR_MAX >> 1;
 }
 
@@ -404,7 +376,7 @@ multiply_unsigned_integer_without_overflow_reaction
   int overflow_flag;
   unsigned char long_result [2 * MAX_INTEGER_OPERAND_SIZE];
 
-  memset (long_result + size, 0, (size_t) size);
+  ammunition_memset (long_result + size, 0, (size_t) size);
   _Pragma( "loopbound min 4 max 4" )
   for (op2_digit_number = size - 1; op2_digit_number >= 0; op2_digit_number--) {
     if (((unsigned char *) op2) [op2_digit_number] != 0) {
@@ -433,7 +405,7 @@ multiply_unsigned_integer_without_overflow_reaction
       break;
     }
   }
-  memcpy (result, long_result + size, (size_t) size);
+  ammunition_memcpy (result, long_result + size, (size_t) size);
   return overflow_flag;
 }
 
@@ -520,10 +492,6 @@ divide_unsigned_integer_without_overflow_reaction
   unsigned char scaled_op1 [MAX_INTEGER_OPERAND_SIZE + 1];
   unsigned char normalized_op2 [MAX_INTEGER_OPERAND_SIZE];
   unsigned char extended_normalized_op2 [MAX_INTEGER_OPERAND_SIZE + 1];
-#ifndef NDEBUG
-
-  int iterations;
-#endif
 
   _Pragma( "loopbound min 4 max 4" )
   for (op2_digit_number = 0; op2_digit_number < size; op2_digit_number++) {
@@ -533,7 +501,7 @@ divide_unsigned_integer_without_overflow_reaction
   first_nonzero_digit_number = op2_digit_number;
   if (first_nonzero_digit_number == size) {
     /* Zero divisor */
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
     return 1 /* TRUE */;
   } else if (first_nonzero_digit_number == size - 1) {
     /* Division by digit. */
@@ -543,7 +511,7 @@ divide_unsigned_integer_without_overflow_reaction
     unsigned long remainder;
 
     digit = ((unsigned char *) op2) [first_nonzero_digit_number];
-    memcpy (result, op1, (size_t) size);
+    ammunition_memcpy (result, op1, (size_t) size);
     remainder = 0;
     _Pragma( "loopbound min 4 max 4" )
     for (digit_number = 0; digit_number < size; digit_number++) {
@@ -557,28 +525,16 @@ divide_unsigned_integer_without_overflow_reaction
   }
   /* Normalization of divisor. */
   scale = (UCHAR_MAX + 1) / (((unsigned char *) op2) [op2_digit_number] + 1);
-  memcpy (scaled_op1 + 1, op1, (size_t) size);
+  ammunition_memcpy (scaled_op1 + 1, op1, (size_t) size);
   *scaled_op1 = 0;
-#ifndef NDEBUG
-
-  assert (!multiply_unsigned_integer_by_digit_without_overflow_reaction
-          (size + 1, scaled_op1, scale));
-#else
 
   multiply_unsigned_integer_by_digit_without_overflow_reaction
   (size + 1, scaled_op1, scale);
-#endif
 
-  memcpy (normalized_op2, op2, (size_t) size);
-#ifndef NDEBUG
-
-  assert (!multiply_unsigned_integer_by_digit_without_overflow_reaction
-          (size, normalized_op2, scale));
-#else
+  ammunition_memcpy (normalized_op2, op2, (size_t) size);
 
   multiply_unsigned_integer_by_digit_without_overflow_reaction
   (size, normalized_op2, scale);
-#endif
 
   _Pragma( "loopbound min 0 max 0" )
   for (scaled_op1_digit_number = 0;
@@ -597,10 +553,6 @@ divide_unsigned_integer_without_overflow_reaction
       = (scaled_op1 [scaled_op1_digit_number] * (UCHAR_MAX + 1)
          + scaled_op1 [scaled_op1_digit_number + 1])
         / normalized_op2 [first_nonzero_digit_number];
-#ifndef NDEBUG
-
-    iterations = 0;
-#endif
 
     _Pragma( "loopbound min 0 max 0" )
     while (normalized_op2 [first_nonzero_digit_number + 1] * q_approximation
@@ -611,14 +563,10 @@ divide_unsigned_integer_without_overflow_reaction
                * normalized_op2 [first_nonzero_digit_number])
               * (UCHAR_MAX + 1) + scaled_op1 [scaled_op1_digit_number + 2])) {
       q_approximation --;
-#ifndef NDEBUG
-
-      iterations++;
-#endif
 
     }
     /* Multiply and subtract */
-    memcpy (extended_normalized_op2 + 1,
+    ammunition_memcpy (extended_normalized_op2 + 1,
             normalized_op2 + first_nonzero_digit_number,
             (size_t) (size - first_nonzero_digit_number));
     *extended_normalized_op2 = 0;
@@ -631,30 +579,21 @@ divide_unsigned_integer_without_overflow_reaction
          scaled_op1 + scaled_op1_digit_number)) {
       /* Negative result.  Compensation by addition. */
       q_approximation--;
-      memcpy (extended_normalized_op2 + 1,
+      ammunition_memcpy (extended_normalized_op2 + 1,
               normalized_op2 + first_nonzero_digit_number,
               (size_t) (size - first_nonzero_digit_number));
       *extended_normalized_op2 = 0;
-#ifndef NDEBUG
-
-      assert (add_unsigned_integer_without_overflow_reaction
-              (size - first_nonzero_digit_number + 1,
-               scaled_op1 + scaled_op1_digit_number,
-               extended_normalized_op2,
-               scaled_op1 + scaled_op1_digit_number));
-#else
 
       add_unsigned_integer_without_overflow_reaction
       (size - first_nonzero_digit_number + 1,
        scaled_op1 + scaled_op1_digit_number, extended_normalized_op2,
        scaled_op1 + scaled_op1_digit_number);
-#endif
 
     }
     ((unsigned char *) result) [size - 1 - first_nonzero_digit_number
                                 + scaled_op1_digit_number] = q_approximation;
   }
-  memset (result, 0, (size_t) (size - 1 - first_nonzero_digit_number));
+  ammunition_memset (result, 0, (size_t) (size - 1 - first_nonzero_digit_number));
   return 0 /* TRUE */;
 }
 
@@ -736,7 +675,7 @@ unsigned_integer_remainder (int size, const void *op1, const void *op2,
   divide_unsigned_integer (size, op1, op2, temporary);
   if (overflow_bit)
     /* Reaction on zero is called from `divide_unsigned_integer'. */
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
   else {
     multiply_unsigned_integer (size, temporary, op2, temporary);
     subtract_unsigned_integer (size, op1, temporary, result);
@@ -755,7 +694,7 @@ integer_remainder (int size, const void *op1, const void *op2, void *result)
   divide_integer (size, op1, op2, temporary);
   if (overflow_bit)
     /* Reaction on zero is called from `divide_integer'. */
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
   else {
     multiply_integer (size, temporary, op2, temporary);
     subtract_integer (size, op1, temporary, result);
@@ -796,11 +735,11 @@ unsigned_integer_shift_right (int size, const void *operand,
       }
   }
   if (byte_shift >= size)
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
   else {
-    memmove ((char *) result + byte_shift, operand,
+    ammunition_memmove ((char *) result + byte_shift, operand,
              (size_t) (size - byte_shift));
-    memset (result, 0, (size_t) byte_shift);
+    ammunition_memset (result, 0, (size_t) byte_shift);
     if (bit_shift == 0)
       return ;
     _Pragma( "loopbound min 3 max 3" )
@@ -849,11 +788,11 @@ integer_shift_right (int size, const void *operand, unsigned int bits, void *res
     }
   }
   if (byte_shift >= size)
-    memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) size);
+    ammunition_memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) size);
   else {
-    memmove ((char *) result + byte_shift, operand,
+    ammunition_memmove ((char *) result + byte_shift, operand,
              (size_t) (size - byte_shift));
-    memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) byte_shift);
+    ammunition_memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) byte_shift);
     if (bit_shift == 0)
       return ;
     carry = (((operand_sign ? UCHAR_MAX : 0) << (CHAR_BIT - bit_shift))
@@ -902,11 +841,11 @@ unsigned_integer_shift_left (int size, const void *operand,
     }
   }
   if (byte_shift >= size)
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
   else {
-    memmove (result, (char *) operand + byte_shift,
+    ammunition_memmove (result, (char *) operand + byte_shift,
              (size_t) (size - byte_shift));
-    memset ((char *) result + (size - byte_shift), 0,
+    ammunition_memset ((char *) result + (size - byte_shift), 0,
             (size_t) byte_shift);
     if (bit_shift == 0)
       return ;
@@ -957,11 +896,11 @@ integer_shift_left (int size, const void *operand, unsigned int bits, void *resu
     }
   }
   if (byte_shift >= size)
-    memset (result, 0, (size_t) size);
+    ammunition_memset (result, 0, (size_t) size);
   else {
-    memmove (result, (char *) operand + byte_shift,
+    ammunition_memmove (result, (char *) operand + byte_shift,
              (size_t) (size - byte_shift));
-    memset ((char *) result + (size - byte_shift), 0,
+    ammunition_memset ((char *) result + (size - byte_shift), 0,
             (size_t) byte_shift);
     if (bit_shift == 0)
       return ;
@@ -1073,7 +1012,7 @@ unsigned_integer_not (int size, const void *operand, void *result)
 int
 eq_unsigned_integer (int size, const void *op1, const void *op2)
 {
-  return memcmp (op1, op2, (size_t) size) == 0;
+  return ammunition_memcmp (op1, op2, (size_t) size) == 0;
 }
 
 /* This function compares two integers of given size on equality.  The
@@ -1082,7 +1021,7 @@ eq_unsigned_integer (int size, const void *op1, const void *op2)
 int
 eq_integer (int size, const void *op1, const void *op2)
 {
-  return memcmp (op1, op2, (size_t) size) == 0;
+  return ammunition_memcmp (op1, op2, (size_t) size) == 0;
 }
 
 /* This function compares two unsigned integers of given size on
@@ -1092,7 +1031,7 @@ eq_integer (int size, const void *op1, const void *op2)
 int
 ne_unsigned_integer (int size, const void *op1, const void *op2)
 {
-  return memcmp (op1, op2, (size_t) size) != 0;
+  return ammunition_memcmp (op1, op2, (size_t) size) != 0;
 }
 
 /* This function compares two integers of given size on inequality.
@@ -1101,7 +1040,7 @@ ne_unsigned_integer (int size, const void *op1, const void *op2)
 int
 ne_integer (int size, const void *op1, const void *op2)
 {
-  return memcmp (op1, op2, (size_t) size) != 0;
+  return ammunition_memcmp (op1, op2, (size_t) size) != 0;
 }
 
 
@@ -1266,9 +1205,9 @@ change_unsigned_integer_size (int operand_size, const void *operand,
 
   overflow_bit = 0;
   if (operand_size <= result_size) {
-    memmove ((char *) result + result_size - operand_size, operand,
+    ammunition_memmove ((char *) result + result_size - operand_size, operand,
              (size_t) operand_size);
-    memset (result, 0, (size_t) (result_size - operand_size));
+    ammunition_memset (result, 0, (size_t) (result_size - operand_size));
   } else {
     _Pragma( "loopbound min 2 max 2" )
     for (operand_digit_number = 0;
@@ -1279,7 +1218,7 @@ change_unsigned_integer_size (int operand_size, const void *operand,
         break;
       }
     }
-    memmove (result, (char *) operand + operand_size - result_size,
+    ammunition_memmove (result, (char *) operand + operand_size - result_size,
              (size_t) result_size);
   }
   if (overflow_bit)
@@ -1300,9 +1239,9 @@ change_integer_size (int operand_size, const void *operand,
   overflow_bit = 0;
   operand_sign = INTEGER_SIGN (operand);
   if (operand_size <= result_size) {
-    memmove ((char *) result + result_size - operand_size, operand,
+    ammunition_memmove ((char *) result + result_size - operand_size, operand,
              (size_t) operand_size);
-    memset (result, (operand_sign ? UCHAR_MAX : 0),
+    ammunition_memset (result, (operand_sign ? UCHAR_MAX : 0),
             (size_t) (result_size - operand_size));
   } else {
     _Pragma( "loopbound min 2 max 2" )
@@ -1315,7 +1254,7 @@ change_integer_size (int operand_size, const void *operand,
         break;
       }
     }
-    memmove (result, (char *) operand + operand_size - result_size,
+    ammunition_memmove (result, (char *) operand + operand_size - result_size,
              (size_t) result_size);
     if (operand_sign != INTEGER_SIGN (result))
       overflow_bit = 1;
@@ -1345,7 +1284,7 @@ unsigned_integer_to_string (int size, const void *operand, char *result)
   int temporary;
   unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
 
-  memcpy (operand_copy, operand, (size_t) size);
+  ammunition_memcpy (operand_copy, operand, (size_t) size);
   length = 0;
   _Pragma( "loopbound min 1 max 10" )
   do {
@@ -1381,7 +1320,7 @@ integer_to_string (int size, const void *operand, char *result)
 
   if (!INTEGER_SIGN (operand))
     return unsigned_integer_to_string (size, operand, result);
-  memcpy (operand_copy, operand, (size_t) size);
+  ammunition_memcpy (operand_copy, operand, (size_t) size);
   /* May be integer overflow. But result is correct because it is unsigned. */
   make_complementary_code (size, operand_copy, operand_copy);
   *result = '-';
@@ -1434,7 +1373,7 @@ string_to_unsigned_integer_without_overflow_reaction
 {
   int overflow_flag;
 
-  memset (result, 0, (size_t) size);
+  ammunition_memset (result, 0, (size_t) size);
   _Pragma( "loopbound min 0 max 10" )
   for (overflow_flag = 0; isdigit (*operand); operand++) {
     overflow_flag

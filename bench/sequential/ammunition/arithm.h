@@ -9,18 +9,11 @@
                 variable of the package and C++ classes for arbitrary
                 precision integer arithmetic.
 
-   SPECIAL CONSIDERATION:
-         C++: Defining macro `NO_TEMPLATE' (e.g. by option `-D' in C++
-       compiler command line) during the file compilation disables to
-       use template classes `sint' and `unsint'.
-
 */
 
 
 #ifndef __ARITHMETIC__
 #define __ARITHMETIC__
-
-#define NDEBUG
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>

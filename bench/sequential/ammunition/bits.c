@@ -1,4 +1,5 @@
 /*
+
   FILE NAME:   bits.c
 
   TITLE:       Package for work with bits
@@ -10,11 +11,6 @@
       most significant bit of the start address byte has number 0.
       The bit string is given by its first bit and its length in
       bits.
-
-  SPECIAL CONSIDERATION:
-        Defining macro `NDEBUG' (e.g. by option `-D' in C compiler
-      command line) during the file compilation disables to fix
-      some internal errors and errors of usage of the package.
 
 */
 

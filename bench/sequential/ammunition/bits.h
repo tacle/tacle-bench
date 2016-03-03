@@ -13,17 +13,10 @@
        of the start address byte has number 0.  The bit string is
        given by its first bit and its length in bits.
 
-   SPECIAL CONSIDERATION:
-         Defining macro `NDEBUG' (e.g. by option `-D' in C/C++
-       compiler command line) before the package macros usage disables
-       to fix some internal errors and errors of usage of the package.
-
 */
 
 #ifndef __BITS__
 #define __BITS__
-
-#define NDEBUG
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
@@ -66,16 +59,9 @@
    `bit_displacement' must be nonegative and can be greater than
    CHAR_BIT. */
 
-#ifndef NDEBUG
-#define BIT(start_byte, bit_displacement)\
-  (((bit_displacement) < 0 ? abort (), 0: 0),\
-   (((const char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
-    >> (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)) & 1)
-#else
 #define BIT(start_byte, bit_displacement)\
   ((((const char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
     >> (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)) & 1)
-#endif
 
 
 /* This macro value sets up new value (must be `0' or `1') of a given
@@ -83,21 +69,11 @@
    Value of `bit_displacement' must be nonegative and can be greater
    than CHAR_BIT. */
 
-#ifndef NDEBUG
-#define SET_BIT(start_byte, bit_displacement, bit)\
-  (((bit_displacement) < 0 || ((bit) != 0 && (bit) != 1)\
-    ? abort (), 0: 0),\
-   ((char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
-   = (((char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
-      & ~(1 << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))\
-     | ((bit) << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))
-#else
 #define SET_BIT(start_byte, bit_displacement, bit)\
   (((char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
    = (((char *) (start_byte)) [(bit_displacement) / CHAR_BIT]\
       & ~(1 << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))\
      | ((bit) << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))
-#endif
 
 int is_zero_bit_string (const void *start_byte, int bit_displacement,
                         int bit_length);
