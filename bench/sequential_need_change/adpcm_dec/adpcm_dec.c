@@ -19,7 +19,7 @@
 
     Changes: adpcm benchmark was split into decode and encode benchmark
 
-    License:  may be used, modified, and re-distributed freely, but
+    License: may be used, modified, and re-distributed freely, but
             the SNU-RT Benchmark Suite must be acknowledged
 
 */

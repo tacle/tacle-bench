@@ -15,7 +15,7 @@
 
   Changes: changed split between initialization and computation
 
-  License: ???
+  License: may be used, modified, and re-distributed freely
 
 */
 

@@ -15,7 +15,7 @@
   Changes: moved initialization into separate function
 
   License: may be used, modified, and re-distributed freely, but
-           the SNU-RT Benchmark Suite must acknowledged
+           the SNU-RT Benchmark Suite must be acknowledged
 
 */
 

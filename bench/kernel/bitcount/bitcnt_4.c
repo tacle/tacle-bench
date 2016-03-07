@@ -12,12 +12,11 @@
     the variance, and standard deviation. It then determines the
     correlation coefficient between the two arrays.
 
-  Source: MRTC
-          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/st/st.c
+  Source: 
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: general open-source
+  License: public domain
 
 */
 

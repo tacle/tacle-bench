@@ -13,7 +13,7 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: general open-source
+  License: public domain
 
 */
 

@@ -19,7 +19,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: general open-source
+ License: unknown
 
  */
 

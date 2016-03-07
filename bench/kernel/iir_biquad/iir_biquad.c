@@ -43,7 +43,7 @@
            24-03-94 creation fixed-point (Martinez Velarde)
            16-03-95 adaption floating-point (Harald L. Schraut)
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely
 
 */
 

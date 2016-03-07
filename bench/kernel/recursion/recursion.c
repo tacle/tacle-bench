@@ -12,7 +12,7 @@
   Source: MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/recursion/recursion.c
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely
 
 */
 
