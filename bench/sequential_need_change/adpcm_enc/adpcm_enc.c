@@ -1,52 +1,29 @@
-/* $Id: adpcm_encoder.c,v 1.6 2011-01-10 14:46:52 falk Exp $ */
-/*************************************************************************/
-/*                                                                       */
-/*   SNU-RT Benchmark Suite for Worst Case Timing Analysis               */
-/*   =====================================================               */
-/*                              Collected and Modified by S.-S. Lim      */
-/*                                           sslim@archi.snu.ac.kr       */
-/*                                         Real-Time Research Group      */
-/*                                        Seoul National University      */
-/*                                                                       */
-/*                                                                       */
-/*        < Features > - restrictions for our experimental environment   */
-/*                                                                       */
-/*          1. Completely structured.                                    */
-/*               - There are no unconditional jumps.                     */
-/*               - There are no exit from loop bodies.                   */
-/*                 (There are no 'break' or 'return' in loop bodies)     */
-/*          2. No 'switch' statements.                                   */
-/*          3. No 'do..while' statements.                                */
-/*          4. Expressions are restricted.                               */
-/*               - There are no multiple expressions joined by 'or',     */
-/*                'and' operations.                                      */
-/*          5. No library calls.                                         */
-/*               - All the functions needed are implemented in the       */
-/*                 source file.                                          */
-/*          6. Printouts removed (Jan G)                                 */
-/*                                                                       */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
-/*                                                                       */
-/*  FILE: adpcm.c - encoder                                                        */
-/*  SOURCE : C Algorithms for Real-Time DSP by P. M. Embree              */
-/*                                                                       */
-/*  DESCRIPTION :                                                        */
-/*                                                                       */
-/*     CCITT G.722 ADPCM (Adaptive Differential Pulse Code Modulation)   */
-/*     algorithm.                                                        */
-/*     16khz sample rate data is stored in the array test_data[SIZE].    */
-/*     Results are stored in the array compressed[SIZE].                 */
-/*     Execution time is determined by the constant SIZE (default value  */
-/*     is 2000).                                                         */
-/*                                                                       */
-/*  REMARK :                                                             */
-/*                                                                       */
-/*  EXECUTION TIME :                                                     */
-/*                                                                       */
-/*                                                                       */
-/*************************************************************************/
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: adpcm_enc
+
+  Author: Juan Martinez Velarde
+
+  Function: CCITT G.722 ADPCM (Adaptive Differential Pulse Code Modulation)
+    algorithm. 16khz sample rate data is stored in the array test_data[SIZE]. 
+    Results are stored in the array compressed[SIZE]. 
+    Execution time is determined by the constant SIZE (default value is 2000).
+    
+
+  Source: C Algorithms for Real-Time DSP by P. M. Embree
+    and SNU-RT Benchmark Suite for Worst Case Timing Analysis
+    collected and modified by S.-S. Lim <sslim@archi.snu.ac.kr>
+
+  Original name: adpcm_encoder
+
+  Changes: no major functional changes
+
+  License: general open source
+
+*/
 
 /* common sampling rate for sound cards on IBM/PC */
 #define SAMPLE_RATE 11025
@@ -764,20 +741,18 @@ int logsch( int ih, int nbh )
   return( nbh );
 }
 
+static int test_data[SIZE * 2], compressed[SIZE];
 
-#ifndef Seoul_Mate
-int main(void)
+void adpcm_enc_init(void)
 {
   int i, j, f;
-  static int test_data[SIZE * 2], compressed[SIZE];
-
-
+  
   /* reset, initialize required memory */
   reset();
 
   /* read in amplitude and frequency for test data */
   j = 10;
-  f = 2000;  /* k rs men, anv nds inte */
+  f = 2000;
 
   /* 16 KHz sample rate */
   /* XXmain_0, MAX: 2 */
@@ -787,13 +762,28 @@ int main(void)
   for ( i = 0 ; i < SIZE ; i++) {
     test_data[i] = (int) j * my_cos( f * PI * i );
   }
+}
 
+void _Pragma( "entrypoint" ) adpcm_main(void)
+{
+  int i;
   /* MAX: 2 */
- _Pragma("loopbound min 2 max 2")
-  for ( i = 0 ; i < IN_END ; i += 2 ) {
+  _Pragma("loopbound min 2 max 2")
+      for ( i = 0 ; i < IN_END ; i += 2 ) {
     compressed[i/2] = encode( test_data[i], test_data[i+1] );
   }
- 
-  return 0;
+  
 }
-#endif
+
+int adpcm_enc_return(void)
+{
+  return compressed[0];
+}
+
+int main(void)
+{
+  adpcm_enc_init();
+  adpcm_main();
+  
+  return adpcm_enc_return();
+}

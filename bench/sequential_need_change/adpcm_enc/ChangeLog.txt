@@ -1,0 +1,10 @@
+File: adpcm_enc.c
+Original provenience: C Algorithms for Real-Time DSP by P. M. Embree
+
+2016-03-07:
+- Rename adpcm_encode to adpcm_enc
+- Add generic TACLeBench header
+- Remove #define Seoul_Mate around main
+- Remove swedish comment after setting frequency to 2000
+- Introduce adpcm_enc_init, adpcm_main, adpcm_return
+- Make test_data and compressed static global variables
