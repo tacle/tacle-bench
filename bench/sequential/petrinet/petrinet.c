@@ -5,8 +5,7 @@
 
   Name: Petrinet
 
-  Author: Friedhelm Stappert, C-LAB, Paderborn, Germany, fst@c-lab.de
-          Copyright (c) 1998/1999, C-LAB, Paderborn
+  Author: Friedhelm Stappert, C-LAB, Paderborn, Germany
 
   Function: Simulate an extended Petri Net
             Automatically generated code containing large amounts of
@@ -16,7 +15,7 @@
 
   Changes: no major functional changes
 
-  License: unknown
+  License: may be used, modified, and re-distributed freely
 
 */
 

@@ -12,7 +12,7 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely
 
 */
 

@@ -17,7 +17,7 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: general open-source
+  License: See the accompanying README file.
 */
 #ifndef CDJPEG_H
 #define CDJPEG_H

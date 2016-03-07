@@ -5,7 +5,7 @@
 
   Name: insertsort
 
-  Author: unknown
+  Author: Sung-Soo Lim
 
   Function: Insertion sort for 10 integer numbers.
      The integer array insertsort_a[] is initialized in main function.
@@ -17,8 +17,14 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely, but
+           the SNU-RT Benchmark Suite must be acknowledged
 
+*/
+
+/*
+  This program is derived from the SNU-RT Benchmark Suite for Worst
+  Case Timing Analysis by Sung-Soo Lim
 */
 
 #include <stdio.h>

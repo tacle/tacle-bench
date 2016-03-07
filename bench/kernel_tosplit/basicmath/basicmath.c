@@ -17,7 +17,7 @@
 
   Changes: no major functional changes
 
-  License: general open-source
+  License: this code is FREE with no restrictions
 
 */
 

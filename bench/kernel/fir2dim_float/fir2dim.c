@@ -16,7 +16,7 @@
 
   Changes: no major functional changes
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely
 
 */
 

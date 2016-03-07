@@ -15,7 +15,7 @@
 
   Changes: no major functional changes
 
-  License: unknown
+  License: GPL version 3 or later
 
 */
 

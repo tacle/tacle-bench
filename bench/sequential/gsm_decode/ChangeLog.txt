@@ -1,0 +1,13 @@
+File: gsm_decode.c
+Original provenience: Jutta Degener and Carsten Bormann, 
+                      Technische Universitaet Berlin
+
+2016-03-07:
+- Add generic TACLeBench header
+- Split code into gsm.h, data.h, config.h, private.h, proto.h
+- Remove code undefined through macros and unnecessay include guards
+- Rename function decode to gsm_decode_main 
+- Remove declaration of main
+- Add functions gsm_decode_init, gsm_decode_return
+- Remove line: /* lpc.c */
+- Remove line: #undef	P
