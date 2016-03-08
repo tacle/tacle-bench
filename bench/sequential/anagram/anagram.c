@@ -143,7 +143,7 @@
 #include "anagram_compare.h"
 
 /* convert letter to index */
-static int ch2i(char ch)
+static int ch2i( int ch )
 {
   return ch - 'a';
 }
@@ -242,7 +242,7 @@ void ReadDict( void )
 {
   char *pch;
   char *pchBase;
-  unsigned long len;
+  unsigned len;
   unsigned cWords = 0;
   unsigned cLetters;
   int i;
@@ -250,7 +250,7 @@ void ReadDict( void )
   len = 0;
   _Pragma( "loopbound min 2279 max 2279" )
   for ( i = 0; i < DICTWORDS; i++ ) {
-    int strlen = 0;
+    unsigned strlen = 0;
     _Pragma( "loopbound min 1 max 5" )
     while ( dictionary[i][strlen] != 0 )
       strlen++;
@@ -288,8 +288,8 @@ void BuildMask( char *pchPhrase )
   int i;
   int ch;
   unsigned iq;                        /* which Quad? */
-  int cbtUsed;                        /* bits used in the current Quad */
-  int cbtNeed;                        /* bits needed for current letter */
+  unsigned int cbtUsed;                        /* bits used in the current Quad */
+  unsigned int cbtNeed;                        /* bits needed for current letter */
   Quad qNeed;                         /* used to build the mask */
 
   /* Tabulate letter frequencies in the phrase */
@@ -310,9 +310,9 @@ void BuildMask( char *pchPhrase )
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ ) {
     if ( alPhrase[i].uFrequency == 0 ) {
-      auGlobalFrequency[i] = ~0;  /* to make it sort last */
+      auGlobalFrequency[i] = ~0u;  /* to make it sort last */
     } else {
-      auGlobalFrequency[i] = 0;
+      auGlobalFrequency[i] = 0u;
       _Pragma( "loopbound min 1 max 2" )
       for ( cbtNeed = 1, qNeed = 1;
             alPhrase[i].uFrequency >= qNeed;
@@ -363,7 +363,7 @@ void BuildWord( char *pchWord )
   int i;
   char *pch = pchWord;
   PWord pw;
-  int cchLength = 0;
+  unsigned int cchLength = 0;
 
   anagram_bzero( ( char * )cchFrequency, sizeof( unsigned char )*ALPHABET );
 
@@ -525,7 +525,7 @@ void SortCandidates( void )
   /* Sort the letters by frequency */
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ )
-    achByFrequency[i] = i;
+    achByFrequency[i] = (char)i;
   anagram_qsort( achByFrequency, ALPHABET, sizeof( char ) );
 }
 
