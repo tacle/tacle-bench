@@ -273,8 +273,8 @@ void ReadDict( void )
       index++;
     }
     *pch++ = '\0';
-    *pchBase = pch - pchBase;
-    pchBase[1] = cLetters;
+    *pchBase = (char)(pch - pchBase);
+    pchBase[1] = (char)cLetters;
     pchBase = pch;
     cWords++;
   }
