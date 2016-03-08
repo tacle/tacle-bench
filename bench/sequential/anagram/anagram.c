@@ -1,4 +1,25 @@
 /*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version 2.0
+
+  Name: anagram
+
+  Author: Raymond Chen
+
+  Function: A program that computes anagrams.
+
+  Source: unknown
+
+  Original name: anagram
+
+  Changes: See ChangeLog.txt
+
+  License: unknown
+
+*/
+
+/*
    Anagram program by Raymond Chen,
    inspired by a similar program by Brian Scearce
 

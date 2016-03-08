@@ -1,4 +1,25 @@
 /*
+
+  This file is part of the TACLeBench benchmark suite.
+  Version 2.0
+
+  Name: anagram_input.c
+
+  Author: Raymond Chen
+
+  Function: This file contains the input data used by anagram.
+
+  Source: anagram
+
+  Original name: anagram
+
+  Changes: See ChangeLog.txt
+
+  License: unknown
+
+*/
+
+/*
   Forward declaration of global variables
 */
 

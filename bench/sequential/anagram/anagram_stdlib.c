@@ -1,3 +1,24 @@
+/*
+
+  This file is part of the TACLeBench benchmark suite.
+  Version 2.0
+
+  Name: anagram_stdlib.c
+
+  Author: Raymond Chen
+
+  Function: This file contains the C standard library functions used by anagram.
+
+  Source: anagram
+
+  Original name: anagram
+
+  Changes: See ChangeLog.txt
+
+  License: unknown
+
+*/
+
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
