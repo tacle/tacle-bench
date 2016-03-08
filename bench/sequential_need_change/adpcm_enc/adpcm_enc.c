@@ -5,7 +5,7 @@
 
   Name: adpcm_enc
 
-  Author: Juan Martinez Velarde
+  Author: Sung-Soo Lim
 
   Function: CCITT G.722 ADPCM (Adaptive Differential Pulse Code Modulation)
     algorithm. 16khz sample rate data is stored in the array test_data[SIZE]. 
@@ -21,8 +21,16 @@
 
   Changes: no major functional changes
 
-  License: general open source
+  License: may be used, modified, and re-distributed freely, but the
+           SNU-RT Benchmark Suite must be acknowledged
 
+*/
+
+/*
+    This program is derived from the SNU-RT Benchmark Suite for Worst
+    Case Timing Analysis by Sung-Soo Lim
+
+    Original source: C Algorithms for Real-Time DSP by P. M. Embree
 */
 
 /* common sampling rate for sound cards on IBM/PC */
