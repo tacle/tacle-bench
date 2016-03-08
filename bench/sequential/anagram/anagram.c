@@ -184,7 +184,6 @@ Letter;
 typedef Letter *PLetter;
 
 static Letter alPhrase[ALPHABET]; /* statistics on the current phrase */
-#define lPhrase(ch) alPhrase[ch2i(ch)]  /* quick access to a letter */
 
 static int cchPhraseLength;                    /* number of letters in phrase */
 
@@ -299,7 +298,7 @@ void BuildMask( char *pchPhrase )
   while ( ( ch = *pchPhrase++ ) != '\0' ) {
     if ( anagram_isalpha( ch ) ) {
       ch = anagram_tolower( ch );
-      lPhrase( ch ).uFrequency++;
+      alPhrase[ ch2i( ch ) ].uFrequency++;
       cchPhraseLength++;
     }
   }
