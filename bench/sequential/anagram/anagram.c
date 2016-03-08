@@ -212,6 +212,7 @@ char achByFrequency[ALPHABET];          /* for sorting */
 
 char *pchDictionary;                /* the dictionary is read here */
 
+void Reset( void );
 void Reset( void )
 {
   anagram_bzero( ( char * )alPhrase, sizeof( Letter )*ALPHABET );
@@ -237,7 +238,8 @@ void Reset( void )
 */
 
 
-void ReadDict()
+void ReadDict( void );
+void ReadDict( void )
 {
   char *pch;
   char *pchBase;
@@ -281,6 +283,7 @@ void ReadDict()
   *pchBase++ = 0;
 }
 
+void BuildMask( char *pchPhrase );
 void BuildMask( char *pchPhrase )
 {
   int i;
@@ -330,6 +333,7 @@ void BuildMask( char *pchPhrase )
   }
 }
 
+PWord NewWord( void );
 PWord NewWord( void )
 {
   PWord pw;
@@ -339,6 +343,7 @@ PWord NewWord( void )
 }
 
 /* NextWord -- get another candidate entry, creating if necessary */
+PWord NextWord( void );
 PWord NextWord( void )
 {
   PWord pw;
@@ -352,6 +357,7 @@ PWord NextWord( void )
 /* BuildWord -- build a Word structure from an ASCII word
    If the word does not fit, then do nothing.
 */
+void BuildWord( char *pchWord );
 void BuildWord( char *pchWord )
 {
   unsigned char cchFrequency[ALPHABET];
@@ -394,6 +400,7 @@ void BuildWord( char *pchWord )
 }
 
 /* AddWords -- build the list of candidates */
+void AddWords( void );
 void AddWords( void )
 {
   char *pch = pchDictionary;      /* walk through the dictionary */
@@ -419,6 +426,7 @@ int cpwLast;
     }
 
 
+void DumpWords( void );
 void DumpWords( void )
 {
   char i, j;
@@ -436,6 +444,7 @@ void DumpWords( void )
   out[offset++] = '\0';
 }
 
+void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter );
 void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter )
 {
   Quad aqNext[MAX_QUADS];
@@ -509,6 +518,7 @@ void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter )
   }
 }
 
+void SortCandidates( void );
 void SortCandidates( void )
 {
   int i;
