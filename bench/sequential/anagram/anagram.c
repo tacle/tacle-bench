@@ -143,19 +143,9 @@
 #include "anagram_compare.h"
 
 /* convert letter to index */
-static int ch2i(char ch)
+static int ch2i( int ch )
 {
   return ch - 'a';
-}
-
-extern unsigned auGlobalFrequency[26];
-
-int CompareFrequency( char *pch1, char *pch2 )
-{
-  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
-         ? -1 :
-         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
-         ? 0 : 1;
 }
 
 #define DICTWORDS 2279
@@ -179,8 +169,9 @@ Word;
 typedef Word *PWord;
 typedef Word **PPWord;
 
-PWord apwCand[MAXCAND];                 /* candidates we've found so far */
-unsigned cpwCand;                       /* how many of them? */
+static PWord
+apwCand[MAXCAND];                 /* candidates we've found so far */
+static unsigned cpwCand;                       /* how many of them? */
 
 /* A Letter remembers information about each letter in the phrase to be
    anagrammed. */
@@ -193,32 +184,42 @@ typedef struct {
 Letter;
 typedef Letter *PLetter;
 
-Letter alPhrase[ALPHABET]; /* statistics on the current phrase */
-#define lPhrase(ch) alPhrase[ch2i(ch)]  /* quick access to a letter */
+static Letter alPhrase[ALPHABET]; /* statistics on the current phrase */
 
-int cchPhraseLength;                    /* number of letters in phrase */
+static int cchPhraseLength;                    /* number of letters in phrase */
 
-Quad aqMainMask[MAX_QUADS]; /* the bit field for the full phrase */
-Quad aqMainSign[MAX_QUADS]; /* where the sign bits are */
+static Quad aqMainMask[MAX_QUADS]; /* the bit field for the full phrase */
+static Quad aqMainSign[MAX_QUADS]; /* where the sign bits are */
 
-const int cchMinLength = 3;
+static const int cchMinLength = 3;
 
 /* auGlobalFrequency counts the number of times each letter appears, summed
    over all candidate words.  This is used to decide which letter to attack
    first.
 */
-unsigned auGlobalFrequency[ALPHABET];
-char achByFrequency[ALPHABET];          /* for sorting */
+static unsigned auGlobalFrequency[ALPHABET];
+static int achByFrequency[ALPHABET];          /* for sorting */
 
-char *pchDictionary;                /* the dictionary is read here */
+static char *pchDictionary;                /* the dictionary is read here */
 
+
+int CompareFrequency( char *pch1, char *pch2 )
+{
+  return auGlobalFrequency[ch2i( *pch1 )] < auGlobalFrequency[ch2i( *pch2 )]
+         ? -1 :
+         auGlobalFrequency[ch2i( *pch1 )] == auGlobalFrequency[ch2i( *pch2 )]
+         ? 0 : 1;
+}
+
+
+void Reset( void );
 void Reset( void )
 {
   anagram_bzero( ( char * )alPhrase, sizeof( Letter )*ALPHABET );
   anagram_bzero( ( char * )aqMainMask, sizeof( Quad )*MAX_QUADS );
   anagram_bzero( ( char * )aqMainSign, sizeof( Quad )*MAX_QUADS );
   anagram_bzero( ( char * )auGlobalFrequency, sizeof( unsigned )*ALPHABET );
-  anagram_bzero( ( char * )achByFrequency, sizeof( char )*ALPHABET );
+  anagram_bzero( ( char * )achByFrequency, sizeof( int )*ALPHABET );
   anagram_bzero( ( char * )apwCand, sizeof( PWord )*MAXCAND );
   cchPhraseLength = 0;
   cpwCand = 0;
@@ -237,11 +238,12 @@ void Reset( void )
 */
 
 
-void ReadDict()
+void ReadDict( void );
+void ReadDict( void )
 {
   char *pch;
   char *pchBase;
-  unsigned long len;
+  unsigned len;
   unsigned cWords = 0;
   unsigned cLetters;
   int i;
@@ -249,7 +251,7 @@ void ReadDict()
   len = 0;
   _Pragma( "loopbound min 2279 max 2279" )
   for ( i = 0; i < DICTWORDS; i++ ) {
-    int strlen = 0;
+    unsigned strlen = 0;
     _Pragma( "loopbound min 1 max 5" )
     while ( dictionary[i][strlen] != 0 )
       strlen++;
@@ -272,8 +274,8 @@ void ReadDict()
       index++;
     }
     *pch++ = '\0';
-    *pchBase = pch - pchBase;
-    pchBase[1] = cLetters;
+    *pchBase = ( char )( pch - pchBase );
+    pchBase[1] = ( char )cLetters;
     pchBase = pch;
     cWords++;
   }
@@ -281,13 +283,15 @@ void ReadDict()
   *pchBase++ = 0;
 }
 
+void BuildMask( char *pchPhrase );
 void BuildMask( char *pchPhrase )
 {
   int i;
   int ch;
   unsigned iq;                        /* which Quad? */
-  int cbtUsed;                        /* bits used in the current Quad */
-  int cbtNeed;                        /* bits needed for current letter */
+  unsigned int cbtUsed;                        /* bits used in the current Quad */
+  unsigned int
+  cbtNeed;                        /* bits needed for current letter */
   Quad qNeed;                         /* used to build the mask */
 
   /* Tabulate letter frequencies in the phrase */
@@ -296,7 +300,7 @@ void BuildMask( char *pchPhrase )
   while ( ( ch = *pchPhrase++ ) != '\0' ) {
     if ( anagram_isalpha( ch ) ) {
       ch = anagram_tolower( ch );
-      lPhrase( ch ).uFrequency++;
+      alPhrase[ ch2i( ch ) ].uFrequency++;
       cchPhraseLength++;
     }
   }
@@ -308,9 +312,9 @@ void BuildMask( char *pchPhrase )
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ ) {
     if ( alPhrase[i].uFrequency == 0 ) {
-      auGlobalFrequency[i] = ~0;  /* to make it sort last */
+      auGlobalFrequency[i] = ~0u;  /* to make it sort last */
     } else {
-      auGlobalFrequency[i] = 0;
+      auGlobalFrequency[i] = 0u;
       _Pragma( "loopbound min 1 max 2" )
       for ( cbtNeed = 1, qNeed = 1;
             alPhrase[i].uFrequency >= qNeed;
@@ -330,6 +334,7 @@ void BuildMask( char *pchPhrase )
   }
 }
 
+PWord NewWord( void );
 PWord NewWord( void )
 {
   PWord pw;
@@ -339,6 +344,7 @@ PWord NewWord( void )
 }
 
 /* NextWord -- get another candidate entry, creating if necessary */
+PWord NextWord( void );
 PWord NextWord( void )
 {
   PWord pw;
@@ -352,13 +358,14 @@ PWord NextWord( void )
 /* BuildWord -- build a Word structure from an ASCII word
    If the word does not fit, then do nothing.
 */
+void BuildWord( char *pchWord );
 void BuildWord( char *pchWord )
 {
   unsigned char cchFrequency[ALPHABET];
   int i;
   char *pch = pchWord;
   PWord pw;
-  int cchLength = 0;
+  unsigned int cchLength = 0;
 
   anagram_bzero( ( char * )cchFrequency, sizeof( unsigned char )*ALPHABET );
 
@@ -394,6 +401,7 @@ void BuildWord( char *pchWord )
 }
 
 /* AddWords -- build the list of candidates */
+void AddWords( void );
 void AddWords( void )
 {
   char *pch = pchDictionary;      /* walk through the dictionary */
@@ -409,8 +417,8 @@ void AddWords( void )
   }
 }
 
-PWord apwSol[MAXSOL];                   /* the answers */
-int cpwLast;
+static PWord apwSol[MAXSOL];                   /* the answers */
+static int cpwLast;
 
 #define OneStep(i) \
     if ((aqNext[i] = pqMask[i] - pw->aqMask[i]) & aqMainSign[i]) { \
@@ -419,11 +427,12 @@ int cpwLast;
     }
 
 
+void DumpWords( void );
 void DumpWords( void )
 {
-  char i, j;
+  int i, j;
   char out[30];
-  unsigned char offset = 0;
+  int offset = 0;
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < cpwLast; i++ ) {
     _Pragma( "loopbound min 3 max 5" )
@@ -436,6 +445,7 @@ void DumpWords( void )
   out[offset++] = '\0';
 }
 
+void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter );
 void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter )
 {
   Quad aqNext[MAX_QUADS];
@@ -509,6 +519,7 @@ void FindAnagram( Quad *pqMask, PPWord ppwStart, int iLetter )
   }
 }
 
+void SortCandidates( void );
 void SortCandidates( void )
 {
   int i;
@@ -517,7 +528,7 @@ void SortCandidates( void )
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ )
     achByFrequency[i] = i;
-  anagram_qsort( achByFrequency, ALPHABET, sizeof( char ) );
+  anagram_qsort( achByFrequency, ALPHABET, sizeof( int ) );
 }
 
 int main( void )
