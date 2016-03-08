@@ -148,16 +148,6 @@ static int ch2i(char ch)
   return ch - 'a';
 }
 
-extern unsigned auGlobalFrequency[26];
-
-int CompareFrequency( char *pch1, char *pch2 )
-{
-  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
-         ? -1 :
-         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
-         ? 0 : 1;
-}
-
 #define DICTWORDS 2279
 extern char *achPhrase[3];
 extern char *dictionary[DICTWORDS];
@@ -179,8 +169,8 @@ Word;
 typedef Word *PWord;
 typedef Word **PPWord;
 
-PWord apwCand[MAXCAND];                 /* candidates we've found so far */
-unsigned cpwCand;                       /* how many of them? */
+static PWord apwCand[MAXCAND];                 /* candidates we've found so far */
+static unsigned cpwCand;                       /* how many of them? */
 
 /* A Letter remembers information about each letter in the phrase to be
    anagrammed. */
@@ -193,24 +183,34 @@ typedef struct {
 Letter;
 typedef Letter *PLetter;
 
-Letter alPhrase[ALPHABET]; /* statistics on the current phrase */
+static Letter alPhrase[ALPHABET]; /* statistics on the current phrase */
 #define lPhrase(ch) alPhrase[ch2i(ch)]  /* quick access to a letter */
 
-int cchPhraseLength;                    /* number of letters in phrase */
+static int cchPhraseLength;                    /* number of letters in phrase */
 
-Quad aqMainMask[MAX_QUADS]; /* the bit field for the full phrase */
-Quad aqMainSign[MAX_QUADS]; /* where the sign bits are */
+static Quad aqMainMask[MAX_QUADS]; /* the bit field for the full phrase */
+static Quad aqMainSign[MAX_QUADS]; /* where the sign bits are */
 
-const int cchMinLength = 3;
+static const int cchMinLength = 3;
 
 /* auGlobalFrequency counts the number of times each letter appears, summed
    over all candidate words.  This is used to decide which letter to attack
    first.
 */
-unsigned auGlobalFrequency[ALPHABET];
-char achByFrequency[ALPHABET];          /* for sorting */
+static unsigned auGlobalFrequency[ALPHABET];
+static char achByFrequency[ALPHABET];          /* for sorting */
 
-char *pchDictionary;                /* the dictionary is read here */
+static char *pchDictionary;                /* the dictionary is read here */
+
+
+int CompareFrequency( char *pch1, char *pch2 )
+{
+  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
+         ? -1 :
+         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
+         ? 0 : 1;
+}
+
 
 void Reset( void );
 void Reset( void )
@@ -416,8 +416,8 @@ void AddWords( void )
   }
 }
 
-PWord apwSol[MAXSOL];                   /* the answers */
-int cpwLast;
+static PWord apwSol[MAXSOL];                   /* the answers */
+static int cpwLast;
 
 #define OneStep(i) \
     if ((aqNext[i] = pqMask[i] - pw->aqMask[i]) & aqMainSign[i]) { \
