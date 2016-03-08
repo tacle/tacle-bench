@@ -197,7 +197,7 @@ static const int cchMinLength = 3;
    first.
 */
 static unsigned auGlobalFrequency[ALPHABET];
-static char achByFrequency[ALPHABET];          /* for sorting */
+static int achByFrequency[ALPHABET];          /* for sorting */
 
 static char *pchDictionary;                /* the dictionary is read here */
 
@@ -218,7 +218,7 @@ void Reset( void )
   anagram_bzero( ( char * )aqMainMask, sizeof( Quad )*MAX_QUADS );
   anagram_bzero( ( char * )aqMainSign, sizeof( Quad )*MAX_QUADS );
   anagram_bzero( ( char * )auGlobalFrequency, sizeof( unsigned )*ALPHABET );
-  anagram_bzero( ( char * )achByFrequency, sizeof( char )*ALPHABET );
+  anagram_bzero( ( char * )achByFrequency, sizeof( int )*ALPHABET );
   anagram_bzero( ( char * )apwCand, sizeof( PWord )*MAXCAND );
   cchPhraseLength = 0;
   cpwCand = 0;
@@ -428,9 +428,9 @@ static int cpwLast;
 void DumpWords( void );
 void DumpWords( void )
 {
-  char i, j;
+  int i, j;
   char out[30];
-  unsigned char offset = 0;
+  int offset = 0;
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < cpwLast; i++ ) {
     _Pragma( "loopbound min 3 max 5" )
@@ -525,8 +525,8 @@ void SortCandidates( void )
   /* Sort the letters by frequency */
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ )
-    achByFrequency[i] = (char)i;
-  anagram_qsort( achByFrequency, ALPHABET, sizeof( char ) );
+    achByFrequency[i] = i;
+  anagram_qsort( achByFrequency, ALPHABET, sizeof( int) );
 }
 
 int main( void )
