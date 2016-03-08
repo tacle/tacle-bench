@@ -169,7 +169,8 @@ Word;
 typedef Word *PWord;
 typedef Word **PPWord;
 
-static PWord apwCand[MAXCAND];                 /* candidates we've found so far */
+static PWord
+apwCand[MAXCAND];                 /* candidates we've found so far */
 static unsigned cpwCand;                       /* how many of them? */
 
 /* A Letter remembers information about each letter in the phrase to be
@@ -204,9 +205,9 @@ static char *pchDictionary;                /* the dictionary is read here */
 
 int CompareFrequency( char *pch1, char *pch2 )
 {
-  return auGlobalFrequency[ch2i(*pch1)] < auGlobalFrequency[ch2i(*pch2)]
+  return auGlobalFrequency[ch2i( *pch1 )] < auGlobalFrequency[ch2i( *pch2 )]
          ? -1 :
-         auGlobalFrequency[ch2i(*pch1)] == auGlobalFrequency[ch2i(*pch2)]
+         auGlobalFrequency[ch2i( *pch1 )] == auGlobalFrequency[ch2i( *pch2 )]
          ? 0 : 1;
 }
 
@@ -273,8 +274,8 @@ void ReadDict( void )
       index++;
     }
     *pch++ = '\0';
-    *pchBase = (char)(pch - pchBase);
-    pchBase[1] = (char)cLetters;
+    *pchBase = ( char )( pch - pchBase );
+    pchBase[1] = ( char )cLetters;
     pchBase = pch;
     cWords++;
   }
@@ -289,7 +290,8 @@ void BuildMask( char *pchPhrase )
   int ch;
   unsigned iq;                        /* which Quad? */
   unsigned int cbtUsed;                        /* bits used in the current Quad */
-  unsigned int cbtNeed;                        /* bits needed for current letter */
+  unsigned int
+  cbtNeed;                        /* bits needed for current letter */
   Quad qNeed;                         /* used to build the mask */
 
   /* Tabulate letter frequencies in the phrase */
@@ -526,7 +528,7 @@ void SortCandidates( void )
   _Pragma( "loopbound min 26 max 26" )
   for ( i = 0; i < ALPHABET; i++ )
     achByFrequency[i] = i;
-  anagram_qsort( achByFrequency, ALPHABET, sizeof( int) );
+  anagram_qsort( achByFrequency, ALPHABET, sizeof( int ) );
 }
 
 int main( void )

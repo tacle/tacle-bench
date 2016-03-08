@@ -82,7 +82,7 @@ static void qsorts( char *a, unsigned long n, unsigned long es )
       swapi( pi, pj, es );
     }
     swapi( a, pj, es );
-    j = (unsigned long)( pj - a ) / es;
+    j = ( unsigned long )( pj - a ) / es;
 
     n = n - j - 1;
     if ( j >= n ) {
