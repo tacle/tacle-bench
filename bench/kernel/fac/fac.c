@@ -52,7 +52,8 @@ void fac_init()
 
 int fac_return()
 {
-  return fac_s;
+  int expected_result = 154;
+  return fac_s - expected_result;
 }
 
 
