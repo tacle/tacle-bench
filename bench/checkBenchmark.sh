@@ -12,9 +12,7 @@ for dir in */; do
     
     for BENCH in */; do
         cd "$BENCH"
-        
-        rm 0
-        
+                
         printf "Checking ${BENCH::-1} ..."
         if [ -f a.out ]; then
             rm a.out
