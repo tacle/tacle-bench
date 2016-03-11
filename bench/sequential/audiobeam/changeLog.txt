@@ -9,6 +9,7 @@ Original provenience: StreamIt
 - Added prefix "audiobeam_" to all global symbols.
 - Added explicit forward declarations of functions.
 - Added an empty init function
+- Added preprocessor command to determine if 32 or 64 bit in audiobeamlibmalloc.h
 - Added new function audiobeam_return producing a checksum as return value.
 - Added new function audiobeam_main according to TACLeBench guidelines.
   audiobeam_main is annotated as entry-point for timing analysis.

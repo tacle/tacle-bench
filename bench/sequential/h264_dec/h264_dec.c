@@ -43,7 +43,7 @@ int main( void );
   Declaration of global variables
 */
 
-extern signed char h264dec_mv_array[65][65][1];
+extern signed char h264dec_mv_array[65][65][2];
 extern short h264dec_list_imgUV[2][45][45];
 extern int h264dec_img_m7[16][16];
 
@@ -58,7 +58,7 @@ struct h264dec_img_par h264dec_img;
 
 int h264dec_return ()
 {
-  return h264dec_img_mpr[0][0] + h264dec_dec_picture_imgUV[0][0][0];
+  return h264dec_img_mpr[0][0] + h264dec_dec_picture_imgUV[0][0][0] - 128;
 }
 
 void h264dec_init ()
@@ -86,7 +86,7 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
   int i = 0, j = 0, ii = 0, jj = 0, i1 = 0, j1 = 0, j4 = 0, i4 = 0;
   int uv;
   int ioff, joff;
-  int bw_pred = 0, fw_pred = 0, pred, ifx;
+  int bw_pred = 0, fw_pred = 0, ifx;
   int ii0, jj0, ii1, jj1, if1, jf1, if0, jf0;
   int f1_x, f1_y, f2_x, f2_y, f3, f4;
 
@@ -102,7 +102,6 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
   short active_pps_weighted_bipred_idc = 0;
 
   int smb = 0;
-  int list_offset = 0;
   int max_y_cr = 287;
 
   int jf;
@@ -112,8 +111,6 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
   int curr_mb_field = 0;
 
   int b8, b4;
-  int uv_shift;
-  int yuv = 0;
 
   int residue_transform_flag = 0;
 
@@ -129,7 +126,6 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
 
     _Pragma( "loopbound min 2 max 2" )
     for ( uv = 0; uv < 2; uv++ ) {
-      uv_shift = uv * ( img->num_blk8x8_uv / 2 );
       intra_prediction = 0;
 
 
@@ -199,12 +195,6 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                   jf0 = f1_y - jf1;
 
                   if ( img->apply_weights ) {
-                    pred = ( if0 * jf0 * h264dec_list_imgUV[uv][jj0][ii0] +
-                             if1 * jf0 * h264dec_list_imgUV[uv][jj0][ii1] +
-                             if0 * jf1 * h264dec_list_imgUV[uv][jj1][ii0] +
-                             if1 * jf1 * h264dec_list_imgUV[uv][jj1][ii1] +
-                             f4 ) / f3;
-
                   } else {
                     h264dec_img_mpr[ii + ioff][jj + joff]
                       = ( if0 * jf0 * h264dec_list_imgUV[uv][jj0][ii0]
@@ -496,9 +486,6 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                             ( ( ( img->wp_round_chroma ) >>
                                 img->chroma_log2_weight_denom ) ) ) ;
                       } else {
-                        int wt_list_offset =
-                          ( active_pps_weighted_bipred_idc == 2 ) ?
-                          list_offset : 0;
 
                         int alpha_fw = 0;
                         int alpha_bw = 0;

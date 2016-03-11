@@ -58,7 +58,7 @@ void lift_init()
 
 int lift_return()
 {
-  return lift_checksum;
+  return lift_checksum - 233;
 }
 
 

@@ -70,8 +70,7 @@ float x, y[];
 #endif
 {
   float z, w, t, r, fn;
-  float tx[3];
-  int e0, i, j, nx, n, ix, hx;
+  int i, j, n = 0, ix, hx;
 
   AUDIOBEAM_GET_FLOAT_WORD( hx, x );
   ix = hx & 0x7fffffff;
