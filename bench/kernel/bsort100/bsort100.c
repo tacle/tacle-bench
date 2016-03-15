@@ -22,30 +22,32 @@
 */
 
 
-#define bsort_SIZE 100
+/*
+  Forward declaration of functions
+*/
 
+void bsort_init( void );
+void bsort_main( void );
+int bsort_return( void );
+int bsort_Initialize( int Array[] );
+int bsort_BubbleSort( int Array[] );
+
+
+/*
+  Declaration of global variables
+*/
+
+#define bsort_SIZE 100
 
 static int bsort_Array[bsort_SIZE];
 
-/* Forward function prototypes */
-int Initialize( int Array[] );
-int BubbleSort( int Array[] );
 
-
-int main( void )
-{
-  Initialize( bsort_Array );
-
-  BubbleSort( bsort_Array );
-
-  return 0;
-}
-
-
-int Initialize( int Array[] )
 /*
-   Initializes given array with randomly generated integers.
+  Initialization- and return-value-related functions
 */
+
+/* Initializes given array with randomly generated integers. */
+int bsort_Initialize( int Array[] )
 {
   int  Index;
 
@@ -57,11 +59,25 @@ int Initialize( int Array[] )
 }
 
 
+void bsort_init( void )
+{
+  bsort_Initialize( bsort_Array );
+}
 
-int BubbleSort( int Array[] )
+
+int bsort_return( void )
+{
+  return 0;
+}
+
+
 /*
-   Sorts an array of integers of size NUMELEMS in ascending order.
+  Core benchmark functions
 */
+
+/* Sorts an array of integers of size bsort_SIZE in ascending
+   order with bubble sort. */
+int bsort_BubbleSort( int Array[] )
 {
   int Sorted = 0;
   int Temp, Index, i;
@@ -88,3 +104,21 @@ int BubbleSort( int Array[] )
   return 0;
 }
 
+
+void bsort_main( void )
+{
+  bsort_BubbleSort( bsort_Array );
+}
+
+
+/*
+  Main function
+*/
+
+int main( void )
+{
+  bsort_init();
+  bsort_main();
+
+  return bsort_return();
+}
