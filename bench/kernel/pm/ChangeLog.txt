@@ -2,7 +2,12 @@ File: pm.c
 Original provenience: unknown
 Source: HPEC Challenge Benchmark Suite
 
-2016-01-22
+2016-03-15:
+- Renamed preprocessor defines MIN_NOISE and LOG10 to pm_MIN_NOISE and
+  pm_LOG10.
+- Made sure that pm_return returns value 0 upon success.
+
+2016-01-22:
 - Moved math functions pm_log10f, pm_pow10f, pm_fabs, pm_floor, pm_ceil into
   own files pm_math.h and pm_libm.c.
 - Moved associated static global variables pm_log_coeff and pm_pow_coeff into
@@ -13,7 +18,7 @@ Source: HPEC Challenge Benchmark Suite
   and pm_stdlib.c.
 - Renamed input.c to pm_input.c
 
-2016-01-21
+2016-01-21:
 - Changed pm_ceil and pm_floor such that the expression !arg is not used
   anymore to resolve compiler warning "implicit conversion turns
   floating-point number into integer". However, NaN and infinity are not
@@ -31,7 +36,7 @@ Source: HPEC Challenge Benchmark Suite
   changes signedness".
 - Removed register storage class for local variables in pm_kernel.
 
-2016-01-07
+2016-01-07:
 - Added original name to generic TACLeBench header.
 - Added forward declarations for all functions.
 - Renamed function main to pm_main.

@@ -31,7 +31,7 @@
   Declaration of global variables
 */
 
-#define LOG10 2.302585093f
+#define pm_LOG10 2.302585093f
 
 /* The coefficients for the pm_log10f and pm_pow10f functions below */
 static float pm_pow_coeff[19];
@@ -95,8 +95,8 @@ void pm_math_init( void )
 /***********************************************************************/
 float pm_pow10f ( float exp )
 {
-  float mul = exp * LOG10;
-  float const term = exp * LOG10;
+  float mul = exp * pm_LOG10;
+  float const term = exp * pm_LOG10;
   float ans = 1.0f;
   float const *fptr = pm_pow_coeff;
 

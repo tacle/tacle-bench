@@ -98,7 +98,7 @@ extern float pm_lib_data[ 60 ][ 64 ];
 extern float pm_pattern_data[ 60 ][ 64 ];
 
 /* some magic number */
-#define MIN_NOISE 1e-10f
+#define pm_MIN_NOISE 1e-10f
 
 /* main data structures used by the benchmark */
 static pm_data_t pm_data;
@@ -169,7 +169,7 @@ void pm_init( void )
 
 int pm_return( void )
 {
-  return pm_result;
+  return pm_result - 12;
 }
 
 
@@ -498,7 +498,7 @@ int pm_kernel( pm_data_t *pmdata )
       tmp1 = *fptr + noise_shift2;
 
       if ( tmp1 == 0.0f )
-        tmp1 = MIN_NOISE;
+        tmp1 = pm_MIN_NOISE;
 
       *fptr = 10.0f * pm_log10f( pm_fabs( tmp1 ) ) + test_noise_db;
 
