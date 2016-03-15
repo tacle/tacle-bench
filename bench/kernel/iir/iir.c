@@ -3,7 +3,7 @@
   This program is part of the TACLeBench benchmark suite.
   Version V 2.0
 
-  Name: iir_biquad
+  Name: iir
 
   Author: Juan Martinez Velarde
 
@@ -37,7 +37,7 @@
   Source: DSPstone
           http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone
 
-  Original name: iir_biquad_N_sections_float
+  Original name: iir_N_sections_float
 
   Changes:
            24-03-94 creation fixed-point (Martinez Velarde)
@@ -52,9 +52,9 @@
   Forward declaration of functions
 */
 
-void iir_biquad_init( void );
-int iir_biquad_return( void );
-void iir_biquad_main( void );
+void iir_init( void );
+int iir_return( void );
+void iir_main( void );
 int main( void );
 
 
@@ -62,33 +62,33 @@ int main( void );
   Declaration of global variables
 */
 
-volatile float iir_biquad_wi[ 2 * 4 ];
-volatile float iir_biquad_coefficients[ 5 * 4 ];
-float iir_biquad_x;
+volatile float iir_wi[ 2 * 4 ];
+volatile float iir_coefficients[ 5 * 4 ];
+float iir_x;
 
 
 /*
   Initialization- and return-value-related functions
 */
 
-void iir_biquad_init( void )
+void iir_init( void )
 {
   int f;
 
 
   _Pragma( "loopbound min 20 max 20" )
   for ( f = 0 ; f < 5 * 4; f++ )
-    iir_biquad_coefficients[ f ] = 7;
+    iir_coefficients[ f ] = 7;
 
   _Pragma( "loopbound min 8 max 8" )
   for ( f = 0 ; f < 2 * 4; f++ )
-    iir_biquad_wi[ f ] = 0;
+    iir_wi[ f ] = 0;
 
-  iir_biquad_x = ( float ) 1;
+  iir_x = ( float ) 1;
 }
 
 
-int iir_biquad_return( void )
+int iir_return( void )
 {
   float checksum = 0.0;
   int f;
@@ -96,7 +96,7 @@ int iir_biquad_return( void )
 
   _Pragma( "loopbound min 8 max 8" )
   for ( f = 0 ; f < 2 * 4; f++ )
-    checksum += iir_biquad_wi[ f ];
+    checksum += iir_wi[ f ];
 
   return( (int) checksum );
 }
@@ -106,7 +106,7 @@ int iir_biquad_return( void )
   Main functions
 */
 
-void _Pragma( "entrypoint" ) iir_biquad_main( void )
+void _Pragma( "entrypoint" ) iir_main( void )
 {
   register float w;
   int f;
@@ -114,11 +114,11 @@ void _Pragma( "entrypoint" ) iir_biquad_main( void )
   register float y;
 
 
-  ptr_coeff = &iir_biquad_coefficients[ 0 ];
-  ptr_wi1 = &iir_biquad_wi[ 0 ];
-  ptr_wi2 = &iir_biquad_wi[ 1 ];
+  ptr_coeff = &iir_coefficients[ 0 ];
+  ptr_wi1 = &iir_wi[ 0 ];
+  ptr_wi2 = &iir_wi[ 1 ];
 
-  y = iir_biquad_x ;
+  y = iir_x ;
 
   _Pragma( "loopbound min 4 max 4" )
   for ( f = 0 ; f < 4 ; f++ ) {
@@ -140,8 +140,8 @@ void _Pragma( "entrypoint" ) iir_biquad_main( void )
 
 int main( void )
 {
-  iir_biquad_init();
-  iir_biquad_main();
+  iir_init();
+  iir_main();
 
-  return( iir_biquad_return() - 144 );
+  return( iir_return() - 144 );
 }

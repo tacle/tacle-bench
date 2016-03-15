@@ -18,9 +18,9 @@
 
   Original name: bs
 
-  Changes: no major functional changed
+  Changes: No major functional changes.
 
-  License: may be used, modified, and re-distributed freely, but
+  License: May be used, modified, and re-distributed freely, but
            the SNU-RT Benchmark Suite must be acknowledged
 
 */
