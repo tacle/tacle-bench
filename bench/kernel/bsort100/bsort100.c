@@ -1,12 +1,27 @@
 /*
-   DESCRIPTION: Bubblesort program
 
-   COMMENTS: Tests the basic loop constructs, integer comparisons, and simple
-         array handling by sorting 100 integers
+  This program is part of the TACLeBench benchmark suite.
+  Version 2.0
+
+  Name: bsort
+
+  Author: unknown
+
+  Function: A program for testing the basic loop constructs, integer
+            comparisons, and simple array handling by sorting 100 integers
+
+  Source: MRTC
+          http://www.mrtc.mdh.se/projects/wcet/wcet_bench/bsort100/bsort100.c
+
+  Original name: bsort100
+
+  Changes: See ChangeLog.txt
+
+  License: unknown
+
 */
 
-/* A read from this address will result in an known value of 1 */
-//#define KNOWN_VALUE (int)(*((char *)0x80200001))
+
 #define KNOWN_VALUE 1
 
 #define WORSTCASE 1
@@ -16,14 +31,8 @@
 #define MAXDIM   (NUMELEMS+1)
 
 
-/* BUBBLESORT BENCHMARK PROGRAM:
-   This program tests the basic loop constructs, integer comparisons,
-   and simple array handling of compilers by sorting 10 arrays of
-   randomly generated integers.
-*/
-
-int Array[MAXDIM], Seed;
-int factor;
+static int bsort_Array[MAXDIM];
+static int factor;
 
 /* Forward function prototypes */
 int Initialize( int Array[] );
@@ -32,9 +41,9 @@ int BubbleSort( int Array[] );
 
 int main( void )
 {
-  Initialize( Array );
+  Initialize( bsort_Array );
 
-  BubbleSort( Array );
+  BubbleSort( bsort_Array );
 
   return 0;
 }
@@ -70,7 +79,7 @@ int BubbleSort( int Array[] )
 */
 {
   int Sorted = FALSE;
-  int Temp, LastIndex, Index, i;
+  int Temp, Index, i;
 
   _Pragma( "loopbound min 99 max 99" )
   for ( i = 1; i <= NUMELEMS - 1; i++ ) {
