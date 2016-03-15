@@ -40,15 +40,15 @@ void cjpeg_transupp_initSeed( void );
 signed char cjpeg_transupp_randomInteger( void );
 void cjpeg_transupp_init( void );
 int cjpeg_transupp_return( void );
-static void cjpeg_transupp_do_flip_v( j_decompress_ptr, j_compress_ptr,
+void cjpeg_transupp_do_flip_v( j_decompress_ptr, j_compress_ptr,
                                       jvirt_barray_ptr *, jvirt_barray_ptr * );
-static void cjpeg_transupp_do_rot_90( j_decompress_ptr, j_compress_ptr,
+void cjpeg_transupp_do_rot_90( j_decompress_ptr, j_compress_ptr,
                                       jvirt_barray_ptr *, jvirt_barray_ptr * );
-static void cjpeg_transupp_do_rot_180( j_decompress_ptr, j_compress_ptr,
+void cjpeg_transupp_do_rot_180( j_decompress_ptr, j_compress_ptr,
                                        jvirt_barray_ptr *, jvirt_barray_ptr * );
-static void cjpeg_transupp_do_rot_270( j_decompress_ptr, j_compress_ptr,
+void cjpeg_transupp_do_rot_270( j_decompress_ptr, j_compress_ptr,
                                        jvirt_barray_ptr *, jvirt_barray_ptr * );
-static void cjpeg_transupp_do_transverse( j_decompress_ptr, j_compress_ptr,
+void cjpeg_transupp_do_transverse( j_decompress_ptr, j_compress_ptr,
                                           jvirt_barray_ptr *,
                                           jvirt_barray_ptr * );
 void cjpeg_transupp_main( void );
@@ -177,10 +177,10 @@ int cjpeg_transupp_return( void )
 /*
   Vertical flip
 */
-static void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
-                                      j_compress_ptr dstinfo,
-                                      jvirt_barray_ptr *src_coef_arrays,
-                                      jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
+                               j_compress_ptr dstinfo,
+                               jvirt_barray_ptr *src_coef_arrays,
+                               jvirt_barray_ptr *dst_coef_arrays )
 {
   unsigned int MCU_rows, comp_height, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_y;
@@ -258,10 +258,10 @@ static void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
    2. Horizontal mirroring.
   These two steps are merged into a single processing routine.
 */
-static void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
-                                      j_compress_ptr dstinfo,
-                                      jvirt_barray_ptr *src_coef_arrays,
-                                      jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
+                               j_compress_ptr dstinfo,
+                               jvirt_barray_ptr *src_coef_arrays,
+                               jvirt_barray_ptr *dst_coef_arrays )
 {
   unsigned int MCU_cols, comp_width, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_x, offset_y;
@@ -350,10 +350,10 @@ static void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
     2. Transposing the image.
   These two steps are merged into a single processing routine.
 */
-static void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
-                                       j_compress_ptr dstinfo,
-                                       jvirt_barray_ptr *src_coef_arrays,
-                                       jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
+                                j_compress_ptr dstinfo,
+                                jvirt_barray_ptr *src_coef_arrays,
+                                jvirt_barray_ptr *dst_coef_arrays )
 {
   unsigned int MCU_rows, comp_height, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_x, offset_y;
@@ -439,10 +439,10 @@ static void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
     2. Horizontal mirroring.
   These two steps are merged into a single processing routine.
 */
-static void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
-                                       j_compress_ptr dstinfo,
-                                       jvirt_barray_ptr *src_coef_arrays,
-                                       jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
+                                j_compress_ptr dstinfo,
+                                jvirt_barray_ptr *src_coef_arrays,
+                                jvirt_barray_ptr *dst_coef_arrays )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
                dst_blk_y;
@@ -575,9 +575,10 @@ static void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
     3. Horizontal mirroring.
   These steps are merged into a single processing routine.
 */
-static void cjpeg_transupp_do_transverse( j_decompress_ptr srcinfo,
-    j_compress_ptr dstinfo, jvirt_barray_ptr *src_coef_arrays,
-    jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_transverse( j_decompress_ptr srcinfo,
+                                   j_compress_ptr dstinfo,
+                                   jvirt_barray_ptr *src_coef_arrays,
+                                   jvirt_barray_ptr *dst_coef_arrays )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
                dst_blk_y;
