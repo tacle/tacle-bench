@@ -1,7 +1,7 @@
 /*
 
   This program is part of the TACLeBench benchmark suite.
-  Version V 1.x
+  Version V 2.0
 
   Name: st
 
