@@ -22,11 +22,10 @@
 */
 
 
-#define NUMELEMS 100
-#define MAXDIM   (NUMELEMS+1)
+#define bsort_SIZE 100
 
 
-static int bsort_Array[MAXDIM];
+static int bsort_Array[bsort_SIZE];
 
 /* Forward function prototypes */
 int Initialize( int Array[] );
@@ -51,8 +50,8 @@ int Initialize( int Array[] )
   int  Index;
 
   _Pragma( "loopbound min 100 max 100" )
-  for ( Index = 1; Index <= NUMELEMS; Index++ )
-    Array[Index] = Index * -1;
+  for ( Index = 0; Index < bsort_SIZE; Index++ )
+    Array[Index] = ( Index + 1 ) * -1;
 
   return 0;
 }
@@ -68,11 +67,11 @@ int BubbleSort( int Array[] )
   int Temp, Index, i;
 
   _Pragma( "loopbound min 99 max 99" )
-  for ( i = 1; i <= NUMELEMS - 1; i++ ) {
+  for ( i = 0; i < bsort_SIZE - 1; i++ ) {
     Sorted = 1;
     _Pragma( "loopbound min 2 max 99" )
-    for ( Index = 1; Index <= NUMELEMS - 1; Index ++ ) {
-      if ( Index > NUMELEMS - i )
+    for ( Index = 0; Index < bsort_SIZE - 1; Index ++ ) {
+      if ( Index > bsort_SIZE - i )
         break;
       if ( Array[Index] > Array[Index + 1] ) {
         Temp = Array[Index];
