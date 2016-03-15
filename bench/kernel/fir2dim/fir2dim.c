@@ -49,7 +49,7 @@ void fir2dim_init() {}
 
 int fir2dim_return()
 {
-  return fir2dim_result;
+  return fir2dim_result - 14;
 }
 
 
@@ -109,7 +109,6 @@ void _Pragma( "entrypoint" ) fir2dim_main()
     static float  array[6 * 6]  ;
     static float  output[4 * 4] ;
 
-    register float *pimage  = &image[0]        ;
     register float *parray  = &array[0], *parray2, *parray3 ;
     register float *pcoeff  = &coefficients[0] ;
     register float *poutput = &output[0]       ;
@@ -117,7 +116,6 @@ void _Pragma( "entrypoint" ) fir2dim_main()
 
     pin_down( &image[0], &array[0], &coefficients[0], &output[0] );
 
-    pimage  = &image[0]        ;
     parray  = &array[0]        ;
     pcoeff  = &coefficients[0] ;
     poutput = &output[0]       ;

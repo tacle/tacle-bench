@@ -5,8 +5,15 @@ unsigned int freeHeapPos;
 
 void *audiobeam_malloc( unsigned int numberOfBytes )
 {
+  unsigned int offset;
+  
+  #if __SIZEOF_POINTER__ == 8
+    offset = ( ( unsigned long )simulated_heap +  freeHeapPos ) % 4;
+  #elif
+    offset = ( ( unsigned int )simulated_heap +  freeHeapPos ) % 4;      
+  #endif
+      
   // Get a 4-byte adress for alignment purposes
-  unsigned int offset = ( ( unsigned int )simulated_heap + freeHeapPos ) % 4;
   if ( offset ) {
     freeHeapPos += 4 - offset;
   }

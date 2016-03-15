@@ -1,7 +1,7 @@
 /*
 
   This program is part of the TACLeBench benchmark suite.
-  Version V 1.x
+  Version V 2.0
 
   Name: ludcmp
 
@@ -12,9 +12,9 @@
   Source: SNU-RT Benchmark Suite, via MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/ludcmp/ludcmp.c
 
-  Changes: moved initialization into separate function
+  Changes: Moved initialization into separate function.
 
-  License: may be used, modified, and re-distributed freely, but
+  License: May be used, modified, and re-distributed freely, but
            the SNU-RT Benchmark Suite must be acknowledged
 
 */
@@ -37,13 +37,14 @@ int  ludcmp_test( int n, double eps );
 void ludcmp_main( void );
 int main( void );
 
-double          ludcmp_a[50][50], ludcmp_b[50], ludcmp_x[50];
+double ludcmp_a[50][50], ludcmp_b[50], ludcmp_x[50];
 int ludcmp_chkerr;
 
 void ludcmp_init( void )
 {
   int             i, j, n = 5;
   double          w;
+  volatile int    x = 0;
 
   _Pragma( "loopbound min 6 max 6" )
   for ( i = 0; i <= n; i++ ) {
@@ -55,9 +56,16 @@ void ludcmp_init( void )
       if ( i == j )
         ludcmp_a[i][j] *= 10;
       w += ludcmp_a[i][j];
+
+      if ( x ) {
+        ludcmp_a[i][j] += x;
+      }
     }
 
     ludcmp_b[i] = w;
+    if ( x ) {
+      ludcmp_b[i] += x;
+    }
   }
 }
 
@@ -70,10 +78,12 @@ int ludcmp_return( void )
   for ( i = 0; i <= n; i++ )
     checksum += ludcmp_x[i];
 
-  return ( ( int ) checksum );
+  /* allow rounding errors for the checksum */
+  checksum -= 6.0;
+  return ( ( checksum < 0.000001 && checksum > -0.000001 ) ? 0 : -1 );
 }
 
-static double ludcmp_fabs( double n )
+double ludcmp_fabs( double n )
 {
   double          f;
 
@@ -153,7 +163,7 @@ int ludcmp_test( int n, double eps )
   return ( 0 );
 }
 
-void ludcmp_main( void )
+void _Pragma( "entrypoint" ) ludcmp_main( void )
 {
   int n = 5;
   double eps = 1;

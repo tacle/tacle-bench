@@ -33,8 +33,11 @@
   Unify the names of encoder/decoder benchmarks to 'name_enc' or 'name_dec',
   resp.:
     h264_dec_ldecode_macroblock -> h264_dec
-    gsm_decode -> gsm_decode
-    adpcm_encoder -> adpcm_encoder
+    gsm_decode -> gsm_dec
+    adpcm_encoder -> adpcm_enc
+  Directory and file names must not include capital letters.
+- Remove 'static' declaration of global variables and functions completely, and
+  add the benchmark name as prefix for these global symbols.
 - Each benchmark is preceeded by a generic TACLeBench header briefly describing
   what the benchmark does, where it originally stems from, names of original
   authors (if existing) and eventually existing original license/copyright

@@ -90,3 +90,7 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
 - Added general TACLeBench header to beginning of source code
+
+2016-03-15:
+- Return 0 if checksum is as expected, -1 otherwise
+- Fix function prototypes of functions without arguments

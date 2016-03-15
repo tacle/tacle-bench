@@ -1,3 +1,27 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: quicksort
+
+  Author: Matthew R. Guthaus
+
+  Function: quicksort applies a recursive quicksort algorithm to two different
+    input sets.
+
+  Source: MiBench
+          http://wwweb.eecs.umich.edu/mibench
+
+  Original name: qsort
+
+  Changes: No major functional changes.
+
+  License: GPL
+
+*/
+
+
 volatile char *quicksort_input_string[ 681 ] = {
   "Kurt", "Vonneguts", "Commencement", "Address", "at", "MIT", "Ladies", "and",
   "gentlemen", "of", "the", "class", "of", "97", "Wear", "sunscreen", "If", "I",

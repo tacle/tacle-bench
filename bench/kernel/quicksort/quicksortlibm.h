@@ -1,21 +1,27 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: quicksortlibm.c
+
+  Author: Ian Lance Taylor
+
+  Function: IEEE754 software library routines.
+
+  Source: Sun Microsystems and Cygnus
+
+  Original name: Unknown
+
+  Changes: No major functional changes.
+
+  License: See quicksortlibm.c
+
+*/
+
+
 #ifndef __QUICKSORTLIBM
 #define __QUICKSORTLIBM
-
-// Often used variables/consts
-#ifdef __STDC__
-static  const float
-#else
-static  float
-#endif
-one    =  1.0f,
-half   =  5.0000000000e-01f, /* 0x3f000000 */
-zero   =  0.0f,
-huge   =  1.0e30,
-two8   =  2.5600000000e+02f, /* 0x43800000 */
-twon8  =  3.9062500000e-03f, /* 0x3b800000 */
-tiny   =  1.0e-30f,
-two    =  2.0,
-two24  =  16777216.0; /* 0x4b800000 */
 
 // The following defines map the math functions to specialized calls
 #define quicksort_acos     quicksort___ieee754_acosf

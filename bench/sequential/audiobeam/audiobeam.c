@@ -104,7 +104,7 @@ void audiobeam_init()
 
 int audiobeam_return()
 {
-  return audiobeam_checksum;
+  return audiobeam_checksum - 255;
 }
 
 
@@ -260,9 +260,6 @@ void audiobeam_calc_distances( float *source_location,
                                int num_mic )
 {
   int i;
-
-  float source_x = source_location[0];
-  float source_y = source_location[1];
 
   _Pragma( "loopbound min 15 max 15" )
   for ( i = 0; i < num_mic; i++ ) {
@@ -428,10 +425,7 @@ int audiobeam_process_signal( struct audiobeam_Delays *delays, int num_mic,
                               struct audiobeam_DataQueue *queue,
                               int num_beams, int window, float *weights )
 {
-  long int max_delay = 0;
   int i, j;
-  int queue_head = 0;
-  unsigned char queue_full = 0;
   float time_index = 0;
   float time_index_inc = ( 1.0 / sampling_rate );
 
@@ -532,7 +526,6 @@ void audiobeam_calc_single_pos( float source_location[3],
 
   float **beamform_results;
   float *energies;
-  float *weights = 0;
 
   beamform_results = ( float ** ) audiobeam_malloc( 1 * sizeof( float * ) );
   beamform_results[0] = ( float * ) audiobeam_malloc( 384 * sizeof( float ) );

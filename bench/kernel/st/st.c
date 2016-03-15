@@ -1,7 +1,7 @@
 /*
 
   This program is part of the TACLeBench benchmark suite.
-  Version V 1.x
+  Version V 2.0
 
   Name: st
 
@@ -15,9 +15,9 @@
   Source: MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/st/st.c
 
-  Changes: a brief summary of major functional changes (not formatting)
+  Changes: No major functional changes.
 
-  License: may be used, modified, and re-distributed freely
+  License: May be used, modified, and re-distributed freely
 
 */
 
@@ -26,18 +26,18 @@
   Forward declaration of functions
 */
 
-void st_initSeed();
+void st_initSeed( void );
 long st_randomInteger();
 void st_initialize( float * );
-void st_init();
-int st_return();
+void st_init( void );
+int st_return( void );
 float st_fabs( float );
 float st_sqrtf( float );
 float st_square( float );
 void st_calc_Sum_Mean( float *, float *, float * );
 void st_calc_Var_Stddev( float *, float, float *, float * );
 void st_calc_LinCorrCoef( float *, float *, float, float, float * );
-void st_main();
+void st_main( void );
 int main( void );
 
 
@@ -95,7 +95,9 @@ void st_init()
 int st_return()
 {
   float checksum = st_meanA + st_meanB + st_stddevA + st_stddevB + st_coef;
-  return ( ( int ) checksum );
+  /* allow rounding errors for the checksum */
+  checksum -= 13695.986328;
+  return ( ( checksum < 0.000001 && checksum > -0.000001 ) ? 0 : -1 );
 }
 
 
@@ -137,8 +139,7 @@ float st_sqrtf( float val )
 
         if ( st_fabs( diff ) <= min_tol )
           flag = 1;
-      } else
-        x = x;
+      }
     }
   }
 
@@ -204,7 +205,7 @@ void st_calc_LinCorrCoef( float *arrayA, float *arrayB, float meanA,
   Main functions
 */
 
-void _Pragma( "entrypoint" ) st_main()
+void _Pragma( "entrypoint" ) st_main( void )
 {
   st_calc_Sum_Mean( st_arrayA, &st_sumA, &st_meanA );
   st_calc_Var_Stddev( st_arrayA, st_meanA, &st_varA, &st_stddevA );

@@ -18,9 +18,9 @@
 
   Original name: bs
 
-  Changes: no major functional changed
+  Changes: No major functional changes.
 
-  License: may be used, modified, and re-distributed freely, but
+  License: May be used, modified, and re-distributed freely, but
            the SNU-RT Benchmark Suite must be acknowledged
 
 */
@@ -35,6 +35,8 @@
   Forward declaration of functions
 */
 
+void bs_initSeed( void );
+long bs_randomInteger( void );
 void bs_init( void );
 int bs_return( void );
 int bs_binary_search( int );
@@ -45,6 +47,8 @@ int main( void );
 /*
   Declaration of global variables
 */
+
+volatile int bs_seed;
 
 struct bs_DATA {
   int key;
@@ -60,38 +64,36 @@ int bs_result;
   Initialization- and return-value-related functions
 */
 
+/*
+  bs_initSeed initializes the seed used in the "random" number generator.
+*/
+void bs_initSeed( void )
+{
+  bs_seed = 0;
+}
+
+
+/*
+  bs_RandomInteger generates "random" integers between 0 and 8094.
+*/
+long bs_randomInteger( void )
+{
+  bs_seed = ( ( bs_seed * 133 ) + 81 ) % 8095;
+  return( bs_seed );
+}
+
+
 void bs_init( void )
 {
-  bs_data[ 0 ].key = 1;
-  bs_data[ 0 ].value = 100;
-  bs_data[ 1 ].key = 5;
-  bs_data[ 1 ].value = 200;
-  bs_data[ 2 ].key = 6;
-  bs_data[ 2 ].value = 300;
-  bs_data[ 3 ].key = 7;
-  bs_data[ 3 ].value = 700;
-  bs_data[ 4 ].key = 8;
-  bs_data[ 4 ].value = 900;
-  bs_data[ 5 ].key = 9;
-  bs_data[ 5 ].value = 250;
-  bs_data[ 6 ].key = 10;
-  bs_data[ 6 ].value = 400;
-  bs_data[ 7 ].key = 11;
-  bs_data[ 7 ].value = 600;
-  bs_data[ 8 ].key = 12;
-  bs_data[ 8 ].value = 800;
-  bs_data[ 9 ].key = 13;
-  bs_data[ 9 ].value = 1500;
-  bs_data[ 10 ].key = 14;
-  bs_data[ 10 ].value = 1200;
-  bs_data[ 11 ].key = 15;
-  bs_data[ 11 ].value = 110;
-  bs_data[ 12 ].key = 16;
-  bs_data[ 12 ].value = 140;
-  bs_data[ 13 ].key = 17;
-  bs_data[ 13 ].value = 133;
-  bs_data[ 14 ].key = 18;
-  bs_data[ 14 ].value = 10;
+  int i;
+
+  bs_initSeed();
+
+  _Pragma( "loopbound min 15 max 15" )
+  for ( i = 0; i < 15; ++i ) {
+    bs_data[ i ].key = bs_randomInteger();
+    bs_data[ i ].value = bs_randomInteger();
+  }
 }
 
 
@@ -138,7 +140,7 @@ int bs_binary_search( int x )
   Main functions
 */
 
-void _Pragma ( "entrypoint" ) bs_main( void )
+void _Pragma( "entrypoint" ) bs_main( void )
 {
   bs_result = bs_binary_search( 8 );
 }
@@ -149,5 +151,5 @@ int main( void )
   bs_init();
   bs_main();
 
-  return( bs_return() );
+  return( bs_return() - 255 );
 }

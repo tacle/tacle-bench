@@ -51,7 +51,7 @@ void duff_init()
 
 int duff_return( void )
 {
-  return duff_target[28];
+  return duff_target[28] - 72;
 }
 
 
