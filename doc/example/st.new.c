@@ -26,18 +26,18 @@
   Forward declaration of functions
 */
 
-void st_initSeed();
-long st_randomInteger();
+void st_initSeed( void );
+long st_randomInteger( void );
 void st_initialize( float * );
-void st_init();
-int st_return();
+void st_init( void );
+int st_return( void );
 float st_fabs( float );
 float st_sqrtf( float );
 float st_square( float );
 void st_calc_Sum_Mean( float *, float *, float * );
 void st_calc_Var_Stddev( float *, float, float *, float * );
 void st_calc_LinCorrCoef( float *, float *, float, float, float * );
-void st_main();
+void st_main( void );
 int main( void );
 
 
@@ -58,7 +58,7 @@ float st_meanA, st_meanB, st_varA, st_varB, st_stddevA, st_stddevB, st_coef;
 /*
   st_initSeed initializes the seed used in the "random" number generator.
 */
-void st_initSeed()
+void st_initSeed( void )
 {
   st_seed = 0;
 }
@@ -67,10 +67,10 @@ void st_initSeed()
 /*
   st_RandomInteger generates random integers between 0 and 8094.
 */
-long st_randomInteger()
+long st_randomInteger( void )
 {
   st_seed = ( ( st_seed * 133 ) + 81 ) % 8095;
-  return ( st_seed );
+  return( st_seed );
 }
 
 
@@ -84,7 +84,7 @@ void st_initialize( float *array )
 }
 
 
-void st_init()
+void st_init( void )
 {
   st_initSeed();
   st_initialize( st_arrayA );
@@ -92,10 +92,10 @@ void st_init()
 }
 
 
-int st_return()
+int st_return( void )
 {
   float checksum = st_meanA + st_meanB + st_stddevA + st_stddevB + st_coef;
-  return ( ( int ) checksum );
+  return( ( int ) checksum );
 }
 
 
@@ -112,7 +112,7 @@ float st_fabs( float n )
   else
     f = -n;
 
-  return ( f );
+  return( f );
 }
 
 
@@ -142,13 +142,13 @@ float st_sqrtf( float val )
     }
   }
 
-  return ( x );
+  return( x );
 }
 
 
 float st_square( float x )
 {
-  return ( x * x );
+  return( x * x );
 }
 
 
@@ -204,7 +204,7 @@ void st_calc_LinCorrCoef( float *arrayA, float *arrayB, float meanA,
   Main functions
 */
 
-void _Pragma( "entrypoint" ) st_main()
+void _Pragma( "entrypoint" ) st_main( void )
 {
   st_calc_Sum_Mean( st_arrayA, &st_sumA, &st_meanA );
   st_calc_Var_Stddev( st_arrayA, st_meanA, &st_varA, &st_stddevA );
@@ -221,5 +221,5 @@ int main( void )
   st_init();
   st_main();
 
-  return ( st_return() );
+  return( st_return() - 127 );
 }
