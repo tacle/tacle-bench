@@ -18,3 +18,9 @@ suite, www.mrtc.....
 2015-12-15:
 - Sorted out licensing terms, added general TACLeBench header to
   beginning of source code
+
+2016-03-15:
+- Return 0 if checksum is as expected, -1 otherwise
+- Touch input matrix with volatile to rule out optimizations
+- Add entrypoint pragma
+

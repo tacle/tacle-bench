@@ -1,7 +1,7 @@
 /*
 
   This program is part of the TACLeBench benchmark suite.
-  Version V 1.x
+  Version V 2.0
 
   Name: countnegative
 
@@ -13,9 +13,9 @@
   Source: MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/cnt/cnt.c
 
-  Changes: changed split between initialization and computation
+  Changes: Changed split between initialization and computation
 
-  License: may be used, modified, and re-distributed freely
+  License: May be used, modified, and re-distributed freely
 
 */
 
@@ -92,7 +92,8 @@ int countnegative_return( void )
                    countnegative_poscnt +
                    countnegative_negtotal +
                    countnegative_negcnt );
-  return checksum;
+
+  return ( ( checksum == 0x1778de ) ? 0 : -1 );
 }
 
 void countnegative_sum( matrix Array )
@@ -125,7 +126,7 @@ void countnegative_sum( matrix Array )
 /*
   The main function
 */
-void countnegative_main ( void )
+void _Pragma( "entrypoint" ) countnegative_main ( void )
 {
   countnegative_sum(  countnegative_array );
 }
