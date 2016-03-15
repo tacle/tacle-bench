@@ -53,7 +53,7 @@
 */
 
 void iir_biquad_init( void );
-float iir_biquad_return( void );
+int iir_biquad_return( void );
 void iir_biquad_main( void );
 int main( void );
 
@@ -88,7 +88,7 @@ void iir_biquad_init( void )
 }
 
 
-float iir_biquad_return( void )
+int iir_biquad_return( void )
 {
   float checksum = 0.0;
   int f;
@@ -98,7 +98,7 @@ float iir_biquad_return( void )
   for ( f = 0 ; f < 2 * 4; f++ )
     checksum += iir_biquad_wi[ f ];
 
-  return( checksum );
+  return( (int) checksum );
 }
 
 
@@ -143,5 +143,5 @@ int main( void )
   iir_biquad_init();
   iir_biquad_main();
 
-  return( ( int ) iir_biquad_return() );
+  return( iir_biquad_return() - 144 );
 }
