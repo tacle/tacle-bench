@@ -53,7 +53,7 @@ void cover_init( void )
 
 int cover_return( void )
 {
-  return cover_cnt;
+  return cover_cnt - 180;
 }
 
 
