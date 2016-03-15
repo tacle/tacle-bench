@@ -11890,7 +11890,7 @@ static void mpeg2_field_ME( unsigned char *oldorg, unsigned char *neworg,
 {
   int w2;
   unsigned char *mb, *toporg, *topref, *botorg, *botref;
-  int var, vmc, v0, dmc, dmcfieldi, dmc8i;
+  int var, vmc, v0, dmcfieldi, dmc8i;
   int imin, jmin, imin8u, jmin8u, imin8l, jmin8l, dmcfield, dmc8, sel, sel8u,
       sel8l;
   int iminf, jminf, imin8uf, jmin8uf, imin8lf, jmin8lf, dmcfieldf, dmc8f, self,
@@ -11947,7 +11947,6 @@ static void mpeg2_field_ME( unsigned char *oldorg, unsigned char *neworg,
          ( dmc_dp < dmcfield ) ) {
       /* Dual Prime prediction */
       mbi->motion_type = 3;
-      dmc = dmc_dp;     /* L1 metric */
       vmc = vmc_dp;     /* we already calculated L2 error for Dual */
 
     } else
@@ -13219,5 +13218,5 @@ int main( void )
   mpeg2_init();
   mpeg2_main();
 
-  return( mpeg2_return() );
+  return( mpeg2_return() - 140 );
 }
