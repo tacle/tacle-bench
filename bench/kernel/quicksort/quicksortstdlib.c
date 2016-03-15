@@ -1,7 +1,7 @@
 #include "quicksort.h"
 
 
-static int quicksort_strcmp( const char *str1, const char *str2 )
+int quicksort_strcmp( const char *str1, const char *str2 )
 {
   int pos = 0;
 
