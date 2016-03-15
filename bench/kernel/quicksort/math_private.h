@@ -1,4 +1,26 @@
 /*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: math_private.h
+
+  Author: Unknown
+
+  Function: IEEE754 software library routines.
+
+  Source: Sun Microsystems
+
+  Original name: fdlibm.h
+
+  Changes: No major functional changes.
+
+  License: See the terms below.
+
+*/
+
+
+/*
  * ====================================================
  * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
  *

@@ -1,3 +1,25 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: quicksortlibm.c
+
+  Author: Ian Lance Taylor
+
+  Function: IEEE754 software library routines.
+
+  Source: Sun Microsystems and Cygnus
+
+  Original name: Unknown
+
+  Changes: No major functional changes.
+
+  License: See quicksortlibm.c
+
+*/
+
+
 #ifndef __QUICKSORTLIBM
 #define __QUICKSORTLIBM
 

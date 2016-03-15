@@ -15,7 +15,7 @@
 
   Original name: qsort
 
-  Changes: no major functional changes
+  Changes: No major functional changes.
 
   License: GPL
 
