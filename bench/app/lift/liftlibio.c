@@ -4,7 +4,7 @@
 int lift_ctrl_io_in[10];
 int lift_ctrl_io_out[4];
 int lift_ctrl_io_analog[4];
-int lift_ctrl_io_led[14];
+int lift_ctrl_io_led[16];
 int lift_ctrl_dly1;
 int lift_ctrl_dly2;
 
@@ -32,7 +32,7 @@ void lift_ctrl_set_vals()
     val |= lift_ctrl_io_out[i] ? 1 : 0;
   }
   lift_simio_out = val;
-  _Pragma( "loopbound min 14 max 14" )
+  _Pragma( "loopbound min 16 max 16" )
   for ( i = 14 - 1; i >= 0; --i ) {
     val <<= 1;
     val |= lift_ctrl_io_led[i] ? 1 : 0;
