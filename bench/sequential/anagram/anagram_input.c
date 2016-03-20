@@ -23,19 +23,19 @@
   Forward declaration of global variables
 */
 
-extern char *achPhrase[3];
-extern char *dictionary[2279];
+extern char *anagram_achPhrase[3];
+extern char *anagram_dictionary[2279];
 
 
 /*
   Definition of global variables
 */
-char *achPhrase[3] = { "todd austin",
+char *anagram_achPhrase[3] = { "todd austin",
                        "john alledy",
                        "mary updike"
                      };
 
-char *dictionary[2279] = { "2nd",
+char *anagram_dictionary[2279] = { "2nd",
                            "4th",
                            "8th",
                            "a",

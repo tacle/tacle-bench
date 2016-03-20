@@ -170,8 +170,8 @@ static int ch2i( int ch )
 }
 
 #define DICTWORDS 2279
-extern char *achPhrase[3];
-extern char *dictionary[DICTWORDS];
+extern char *anagram_achPhrase[3];
+extern char *anagram_dictionary[DICTWORDS];
 
 typedef unsigned int Quad;              /* for building our bit mask */
 #define MASK_BITS 32                    /* number of bits in a Quad */
@@ -224,7 +224,7 @@ static int achByFrequency[ALPHABET];          /* for sorting */
 static char *pchDictionary;                /* the dictionary is read here */
 
 
-int CompareFrequency( char *pch1, char *pch2 )
+int anagram_CompareFrequency( char *pch1, char *pch2 )
 {
   return auGlobalFrequency[ch2i( *pch1 )] < auGlobalFrequency[ch2i( *pch2 )]
          ? -1 :
@@ -274,7 +274,7 @@ void ReadDict( void )
   for ( i = 0; i < DICTWORDS; i++ ) {
     unsigned strlen = 0;
     _Pragma( "loopbound min 1 max 5" )
-    while ( dictionary[i][strlen] != 0 )
+    while ( anagram_dictionary[i][strlen] != 0 )
       strlen++;
     len += strlen + 2;
   }
@@ -288,10 +288,10 @@ void ReadDict( void )
     cLetters = 0;
 
     _Pragma( "loopbound min 1 max 5" )
-    while ( dictionary[i][index] != '\0' ) {
-      if ( anagram_isalpha( dictionary[i][index] ) )
+    while ( anagram_dictionary[i][index] != '\0' ) {
+      if ( anagram_isalpha( anagram_dictionary[i][index] ) )
         cLetters++;
-      *pch++ = dictionary[i][index];
+      *pch++ = anagram_dictionary[i][index];
       index++;
     }
     *pch++ = '\0';
@@ -561,7 +561,7 @@ int main( void )
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < 3; i++ ) {
     Reset();
-    BuildMask( achPhrase[i] );
+    BuildMask( anagram_achPhrase[i] );
     AddWords();
     if ( cpwCand == 0 || cchPhraseLength == 0 )
       continue;
