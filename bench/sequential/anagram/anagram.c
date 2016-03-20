@@ -550,11 +550,16 @@ void anagram_SortCandidates( void )
   anagram_qsort( anagram_achByFrequency, anagram_ALPHABET, sizeof( int ) );
 }
 
-int main( void )
+void anagram_init( void );
+void anagram_init( void )
+{
+  anagram_ReadDict();
+}
+
+int anagram_main( void );
+int anagram_main( void )
 {
   int i;
-
-  anagram_ReadDict();
 
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < 3; i++ ) {
@@ -572,4 +577,23 @@ int main( void )
   }
 
   return 0;
+}
+
+int anagram_return( void );
+int anagram_return( void )
+{
+  return 0;
+}
+
+
+/*
+  Main function
+*/
+
+int main( void )
+{
+  anagram_init();
+  anagram_main();
+
+  return anagram_return();
 }
