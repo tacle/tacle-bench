@@ -163,22 +163,30 @@
 
 #include "anagram_compare.h"
 
-/* convert letter to index */
-static int anagram_ch2i( int ch )
-{
-  return ch - 'a';
-}
+
+/*
+  Defines
+*/
 
 #define anagram_DICTWORDS 2279
-extern char *anagram_achPhrase[3];
-extern char *anagram_dictionary[anagram_DICTWORDS];
-
-typedef unsigned int anagram_Quad;              /* for building our bit mask */
 #define anagram_MASK_BITS 32                    /* number of bits in a Quad */
 #define anagram_MAX_QUADS 2                     /* controls largest phrase */
 #define anagram_MAXCAND  100                    /* candidates */
 #define anagram_MAXSOL   51                     /* words in the solution */
 #define anagram_ALPHABET 26                     /* letters in the alphabet */
+
+#define anagram_OneStep(i) \
+        if ((aqNext[i] = pqMask[i] - pw->aqMask[i]) & anagram_aqMainSign[i]) { \
+          ppwStart++; \
+          continue; \
+        }
+
+
+/*
+  Type definitions
+*/
+
+typedef unsigned int anagram_Quad;              /* for building our bit mask */
 
 /* A Word remembers the information about a candidate word. */
 typedef struct {
@@ -189,10 +197,6 @@ typedef struct {
 typedef anagram_Word *anagram_PWord;
 typedef anagram_Word **anagram_PPWord;
 
-static anagram_PWord
-anagram_apwCand[anagram_MAXCAND];                 /* candidates we've found so far */
-static unsigned anagram_cpwCand;                       /* how many of them? */
-
 /* A Letter remembers information about each letter in the phrase to be
    anagrammed. */
 typedef struct {
@@ -202,6 +206,38 @@ typedef struct {
   unsigned iq;                        /* which Quad to inspect? */
 } anagram_Letter;
 typedef anagram_Letter *anagram_PLetter;
+
+
+/*
+  Forward declaration of functions
+*/
+
+void anagram_init( void );
+int anagram_main( void );
+int anagram_return( void );
+int anagram_ch2i( int ch );
+void anagram_AddWords( void );
+void anagram_BuildMask( char *pchPhrase );
+void anagram_BuildWord( char *pchWord );
+void anagram_DumpWords( void );
+void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart, int iLetter );
+anagram_PWord anagram_NewWord( void );
+anagram_PWord anagram_NextWord( void );
+void anagram_ReadDict( void );
+void anagram_Reset( void );
+void anagram_SortCandidates( void );
+
+
+/*
+  Declaration of global variables
+*/
+
+extern char *anagram_achPhrase[3];
+extern char *anagram_dictionary[anagram_DICTWORDS];
+
+static anagram_PWord
+anagram_apwCand[anagram_MAXCAND];                 /* candidates we've found so far */
+static unsigned anagram_cpwCand;                       /* how many of them? */
 
 static anagram_Letter anagram_alPhrase[anagram_ALPHABET]; /* statistics on the current phrase */
 
@@ -221,28 +257,13 @@ static int anagram_achByFrequency[anagram_ALPHABET];          /* for sorting */
 
 static char *anagram_pchDictionary;                /* the dictionary is read here */
 
-
-int anagram_CompareFrequency( char *pch1, char *pch2 )
-{
-  return anagram_auGlobalFrequency[anagram_ch2i( *pch1 )] < anagram_auGlobalFrequency[anagram_ch2i( *pch2 )]
-         ? -1 :
-         anagram_auGlobalFrequency[anagram_ch2i( *pch1 )] == anagram_auGlobalFrequency[anagram_ch2i( *pch2 )]
-         ? 0 : 1;
-}
+static anagram_PWord anagram_apwSol[anagram_MAXSOL];                   /* the answers */
+static int anagram_cpwLast;
 
 
-void anagram_Reset( void );
-void anagram_Reset( void )
-{
-  anagram_bzero( ( char * )anagram_alPhrase, sizeof( anagram_Letter )*anagram_ALPHABET );
-  anagram_bzero( ( char * )anagram_aqMainMask, sizeof( anagram_Quad )*anagram_MAX_QUADS );
-  anagram_bzero( ( char * )anagram_aqMainSign, sizeof( anagram_Quad )*anagram_MAX_QUADS );
-  anagram_bzero( ( char * )anagram_auGlobalFrequency, sizeof( unsigned )*anagram_ALPHABET );
-  anagram_bzero( ( char * )anagram_achByFrequency, sizeof( int )*anagram_ALPHABET );
-  anagram_bzero( ( char * )anagram_apwCand, sizeof( anagram_PWord )*anagram_MAXCAND );
-  anagram_cchPhraseLength = 0;
-  anagram_cpwCand = 0;
-}
+/*
+  Initialization- and return-value-related functions
+*/
 
 /* ReadDict -- read the dictionary file into memory and preprocess it
 
@@ -255,9 +276,6 @@ void anagram_Reset( void )
    Observe that cch+3 is the length of the total encoding.  These
    byte streams are concatenated, and terminated with a 0.
 */
-
-
-void anagram_ReadDict( void );
 void anagram_ReadDict( void )
 {
   char *pch;
@@ -302,7 +320,52 @@ void anagram_ReadDict( void )
   *pchBase++ = 0;
 }
 
-void anagram_BuildMask( char *pchPhrase );
+
+void anagram_init( void )
+{
+  anagram_ReadDict();
+}
+
+
+int anagram_return( void )
+{
+  return 0;
+}
+
+
+/*
+  Core benchmark functions
+*/
+
+/* convert letter to index */
+int anagram_ch2i( int ch )
+{
+  return ch - 'a';
+}
+
+
+int anagram_CompareFrequency( char *pch1, char *pch2 )
+{
+  return anagram_auGlobalFrequency[anagram_ch2i( *pch1 )] < anagram_auGlobalFrequency[anagram_ch2i( *pch2 )]
+         ? -1 :
+         anagram_auGlobalFrequency[anagram_ch2i( *pch1 )] == anagram_auGlobalFrequency[anagram_ch2i( *pch2 )]
+         ? 0 : 1;
+}
+
+
+void anagram_Reset( void )
+{
+  anagram_bzero( ( char * )anagram_alPhrase, sizeof( anagram_Letter )*anagram_ALPHABET );
+  anagram_bzero( ( char * )anagram_aqMainMask, sizeof( anagram_Quad )*anagram_MAX_QUADS );
+  anagram_bzero( ( char * )anagram_aqMainSign, sizeof( anagram_Quad )*anagram_MAX_QUADS );
+  anagram_bzero( ( char * )anagram_auGlobalFrequency, sizeof( unsigned )*anagram_ALPHABET );
+  anagram_bzero( ( char * )anagram_achByFrequency, sizeof( int )*anagram_ALPHABET );
+  anagram_bzero( ( char * )anagram_apwCand, sizeof( anagram_PWord )*anagram_MAXCAND );
+  anagram_cchPhraseLength = 0;
+  anagram_cpwCand = 0;
+}
+
+
 void anagram_BuildMask( char *pchPhrase )
 {
   int i;
@@ -353,7 +416,7 @@ void anagram_BuildMask( char *pchPhrase )
   }
 }
 
-anagram_PWord anagram_NewWord( void );
+
 anagram_PWord anagram_NewWord( void )
 {
   anagram_PWord pw;
@@ -362,8 +425,8 @@ anagram_PWord anagram_NewWord( void )
   return pw;
 }
 
+
 /* NextWord -- get another candidate entry, creating if necessary */
-anagram_PWord anagram_NextWord( void );
 anagram_PWord anagram_NextWord( void )
 {
   anagram_PWord pw;
@@ -374,10 +437,9 @@ anagram_PWord anagram_NextWord( void )
   return anagram_apwCand[anagram_cpwCand - 1];
 }
 
+
 /* BuildWord -- build a Word structure from an ASCII word
-   If the word does not fit, then do nothing.
-*/
-void anagram_BuildWord( char *pchWord );
+   If the word does not fit, then do nothing. */
 void anagram_BuildWord( char *pchWord )
 {
   unsigned char cchFrequency[anagram_ALPHABET];
@@ -419,8 +481,8 @@ void anagram_BuildWord( char *pchWord )
   }
 }
 
+
 /* AddWords -- build the list of candidates */
-void anagram_AddWords( void );
 void anagram_AddWords( void )
 {
   char *pch = anagram_pchDictionary;      /* walk through the dictionary */
@@ -436,17 +498,7 @@ void anagram_AddWords( void )
   }
 }
 
-static anagram_PWord anagram_apwSol[anagram_MAXSOL];                   /* the answers */
-static int anagram_cpwLast;
 
-#define anagram_OneStep(i) \
-    if ((aqNext[i] = pqMask[i] - pw->aqMask[i]) & anagram_aqMainSign[i]) { \
-        ppwStart++; \
-        continue; \
-    }
-
-
-void anagram_DumpWords( void );
 void anagram_DumpWords( void )
 {
   int i, j;
@@ -464,7 +516,7 @@ void anagram_DumpWords( void )
   out[offset++] = '\0';
 }
 
-void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart, int iLetter );
+
 void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart, int iLetter )
 {
   anagram_Quad aqNext[anagram_MAX_QUADS];
@@ -538,7 +590,7 @@ void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart, int iLe
   }
 }
 
-void anagram_SortCandidates( void );
+
 void anagram_SortCandidates( void )
 {
   int i;
@@ -550,13 +602,7 @@ void anagram_SortCandidates( void )
   anagram_qsort( anagram_achByFrequency, anagram_ALPHABET, sizeof( int ) );
 }
 
-void anagram_init( void );
-void anagram_init( void )
-{
-  anagram_ReadDict();
-}
 
-int anagram_main( void );
 int anagram_main( void )
 {
   int i;
@@ -576,12 +622,6 @@ int anagram_main( void )
     _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" )
   }
 
-  return 0;
-}
-
-int anagram_return( void );
-int anagram_return( void )
-{
   return 0;
 }
 
