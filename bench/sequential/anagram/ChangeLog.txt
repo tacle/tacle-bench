@@ -1,0 +1,97 @@
+File: anagram.c
+Original provenience: unknown
+Source: unknown 
+
+2016-03-22
+- Added forward declarations for all functions.
+- Renamed function main to anagram_main.
+- Added function anagram_init that calls anagram_ReadDict, removed
+  call to anagram_ReadDict from anagram_main.
+- Added function anagram_return that handles the return value.  
+- Added new function main that first calls anagram_init, 
+  then anagram_main and finally returns the return value of 
+  anagram_return.
+- Added generic TACLeBench header to all files.
+- Introduced comments to split file in sections for type 
+  definitions, forward declarations, global variables, 
+  initialization-related and return-value-related functions, 
+  core benchmark functions, and main routine.
+- Renamed ch2i, DICTWORDS, Quad, MASK_BITS, MAX_QUADS, MAXCAND,
+  MAXSOL, ALPHABET, Word, PWord, PPWord, apwCand, cpwCand, Letter,
+  PLetter, alPhrase, cchPhraseLength, aqMainMask, aqMainSign,
+  cchMinLength, auGlobalFrequency, achByFrequency, pchDictionary,
+  Reset, ReadDict, BuildMask, NewWord, NextWord, BuildWord,
+  AddWords, apwSol, cpwLast, OneStep, DumpWords, FindAnagram and
+  SortCandidates to anagram_ch2i, anagram_DICTWORDS, anagram_Quad,
+  anagram_MASK_BITS, anagram_MAX_QUADS, anagram_MAXCAND,
+  anagram_MAXSOL, anagram_ALPHABET, anagram_Word, anagram_PWord,
+  anagram_PPWord, anagram_apwCand, anagram_cpwCand, anagram_Letter,
+  anagram_PLetter, anagram_alPhrase, anagram_cchPhraseLength,
+  anagram_aqMainMask, anagram_aqMainSign, anagram_cchMinLength,
+  anagram_auGlobalFrequency, anagram_achByFrequency,
+  anagram_pchDictionary, anagram_Reset, anagram_ReadDict,
+  anagram_BuildMask, anagram_NewWord, anagram_NextWord,
+  anagram_BuildWord, anagram_AddWords, anagram_apwSol,
+  anagram_cpwLast, anagram_OneStep, anagram_DumpWords,
+  anagram_FindAnagram and anagram_SortCandidates.
+- Renamed swapi, pivot, qsorts, simulated_heap and freeHeapPos to
+  anagram_swapi, anagram_pivot, anagram_qsorts,
+  anagram_simulated_heap and anagram_freeHeapPos.
+- Renamed achPhrase and dictionary to anagram_achPhrase and
+  anagram_dictionary.
+- Renamed CompareFrequency to anagram_CompareFrequency.
+- Increased simulated heap in anagram_stdlib.c to 18000 bytes to
+  prevent segmentation fault.
+- Changed header guard _WCCMALLOC_H to ANAGRAM_STRINGS_H.
+- Renamed wccmalloc, wccbzero to anagram_malloc, anagram_bzero.
+- Moved declaration of anagram_malloc to header anagram_stdlib.h.
+- Introduced header guard ANAGRAM_CTYPE_H.
+- Renamed wccislower, wccisupper, wccisalpha,  wcctolower to
+  anagram_islower, anagram_isupper, anagram_isalpha, 
+  anagram_tolower.
+- Removed illegal keyword "inline".
+- Changed header guard _WCCSTDLIB_H to ANAGRAM_STDLIB_H.
+- Renamed wccqsort to anagram_qsort.
+- Fixed compiler warning "no previous extern declaration for
+  non-static variable" for variables simulated_heap and
+  freeHeapPos by declaring them static.
+- Renamed preprocessor define HEAP_SIZE to ANAGRAM_HEAP_SIZE.
+- Fixed compiler warning "no previous prototype for function" by
+  moving includes to the top of the file.
+- Fixed compiler warnings "implicit conversion changes signedness" 
+  and "comparison of integers of different signs" by consistenly
+  using the type unsigned long in qsort helper functions.
+- Moved function CompareFrequency to file anagram.c, added
+  declaration for it in file anagram_compare.h and included it in
+  anagram_stdlib.h.
+- Fixed compiler warning "no previous extern declaration for 
+  non-static variable" by adding forward declarations.
+- Fixed compiler warning "macro is not used" by removing unused
+  macros MAXWORDS and i2ch.
+- Replaced macro ch2i by proper function.
+- Fixed compiler warning "array subscript is of type 'char' using
+  function ch2i in function CompareFrequency.
+- Fixed compiler warning "unused variable" by removing variable i
+  in function Reset.
+- Fixed compiler warning "no previous extern declaration for 
+  non-static variable" by making global variables in file 
+  anagram.c static.
+- Replaced macro lPhrase by its expansion.
+- Fixed compiler warnings "implicit conversion loses integer 
+  precision" and "implicit conversion changes signedness" by
+  adding explicit casts or using the appropriate type for local
+  variables.
+- Fixed compiler warning "array subscript is of type 'char'" by
+  changing type of some local variables as well as of global
+  variable achByFrequency to int.
+- Changed all //-style comments to /* */-style comments.
+- Moved contents of wccmalloc.c to anagram_stdlib.c.
+- Renamed input.c to anagram_input.c.
+- Renamed wccctype.h to anagram_ctype.h.
+- Renamed wccstdlib.c to anagram_stdlib.c.
+- Renamed wccstdlib.h to anagram_stdlib.h.
+- Renamed wccmalloc.h to anagram_strings.h.
+- Applied TACLeBench formatting rules via
+  astyle --options=doc/example/astylerc.txt
+- Tested conformance to C99 via
+  clang -fsyntax-only -Weverything -Wno-unknown-pragmas -Wno-padded -pedantic -std=c99

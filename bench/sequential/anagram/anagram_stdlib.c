@@ -27,6 +27,7 @@
 /* support function pointers */
 #include "anagram_compare.h"
 
+
 static void anagram_swapi( char *ii, char *ij, unsigned long es )
 {
   char *i, *j, c;
@@ -36,8 +37,8 @@ static void anagram_swapi( char *ii, char *ij, unsigned long es )
   _Pragma( "loopbound min 1 max 1" )
   do {
     c = *i;
-    *i++ = *j;
-    *j++ = c;
+    *i ++ = *j;
+    *j ++ = c;
     es -= sizeof( char );
   } while ( es != 0 );
 }
@@ -89,7 +90,7 @@ static void anagram_qsorts( char *a, unsigned long n, unsigned long es )
     while ( 1 ) {
       /* wcc note: this assignment expression was added to avoid assignment of
          multiple loop bound annotations to same loop (cf. Ticket #0002323). */
-      flowfactdummy++;
+      flowfactdummy ++;
       _Pragma( "loopbound min 1 max 5" )
       do {
         pi += es;
@@ -133,10 +134,11 @@ static unsigned int anagram_freeHeapPos;
 void *anagram_malloc( unsigned int numberOfBytes )
 {
   /* Get a 4-byte adress for alignment purposes */
-  unsigned int offset = ( ( unsigned int )anagram_simulated_heap + anagram_freeHeapPos ) % 4;
+  unsigned int offset = ( ( unsigned int )anagram_simulated_heap +
+                          anagram_freeHeapPos ) % 4;
   if ( offset )
     anagram_freeHeapPos += 4 - offset;
-  void *currentPos = ( void * )&anagram_simulated_heap[anagram_freeHeapPos];
+  void *currentPos = ( void * )&anagram_simulated_heap[ anagram_freeHeapPos ];
   anagram_freeHeapPos += numberOfBytes;
   return currentPos;
 }
@@ -146,7 +148,7 @@ void anagram_bzero( char *p, unsigned long len )
   unsigned long i;
 
   _Pragma( "loopbound min 8 max 416" )
-  for ( i = 0; i < len; ++i )
-    *p++ = '\0';
+  for ( i = 0; i < len; ++ i )
+    *p ++ = '\0';
 }
 
