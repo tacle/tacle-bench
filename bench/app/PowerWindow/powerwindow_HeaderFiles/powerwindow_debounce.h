@@ -1,16 +1,20 @@
 /*
- * File: powerwindow_debounce_main.h
- *
- * Code generated for Simulink model 'powerwindow_debounce_main'.
- *
- * Model version                  : 1.34
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Tue Jun 30 15:05:13 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_debounce.h
+
+ Author: unknown
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_debounce.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: unknown
+
  */
 
 #ifndef powerwindow_RTW_HEADER_debounce_h_

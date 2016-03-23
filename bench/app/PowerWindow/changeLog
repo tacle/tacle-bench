@@ -1,0 +1,34 @@
+Adjusted the original files to tacle benchmark requirements
+
+Created the input serials in void powerwindow_input_initialize(void) to cover the real life scenarios 
+
+
+
+23-03-2016:
+Deleted folder powerwindow_SourceFiles moved all the contained c files to PowerWindow folder
+
+Created headerfile powerwindow.h
+
+Added
+
+#ifndef NULL
+#define NULL   ((void *) 0)
+#endif
+
+to header file powerwindow.h
+
+Deleted #include <stdio.h> in all files replaced with headerfile powerwindow.h
+
+Deleted function powerwindow_GetErrorStatus(void) and the related code
+
+Commented  
+	long tic, toc, tictoc;
+	tic = powerwindow_get_cycles();
+	toc = powerwindow_get_cycles();
+	tictoc = toc-tic;
+	printf("%ld\n",tictoc ); 
+
+in the int main(void).  Uncomment can print the execution time of the powerwindow benchmark.
+
+Adjusted the description of all the files
+

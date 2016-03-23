@@ -1,16 +1,20 @@
 /*
- * File: powerwindow_control.h
- *
- * Code generated for Simulink model 'powerwindow_control'.
- *
- * Model version                  : 1.64
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Mon Aug 10 11:43:36 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_powerwindow_control.h
+
+ Author: unknown
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_powerwindow_control.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: unknown
+
  */
 
 #ifndef powerwindow_RTW_HEADER_powerwindow_control_h_

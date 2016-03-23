@@ -3,7 +3,7 @@
  This program is part of the TACLeBench benchmark suite.
  Version V 1.x
 
- Name: powerwindow_debounce_main
+ Name: powerwindow_debounce.c
 
  Author: unknown
 
@@ -14,8 +14,7 @@
  	 powerwindow_debounce_main.c defines all the functions that will be used in debounce_PSG_Front which is a part of the Power window.
 
 
- Source: MRTC
- http://www.mrtc.mdh.se/projects/wcet/wcet_bench/PowerWindow/SourceFiles/powerwindow_debounce_main.c
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_debounce.c
 
  Changes: a brief summary of major functional changes and formatting)
 
@@ -23,8 +22,9 @@
 
  */
 
-#include "../powerwindow_HeaderFiles/powerwindow_debounce.h"
-#include "../powerwindow_HeaderFiles/powerwindow_debounce_private.h"
+
+#include "powerwindow_HeaderFiles/powerwindow_debounce.h"
+#include "powerwindow_HeaderFiles/powerwindow_debounce_private.h"
 
 /* Named constants for Chart: '<Root>/Chart' */
 #define debounce_IN_debounce           ((powerwindow_uint8_T)1U)

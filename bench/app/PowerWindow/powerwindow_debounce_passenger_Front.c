@@ -3,15 +3,14 @@
  This program is part of the TACLeBench benchmark suite.
  Version V 1.x
 
- Name: debounce_passenger_Front
+ Name: debounce_passenger_Front.c
 
  Author: unknown
 
- Function: debounce_passenger_Front calls powerwindow_debounce_main.c to powerwindow_debounce_main the push-down button
+ Function: debounce_passenger_Front calls powerwindow_debounce.c to debounce the push-down button
  	 of the power window for the front passenger.
 
- Source: MRTC
- http://www.mrtc.mdh.se/projects/wcet/wcet_bench/PowerWindow/SourceFiles/debounce_passenger_Front.c
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/debounce_passenger_Front.c
 
  Changes: a brief summary of major functional changes and formatting)
 
@@ -19,11 +18,10 @@
 
 */
 
-#include <stdio.h>
-
-#include "../powerwindow_HeaderFiles/powerwindow_debounce.h"
-#include "../powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front.h"
-#include "../powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front_private.h"
+#include "powerwindow_HeaderFiles/powerwindow.h"
+#include "powerwindow_HeaderFiles/powerwindow_debounce.h"
+#include "powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front.h"
+#include "powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front_private.h"
 
 /*
   Forward declaration of functions

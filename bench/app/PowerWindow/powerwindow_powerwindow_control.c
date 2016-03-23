@@ -3,7 +3,7 @@
  This program is part of the TACLeBench benchmark suite.
  Version V 1.x
 
- Name: powerwindow_control
+ Name: powerwindow_powerwindow_control
 
  Author: unknown
 
@@ -12,19 +12,18 @@
  	 control the height of the power window. The second one is for pinch sensing.
  	 The two control components can run in parallel.
 
- Source: MRTC
- http://www.mrtc.mdh.se/projects/wcet/wcet_bench/PowerWindow/Debounce/Debounce.c
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow//powerwindow_powerwindow_control.c
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: general open-source
 
 */
-#include <stdio.h>
 
-#include "../powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
-#include "../powerwindow_HeaderFiles/powerwindow_powerwindow_control.h"
-#include "../powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
+#include "powerwindow_HeaderFiles/powerwindow.h"
+#include "powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
+#include "powerwindow_HeaderFiles/powerwindow_powerwindow_control.h"
+#include "powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
 
 /* Named constants for Chart: '<S2>/stateflow control model' */
 #define powerwindow_powerwindow_control_IN_AutoDown             ((powerwindow_uint8_T)1U)

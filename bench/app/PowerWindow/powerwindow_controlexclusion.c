@@ -3,16 +3,14 @@
  This program is part of the TACLeBench benchmark suite.
  Version V 1.x
 
- Name: controlexclusion
+ Name: powerwindow_controlexclusion
 
  Author: unknown
 
- Function: controlexclusion is one functionality of the power window benchmark.
- 	 It gives the driver higher priority than the passenger. Passenger can control the power window
- 	 only when driver does not have to adjust the window height.
+ Function: powerwindow_controlexclusion is one functionality of the power window benchmark.
+ 	 It takes the input signal from the driver and the passenger to determine the final control signal.
 
- Source: MRTC
- http://www.mrtc.mdh.se/projects/wcet/wcet_bench/PowerWindow/Debounce/Debounce.c
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_controlexclusion.c
 
  Changes: a brief summary of major functional changes and formatting)
 
@@ -20,8 +18,10 @@
 
 */
 
-#include "../powerwindow_HeaderFiles/powerwindow_controlexclusion.h"
-#include "../powerwindow_HeaderFiles/powerwindow_controlexclusion_private.h"
+
+
+#include "powerwindow_HeaderFiles/powerwindow_controlexclusion.h"
+#include "powerwindow_HeaderFiles/powerwindow_controlexclusion_private.h"
 
 /*
   Forward declaration of functions

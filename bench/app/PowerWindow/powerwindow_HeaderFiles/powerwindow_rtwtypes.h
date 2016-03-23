@@ -1,13 +1,21 @@
 /*
- * File: rtwtypes.h
- *
- * Code generated for Simulink model 'Debounce'.
- *
- * Model version                  : 1.34
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Tue Jun 30 15:05:13 2015
- */
 
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_rtwtypes.h
+
+ Author: unknown
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_rtwtypes.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: unknown
+
+ */
 #ifndef powerwindow__RTWTYPES_H__
 #define powerwindow__RTWTYPES_H__
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPILER=clang # Please adapt this line to your favorite compiler.
+COMPILER=gcc # Please adapt this line to your favorite compiler.
 
 OPTIONS=" -Wall -Wno-unknown-pragmas -Werror "
 
