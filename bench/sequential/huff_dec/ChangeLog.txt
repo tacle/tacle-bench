@@ -1,0 +1,14 @@
+File: huff_dec.c
+Original provenience: David Bourgin (David.Bourgin@ufrima.imag.fr)
+
+2016-03-23:
+- Replaced dynamic memory allocation by a fixed array with 514 entries
+- Replaced memset() with loops
+- Replaced file I/O by reading and writing to char arrays
+- Added huff_dec_main(), huff_dec_init() and huff_dec_return()
+- Added huff_dec_ prefix to all functions, types and global variables
+- Changed function arguments to ANSI style
+- Replaced macro definitions
+- Added generic TACLeBench header replacing previous header
+- Included license from compress.txt
+- Corrected loop bounds in huff_dec_read_header()
