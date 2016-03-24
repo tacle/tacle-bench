@@ -70,12 +70,12 @@ void huff_dec_init( void );
 int huff_dec_return( void );
 static int huff_dec_end_of_data();
 static int huff_dec_read_byte();
-static void huff_dec_write_byte(char ch);
+static void huff_dec_write_byte( char ch );
 static unsigned char huff_dec_read_code_1_bit();
 static unsigned int huff_dec_read_code_n_bits( unsigned int n );
 static void huff_dec_read_header( t_bin_val codes_table[257] );
 static huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
-                                      huff_dec_t_tree heap[514] );
+    huff_dec_t_tree heap[514] );
 void huff_dec_main( void );
 int main( void );
 
@@ -107,34 +107,35 @@ static char *huff_dec_plaintext =
   "in the text you are reading, you'll fast understand the compression ratio...";
 
 #define huff_dec_encoded_len 419
-static unsigned char huff_dec_encoded[huff_dec_encoded_len] = { 
-  128, 0, 0, 0,  80, 133, 32, 32,  128, 100, 4, 32,  63, 239, 255, 240,
-  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 
-  4, 7, 174, 21, 129, 234, 5, 112, 132, 201, 21, 66, 43, 228, 84, 134,
-  72, 69, 100, 138, 193, 21, 224, 248, 86, 69, 116, 75, 5, 133, 248, 95,
-  196, 64, 114, 50, 113, 40, 37, 195, 128, 212, 116, 210, 42, 162, 52, 51,
-  12, 132, 120, 245, 99, 37, 33, 48, 39, 135, 173, 34, 167, 94, 87, 142,
-  110, 22, 87, 178, 84, 198, 99, 141, 60, 199, 226, 186, 164, 169, 67, 189,
-  1, 32, 110, 179, 221, 192, 145, 133, 184, 184, 28, 214, 224, 150, 73, 10,
-  242, 20, 83, 152, 252, 26, 223, 9, 143, 149, 183, 226, 149, 131, 175, 215,
-  56, 18, 19, 6, 55, 31, 129, 40, 232, 52, 185, 160, 148, 18, 36, 197,
-  85, 248, 202, 86, 28, 9, 24, 165, 2, 197, 60, 11, 147, 225, 208, 50,
-  99, 174, 155, 76, 224, 72, 197, 193, 189, 184, 121, 94, 17, 213, 120, 35,
-  115, 108, 57, 149, 121, 2, 70, 23, 86, 158, 112, 86, 17, 38, 15, 198,
-  90, 227, 25, 115, 52, 147, 70, 176, 152, 4, 140, 19, 53, 66, 64, 119,
-  65, 61, 190, 15, 60, 56, 27, 168, 215, 194, 175, 55, 193, 218, 41, 224,
-  74, 9, 24, 33, 255, 125, 126, 128, 177, 156, 9, 32, 18, 48, 186, 180,
-  240, 242, 188, 104, 117, 109, 129, 35, 10, 98, 44, 211, 4, 160, 155, 208,
-  119, 146, 9, 100, 144, 9, 42, 132, 243, 22, 48, 191, 3, 159, 224, 220,
-  9, 62, 30, 87, 141, 14, 173, 176, 36, 99, 192, 146, 168, 57, 254, 2,
-  106, 153, 203, 51, 73, 41, 198, 38, 2, 198, 12, 201, 84, 2, 70, 7,
-  235, 178, 180, 12, 102, 4, 152, 38, 244, 29, 228, 139, 88, 76, 14, 7,
-  49, 253, 48, 102, 72, 116, 88, 18, 48, 63, 93, 149, 161, 134, 60, 192,
-  232, 176, 98, 181, 129, 27, 88, 124, 175, 104, 102, 72, 220, 21, 149, 84,
-  227, 136, 18, 48, 63, 93, 149, 161, 137, 128, 72, 192, 178, 96, 135, 149,
-  227, 155, 131, 119, 90, 99, 250, 129, 229, 123, 20, 160, 251, 140, 131, 226,
-  217, 166, 93, 22, 4, 140, 29, 91, 166, 183, 25, 202, 192, 111, 20, 171,
-  142, 57, 83 };
+static unsigned char huff_dec_encoded[huff_dec_encoded_len] = {
+  128, 0, 0, 0, 80, 133, 32, 32, 128, 100, 4, 32, 63, 239, 255, 240,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  4, 7, 167, 21, 129, 232, 69, 120, 132, 217, 20, 162, 19, 164, 39, 133,
+  252, 138, 105, 20, 194, 19, 129, 240, 172, 138, 248, 150, 11, 11, 240, 201,
+  68, 64, 114, 53, 17, 42, 37, 195, 128, 212, 116, 194, 41, 98, 52, 51,
+  12, 132, 112, 244, 3, 36, 33, 52, 39, 135, 164, 33, 62, 156, 87, 14,
+  110, 22, 87, 50, 85, 198, 99, 142, 140, 194, 81, 78, 158, 84, 129, 254,
+  129, 248, 110, 179, 159, 192, 145, 133, 184, 184, 28, 210, 96, 146, 73, 10,
+  226, 21, 83, 152, 74, 13, 111, 132, 199, 202, 219, 241, 74, 193, 167, 105,
+  222, 31, 147, 6, 55, 31, 129, 40, 232, 52, 153, 160, 148, 18, 36, 197,
+  45, 216, 202, 86, 30, 31, 177, 90, 133, 138, 248, 23, 81, 195, 160, 100,
+  215, 93, 50, 185, 225, 251, 23, 6, 230, 225, 229, 112, 71, 80, 96, 141,
+  205, 176, 230, 85, 196, 9, 24, 93, 90, 121, 225, 76, 68, 152, 63, 25,
+  107, 140, 101, 204, 214, 77, 26, 194, 96, 18, 48, 77, 210, 137, 1, 253,
+  4, 230, 248, 56, 240, 224, 111, 163, 95, 10, 12, 223, 7, 234, 167, 129,
+  40, 36, 96, 135, 125, 245, 250, 2, 198, 120, 127, 0, 145, 133, 213, 167,
+  135, 149, 195, 67, 235, 108, 9, 24, 87, 17, 102, 152, 37, 4, 222, 131,
+  188, 144, 73, 36, 128, 73, 20, 81, 152, 177, 133, 248, 28, 165, 131, 120,
+  127, 240, 242, 184, 104, 125, 109, 129, 35, 30, 4, 145, 65, 202, 88, 9,
+  138, 103, 44, 205, 100, 167, 24, 152, 11, 24, 51, 37, 66, 9, 24, 31,
+  174, 202, 212, 49, 152, 18, 96, 155, 208, 119, 146, 45, 97, 48, 56, 28,
+  194, 90, 224, 204, 144, 232, 176, 36, 96, 126, 187, 43, 83, 12, 121, 129,
+  209, 96, 197, 35, 2, 54, 176, 249, 92, 208, 204, 145, 188, 41, 170, 180,
+  71, 16, 36, 96, 126, 187, 43, 83, 19, 0, 145, 129, 100, 209, 15, 43,
+  135, 55, 6, 238, 180, 194, 90, 17, 229, 115, 21, 168, 251, 140, 131, 162,
+  217, 166, 93, 22, 4, 140, 31, 91, 166, 55, 25, 202, 192, 111, 20, 171,
+  207, 39, 192,
+};
 
 
 void huff_dec_init( void )
@@ -148,8 +149,8 @@ int huff_dec_return( void )
 {
   int i;
   _Pragma( "loopbound min 1 max 600" )
-  for (i=0; i<huff_dec_plaintext_len; i++) {
-    if (huff_dec_plaintext[i] != huff_dec_output[i]) return i+1;
+  for ( i = 0; i < huff_dec_plaintext_len; i++ ) {
+    if ( huff_dec_plaintext[i] != huff_dec_output[i] ) return i + 1;
   }
   return 0;
 }
@@ -161,17 +162,17 @@ int huff_dec_return( void )
 
 static int huff_dec_end_of_data()
 {
-    return huff_dec_input_pos >= huff_dec_encoded_len;
+  return huff_dec_input_pos >= huff_dec_encoded_len;
 }
 
 
 static int huff_dec_read_byte()
 {
-    return huff_dec_encoded[huff_dec_input_pos++];
+  return huff_dec_encoded[huff_dec_input_pos++];
 }
 
 
-static void huff_dec_write_byte(char ch)
+static void huff_dec_write_byte( char ch )
 {
   huff_dec_output[huff_dec_output_pos++] = ch;
 }
@@ -219,8 +220,8 @@ static unsigned int huff_dec_read_code_n_bits( unsigned int n )
       i -= byte_nb_to_read;
       byte_nb_to_read = 0;
     } else {
-      result = ( result << i ) + 
-        ( ( val_to_read >> ( byte_nb_to_read - i ) ) & ( ( 1 << i ) - 1 ) );
+      result = ( result << i ) +
+               ( ( val_to_read >> ( byte_nb_to_read - i ) ) & ( ( 1 << i ) - 1 ) );
       byte_nb_to_read -= i;
       i = 0;
     }
@@ -239,7 +240,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
   unsigned num_byte;
 
   _Pragma ( "loopbound min 257 max 257" )
-  for ( i = 0; i < 257; i++) {
+  for ( i = 0; i < 257; i++ ) {
     codes_table[i].bits_nb = 0;
     _Pragma ( "loopbound min 32 max 32" )
     for ( j = 0; j < 32; j++ ) {
@@ -251,7 +252,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
   if ( huff_dec_read_code_1_bit() )
     /* First bit=0 => Present bytes coded on n*8 bits
                 =1 => Present bytes coded on 256 bits */
-  _Pragma ( "loopbound min 256 max 256" )
+    _Pragma ( "loopbound min 256 max 256" )
     for ( i = 0; i <= 255; i++ )
       codes_table[i].presence = huff_dec_read_code_1_bit();
   else {
@@ -279,7 +280,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
       num_byte = ( j - 1 ) >> 3;
       if ( j & 7 ) {
         /* Reads the bits that takes less than one byte */
-        codes_table[i].bits[num_byte] = 
+        codes_table[i].bits[num_byte] =
           ( unsigned char )huff_dec_read_code_n_bits( j & 7 );
         j -= j & 7;
         num_byte--;
@@ -288,7 +289,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
       _Pragma ( "loopbound min 0 max 1" )
       while ( j >= 8 ) {
         /* Reads the bits that takes one byte, at least */
-        codes_table[i].bits[num_byte] = 
+        codes_table[i].bits[num_byte] =
           ( unsigned char )huff_dec_read_code_n_bits( 8 );
         j -= 8;
         num_byte--;
@@ -298,7 +299,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
 
 
 static huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
-                                                huff_dec_t_tree heap[514] )
+    huff_dec_t_tree heap[514] )
 /* Returned parameters: A binary tree is returned
    Action: Returns the decoding binary tree built from 'codes_table'
    Errors: None
