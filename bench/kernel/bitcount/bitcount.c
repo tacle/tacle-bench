@@ -31,7 +31,6 @@ int bitcount_res;
 unsigned long bitcount_seed;
 unsigned long bitcount_n = 0;
 unsigned int bitcount_iterations = 10;
-int bitcount_returnValue;
 
 /*
    First declaration of the functions
@@ -56,7 +55,7 @@ static int bitcount_bit_shifter( long int x )
 
 int bitcount_return()
 {
-  return bitcount_returnValue;
+  return bitcount_n - 1095;
 }
 
 void bitcount_init()
@@ -128,14 +127,13 @@ void bitcount_main()
           bitcount_res = bitcount_bit_shifter( bitcount_seed );
           break;
         default:
-          bitcount_returnValue = 1;
+          break;
       }
       bitcount_n += bitcount_res;
     }
   }
   _Pragma( "flowrestriction 1*ntbl_bitcount <= 8*call_ntbl" )
   _Pragma( "flowrestriction 1*btbl_bitcount <= 4*call_btbl" )
-  bitcount_returnValue = 0;
 }
 
 int main( void )

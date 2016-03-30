@@ -33,8 +33,8 @@
 #else
 /* Repeated inclusions of this file are no-ops unless JMESSAGE is defined*/
 #define CJPEG_JPEG6B_WRBMP_JMESSAGE(code,string)
-#endif  CDERROR_H
-#endif  CJPEG_JPEG6B_WRBMP_JMESSAGE
+#endif  /* CDERROR_H */
+#endif  /* CJPEG_JPEG6B_WRBMP_JMESSAGE */
 
 #ifdef CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST
 
@@ -42,7 +42,7 @@ typedef enum {
 
 #define CJPEG_JPEG6B_WRBMP_JMESSAGE(code,string)  code ,
 
-#endif  CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST
+#endif  /* CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST */
 
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JMSG_FIRSTADDONCODE = 1000, NULL )  //Must be first entry!
 
@@ -58,7 +58,7 @@ typedef enum {
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_BMP_MAPPED, "%ux%u 8-bit colormapped BMP image" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_BMP_OS2, "%ux%u 24-bit OS2 BMP image" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_BMP_OS2_MAPPED, "%ux%u 8-bit colormapped OS2 BMP image" )
-  #endif  CJPEG_JPEG6B_WRBMP_BMP_SUPPORTED
+  #endif  /* CJPEG_JPEG6B_WRBMP_BMP_SUPPORTED */
 
   #ifdef CJPEG_JPEG6B_WRBMP_GIF_SUPPORTED
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_GIF_BUG, "GIF output got confused" )
@@ -75,7 +75,7 @@ typedef enum {
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JWRN_GIF_CHAR, "Bogus char 0x%02x in GIF file, ignoring" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JWRN_GIF_ENDCODE, "Premature end of GIF image" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JWRN_GIF_NOMOREDATA, "Ran out of GIF bits" )
-  #endif  CJPEG_JPEG6B_WRBMP_GIF_SUPPORTED
+  #endif /* CJPEG_JPEG6B_WRBMP_GIF_SUPPORTED */
 
   #ifdef CJPEG_JPEG6B_WRBMP_PPM_SUPPORTED
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_PPM_COLORSPACE, "PPM output must be grayscale or RGB" )
@@ -85,7 +85,7 @@ typedef enum {
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_PGM_TEXT, "%ux%u text PGM image" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_PPM, "%ux%u PPM image" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_PPM_TEXT, "%ux%u text PPM image" )
-  #endif  CJPEG_JPEG6B_WRBMP_PPM_SUPPORTED
+  #endif  /* CJPEG_JPEG6B_WRBMP_PPM_SUPPORTED */
 
   #ifdef RLE_SUPPORTED
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_RLE_BADERROR, "Bogus error code from RLE library" )
@@ -102,7 +102,7 @@ typedef enum {
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_RLE_GRAY, "%ux%u grayscale RLE file" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_RLE_MAPGRAY, "%ux%u grayscale RLE file with map of length %d" )
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_RLE_MAPPED, "%ux%u colormapped RLE file with map of length %d" )
-  #endif  RLE_SUPPORTED
+  #endif /* RLE_SUPPORTED */
 
   #ifdef CJPEG_JPEG6B_WRBMP_TARGA_SUPPORTED
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_TGA_BADCMAP, "Unsupported Targa colormap format" )
@@ -113,7 +113,7 @@ typedef enum {
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JTRC_TGA_MAPPED, "%ux%u colormapped Targa image" )
   #else
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_TGA_NOTCOMP, "Targa support was not compiled" )
-  #endif  CJPEG_JPEG6B_WRBMP_TARGA_SUPPORTED
+  #endif  /* CJPEG_JPEG6B_WRBMP_TARGA_SUPPORTED */
 
   CJPEG_JPEG6B_WRBMP_JMESSAGE( JERR_BAD_CMAP_FILE,
                                "Color map file is invalid or of unsupported format" )
@@ -134,7 +134,7 @@ typedef enum {
 } CJPEG_JPEG6B_WRBMP_ADDON_MESSAGE_CODE;
 
 #undef CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST
-  #endif  CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST
+  #endif  /* CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST */
 
 /* Zap JMESSAGE macro so that future re-inclusions do nothing by default*/
 #undef CJPEG_JPEG6B_WRBMP_JMESSAGE
