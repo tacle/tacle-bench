@@ -25,7 +25,7 @@
   Include section
 */
 
-#include "h264dec.h"
+#include "h264_dec.h"
 
 
 /*
