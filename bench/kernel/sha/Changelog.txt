@@ -1,0 +1,105 @@
+File: sha.c
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Removed IFDEF lines
+- Added main functionality from sha_driver.c
+- Added prefix to functions (sha_functionname)
+- Added sha_main, sha_init, sha_return functions
+- Changed local to global variable for the init function
+- Added checksum in return to return 0 when calculated correctly
+- Applied Code Style 
+
+File: sha.h
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Add forward declaration of functions
+- Applied Code Style 
+
+File: glibc_common.h
+Original provenience: 
+
+2015-03-30:
+- Removed file and copy to sha.h
+
+File: my_file.h
+Original provenience: 
+
+2015-03-30:
+- Removed file and copy to sha.h
+
+File: my_file.c
+Original provenience: 
+
+2015-03-30:
+- Remove file and copy to sha.c
+
+File: input_small.c
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- reformatted data to 20 chars per line
+- Added generic TACLeBench header to line 1
+- Applied Code Style 
+
+File: memhelper.h
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Removed unnecessary #IFNDEF
+- Applied Code Style 
+
+File: memhelper.c
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Added break; to switch statement
+- Applied Code Style 
+
+
+File: memset.h
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Applied Code Style 
+
+
+File: memset.c
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Applied Code Style 
+
+
+File: memcpy.h
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Added prefix to functions (sha_functionname)
+- Applied Code Style 
+
+
+File: memcpy.c
+Original provenience: 
+
+2015-03-30:
+- Remove comment on line 1
+- Added generic TACLeBench header to line 1
+- Added prefix to functions (sha_functionname)
+- Applied Code Style 
