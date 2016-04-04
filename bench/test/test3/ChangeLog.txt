@@ -33,3 +33,5 @@ Original provenience: Universitaet des Saarlandes, Saarbruecken, Germany
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+- Sanity check: Replaced all expressions 'x >> 1' by 'x >>= 1' in order to
+  eliminate compiler warnings showing that 'x >> 1' makes no sense.
