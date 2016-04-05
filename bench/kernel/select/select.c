@@ -52,7 +52,7 @@
   Forward declaration of functions
 */
 void select_init( void );
-float select_return( void );
+int select_return( void );
 int select_main( void );
 int main( void );
 
@@ -94,9 +94,9 @@ void select_init( void )
 }
 
 
-float select_return( void )
+int select_return( void )
 {
-  return ( select_selected - SELECT_SELECTED_VALUE );
+  return ( ( select_selected - SELECT_SELECTED_VALUE ) == 0 );
 }
 
 
