@@ -45,3 +45,6 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 2016-02-03:
 - Secured SWAP macro (keep the macro as it is used often).
 - Corrected loop bounds.
+
+2016-04-05:
+- Return '0' on success

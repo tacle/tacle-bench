@@ -64,6 +64,7 @@ int main( void );
 float select_selected = 0.0;
 float select_arr[ 20 ];
 
+const float SELECT_SELECTED_VALUE = 35.0f;
 
 #define SWAP(a,b) do { temp = (a); (a) = (b); (b) = temp; } while (0)
 
@@ -95,7 +96,7 @@ void select_init( void )
 
 float select_return( void )
 {
-  return select_selected;
+  return ( select_selected - SELECT_SELECTED_VALUE );
 }
 
 
