@@ -164,7 +164,7 @@ int jfdctint_return()
   int i;
   for ( i = 0; i < 64; ++i )
     checksum += jfdctint_data[ i ];
-  return ( checksum - JFDCTINT_CHECKSUM );
+  return ( ( checksum == JFDCTINT_CHECKSUM ) ? 0 : -1 );
 }
 
 

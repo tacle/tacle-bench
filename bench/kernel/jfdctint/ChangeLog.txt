@@ -53,3 +53,6 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
   
 2016-04-05:
 - Return '0' on success
+
+2016-06-06:
+- Fixed generation of return value

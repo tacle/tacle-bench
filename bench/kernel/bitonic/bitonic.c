@@ -62,7 +62,7 @@ int bitonic_return( void )
 
   checksum += bitonic_a[ 0 ] + bitonic_a[ 21 ] + bitonic_a[ 31 ];
 
-  return ( checksum - BITONIC_CHECKSUM );
+  return ( ( checksum == BITONIC_CHECKSUM ) ? 0 : -1 );
 }
 
 

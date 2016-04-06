@@ -948,7 +948,7 @@ int petrinet_return( void )
   for ( i = 0; i < 6; ++i )
     checksum += petrinet_P3_marking_member_0[i];
 
-  return ( checksum - PETRINET_CHECKSUM );
+  return ( ( checksum == PETRINET_CHECKSUM ) ? 0 : -1 );
 }
 
 

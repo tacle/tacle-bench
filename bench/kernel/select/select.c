@@ -96,7 +96,7 @@ void select_init( void )
 
 int select_return( void )
 {
-  return ( ( select_selected - SELECT_SELECTED_VALUE ) == 0 );
+  return ( ( select_selected == SELECT_SELECTED_VALUE ) ? 0 : -1 );
 }
 
 
