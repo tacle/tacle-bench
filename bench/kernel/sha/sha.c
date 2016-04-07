@@ -17,7 +17,6 @@
 #include "memcpy.h"
 #include "memset.h"
 #include "sha.h"
-#include <stdio.h>
 
 /* SHA f()-functions */
 #define f1(x,y,z) ((x & y) | (~x & z))
