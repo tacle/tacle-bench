@@ -235,5 +235,5 @@ int main( void )
   quicksort_init();
   quicksort_main();
 
-  return ( quicksort_return() - 235 );
+  return ( quicksort_return() - 1527923179 != 0 );
 }
