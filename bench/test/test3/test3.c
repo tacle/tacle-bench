@@ -5074,5 +5074,5 @@ int main()
   test3_init();
   test3_main();
 
-  return( test3_return() - 8 );
+  return( test3_return() - 1377313800 != 0 );
 }
