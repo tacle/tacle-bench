@@ -739,5 +739,5 @@ int main( void )
   cjpeg_transupp_init();
   cjpeg_transupp_main();
 
-  return ( cjpeg_transupp_return() - 148 );
+  return ( cjpeg_transupp_return() - 660 != 0 );
 }
