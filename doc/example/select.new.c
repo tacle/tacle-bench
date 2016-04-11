@@ -83,6 +83,7 @@ void select_init( void )
     Apply volatile XOR-bitmask to entire input array.
   */
   p = (unsigned char *) &select_arr[ 0 ];
+  _Pragma( "loopbound min 80 max 80" )
   for ( i = 0; i < sizeof( select_arr ); ++i, ++p )
     *p ^= bitmask;
 }
