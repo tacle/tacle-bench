@@ -151,5 +151,5 @@ int main( void )
   bs_init();
   bs_main();
 
-  return( bs_return() - 255 );
+  return( bs_return() - (-1) != 0 );
 }
