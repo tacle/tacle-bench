@@ -122,7 +122,7 @@ volatile int mpeg2_topfirst = 1;
 volatile int mpeg2_frame_pred_dct = 0;
 struct mbinfo mpeg2_mbinfo[ 352 ];
 
-volatile unsigned char mpeg2_oldorgframe[] = {
+unsigned char mpeg2_oldorgframe[] = {
   0x9f, 0x9d, 0x9b, 0x9d, 0x9f, 0xa1, 0xa2, 0xa3,
   0x9e, 0xa2, 0xa5, 0xa5, 0xa2, 0xa1, 0xa4, 0xa7,
   0xa3, 0xa3, 0xa5, 0xa6, 0xa5, 0xa5, 0xa3, 0xa2,
@@ -11389,8 +11389,6 @@ volatile unsigned char mpeg2_oldorgframe[] = {
   0x4e, 0x4c, 0x49, 0x3a, 0x4a, 0x4c, 0x1d, 0x0c
 };
 
-unsigned char mpeg2_inputframe[ 90112 ];
-
 
 /*
   Initialization- and return-value-related functions
@@ -11398,12 +11396,17 @@ unsigned char mpeg2_inputframe[ 90112 ];
 
 void mpeg2_init( void )
 {
-  int i;
+  unsigned int i;
+  unsigned char *p;
+  volatile char bitmask = 0;
 
-
+  /*
+    Apply volatile XOR-bitmask to entire input array.
+  */
+  p = (unsigned char *) &mpeg2_oldorgframe[ 0 ];
   _Pragma( "loopbound min 90112 max 90112" )
-  for ( i = 0; i < 90112; i++ )
-    mpeg2_inputframe[ i ] = mpeg2_oldorgframe[ i ];
+  for ( i = 0; i < sizeof( mpeg2_oldorgframe ); ++i, ++p )
+    *p ^= bitmask;
 }
 
 
@@ -13195,8 +13198,8 @@ int mpeg2_variance( unsigned char *p, int lx )
 void _Pragma ( "entrypoint" ) mpeg2_main( void )
 {
   mpeg2_motion_estimation(
-    mpeg2_inputframe, mpeg2_inputframe, mpeg2_inputframe, mpeg2_inputframe,
-    mpeg2_inputframe, mpeg2_inputframe, 7, 7, 3, 3, mpeg2_mbinfo, 0, 0 );
+    mpeg2_oldorgframe, mpeg2_oldorgframe, mpeg2_oldorgframe, mpeg2_oldorgframe,
+    mpeg2_oldorgframe, mpeg2_oldorgframe, 7, 7, 3, 3, mpeg2_mbinfo, 0, 0 );
 }
 
 
@@ -13205,5 +13208,5 @@ int main( void )
   mpeg2_init();
   mpeg2_main();
 
-  return( mpeg2_return() - 140 );
+  return( mpeg2_return() - (-116) != 0 );
 }
