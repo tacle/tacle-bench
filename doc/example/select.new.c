@@ -51,8 +51,6 @@
 /*
   Forward declaration of functions
 */
-void select_initSeed( void );
-unsigned char select_randomInteger( void );
 void select_init( void );
 int select_return( void );
 int select_main( void );
@@ -67,8 +65,6 @@ float select_selected = 0.0;
 float select_arr[ 20 ] = {
   5.0f, 4.0f, 10.3f, 1.1f, 5.7f, 100.0f, 231.0f, 111.0f, 49.5f, 99.0f, 10.0f,
   150.0f, 222.22f, 101.0f, 77.0f, 44.0f, 35.0f, 20.54f, 99.99f, 888.88f };
-volatile unsigned char select_seed;
-volatile unsigned char select_xormask;
 
 #define SWAP(a,b) do { temp = (a); (a) = (b); (b) = temp; } while (0)
 
@@ -77,46 +73,18 @@ volatile unsigned char select_xormask;
   Initialization- and return-value-related functions
 */
 
-/*
-  select_initSeed initializes the seed used in the "random" number generator.
-*/
-void select_initSeed( void )
-{
-  select_seed = 0;
-}
-
-
-/*
-  select_RandomInteger generates "random" integers between 0 and 255.
-*/
-unsigned char select_randomInteger( void )
-{
-  select_seed = ( ( select_seed * 133 ) + 81 ) % 256;
-  return( select_seed );
-}
-
-
 void select_init( void )
 {
   unsigned int i;
   unsigned char *p;
-
-  select_initSeed();
-  select_xormask = select_randomInteger();
+  volatile char bitmask = 0;
 
   /*
-    Apply "random" XOR-bitmask to entire input array.
+    Apply volatile XOR-bitmask to entire input array.
   */
   p = (unsigned char *) &select_arr[ 0 ];
   for ( i = 0; i < sizeof( select_arr ); ++i, ++p )
-    *p ^= select_xormask;
-
-  /*
-    Undo this bit-masking by applying the XOR operation a second time.
-  */
-  p = (unsigned char *) &select_arr[ 0 ];
-  for ( i = 0; i < sizeof( select_arr ); ++i, ++p )
-    *p ^= select_xormask;
+    *p ^= bitmask;
 }
 
 
@@ -209,6 +177,6 @@ int main( void )
   select_init();
   select_main();
 
-  return( select_return() - 35 );
+  return( select_return() - 35 != 0 );
 }
 
