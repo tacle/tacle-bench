@@ -133,13 +133,9 @@ static unsigned int anagram_freeHeapPos;
 
 void *anagram_malloc( unsigned int numberOfBytes )
 {
-  /* Get a 4-byte address for alignment purposes */
-  unsigned int offset = ( ( unsigned int )anagram_simulated_heap +
-                          anagram_freeHeapPos ) % 4;
-  if ( offset )
-    anagram_freeHeapPos += 4 - offset;
   void *currentPos = ( void * )&anagram_simulated_heap[ anagram_freeHeapPos ];
-  anagram_freeHeapPos += numberOfBytes;
+  /* Get a 4-byte address for alignment purposes */
+  anagram_freeHeapPos += ( ( numberOfBytes + 4 ) & ( unsigned int )0xfffffffc );
   return currentPos;
 }
 
