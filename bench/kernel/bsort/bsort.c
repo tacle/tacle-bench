@@ -18,7 +18,7 @@
 
   Changes: See ChangeLog.txt
 
-  License: unknown
+  License: May be used, modified, and re-distributed freely.
 
 */
 
