@@ -128,6 +128,7 @@ static float pm_init_array_8[110];
 void pm_init_lib( pm_float_array_t *lib )
 {
   int i;
+  volatile int do_not_optimize_away = 0;
 
   lib->rctype = 1;
   lib->ndims = 2;
@@ -139,6 +140,10 @@ void pm_init_lib( pm_float_array_t *lib )
   for ( i = 0; i < 60; i++ )
     pm_lib_ptr[i] = pm_lib_data[i];
 
+  _Pragma( "loopbound min 60 max 60" )
+  for ( i = 0; i < 60; i++ )
+    pm_lib_ptr[i] += do_not_optimize_away;
+
   lib->data = *pm_lib_ptr;
   lib->datav = ( void * )pm_lib_ptr;
 }
@@ -147,6 +152,7 @@ void pm_init_lib( pm_float_array_t *lib )
 void pm_init_pattern( pm_float_array_t *pattern )
 {
   int i;
+  volatile int do_not_optimize_away = 0;
 
   pattern->rctype = 1;
   pattern->ndims = 2;
@@ -157,6 +163,10 @@ void pm_init_pattern( pm_float_array_t *pattern )
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
     pm_pattern_ptr[i] = pm_pattern_data[i];
+
+  _Pragma( "loopbound min 60 max 60" )
+  for ( i = 0; i < 60; i++ )
+    pm_pattern_ptr[i] += do_not_optimize_away;
 
   pattern->data = *pm_pattern_ptr;
   pattern->datav = ( void * )pm_pattern_ptr;
