@@ -337,18 +337,23 @@ void anagram_init( void )
   anagram_ReadDict();
 }
 
-#include <stdio.h>
 
 int anagram_return( void )
 {
   int i;
-  char const * answer = "Kay dupe rim ";
+  char const * answer1 = "Kay dupe rim ";
+  char const * answer2 = "dupe Kay rim ";
+  int answer1_wrong = 0;
+  int answer2_wrong = 0;
 
-  for (i = 0; i < 13; i++)
-    if (answer[ i ] != anagram_buffer[ i ])
-      return 1;
+  for (i = 0; i < 13; i++) {
+    if (answer1[ i ] != anagram_buffer[ i ])
+      answer1_wrong = 1;
+    if (answer2[ i ] != anagram_buffer[ i ])
+      answer2_wrong = 1;
+  }
 
-  return 0;
+  return answer1_wrong && answer2_wrong;
 }
 
 
