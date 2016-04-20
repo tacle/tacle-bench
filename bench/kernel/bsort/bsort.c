@@ -68,7 +68,13 @@ void bsort_init( void )
 
 int bsort_return( void )
 {
-  return 0;
+  int Sorted = 1;
+  int Index;
+
+  for ( Index = 0; Index < bsort_SIZE - 1; Index ++ )
+    Sorted = Sorted && ( bsort_Array[ Index ] < bsort_Array[ Index + 1 ] );
+
+  return 1 - Sorted;
 }
 
 
