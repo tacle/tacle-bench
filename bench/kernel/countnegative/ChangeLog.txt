@@ -24,3 +24,6 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
 2016-03-15:
 - Return 0 if checksum is as expected, -1 otherwise
 - Add entrypoint pragma
+
+2016-04-20:
+- Cast "expected" return value to int for comparison

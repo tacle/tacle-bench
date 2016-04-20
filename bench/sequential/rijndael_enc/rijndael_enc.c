@@ -68,13 +68,12 @@ void rijndael_enc_init( void )
   rijndael_enc_fin.size = 31369;
   rijndael_enc_fin.cur_pos = 0;
 
-  int i;
+  unsigned i;
   volatile int x = 0;
   rijndael_enc_fin.size ^= x;
   _Pragma( "loopbound min 31369 max 31369" )
-  for ( i = 0; i < rijndael_enc_fin.size; i++ ) {
+  for ( i = 0; i < rijndael_enc_fin.size; i++ )
     rijndael_enc_fin.data[i] ^= x;
-  }
 
   /* this is a pointer to the hexadecimal key digits  */
   const volatile char *cp =
@@ -116,7 +115,7 @@ void rijndael_enc_init( void )
 
 int rijndael_enc_return( void )
 {
-  return ( ( rijndael_enc_checksum == 249509 ) ? 0 : -1 );
+  return ( ( rijndael_enc_checksum == ( int )249509 ) ? 0 : -1 );
 }
 
 /* A Pseudo Random Number Generator (PRNG) used for the     */

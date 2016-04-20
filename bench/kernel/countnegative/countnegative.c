@@ -93,7 +93,7 @@ int countnegative_return( void )
                    countnegative_negtotal +
                    countnegative_negcnt );
 
-  return ( ( checksum == 0x1778de ) ? 0 : -1 );
+  return ( ( checksum == ( int )0x1778de ) ? 0 : -1 );
 }
 
 void countnegative_sum( matrix Array )

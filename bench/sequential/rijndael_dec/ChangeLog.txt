@@ -8,6 +8,8 @@ Source: security section of MiBench
 - Added general TACLeBench header to beginning of source code
 - Applied code formatting with astyle as in the example
 - Rename to rijndael_dec.c
+- Make loop counter in rijndael_dec_init unsigned
+- Remove dead code at end of rijndael_dec_decfile
 
 File: aes.h
 Source: security section of MiBench
@@ -25,6 +27,9 @@ Source: security section of MiBench
 - Replace implementation for rijndael_enc_encrypt with implementation
   for rijndael_enc_decrypt
 - Applied code formatting with astyle as in the example
+- Remove unused macros s, ff_poly, ff_hi, m1, m2, m3, FFmulX,
+  fwd_mcol, fwd_var, inv_var, si, so, fwd_rnd, inv_rnd, fwd_lrnd,
+  inv_lrnd, locals, l_copy, state_in, state_out, round
 
 File: aestab.h
 Source: security section of MiBench
@@ -32,6 +37,8 @@ Source: security section of MiBench
 2016-04-20:
 - Replace with file aestab.h from rijndael_enc benchmark, using prefix
   rijndael_dec
+- Remove unused arrays rijndael_dec_s_box, rijndael_dec_inv_s_box,
+  rijndael_dec_ft_tab
 
 Files: glibc_common.c, my_file.c, glibc_common.h, my_file.h
 Source: security section of MiBench
@@ -41,7 +48,7 @@ Source: security section of MiBench
   rijndael_enc benchmark (renamed to rijndael_dec_libc.c and
   rijndael_dec_libc.h, using prefix rijndael_dec)
 
-File: input_small_small.c
+File: input_small_enc.c
 Source: security section of MiBench
 
 2016-02-26:

@@ -68,7 +68,7 @@ void rijndael_dec_init( void )
   rijndael_dec_fin.size = 32768;
   rijndael_dec_fin.cur_pos = 0;
 
-  int i;
+  unsigned i;
   volatile int x = 0;
   rijndael_dec_fin.size ^= x;
   _Pragma( "loopbound min 32768 max 32768" )
@@ -172,15 +172,6 @@ void rijndael_dec_decfile( struct rijndael_dec_FILE *fin, struct aes *ctx )
     l = i;
     tp = bp1, bp1 = bp2, bp2 = tp;
   }
-
-  /* we have now output 16 * n + 15 bytes of the file with any left   */
-  /* in outbuf waiting to be output. If x bytes remain to be written, */
-  /* we know that (16 * n + x + 15) % 16 = flen, giving x = flen + 1  */
-  /* But we must also remember that the first block is offset by one  */
-  /* in the buffer - we use the fact that l = 15 rather than 16 here  */
-
-  l = ( l == 15 ? 1 : 0 );
-  flen += 1 - l;
 }
 
 void _Pragma( "entrypoint" ) rijndael_dec_main( void )
