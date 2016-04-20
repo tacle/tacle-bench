@@ -121,7 +121,7 @@ int rijndael_dec_return( void )
 void rijndael_dec_decfile( struct rijndael_dec_FILE *fin, struct aes *ctx )
 {
   unsigned char inbuf1[16], inbuf2[16], outbuf[16], *bp1, *bp2, *tp;
-  int           i, l, flen;
+  int           i;
 
 
   rijndael_dec_fread( inbuf1, 1, 16, fin );
@@ -143,8 +143,6 @@ void rijndael_dec_decfile( struct rijndael_dec_FILE *fin, struct aes *ctx )
   for ( i = 0; i < 16; ++i )      /* xor with previous input          */
     outbuf[i] ^= inbuf1[i];
 
-  flen = outbuf[0] & 15;  /* recover length of the last block and set */
-  l = 15;                 /* the count of valid bytes in block to 15  */
   bp1 = inbuf1;           /* set up pointers to two input buffers     */
   bp2 = inbuf2;
 
@@ -167,9 +165,7 @@ void rijndael_dec_decfile( struct rijndael_dec_FILE *fin, struct aes *ctx )
     for ( i = 0; i < 16; ++i )  /* xor it with previous input block */
       outbuf[i] ^= bp2[i];
 
-    /* set byte count to 16 and swap buffer pointers                */
-
-    l = i;
+    /* swap buffer pointers                */
     tp = bp1, bp1 = bp2, bp2 = tp;
   }
 }

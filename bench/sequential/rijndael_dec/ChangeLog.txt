@@ -9,7 +9,7 @@ Source: security section of MiBench
 - Applied code formatting with astyle as in the example
 - Rename to rijndael_dec.c
 - Make loop counter in rijndael_dec_init unsigned
-- Remove dead code at end of rijndael_dec_decfile
+- Remove dead code in rijndael_dec_decfile
 
 File: aes.h
 Source: security section of MiBench
