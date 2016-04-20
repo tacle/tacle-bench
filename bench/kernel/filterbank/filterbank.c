@@ -87,7 +87,7 @@ void _Pragma( "entrypoint" ) filterbank_main( void )
   while ( filterbank_numiters-- > 0 )
     filterbank_core( r, y, H, F );
 
-  filterbank_return_value = (int)( y[ 0 ] + y[ 1 ] );
+  filterbank_return_value = (int)( y[ 0 ] ) - 9408;
 }
 
 
