@@ -2,6 +2,11 @@ File: anagram.c
 Original provenience: unknown
 Source: unknown 
 
+2016-04-20:
+- Fixed some compiler warnings.
+- Return value of anagram_return depends on the computation inside
+  of anagram_main.
+
 2016-03-22
 - Added forward declarations for all functions.
 - Renamed function main to anagram_main.

@@ -193,6 +193,7 @@ typedef struct {
   char *pchWord;                            /* the word itself */
   anagram_Quad aqMask[ anagram_MAX_QUADS ]; /* the word's mask */
   unsigned cchLength;                       /* letters in the word */
+  char padding[4];
 } anagram_Word;
 typedef anagram_Word *anagram_PWord;
 typedef anagram_Word **anagram_PPWord;
@@ -268,6 +269,8 @@ static char *anagram_pchDictionary;
 static anagram_PWord anagram_apwSol[ anagram_MAXSOL ];
 static int anagram_cpwLast;
 
+/* buffer to write an answer */
+static char anagram_buffer[30];
 
 /*
   Initialization- and return-value-related functions
@@ -334,9 +337,17 @@ void anagram_init( void )
   anagram_ReadDict();
 }
 
+#include <stdio.h>
 
 int anagram_return( void )
 {
+  int i;
+  char const * answer = "Kay dupe rim ";
+
+  for (i = 0; i < 13; i++)
+    if (answer[ i ] != anagram_buffer[ i ])
+      return 1;
+
   return 0;
 }
 
@@ -520,18 +531,17 @@ void anagram_AddWords( void )
 void anagram_DumpWords( void )
 {
   int i, j;
-  char out[ 30 ];
   int offset = 0;
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < anagram_cpwLast; i ++ ) {
     _Pragma( "loopbound min 3 max 5" )
     for ( j = 0; anagram_apwSol[ i ]->pchWord[ j ] != '\0'; j ++ )
-      out[ offset + j ] = anagram_apwSol[ i ]->pchWord[ j ];
+      anagram_buffer[ offset + j ] = anagram_apwSol[ i ]->pchWord[ j ];
     offset += j;
 
-    out[ offset ++ ] = ' ';
+    anagram_buffer[ offset ++ ] = ' ';
   }
-  out[ offset ++ ] = '\0';
+  anagram_buffer[ offset ++ ] = '\0';
 }
 
 
