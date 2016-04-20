@@ -133,7 +133,7 @@ static unsigned int anagram_freeHeapPos;
 
 void *anagram_malloc( unsigned int numberOfBytes )
 {
-  /* Get a 4-byte adress for alignment purposes */
+  /* Get a 4-byte address for alignment purposes */
   unsigned int offset = ( ( unsigned int )anagram_simulated_heap +
                           anagram_freeHeapPos ) % 4;
   if ( offset )
