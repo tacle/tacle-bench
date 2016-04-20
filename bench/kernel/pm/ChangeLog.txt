@@ -2,6 +2,10 @@ File: pm.c
 Original provenience: unknown
 Source: HPEC Challenge Benchmark Suite
 
+2016-04-20:
+- Fixed some compiler warnings.
+- Moved main to end of file.
+
 2016-03-15:
 - Renamed preprocessor defines MIN_NOISE and LOG10 to pm_MIN_NOISE and
   pm_LOG10.

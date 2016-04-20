@@ -40,6 +40,7 @@ typedef struct pm_float_array_t {
   int          size[3];
   unsigned int ndims;
   unsigned int rctype;
+  char padding[4];
 } pm_float_array_t;
 
 
@@ -70,6 +71,7 @@ typedef struct pm_data_t {
   int   profile_size; /* the length of the pattern */
   int   num_templates; /* the number of library templates */
   int   elsize; /* the size of a single fp number */
+  char padding[4];
 } pm_data_t;
 
 
@@ -187,19 +189,6 @@ void _Pragma( "entrypoint" ) pm_main( void )
 }
 
 
-/*
-  Main function
-*/
-
-int main( void )
-{
-  pm_init();
-  pm_main();
-
-  return pm_return();
-}
-
-
 /***********************************************************************/
 /* Allocate and initailize the test pattern, the template library, and
    other necessary data structure. */
@@ -283,8 +272,8 @@ int pm_kernel( pm_data_t *pmdata )
 
   int match_index; /* the index of the most likely template that matches the
                       test pattern */
-  int min_MSE_index = shift_size + 1; /* the index of the range shifts with
-                                         the lowest mean square error */
+  int min_MSE_index; /* the index of the range shifts with
+                        the lowest mean square error */
   unsigned int num_template_exceed,
            num_test_exceed; /* the number of pixels exceeded the test pattern
                                and a library template */
@@ -729,4 +718,17 @@ int pm_kernel( pm_data_t *pmdata )
   }
 
   return match_index;
+}
+
+
+/*
+  Main function
+*/
+
+int main( void )
+{
+  pm_init();
+  pm_main();
+
+  return pm_return();
 }
