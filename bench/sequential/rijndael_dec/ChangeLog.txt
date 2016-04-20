@@ -1,0 +1,48 @@
+File: rijndael_decoder.c
+Source: security section of MiBench
+
+- Prefix library functions with rijndael_dec
+- Move functionality from function main into functions
+  rijndael_enc_init, rijndael_enc_main, and rijndael_enc_return
+  (reusing code from rijndael_enc benchmark)
+- Added general TACLeBench header to beginning of source code
+- Applied code formatting with astyle as in the example
+- Rename to rijndael_dec.c
+
+File: aes.h
+Source: security section of MiBench
+
+2016-04-20:
+- Replace with file aes.h from rijndael_enc benchmark
+- Declare prototype for rijndael_enc_decrypt instead of rijndael_enc_encrypt
+
+File: aes.c
+Source: security section of MiBench
+
+2016-04-20:
+- Replace with file aes.h from rijndael_enc benchmark, using prefix
+  rijndael_dec
+- Replace implementation for rijndael_enc_encrypt with implementation
+  for rijndael_enc_decrypt
+- Applied code formatting with astyle as in the example
+
+File: aestab.h
+Source: security section of MiBench
+
+2016-04-20:
+- Replace with file aestab.h from rijndael_enc benchmark, using prefix
+  rijndael_dec
+
+Files: glibc_common.c, my_file.c, glibc_common.h, my_file.h
+Source: security section of MiBench
+
+2016-04-20:
+- Replace with files rijndael_enc_libc.c and rijndael_enc_libc.h from
+  rijndael_enc benchmark (renamed to rijndael_dec_libc.c and
+  rijndael_dec_libc.h, using prefix rijndael_dec)
+
+File: input_small_small.c
+Source: security section of MiBench
+
+2016-02-26:
+- Prefix input array with rijndael_dec
