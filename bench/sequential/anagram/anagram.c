@@ -295,6 +295,7 @@ void anagram_ReadDict( void )
   unsigned cWords = 0;
   unsigned cLetters;
   int i;
+  volatile char bitmask = 0;
 
   len = 0;
   _Pragma( "loopbound min 2279 max 2279" )
@@ -320,6 +321,7 @@ void anagram_ReadDict( void )
         cLetters ++;
       *pch ++ = anagram_dictionary[ i ][ index ];
       index ++;
+      *( pch - 1 ) ^= bitmask;
     }
     *pch ++ = '\0';
     *pchBase = ( char )( pch - pchBase );
