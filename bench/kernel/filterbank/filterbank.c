@@ -36,6 +36,7 @@ void filterbank_core( float r[ 256 ],
   Declaration of global variables
 */
 
+static int filterbank_return_value;
 static int filterbank_numiters;
 
 
@@ -51,7 +52,7 @@ void filterbank_init( void )
 
 int filterbank_return( void )
 {
-  return 0;
+  return filterbank_return_value;
 }
 
 
@@ -85,6 +86,8 @@ void _Pragma( "entrypoint" ) filterbank_main( void )
   _Pragma( "loopbound min 2 max 2" )
   while ( filterbank_numiters-- > 0 )
     filterbank_core( r, y, H, F );
+
+  filterbank_return_value = (int)( y[ 0 ] + y[ 1 ] );
 }
 
 
