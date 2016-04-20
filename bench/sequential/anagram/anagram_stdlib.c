@@ -15,7 +15,7 @@
 
   Changes: See ChangeLog.txt
 
-  License: unknown
+  License: See anagram.c
 
 */
 
