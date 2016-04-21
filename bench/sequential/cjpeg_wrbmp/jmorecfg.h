@@ -19,18 +19,18 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: See the accompanying README file.
+  License: general open-source
 */
 
 #ifndef JMORECFG_H
 #define JMORECFG_H
 
 
-#define CJPEG_JPEG6B_WRBMP_GETJSAMPLE(value)  ((int) (value))
+#define CJPEG_WRBMP_GETJSAMPLE(value)  ((int) (value))
 
-typedef unsigned char CJPEG_JPEG6B_WRBMP_JSAMPLE;
-typedef short CJPEG_JPEG6B_WRBMP_JCOEF;
-typedef unsigned char CJPEG_JPEG6B_WRBMP_JOCTET;
+typedef unsigned char CJPEG_WRBMP_JSAMPLE;
+typedef short CJPEG_WRBMP_JCOEF;
+typedef unsigned char CJPEG_WRBMP_JOCTET;
 
 /* These typedefs are used for various table entries and so forth.
    They must be at least as wide as specified; but making them too big
@@ -41,12 +41,12 @@ typedef unsigned char CJPEG_JPEG6B_WRBMP_JOCTET;
 
 /* UINT8 must hold at least the values 0..255. */
 
-typedef unsigned char CJPEG_JPEG6B_WRBMP_UINT8;
+typedef unsigned char CJPEG_WRBMP_UINT8;
 
 
 /* UINT16 must hold at least the values 0..65535. */
 
-typedef unsigned short CJPEG_JPEG6B_WRBMP_UINT16;
+typedef unsigned short CJPEG_WRBMP_UINT16;
 
 
 /* INT16 must hold at least the values -32768..32767. */
@@ -61,7 +61,7 @@ typedef short INT16;
 typedef long INT32;
 #endif
 
-typedef unsigned int CJPEG_JPEG6B_WRBMP_JDIMENSION;
+typedef unsigned int CJPEG_WRBMP_JDIMENSION;
 
 /* This macro is used to declare a "method", that is, a function pointer.
    We want to supply prototype parameters if the compiler can cope.
@@ -71,10 +71,10 @@ typedef unsigned int CJPEG_JPEG6B_WRBMP_JDIMENSION;
 
 #define EXTERN(type)    extern type
 
-#ifdef CJPEG_JPEG6B_WRBMP_HAVE_PROTOTYPES
-#define CJPEG_JPEG6B_WRBMP_JMETHOD(type,methodname,arglist)  type (*methodname) arglist
+#ifdef CJPEG_WRBMP_HAVE_PROTOTYPES
+#define CJPEG_WRBMP_JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
-#define CJPEG_JPEG6B_WRBMP_JMETHOD(type,methodname,arglist)  type (*methodname) ()
+#define CJPEG_WRBMP_JMETHOD(type,methodname,arglist)  type (*methodname) ()
 #endif
 
 
@@ -85,12 +85,12 @@ typedef unsigned int CJPEG_JPEG6B_WRBMP_JDIMENSION;
 */
 
 #ifdef CJPEG_JPEG6B_WRBMP_NEED_FAR_POINTERS
-#define CJPEG_JPEG6B_WRBMP_FAR  far
+#define CJPEG_WRBMP_FAR  far
 #else
-#define CJPEG_JPEG6B_WRBMP_FAR
+#define CJPEG_WRBMP_FAR
 #endif
 
 #ifndef CJPEG_JPEG6B_WRBMP_HAVE_BOOLEAN
-typedef int cjpeg_jpeg6b_wrbmp_boolean;
+typedef int cjpeg_wrbmp_boolean;
 #endif
 #endif

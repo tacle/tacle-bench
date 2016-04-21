@@ -7,13 +7,13 @@
 
   Author: Bob Stout & Auke Reitsma
 
-  Function:
+  Function: test program for bit counting functions
 
   Source: www.snippest.com
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: public domain
+  License: general open-source
 
 */
 
@@ -26,11 +26,11 @@
    Global variables
 */
 
-unsigned long bitcount_randseed = 1;
+unsigned long bitcount_randseed;
 int bitcount_res;
 unsigned long bitcount_seed;
-unsigned long bitcount_n = 0;
-unsigned int bitcount_iterations = 10;
+unsigned long bitcount_n;
+unsigned int bitcount_iterations;
 
 /*
    First declaration of the functions
@@ -45,7 +45,8 @@ int main( void );
 
 static int bitcount_bit_shifter( long int x )
 {
-  int i, n;
+  int n;
+  unsigned int i;
 
   _Pragma( "loopbound min 31 max 31" )
   for ( i = n = 0; x && ( i < ( sizeof( long ) * 8 ) ); ++i, x >>= 1 )
@@ -90,7 +91,7 @@ unsigned long bitcount_random( void )
 
 void bitcount_main()
 {
-  int i, j;
+  unsigned int i, j;
   _Pragma( "loopbound min 8 max 8" )
   for ( i = 0; i < FUNCS; i++ ) {
     _Pragma( "loopbound min 10 max 10" )

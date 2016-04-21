@@ -42,8 +42,8 @@ int main( void );
   Declaration of global variables
 */
 unsigned int insertsort_a[11];
-int insertsort_iters_i = 0, insertsort_min_i = 100000, insertsort_max_i = 0;
-int insertsort_iters_a = 0, insertsort_min_a = 100000, insertsort_max_a = 0;
+int insertsort_iters_i, insertsort_min_i, insertsort_max_i;
+int insertsort_iters_a, insertsort_min_a, insertsort_max_a;
 
 /*
   Initialization- and return-value-related functions
@@ -52,7 +52,7 @@ int insertsort_iters_a = 0, insertsort_min_a = 100000, insertsort_max_a = 0;
 void insertsort_initialize(unsigned int* array)
 {
 
-    register int i;
+    register volatile int i;
     _Pragma( "loopbound min 10 max 10" )
     for ( i = 0; i < 10; i++ )
         insertsort_a[i] = array[i];
@@ -63,12 +63,25 @@ void insertsort_initialize(unsigned int* array)
 void insertsort_init()
 {
     unsigned int a[11] = {0, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+
+    insertsort_iters_i = 0;
+    insertsort_min_i = 100000;
+	insertsort_max_i = 0;
+    insertsort_iters_a = 0;
+    insertsort_min_a = 100000;
+    insertsort_max_a = 0;
+
     insertsort_initialize(a);
 }
 
 int insertsort_return()
 {
-    return 0;
+	int i, returnValue=0;
+
+	for ( i = 0; i < 10; i++ )
+		returnValue += insertsort_a[i];
+
+    return returnValue - 52;
 }
 
 
@@ -116,11 +129,6 @@ void _Pragma( "entrypoint" ) insertsort_main()
         insertsort_min_i = insertsort_iters_i;
     if ( insertsort_iters_i > insertsort_max_i )
         insertsort_max_i = insertsort_iters_i;
-
-
-    printf( "i-loop: [%d, %d]\n", insertsort_min_i, insertsort_max_i );
-    printf( "a-loop: [%d, %d]\n", insertsort_min_a, insertsort_max_a );
-
 }
 
 int main( void )

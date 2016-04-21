@@ -21,6 +21,7 @@ Original provenience:
 2015-10-12:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
+- Removed _jpeg6b_ from the prefix
 - Changed the global variable from colormap to cjpeg_jpeg6b_wrbmp_colormap
 - Removed unused variables: test_image[] and color_map[]
 - Moved initialization of cjpeg_jpeg6b_wrbmp_colormap to function. This function is called from cjpeg_jpeg6b_wrbmp_init function
@@ -32,6 +33,7 @@ Original provenience:
 2015-10-12:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
+- Removed _jpeg6b_ from the prefix
 - Changed JMESSAGE to CJPEG_JPEG6B_WRBMP_JMESSAGE
 - Changed JMAKE_ENUM_LIST to CJPEG_JPEG6B_WRBMP_JMAKE_ENUM_LIST
 - Applied Code Style 
@@ -53,6 +55,7 @@ Original provenience:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
 - Change defines to CJPEG_JPEG6B_WRBMP_{NAME}
+- Removed _jpeg6b_ from the prefix
 - Applied Code Style 
 
 
@@ -63,6 +66,7 @@ Original provenience:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
 - Removed error and warning defines
+- Removed _jpeg6b_ from the prefix
 - Applied Code Style 
 
 
@@ -73,6 +77,7 @@ Original provenience:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
 - Removed unused comments
+- Removed _jpeg6b_ from the prefix
 - Removed unused defines
 - Removed unused typedefs
 - Applied Code Style 
@@ -85,6 +90,7 @@ Original provenience:
 - Remove comment on line 1
 - Used define value directly
 - Remove unused typedefs, defines
+- Removed _jpeg6b_ from the prefix
 - Changed struct name to cjpeg_jpeg6b_wrbmp_{name}
 - Changed define {name} to cjpeg_jpeg6b_wrbmp_{name}
 - Added generic TACLeBench header to line 1

@@ -12,14 +12,13 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: may be used, modified, and re-distributed freely
+  License: general open-source
 
 */
 
 /* A read from this address will result in an known value of 1 */
 #define KNOWN_VALUE 1
 #define NDES_WORSTCASE 1
-
 /*
   Declaration of global variables
 */
@@ -35,9 +34,9 @@ unsigned long ndes_bit[33];
 ndes_immense ndes_inp, ndes_key, ndes_out;
 int ndes_newkey, ndes_isw;
 
-ndes_immense ndes_icd;
-char ndes_ipc1[57];
-char ndes_ipc2[49];
+static ndes_immense ndes_icd;
+static char ndes_ipc1[57];
+static char ndes_ipc2[49];
 
 
 #ifdef NDES_WORSTCASE
@@ -63,7 +62,7 @@ int main( void );
 */
 void ndes_init()
 {
-  int i;
+  volatile int i;
   char ndes_ipc1_tmp[57] = {
     0, 57, 49, 41, 33, 25, 17, 9, 1, 58, 50,
     42, 34, 26, 18, 10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60,
@@ -80,9 +79,6 @@ void ndes_init()
     ndes_ipc1[i] = ndes_ipc1_tmp[i];
   for ( i = 0; i < 49; i++ )
     ndes_ipc2[i] = ndes_ipc2_tmp[i];
-
-  ndes_icd.l = 0;
-  ndes_icd.r = 0;
 
   ndes_inp.l = KNOWN_VALUE * 35;
   ndes_inp.r = KNOWN_VALUE * 26;
@@ -142,7 +138,7 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
     _Pragma( "loopbound min 28 max 28" )
     for ( j = 28, k = 56; j >= 1; j--, k-- ) {
       ndes_icd.r = ( ndes_icd.r << 1 ) | ndes_getbit( key, ndes_ipc1[j], 32 );
-	  ndes_icd.l = ndes_icd.l << 1;
+      ndes_icd.l = ndes_icd.l << 1;
       ndes_icd.l = ( ndes_icd.l ) | ndes_getbit( key, ndes_ipc1[k], 32 );
     }
 
@@ -161,7 +157,7 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
 	itmp.r = itmp.r << 1;
     itmp.r = ( itmp.r ) | ndes_getbit( inp, ip[j], 32 );
 	itmp.l = itmp.l << 1;
-    itmp.l = ( itmp.l ) | ndes_getbit( inp, ip[k], 32 );
+	itmp.l = ( itmp.l ) | ndes_getbit( inp, ip[k], 32 );
   }
   _Pragma( "loopbound min 16 max 16" )
   for ( i = 1; i <= 16; i++ ) {
@@ -180,9 +176,9 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
   _Pragma( "loopbound min 32 max 32" )
   for ( j = 32, k = 64; j >= 1; j--, k-- ) {
 	( *out ).r = ( *out ).r << 1;
-    ( *out ).r = ( ( *out ).r ) | ndes_getbit( itmp, ipm[j], 32 );
+	( *out ).r = ( ( *out ).r ) | ndes_getbit( itmp, ipm[j], 32 );
 	( *out ).l = ( *out ).l << 1;
-    ( *out ).l = ( ( *out ).l ) | ndes_getbit( itmp, ipm[k], 32 );
+	( *out ).l = ( ( *out ).l ) | ndes_getbit( itmp, ipm[k], 32 );
   }
 }
 
@@ -267,7 +263,8 @@ void ndes_cyfun( unsigned long ir, ndes_great k, unsigned long *iout )
   ndes_great ie;
   unsigned long itmp, ietmp1, ietmp2;
   char iec[9];
-  int jj, irow, icol, iss, j, l, m;
+  int irow, icol, iss, l, m;
+  int volatile j, jj;
   unsigned long *p;
 
   p = ndes_bit;
@@ -310,10 +307,8 @@ void ndes_cyfun( unsigned long ir, ndes_great k, unsigned long *iout )
 
   _Pragma( "loopbound min 32 max 32" )
   for ( j = 32; j >= 1; j-- )
-  {
 	*iout = ( *iout << 1 );
-    *iout |= ( p[ipp[j]] & itmp ? 1 : 0 );
-  }
+	*iout |= ( p[ipp[j]] & itmp ? 1 : 0 );
 }
 
 unsigned long ndes_getbit( ndes_immense source, int bitno, int nbits )

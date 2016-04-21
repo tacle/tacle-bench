@@ -199,7 +199,7 @@ int sha_return( void )
   for(i=0;i<16;i++)
 	sum+=sha_info.data[i];
 
-  return (( int )  sum - 4007465316);
+  return (( int )  sum - 1532778765);
 }
 
 int main ( void )

@@ -1,4 +1,4 @@
-﻿File: recursion.c
+File: recursion.c
 Original provenience: Mälardalen benchmark suite, www.mrtc.....
 
 2015-10-12:
@@ -9,5 +9,6 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
 - Added recursion_main, recursion_init, recursion_return function
 - create input value for recursion_fib function
 - Applied Code Style 
-- Make the return function equal to 0, by substracting 89 from the result
+- Added checksum in return function
+- Made input value volatile
 

@@ -13,7 +13,7 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: public domain
+  License: general open-source
 
 */
 
@@ -36,6 +36,7 @@ int bitcount_bitcount( long i );
 **  bitcount_3.c
 */
 void bitcount_init3( void );
+int bitcount_ntbl_bitcount( long int x );
 int bitcount_BW_btbl_bitcount( long int x );
 int bitcount_AR_btbl_bitcount( long int x );
 

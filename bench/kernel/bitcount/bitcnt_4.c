@@ -5,18 +5,15 @@
 
   Name: bitcnt_4.c
 
-  Author: unknown
+  Author: Bob Stout
 
-  Function: st is a statistics program.
-    This program computes for two arrays of numbers the sum, the mean,
-    the variance, and standard deviation. It then determines the
-    correlation coefficient between the two arrays.
+  Function: Recursive bit counting functions using table lookup
 
-  Source: 
+  Source: http://www.snippets.org/
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: public domain
+  License: general open-source
 
 */
 
@@ -34,7 +31,7 @@ static char bitcount_bits[256];
 
 void bitcount_init4( void )
 {
-  int i = 0;
+  int volatile i = 0;
   char bitcount_bits_tmp[256] = {
     0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
     1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,

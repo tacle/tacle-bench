@@ -18,15 +18,15 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: See the accompanying README file.
+  License: general open-source
 */
 
 
 #ifndef JPEGLIB_H
 #define JPEGLIB_H
 
-typedef int CJPEG_JPEG6B_WRBMP_FILE;
-typedef unsigned int cjpeg_jpeg6b_wrbmp_size_t;
+typedef int CJPEG_WRBMP_FILE;
+typedef unsigned int cjpeg_wrbmp_size_t;
 
 /*
    First we include the configuration files that record how this
@@ -45,23 +45,23 @@ typedef unsigned int cjpeg_jpeg6b_wrbmp_size_t;
    but the pointer arrays can fit in near memory.
 */
 
-typedef CJPEG_JPEG6B_WRBMP_JSAMPLE CJPEG_JPEG6B_WRBMP_FAR
-*CJPEG_JPEG6B_WRBMP_JSAMPROW;  /* ptr to one image row of pixel samples. */
-typedef CJPEG_JPEG6B_WRBMP_JSAMPROW
-*CJPEG_JPEG6B_WRBMP_JSAMPARRAY; /* ptr to some rows (a 2-D sample array) */
-typedef CJPEG_JPEG6B_WRBMP_JSAMPARRAY
-*CJPEG_JPEG6B_WRBMP_JSAMPIMAGE; /* a 3-D sample array: top index is color */
+typedef CJPEG_WRBMP_JSAMPLE CJPEG_WRBMP_FAR
+*CJPEG_WRBMP_JSAMPROW;  /* ptr to one image row of pixel samples. */
+typedef CJPEG_WRBMP_JSAMPROW
+*CJPEG_WRBMP_JSAMPARRAY; /* ptr to some rows (a 2-D sample array) */
+typedef CJPEG_WRBMP_JSAMPARRAY
+*CJPEG_WRBMP_JSAMPIMAGE; /* a 3-D sample array: top index is color */
 
-typedef CJPEG_JPEG6B_WRBMP_JCOEF
-CJPEG_JPEG6B_WRBMP_JBLOCK[64]; /* one block of coefficients */
-typedef CJPEG_JPEG6B_WRBMP_JBLOCK CJPEG_JPEG6B_WRBMP_FAR
-*CJPEG_JPEG6B_WRBMP_JBLOCKROW;  /* pointer to one row of coefficient blocks */
-typedef CJPEG_JPEG6B_WRBMP_JBLOCKROW
-*CJPEG_JPEG6B_WRBMP_JBLOCKARRAY;   /* a 2-D array of coefficient blocks */
-typedef CJPEG_JPEG6B_WRBMP_JBLOCKARRAY
-*CJPEG_JPEG6B_WRBMP_JBLOCKIMAGE; /* a 3-D array of coefficient blocks */
+typedef CJPEG_WRBMP_JCOEF
+CJPEG_WRBMP_JBLOCK[64]; /* one block of coefficients */
+typedef CJPEG_WRBMP_JBLOCK CJPEG_WRBMP_FAR
+*CJPEG_WRBMP_JBLOCKROW;  /* pointer to one row of coefficient blocks */
+typedef CJPEG_WRBMP_JBLOCKROW
+*CJPEG_WRBMP_JBLOCKARRAY;   /* a 2-D array of coefficient blocks */
+typedef CJPEG_WRBMP_JBLOCKARRAY
+*CJPEG_WRBMP_JBLOCKIMAGE; /* a 3-D array of coefficient blocks */
 
-typedef CJPEG_JPEG6B_WRBMP_JCOEF CJPEG_JPEG6B_WRBMP_FAR
+typedef CJPEG_WRBMP_JCOEF CJPEG_WRBMP_FAR
 *JCOEFPTR;  /* useful in a couple of places */
 
 
@@ -75,32 +75,32 @@ typedef struct {
      (not the zigzag order in which they are stored in a JPEG DQT marker).
      CAUTION: IJG versions prior to v6a kept this array in zigzag order.
   */
-  CJPEG_JPEG6B_WRBMP_UINT16
+  CJPEG_WRBMP_UINT16
   quantval[64];  /* quantization step for each coefficient */
   /* This field is used only during compression.  It's initialized FALSE when
      the table is created, and set TRUE when it's been output to the file.
      You could suppress output of a table by setting this to TRUE.
      (See jpeg_suppress_tables for an example.)
   */
-  cjpeg_jpeg6b_wrbmp_boolean sent_table;   /* TRUE when table has been output */
-} CJPEG_JPEG6B_WRBMP_JQUANT_TBL;
+  cjpeg_wrbmp_boolean sent_table;   /* TRUE when table has been output */
+} CJPEG_WRBMP_JQUANT_TBL;
 
 
 /* Huffman coding tables. */
 
 typedef struct {
   /* These two fields directly represent the contents of a JPEG DHT marker */
-  CJPEG_JPEG6B_WRBMP_UINT8 bits[17];   /* bits[k] = # of symbols with codes of */
+  CJPEG_WRBMP_UINT8 bits[17];   /* bits[k] = # of symbols with codes of */
   /* length k bits; bits[0] is unused */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   huffval[256];   /* The symbols, in order of incr code length */
   /* This field is used only during compression.  It's initialized FALSE when
      the table is created, and set TRUE when it's been output to the file.
      You could suppress output of a table by setting this to TRUE.
      (See jpeg_suppress_tables for an example.)
   */
-  cjpeg_jpeg6b_wrbmp_boolean sent_table;   /* TRUE when table has been output */
-} CJPEG_JPEG6B_WRBMP_JHUFF_TBL;
+  cjpeg_wrbmp_boolean sent_table;   /* TRUE when table has been output */
+} CJPEG_WRBMP_JHUFF_TBL;
 
 
 /* Basic info about one component (color channel). */
@@ -128,8 +128,8 @@ typedef struct {
      Any dummy blocks added to complete an MCU are not counted; therefore
      these values do not depend on whether a scan is interleaved or not.
   */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION width_in_blocks;
-  CJPEG_JPEG6B_WRBMP_JDIMENSION height_in_blocks;
+  CJPEG_WRBMP_JDIMENSION width_in_blocks;
+  CJPEG_WRBMP_JDIMENSION height_in_blocks;
   /* Size of a DCT block in samples.  Always DCTSIZE for compression.
      For decompression this is the size of the output from one DCT block,
      reflecting any scaling we choose to apply during the IDCT step.
@@ -143,13 +143,13 @@ typedef struct {
      and similarly for height.  For decompression, IDCT scaling is included, so
      downsampled_width = ceil(image_width * Hi/Hmax * DCT_scaled_size/DCTSIZE)
   */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION downsampled_width;  /* actual width in samples */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION downsampled_height; /* actual height in samples */
+  CJPEG_WRBMP_JDIMENSION downsampled_width;  /* actual width in samples */
+  CJPEG_WRBMP_JDIMENSION downsampled_height; /* actual height in samples */
   /* This flag is used only for decompression.  In cases where some of the
      components will be ignored (eg grayscale output from YCbCr image),
      we can skip most computations for the unused components.
   */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   component_needed; /* do we need the value of this component? */
 
   /* These values are computed before starting a scan of the component. */
@@ -165,11 +165,11 @@ typedef struct {
      See jdinput.c comments about the need for this information.
      This field is currently used only for decompression.
   */
-  CJPEG_JPEG6B_WRBMP_JQUANT_TBL *quant_table;
+  CJPEG_WRBMP_JQUANT_TBL *quant_table;
 
   /* Private per-component storage for DCT or IDCT subsystem. */
   void *dct_table;
-} cjpeg_jpeg6b_wrbmp_jpeg_component_info;
+} cjpeg_wrbmp_jpeg_component_info;
 
 
 /* The script for encoding a multiple-scan file is an array of these: */
@@ -179,19 +179,19 @@ typedef struct {
   int component_index[4]; /* their SOF/comp_info[] indexes */
   int Ss, Se;     /* progressive JPEG spectral selection parms */
   int Ah, Al;     /* progressive JPEG successive approx. parms */
-} cjpeg_jpeg6b_wrbmp_jpeg_scan_info;
+} cjpeg_wrbmp_jpeg_scan_info;
 
 /* The decompressor can save APPn and COM markers in a list of these: */
 
-typedef struct cjpeg_jpeg6b_wrbmp_jpeg_marker_struct CJPEG_JPEG6B_WRBMP_FAR
+typedef struct cjpeg_wrbmp_jpeg_marker_struct CJPEG_WRBMP_FAR
   *jpeg_saved_marker_ptr;
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_marker_struct {
+struct cjpeg_wrbmp_jpeg_marker_struct {
   jpeg_saved_marker_ptr next; /* next in list, or NULL */
-  CJPEG_JPEG6B_WRBMP_UINT8 marker;     /* marker code: JPEG_COM, or JPEG_APP0+n */
+  CJPEG_WRBMP_UINT8 marker;     /* marker code: JPEG_COM, or JPEG_APP0+n */
   unsigned int original_length; /* # bytes of data in the file */
   unsigned int data_length; /* # bytes of data saved at data[] */
-  CJPEG_JPEG6B_WRBMP_JOCTET CJPEG_JPEG6B_WRBMP_FAR
+  CJPEG_WRBMP_JOCTET CJPEG_WRBMP_FAR
   *data;     /* the data contained in the marker */
   /* the marker length word is not counted in data_length or original_length */
 };
@@ -205,7 +205,7 @@ typedef enum {
   JCS_YCbCr,    /* Y/Cb/Cr (also known as YUV) */
   JCS_CMYK,   /* C/M/Y/K */
   JCS_YCCK    /* Y/Cb/Cr/K */
-} CJPEG_JPEG6B_WRBMP_J_COLOR_SPACE;
+} CJPEG_WRBMP_J_COLOR_SPACE;
 
 /* DCT/IDCT algorithm options. */
 
@@ -213,7 +213,7 @@ typedef enum {
   JDCT_ISLOW,   /* slow but accurate integer algorithm */
   JDCT_IFAST,   /* faster, less accurate integer method */
   JDCT_FLOAT    /* floating-point: accurate, fast on fast HW */
-} CJPEG_JPEG6B_WRBMP_J_DCT_METHOD;
+} CJPEG_WRBMP_J_DCT_METHOD;
 
 /* Dithering options for decompression. */
 
@@ -221,56 +221,56 @@ typedef enum {
   JDITHER_NONE,   /* no dithering */
   JDITHER_ORDERED,  /* simple ordered dither */
   JDITHER_FS    /* Floyd-Steinberg error diffusion dither */
-} CJPEG_JPEG6B_WRBMP_J_DITHER_MODE;
+} CJPEG_WRBMP_J_DITHER_MODE;
 
 
 /* Common fields between JPEG compression and decompression master structs. */
 
-#define cjpeg_jpeg6b_wrbmp_jpeg_common_fields \
-  struct cjpeg_jpeg6b_wrbmp_jpeg_error_mgr * err;  /* Error handler module */\
-  struct cjpeg_jpeg6b_wrbmp_jpeg_memory_mgr * mem; /* Memory manager module */\
-  struct cjpeg_jpeg6b_wrbmp_jpeg_progress_mgr * progress; /* Progress monitor, or NULL if none */\
+#define cjpeg_wrbmp_jpeg_common_fields \
+  struct cjpeg_wrbmp_jpeg_error_mgr * err;  /* Error handler module */\
+  struct cjpeg_wrbmp_jpeg_memory_mgr * mem; /* Memory manager module */\
+  struct cjpeg_wrbmp_jpeg_progress_mgr * progress; /* Progress monitor, or NULL if none */\
   void * client_data;   /* Available for use by application */\
-  cjpeg_jpeg6b_wrbmp_boolean is_decompressor;  /* So common code can tell which is which */\
+  cjpeg_wrbmp_boolean is_decompressor;  /* So common code can tell which is which */\
   int global_state    /* For checking call sequence validity */
 
 /* Routines that are to be used by both halves of the library are declared
    to receive a pointer to this structure.  There are no actual instances of
    jpeg_common_struct, only of jpeg_compress_struct and jpeg_decompress_struct.
 */
-struct cjpeg_jpeg6b_wrbmp_jpeg_common_struct {
-  cjpeg_jpeg6b_wrbmp_jpeg_common_fields;   /* Fields common to both master struct types */
+struct cjpeg_wrbmp_jpeg_common_struct {
+  cjpeg_wrbmp_jpeg_common_fields;   /* Fields common to both master struct types */
   /* Additional fields follow in an actual jpeg_compress_struct or
      jpeg_decompress_struct.  All three structs must agree on these
      initial fields!  (This would be a lot cleaner in C++.)
   */
 };
 
-typedef struct cjpeg_jpeg6b_wrbmp_jpeg_common_struct
-  *cjpeg_jpeg6b_wrbmp_j_common_ptr;
-typedef struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct
-  *cjpeg_jpeg6b_wrbmp_j_compress_ptr;
-typedef struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct
-  *cjpeg_jpeg6b_wrbmp_j_decompress_ptr;
+typedef struct cjpeg_wrbmp_jpeg_common_struct
+  *cjpeg_wrbmp_j_common_ptr;
+typedef struct cjpeg_wrbmp_jpeg_compress_struct
+  *cjpeg_wrbmp_j_compress_ptr;
+typedef struct cjpeg_wrbmp_jpeg_decompress_struct
+  *cjpeg_wrbmp_j_decompress_ptr;
 
 
 /* Master record for a compression instance */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
-  cjpeg_jpeg6b_wrbmp_jpeg_common_fields;   /* Fields shared with jpeg_decompress_struct */
+struct cjpeg_wrbmp_jpeg_compress_struct {
+  cjpeg_wrbmp_jpeg_common_fields;   /* Fields shared with jpeg_decompress_struct */
 
   /* Destination for compressed data */
-  struct cjpeg_jpeg6b_wrbmp_jpeg_destination_mgr *dest;
+  struct cjpeg_wrbmp_jpeg_destination_mgr *dest;
 
   /* Description of source image --- these fields must be filled in by
      outer application before starting compression.  in_color_space must
      be correct before you can even call jpeg_set_defaults().
   */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION image_width; /* input image width */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION image_height;  /* input image height */
+  CJPEG_WRBMP_JDIMENSION image_width; /* input image width */
+  CJPEG_WRBMP_JDIMENSION image_height;  /* input image height */
   int input_components;   /* # of color components in input image */
-  CJPEG_JPEG6B_WRBMP_J_COLOR_SPACE in_color_space; /* colorspace of input image */
+  CJPEG_WRBMP_J_COLOR_SPACE in_color_space; /* colorspace of input image */
 
   float input_gamma;    /* image gamma of input image */
 
@@ -285,44 +285,44 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
   int data_precision;   /* bits of precision in image data */
 
   int num_components;   /* # of color components in JPEG image */
-  CJPEG_JPEG6B_WRBMP_J_COLOR_SPACE
+  CJPEG_WRBMP_J_COLOR_SPACE
   jpeg_color_space; /* colorspace of JPEG image */
 
-  cjpeg_jpeg6b_wrbmp_jpeg_component_info *comp_info;
+  cjpeg_wrbmp_jpeg_component_info *comp_info;
   /* comp_info[i] describes component that appears i'th in SOF */
 
-  CJPEG_JPEG6B_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
+  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
   /* ptrs to coefficient quantization tables, or NULL if not defined */
 
-  CJPEG_JPEG6B_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
-  CJPEG_JPEG6B_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
   /* ptrs to Huffman coding tables, or NULL if not defined */
 
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_dc_L[16]; /* L values for DC arith-coding tables */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_dc_U[16]; /* U values for DC arith-coding tables */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_ac_K[16]; /* Kx values for AC arith-coding tables */
 
   int num_scans;    /* # of entries in scan_info array */
-  const cjpeg_jpeg6b_wrbmp_jpeg_scan_info
+  const cjpeg_wrbmp_jpeg_scan_info
   *scan_info;  /* script for multi-scan file, or NULL */
   /* The default value of scan_info is NULL, which causes a single-scan
      sequential JPEG file to be emitted.  To create a multi-scan file,
      set num_scans and scan_info to point to an array of scan definitions.
   */
 
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   raw_data_in;    /* TRUE=caller supplies downsampled data */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   arith_code;   /* TRUE=arithmetic coding, FALSE=Huffman */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   optimize_coding;  /* TRUE=optimize entropy encoding parms */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   CCIR601_sampling; /* TRUE=first samples are cosited */
   int smoothing_factor;   /* 1..100, or 0 for no input smoothing */
-  CJPEG_JPEG6B_WRBMP_J_DCT_METHOD dct_method;  /* DCT algorithm selector */
+  CJPEG_WRBMP_J_DCT_METHOD dct_method;  /* DCT algorithm selector */
 
   /* The restart interval can be specified in absolute MCUs by setting
      restart_interval, or in MCU rows by setting restart_in_rows
@@ -334,19 +334,19 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
 
   /* Parameters controlling emission of special markers. */
 
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   write_JFIF_header;  /* should a JFIF marker be written? */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   JFIF_major_version; /* What to write for the JFIF version number */
-  CJPEG_JPEG6B_WRBMP_UINT8 JFIF_minor_version;
+  CJPEG_WRBMP_UINT8 JFIF_minor_version;
   /* These three values are not used by the JPEG code, merely copied */
   /* into the JFIF APP0 marker.  density_unit can be 0 for unknown, */
   /* 1 for dots/inch, or 2 for dots/cm.  Note that the pixel aspect */
   /* ratio is defined by X_density/Y_density even when density_unit=0. */
-  CJPEG_JPEG6B_WRBMP_UINT8 density_unit;   /* JFIF code for pixel size units */
-  CJPEG_JPEG6B_WRBMP_UINT16 X_density;   /* Horizontal pixel density */
-  CJPEG_JPEG6B_WRBMP_UINT16 Y_density;   /* Vertical pixel density */
-  cjpeg_jpeg6b_wrbmp_boolean
+  CJPEG_WRBMP_UINT8 density_unit;   /* JFIF code for pixel size units */
+  CJPEG_WRBMP_UINT16 X_density;   /* Horizontal pixel density */
+  CJPEG_WRBMP_UINT16 Y_density;   /* Vertical pixel density */
+  cjpeg_wrbmp_boolean
   write_Adobe_marker; /* should an Adobe marker be written? */
 
   /* State variable: index of next scanline to be written to
@@ -354,7 +354,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
      processing loop, e.g., "while (next_scanline < image_height)".
   */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION next_scanline; /* 0 .. image_height-1  */
+  CJPEG_WRBMP_JDIMENSION next_scanline; /* 0 .. image_height-1  */
 
   /* Remaining fields are known throughout compressor, but generally
      should not be touched by a surrounding application.
@@ -363,12 +363,12 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
   /*
      These fields are computed during compression startup
   */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   progressive_mode; /* TRUE if scan script uses progressive mode */
   int max_h_samp_factor;  /* largest h_samp_factor */
   int max_v_samp_factor;  /* largest v_samp_factor */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  CJPEG_WRBMP_JDIMENSION
   total_iMCU_rows; /* # of iMCU rows to be input to coef ctlr */
   /* The coefficient controller receives data in units of MCU rows as defined
      for fully interleaved scans (whether the JPEG file is interleaved or not).
@@ -381,11 +381,11 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
      They describe the components and MCUs actually appearing in the scan.
   */
   int comps_in_scan;    /* # of JPEG components in this scan */
-  cjpeg_jpeg6b_wrbmp_jpeg_component_info *cur_comp_info[4];
+  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[4];
   /* *cur_comp_info[i] describes component that appears i'th in SOS */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  CJPEG_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
+  CJPEG_WRBMP_JDIMENSION
   MCU_rows_in_scan;  /* # of MCU rows in the image */
 
   int blocks_in_MCU;    /* # of DCT blocks per MCU */
@@ -395,7 +395,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
 
   int Ss, Se, Ah, Al;   /* progressive JPEG parameters for scan */
 
-  cjpeg_jpeg6b_wrbmp_jpeg_scan_info
+  cjpeg_wrbmp_jpeg_scan_info
   *script_space;  /* workspace for jpeg_simple_progression */
   int script_space_size;
 };
@@ -403,20 +403,20 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_compress_struct {
 
 /* Master record for a decompression instance */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
-  cjpeg_jpeg6b_wrbmp_jpeg_common_fields;   /* Fields shared with jpeg_compress_struct */
+struct cjpeg_wrbmp_jpeg_decompress_struct {
+  cjpeg_wrbmp_jpeg_common_fields;   /* Fields shared with jpeg_compress_struct */
 
   /* Source of compressed data */
-  struct cjpeg_jpeg6b_wrbmp_jpeg_source_mgr *src;
+  struct cjpeg_wrbmp_jpeg_source_mgr *src;
 
   /* Basic description of image --- filled in by jpeg_read_header(). */
   /* Application may inspect these values to decide how to process image. */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  CJPEG_WRBMP_JDIMENSION
   image_width; /* nominal image width (from SOF marker) */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION image_height;  /* nominal image height */
+  CJPEG_WRBMP_JDIMENSION image_height;  /* nominal image height */
   int num_components;   /* # of color components in JPEG image */
-  CJPEG_JPEG6B_WRBMP_J_COLOR_SPACE
+  CJPEG_WRBMP_J_COLOR_SPACE
   jpeg_color_space; /* colorspace of JPEG image */
 
   /* Decompression processing parameters --- these fields must be set before
@@ -424,35 +424,35 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      them to default values.
   */
 
-  CJPEG_JPEG6B_WRBMP_J_COLOR_SPACE out_color_space; /* colorspace for output */
+  CJPEG_WRBMP_J_COLOR_SPACE out_color_space; /* colorspace for output */
 
   unsigned int scale_num, scale_denom; /* fraction by which to scale image */
 
   float output_gamma;   /* image gamma wanted in output */
 
-  cjpeg_jpeg6b_wrbmp_boolean buffered_image; /* TRUE=multiple output passes */
-  cjpeg_jpeg6b_wrbmp_boolean raw_data_out;   /* TRUE=downsampled data wanted */
+  cjpeg_wrbmp_boolean buffered_image; /* TRUE=multiple output passes */
+  cjpeg_wrbmp_boolean raw_data_out;   /* TRUE=downsampled data wanted */
 
-  CJPEG_JPEG6B_WRBMP_J_DCT_METHOD dct_method;  /* IDCT algorithm selector */
-  cjpeg_jpeg6b_wrbmp_boolean
+  CJPEG_WRBMP_J_DCT_METHOD dct_method;  /* IDCT algorithm selector */
+  cjpeg_wrbmp_boolean
   do_fancy_upsampling;  /* TRUE=apply fancy upsampling */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   do_block_smoothing; /* TRUE=apply interblock smoothing */
 
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   quantize_colors;  /* TRUE=colormapped output wanted */
   /* the following are ignored if not quantize_colors: */
-  CJPEG_JPEG6B_WRBMP_J_DITHER_MODE
+  CJPEG_WRBMP_J_DITHER_MODE
   dither_mode;  /* type of color dithering to use */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   two_pass_quantize;  /* TRUE=use two-pass color quantization */
   int desired_number_of_colors; /* max # colors to use in created colormap */
   /* these are significant only in buffered-image mode: */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   enable_1pass_quant; /* enable future use of 1-pass quantizer */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   enable_EXTERNal_quant;/* enable future use of EXTERNal colormap */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   enable_2pass_quant; /* enable future use of 2-pass quantizer */
 
   /* Description of actual output image that will be returned to application.
@@ -461,8 +461,8 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      in advance of calling jpeg_start_decompress().
   */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION output_width;  /* scaled image width */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION output_height; /* scaled image height */
+  CJPEG_WRBMP_JDIMENSION output_width;  /* scaled image width */
+  CJPEG_WRBMP_JDIMENSION output_height; /* scaled image height */
   int out_color_components; /* # of color components in out_color_space */
   int output_components;  /* # of color components returned */
   /* output_components is 1 (a colormap index) when quantizing colors;
@@ -481,7 +481,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      The map has out_color_components rows and actual_number_of_colors columns.
   */
   int actual_number_of_colors;  /* number of entries in use */
-  CJPEG_JPEG6B_WRBMP_JSAMPARRAY
+  CJPEG_WRBMP_JSAMPARRAY
   colormap;    /* The color map as a 2-D pixel array */
 
   /* State variables: these variables indicate the progress of decompression.
@@ -492,13 +492,13 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      Application may use this to control its processing loop, e.g.,
      "while (output_scanline < output_height)".
   */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION output_scanline; /* 0 .. output_height-1  */
+  CJPEG_WRBMP_JDIMENSION output_scanline; /* 0 .. output_height-1  */
 
   /* Current input scan number and number of iMCU rows completed in scan.
      These indicate the progress of the decompressor input side.
   */
   int input_scan_number;  /* Number of SOS markers seen so far */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  CJPEG_WRBMP_JDIMENSION
   input_iMCU_row;  /* Number of iMCU rows completed */
 
   /* The "output scan number" is the notional scan being displayed by the
@@ -506,7 +506,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      to get ahead of input scan/row, but it can fall arbitrarily far behind.
   */
   int output_scan_number; /* Nominal scan number being displayed */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION output_iMCU_row; /* Number of iMCU rows read */
+  CJPEG_WRBMP_JDIMENSION output_iMCU_row; /* Number of iMCU rows read */
 
   /* Current progression status.  coef_bits[c][i] indicates the precision
      with which component c's DCT coefficient i (in zigzag order) is known.
@@ -526,11 +526,11 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      datastreams when processing abbreviated JPEG datastreams.
   */
 
-  CJPEG_JPEG6B_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
+  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
   /* ptrs to coefficient quantization tables, or NULL if not defined */
 
-  CJPEG_JPEG6B_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
-  CJPEG_JPEG6B_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
   /* ptrs to Huffman coding tables, or NULL if not defined */
 
   /* These parameters are never carried across datastreams, since they
@@ -539,19 +539,19 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
 
   int data_precision;   /* bits of precision in image data */
 
-  cjpeg_jpeg6b_wrbmp_jpeg_component_info *comp_info;
+  cjpeg_wrbmp_jpeg_component_info *comp_info;
   /* comp_info[i] describes component that appears i'th in SOF */
 
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   progressive_mode; /* TRUE if SOFn specifies progressive mode */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   arith_code;   /* TRUE=arithmetic coding, FALSE=Huffman */
 
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_dc_L[16]; /* L values for DC arith-coding tables */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_dc_U[16]; /* U values for DC arith-coding tables */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   arith_ac_K[16]; /* Kx values for AC arith-coding tables */
 
   unsigned int
@@ -560,20 +560,20 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
   /* These fields record data obtained from optional markers recognized by
      the JPEG library.
   */
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   saw_JFIF_marker;  /* TRUE iff a JFIF APP0 marker was found */
   /* Data copied from JFIF marker; only valid if saw_JFIF_marker is TRUE: */
-  CJPEG_JPEG6B_WRBMP_UINT8 JFIF_major_version; /* JFIF version number */
-  CJPEG_JPEG6B_WRBMP_UINT8 JFIF_minor_version;
-  CJPEG_JPEG6B_WRBMP_UINT8 density_unit;   /* JFIF code for pixel size units */
-  CJPEG_JPEG6B_WRBMP_UINT16 X_density;   /* Horizontal pixel density */
-  CJPEG_JPEG6B_WRBMP_UINT16 Y_density;   /* Vertical pixel density */
-  cjpeg_jpeg6b_wrbmp_boolean
+  CJPEG_WRBMP_UINT8 JFIF_major_version; /* JFIF version number */
+  CJPEG_WRBMP_UINT8 JFIF_minor_version;
+  CJPEG_WRBMP_UINT8 density_unit;   /* JFIF code for pixel size units */
+  CJPEG_WRBMP_UINT16 X_density;   /* Horizontal pixel density */
+  CJPEG_WRBMP_UINT16 Y_density;   /* Vertical pixel density */
+  cjpeg_wrbmp_boolean
   saw_Adobe_marker; /* TRUE iff an Adobe APP14 marker was found */
-  CJPEG_JPEG6B_WRBMP_UINT8
+  CJPEG_WRBMP_UINT8
   Adobe_transform;  /* Color transform code from Adobe marker */
 
-  cjpeg_jpeg6b_wrbmp_boolean
+  cjpeg_wrbmp_boolean
   CCIR601_sampling; /* TRUE=first samples are cosited */
 
   /* Aside from the specific data retained from APPn markers known to the
@@ -594,7 +594,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
 
   int min_DCT_scaled_size;  /* smallest DCT_scaled_size of any component */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION total_iMCU_rows; /* # of iMCU rows in image */
+  CJPEG_WRBMP_JDIMENSION total_iMCU_rows; /* # of iMCU rows in image */
   /* The coefficient controller's input and output progress is measured in
      units of "iMCU" (interleaved MCU) rows.  These are the same as MCU rows
      in fully interleaved JPEG scans, but are used whether the scan is
@@ -603,7 +603,7 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      v_samp_factor*DCT_scaled_size sample rows of a component per iMCU row.
   */
 
-  CJPEG_JPEG6B_WRBMP_JSAMPLE
+  CJPEG_WRBMP_JSAMPLE
   *sample_range_limit;  /* table for fast range-limiting */
 
   /*
@@ -612,11 +612,11 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
      Note that the decompressor output side must not use these fields.
   */
   int comps_in_scan;    /* # of JPEG components in this scan */
-  cjpeg_jpeg6b_wrbmp_jpeg_component_info *cur_comp_info[4];
+  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[4];
   /* *cur_comp_info[i] describes component that appears i'th in SOS */
 
-  CJPEG_JPEG6B_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
-  CJPEG_JPEG6B_WRBMP_JDIMENSION
+  CJPEG_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
+  CJPEG_WRBMP_JDIMENSION
   MCU_rows_in_scan;  /* # of MCU rows in the image */
 
   int blocks_in_MCU;    /* # of DCT blocks per MCU */
@@ -659,23 +659,23 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_decompress_struct {
 
 /* Error handler object */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_error_mgr {
+struct cjpeg_wrbmp_jpeg_error_mgr {
   /* Error exit handler: does not return to caller */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, error_exit,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, error_exit,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
   /* Conditionally emit a trace or warning message */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, emit_message,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int msg_level ) );
+  CJPEG_WRBMP_JMETHOD( void, emit_message,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int msg_level ) );
   /* Routine that actually outputs a trace or error message */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, output_message,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, output_message,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
   /* Format a message string for the most recent JPEG error or message */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, format_message,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, char *buffer ) );
+  CJPEG_WRBMP_JMETHOD( void, format_message,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, char *buffer ) );
 #define JMSG_LENGTH_MAX  200  /* recommended size of format_message buffer */
   /* Reset error state variables at start of a new image */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, reset_error_mgr,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, reset_error_mgr,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   /* The message ID code and any parameters are saved here.
      A message can have one string parameter or up to 8 int parameters.
@@ -723,9 +723,9 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_error_mgr {
 
 /* Progress monitor object */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_progress_mgr {
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, progress_monitor,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
+struct cjpeg_wrbmp_jpeg_progress_mgr {
+  CJPEG_WRBMP_JMETHOD( void, progress_monitor,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   long pass_counter;    /* work units completed in this pass */
   long pass_limit;    /* total number of work units in this pass */
@@ -736,38 +736,38 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_progress_mgr {
 
 /* Data destination object for compression */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_destination_mgr {
-  CJPEG_JPEG6B_WRBMP_JOCTET
+struct cjpeg_wrbmp_jpeg_destination_mgr {
+  CJPEG_WRBMP_JOCTET
   *next_output_byte;   /* => next byte to write in buffer */
-  cjpeg_jpeg6b_wrbmp_size_t
+  cjpeg_wrbmp_size_t
   free_in_buffer;  /* # of byte spaces remaining in buffer */
 
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, init_destination,
-                              ( cjpeg_jpeg6b_wrbmp_j_compress_ptr cinfo ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_boolean, empty_output_buffer,
-                              ( cjpeg_jpeg6b_wrbmp_j_compress_ptr cinfo ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, term_destination,
-                              ( cjpeg_jpeg6b_wrbmp_j_compress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, init_destination,
+                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, empty_output_buffer,
+                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, term_destination,
+                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
 };
 
 
 /* Data source object for decompression */
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_source_mgr {
-  const CJPEG_JPEG6B_WRBMP_JOCTET
+struct cjpeg_wrbmp_jpeg_source_mgr {
+  const CJPEG_WRBMP_JOCTET
   *next_input_byte;  /* => next byte to read from buffer */
-  cjpeg_jpeg6b_wrbmp_size_t bytes_in_buffer; /* # of bytes remaining in buffer */
+  cjpeg_wrbmp_size_t bytes_in_buffer; /* # of bytes remaining in buffer */
 
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, init_source,
-                              ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_boolean, fill_input_buffer,
-                              ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, skip_input_data,
-                              ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo, long num_bytes ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_boolean, resync_to_restart,
-                              ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo, int desired ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, term_source,
-                              ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, init_source,
+                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, fill_input_buffer,
+                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( void, skip_input_data,
+                              ( cjpeg_wrbmp_j_decompress_ptr cinfo, long num_bytes ) );
+  CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, resync_to_restart,
+                              ( cjpeg_wrbmp_j_decompress_ptr cinfo, int desired ) );
+  CJPEG_WRBMP_JMETHOD( void, term_source,
+                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
 };
 
 
@@ -782,58 +782,58 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_source_mgr {
    successful.
 */
 
-typedef struct jvirt_sarray_control *cjpeg_jpeg6b_wrbmp_jvirt_sarray_ptr;
-typedef struct jvirt_barray_control *cjpeg_jpeg6b_wrbmp_jvirt_barray_ptr;
+typedef struct jvirt_sarray_control *cjpeg_wrbmp_jvirt_sarray_ptr;
+typedef struct jvirt_barray_control *cjpeg_wrbmp_jvirt_barray_ptr;
 
 
-struct cjpeg_jpeg6b_wrbmp_jpeg_memory_mgr {
+struct cjpeg_wrbmp_jpeg_memory_mgr {
   /* Method pointers */
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void *, alloc_small,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int pool_id,
-                                cjpeg_jpeg6b_wrbmp_size_t sizeofobject ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void CJPEG_JPEG6B_WRBMP_FAR *, alloc_large,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int pool_id,
-                                cjpeg_jpeg6b_wrbmp_size_t sizeofobject ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( CJPEG_JPEG6B_WRBMP_JSAMPARRAY, alloc_sarray,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int pool_id,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION samplesperrow,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION numrows ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( CJPEG_JPEG6B_WRBMP_JBLOCKARRAY, alloc_barray,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int pool_id,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION blocksperrow,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION numrows ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_jvirt_sarray_ptr,
-                              request_virt_sarray, ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo,
+  CJPEG_WRBMP_JMETHOD( void *, alloc_small,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                                cjpeg_wrbmp_size_t sizeofobject ) );
+  CJPEG_WRBMP_JMETHOD( void CJPEG_WRBMP_FAR *, alloc_large,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                                cjpeg_wrbmp_size_t sizeofobject ) );
+  CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JSAMPARRAY, alloc_sarray,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                                CJPEG_WRBMP_JDIMENSION samplesperrow,
+                                CJPEG_WRBMP_JDIMENSION numrows ) );
+  CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JBLOCKARRAY, alloc_barray,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                                CJPEG_WRBMP_JDIMENSION blocksperrow,
+                                CJPEG_WRBMP_JDIMENSION numrows ) );
+  CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_jvirt_sarray_ptr,
+                              request_virt_sarray, ( cjpeg_wrbmp_j_common_ptr cinfo,
                                   int pool_id,
-                                  cjpeg_jpeg6b_wrbmp_boolean pre_zero,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION samplesperrow,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION numrows,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION maxaccess ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_jvirt_barray_ptr,
-                              request_virt_barray, ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo,
+                                  cjpeg_wrbmp_boolean pre_zero,
+                                  CJPEG_WRBMP_JDIMENSION samplesperrow,
+                                  CJPEG_WRBMP_JDIMENSION numrows,
+                                  CJPEG_WRBMP_JDIMENSION maxaccess ) );
+  CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_jvirt_barray_ptr,
+                              request_virt_barray, ( cjpeg_wrbmp_j_common_ptr cinfo,
                                   int pool_id,
-                                  cjpeg_jpeg6b_wrbmp_boolean pre_zero,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION blocksperrow,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION numrows,
-                                  CJPEG_JPEG6B_WRBMP_JDIMENSION maxaccess ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, realize_virt_arrays,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( CJPEG_JPEG6B_WRBMP_JSAMPARRAY, access_virt_sarray,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo,
-                                cjpeg_jpeg6b_wrbmp_jvirt_sarray_ptr ptr,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION start_row,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION num_rows,
-                                cjpeg_jpeg6b_wrbmp_boolean writable ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( CJPEG_JPEG6B_WRBMP_JBLOCKARRAY, access_virt_barray,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo,
-                                cjpeg_jpeg6b_wrbmp_jvirt_barray_ptr ptr,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION start_row,
-                                CJPEG_JPEG6B_WRBMP_JDIMENSION num_rows,
-                                cjpeg_jpeg6b_wrbmp_boolean writable ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, free_pool,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo, int pool_id ) );
-  CJPEG_JPEG6B_WRBMP_JMETHOD( void, self_destruct,
-                              ( cjpeg_jpeg6b_wrbmp_j_common_ptr cinfo ) );
+                                  cjpeg_wrbmp_boolean pre_zero,
+                                  CJPEG_WRBMP_JDIMENSION blocksperrow,
+                                  CJPEG_WRBMP_JDIMENSION numrows,
+                                  CJPEG_WRBMP_JDIMENSION maxaccess ) );
+  CJPEG_WRBMP_JMETHOD( void, realize_virt_arrays,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+  CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JSAMPARRAY, access_virt_sarray,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo,
+                                cjpeg_wrbmp_jvirt_sarray_ptr ptr,
+                                CJPEG_WRBMP_JDIMENSION start_row,
+                                CJPEG_WRBMP_JDIMENSION num_rows,
+                                cjpeg_wrbmp_boolean writable ) );
+  CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JBLOCKARRAY, access_virt_barray,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo,
+                                cjpeg_wrbmp_jvirt_barray_ptr ptr,
+                                CJPEG_WRBMP_JDIMENSION start_row,
+                                CJPEG_WRBMP_JDIMENSION num_rows,
+                                cjpeg_wrbmp_boolean writable ) );
+  CJPEG_WRBMP_JMETHOD( void, free_pool,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id ) );
+  CJPEG_WRBMP_JMETHOD( void, self_destruct,
+                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   /* Limit on memory allocation for this JPEG object.  (Note that this is
      merely advisory, not a guaranteed maximum; it only affects the space
@@ -850,9 +850,9 @@ struct cjpeg_jpeg6b_wrbmp_jpeg_memory_mgr {
 /* Routine signature for application-supplied marker processing methods.
    Need not pass marker code since it is stored in cinfo->unread_marker.
 */
-typedef CJPEG_JPEG6B_WRBMP_JMETHOD( cjpeg_jpeg6b_wrbmp_boolean,
+typedef CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean,
                                     jpeg_marker_parser_method,
-                                    ( cjpeg_jpeg6b_wrbmp_j_decompress_ptr cinfo ) );
+                                    ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
 
 /*
    The JPEG library modules define JPEG_INTERNALS before including this file.

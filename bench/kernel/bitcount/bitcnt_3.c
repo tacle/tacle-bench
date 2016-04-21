@@ -7,13 +7,13 @@
 
   Author: Bob Stout & Auke Reitsma
 
-  Function:
+  Function: Bit counting functions using table lookup
 
-  Source:
+  Source: http://www.snippets.org/
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: public domain
+  License: general open-source
 
 */
 
@@ -31,7 +31,7 @@ static char bitcount_bits[256];
 
 void bitcount_init3( void )
 {
-  int i = 0;
+  int volatile i = 0;
   char bitcount_bits_tmp[256] = {
     0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
     1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
