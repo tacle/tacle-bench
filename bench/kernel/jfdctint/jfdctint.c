@@ -139,7 +139,7 @@ int main( void );
 int jfdctint_data[ 64 ];
 
 
-const int JFDCTINT_CHECKSUM = 28;
+const int JFDCTINT_CHECKSUM = 1668124;
 
 void jfdctint_init()
 {
