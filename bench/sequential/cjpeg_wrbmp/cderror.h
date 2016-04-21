@@ -19,11 +19,11 @@
 
   Source: Independent JPEG Group's software
 
+  Changes: no major functional changes
 
-  Changes: a brief summary of major functional changes (not formatting)
+  License: May be used, modified, and re-distributed freely.
 
-  License: general open-source
-*/
+ */
 
 #ifndef CJPEG_WRBMP_JMESSAGE
 #ifndef CDERROR_H

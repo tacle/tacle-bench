@@ -11,7 +11,9 @@
 
   Source: Peter C. Gutmann's implementation as found in Applied Cryptography by Bruce Schneier
 
-  License: general open-source
+  Changes: no major functional changes
+
+  License: May be used, modified, and re-distributed freely.
 */
 
 #ifndef SHA_H

@@ -14,6 +14,8 @@
 
   Source: GNU C Library
 
+  Changes: no major functional changes
+
   License: GNU Lesser General Public License
 */
 #include "memset.h"

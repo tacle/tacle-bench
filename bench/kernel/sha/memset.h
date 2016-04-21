@@ -15,6 +15,8 @@
   Source: GNU C Library
 
   License: GNU Lesser General Public License
+
+  Changes: no major functional changes
 */
 #include "memhelper.h"
 

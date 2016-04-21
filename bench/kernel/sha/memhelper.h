@@ -11,7 +11,10 @@
 
   Source: Peter C. Gutmann's implementation as found in Applied Cryptography by Bruce Schneier
 
-  License: general open-source
+  License: GNU Lesser General Public License
+
+  Changes: no major functional changes
+
 */
 
 #ifndef MEM_HELPER_H

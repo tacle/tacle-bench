@@ -14,6 +14,8 @@
 
   Source: GNU C Library
 
+  Changes: no major functional changes
+
   License: Copyright (C) 1991, 1997, 2003 Free Software Foundation, Inc.
 */
 

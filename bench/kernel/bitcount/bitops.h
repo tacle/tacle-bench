@@ -7,13 +7,13 @@
 
   Author: Bob Stout & Auke Reitsma
 
-  Function:
+  Function: test program for bit counting functions
 
   Source:
 
-  Changes: a brief summary of major functional changes (not formatting)
+  Changes: no major functional changes
 
-  License: general open-source
+  License: May be used, modified, and re-distributed freely.
 
 */
 

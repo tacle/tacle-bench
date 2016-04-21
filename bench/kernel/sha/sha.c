@@ -11,8 +11,11 @@
 
   Source: Peter C. Gutmann's implementation as found in Applied Cryptography by Bruce Schneier
 
-  License: general open-source
-*/
+  Changes: no major functional changes
+
+  License: GNU Lesser General Public License
+
+ */
 
 #include "memcpy.h"
 #include "memset.h"
@@ -199,13 +202,12 @@ int sha_return( void )
   for(i=0;i<16;i++)
 	sum+=sha_info.data[i];
 
-  return (( int )  sum - 1532778765);
+  return (( int )  sum + 1532778765);
 }
 
 int main ( void )
 {
   sha_init();
   sha_main();
-
   return ( sha_return() );
 }

@@ -11,7 +11,9 @@
 
   Source: Peter C. Gutmann's implementation as found in Applied Cryptography by Bruce Schneier
 
-  License: general open-source
+  Changes: no major functional changes
+
+  License: May be used, modified, and re-distributed freely.
 */
 unsigned char sha_data[32743] = {
 		'K', 'u', 'r', 't', 'V', 'o', 'n', 'n', 'e', 'g', 'u', 't', 's', 'C', 'o', 'm', 'm', 'e', 'n', 'c',
