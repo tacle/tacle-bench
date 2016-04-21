@@ -59,3 +59,5 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 
 2016-04-21:
 - Fixed checksum value
+- Fixed license
+

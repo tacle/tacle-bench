@@ -41,7 +41,7 @@
   Changes: Moved initialisation code from jfdctint_main() to jfdctint_init(),
            added checksum calculation in jfdctint_return()
 
-  License: Public Domain
+  License: see README
 
 */
 
