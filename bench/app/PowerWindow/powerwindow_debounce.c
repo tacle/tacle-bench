@@ -5,7 +5,7 @@
 
  Name: powerwindow_debounce.c
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: powerwindow_debounce_main is used to powerwindow_debounce_main the push-down button of the power window.
  	 In order to input a manual switch signal into a digital circuit,
@@ -18,7 +18,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
  */
 

@@ -5,7 +5,7 @@
 
  Name: powerwindow_powerwindow_control
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: powerwindow_control is one functionality of the power window benchmark.
  	 It composes two control modules: logic and sensing. The first one is used to
@@ -16,7 +16,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: general open-source
+ License: GNU General Public License
 
 */
 

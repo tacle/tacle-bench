@@ -5,7 +5,7 @@
 
  Name: powerwindow
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: powerwindow implement the powerwindow that can be seen in cars nowadays. 
 	The window can be controled by either driver or passenger. When an object is 
@@ -16,7 +16,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
 */
 

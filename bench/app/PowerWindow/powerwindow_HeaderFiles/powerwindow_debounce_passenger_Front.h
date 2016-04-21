@@ -5,7 +5,7 @@
 
  Name: powerwindow_debounce_passenger_Front.h
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: headerfile
 
@@ -13,7 +13,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
  */
 

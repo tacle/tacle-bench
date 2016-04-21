@@ -5,7 +5,7 @@
 
  Name: debounce_passenger_Front.c
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: debounce_passenger_Front calls powerwindow_debounce.c to debounce the push-down button
  	 of the power window for the front passenger.
@@ -14,7 +14,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
 */
 

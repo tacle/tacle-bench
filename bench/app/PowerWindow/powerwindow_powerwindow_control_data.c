@@ -5,7 +5,7 @@
 
  Name: powerwindow_powerwindow_control_data
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: powerwindow_control_data is used as the look up table for the control
  	 module in powerwindow_control
@@ -14,7 +14,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
  */
 

@@ -5,7 +5,7 @@
 
  Name: powerwindow_controlexclusion
 
- Author: unknown
+ Author: University of Antwerp
 
  Function: powerwindow_controlexclusion is one functionality of the power window benchmark.
  	 It takes the input signal from the driver and the passenger to determine the final control signal.
@@ -14,7 +14,7 @@
 
  Changes: a brief summary of major functional changes and formatting)
 
- License: unknown
+ License: GNU General Public License
 
 */
 

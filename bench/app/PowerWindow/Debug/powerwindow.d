@@ -1,4 +1,4 @@
-powerwindow.o: ../powerwindow.c \
+powerwindow.o: ../powerwindow.c ../powerwindow_HeaderFiles/powerwindow.h \
  ../powerwindow_HeaderFiles/powerwindow_controlexclusion.h \
  ../powerwindow_HeaderFiles/../powerwindow_HeaderFiles/powerwindow_rtwtypes.h \
  ../powerwindow_HeaderFiles/../powerwindow_HeaderFiles/powerwindow_controlexclusion_types.h \
@@ -15,6 +15,8 @@ powerwindow.o: ../powerwindow.c \
  ../powerwindow_HeaderFiles/../powerwindow_HeaderFiles/powerwindow_rtw_solver.h \
  ../powerwindow_HeaderFiles/powerwindow_powerwindow_control_types.h \
  ../powerwindow_HeaderFiles/powerwindow_rtwtypes.h
+
+../powerwindow_HeaderFiles/powerwindow.h:
 
 ../powerwindow_HeaderFiles/powerwindow_controlexclusion.h:
 
