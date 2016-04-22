@@ -18,8 +18,8 @@
 
   Changes: no major functional changes
 
-  License: May be used, modified, and re-distributed freely.
-*/
+  License:  See the accompanying README file
+  */
 
 /*
    To define the enum list of message codes, include this file without

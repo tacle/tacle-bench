@@ -14,7 +14,7 @@
 
   Changes: no major functional changes
 
-  License: May be used, modified, and re-distributed freely.
+  License:  See the accompanying README files
 */
 
 #ifndef JCONFIG_H

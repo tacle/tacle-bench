@@ -20,7 +20,7 @@
 
   Changes: a brief summary of major functional changes (not formatting)
 
-  License: May be used, modified, and re-distributed freely.
+  License:  See the accompanying README file
 
 */
 
