@@ -202,12 +202,12 @@ int sha_return( void )
   for(i=0;i<16;i++)
 	sum+=sha_info.data[i];
 
-  return (( int )  sum + 1532778765);
+  return (( int )  sum );
 }
 
 int main ( void )
 {
   sha_init();
   sha_main();
-  return ( sha_return() );
+  return ( sha_return()+ 1532778765 != 0 );
 }

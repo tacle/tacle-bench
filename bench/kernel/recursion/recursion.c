@@ -54,7 +54,7 @@ int recursion_fib( int i )
 
 int recursion_return()
 {
-  return recursion_result - 89;
+  return recursion_result;
 }
 
 void recursion_main( void )
@@ -68,5 +68,5 @@ int main( void )
 {
   recursion_init();
   recursion_main();
-  return ( recursion_return() );
+  return ( recursion_return() + (-89) != 0 );
 }

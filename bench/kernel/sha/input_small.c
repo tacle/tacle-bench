@@ -15,7 +15,7 @@
 
   License: May be used, modified, and re-distributed freely.
 */
-unsigned char sha_data[32743] = {
+unsigned volatile char sha_data[32743] = {
 		'K', 'u', 'r', 't', 'V', 'o', 'n', 'n', 'e', 'g', 'u', 't', 's', 'C', 'o', 'm', 'm', 'e', 'n', 'c',
 		'e', 'm', 'e', 'n', 't', 'A', 'd', 'd', 'r', 'e', 's', 's', 'a', 't', 'M', 'I', 'T', 'L', 'a', 'd',
 		'i', 'e', 's', 'a', 'n', 'd', 'g', 'e', 'n', 't', 'l', 'e', 'm', 'e', 'n', 'o', 'f', 't', 'h', 'e',

@@ -201,7 +201,10 @@ void cjpeg_wrbmp_main()
 
 int cjpeg_wrbmp_return()
 {
-  return 0;
+   int results = 0;
+   results = ( int ) cjpeg_wrbmp_jpeg_stream;
+
+   return results;
 }
 
 int main( void )
@@ -209,7 +212,7 @@ int main( void )
 	cjpeg_wrbmp_init();
   	cjpeg_wrbmp_main();
 
-    return ( cjpeg_wrbmp_return() );
+    return ( cjpeg_wrbmp_return() + (-4256800) != 0 );
 }
 
 #endif /* BMP_SUPPORTED */
