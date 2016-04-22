@@ -112,7 +112,7 @@ int quicksort_return( void )
 
 void quicksort_str( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
 
 
@@ -163,7 +163,7 @@ void quicksort_str( char *a, unsigned long n, unsigned long es )
 
 void quicksort_vec( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
 
 
