@@ -74,6 +74,7 @@ float iir_x;
 void iir_init( void )
 {
   int f;
+  unsigned int i;
   unsigned char *p;
   volatile char bitmask = 0;
 
@@ -93,12 +94,12 @@ void iir_init( void )
   */
   p = (unsigned char *) &iir_coefficients[ 0 ];
   _Pragma( "loopbound min 80 max 80" )
-  for ( f = 0; f < sizeof( iir_coefficients ); ++f, ++p )
+  for ( i = 0; i < sizeof( iir_coefficients ); ++i, ++p )
     *p ^= bitmask;
 
   p = (unsigned char *) &iir_wi[ 0 ];
   _Pragma( "loopbound min 32 max 32" )
-  for ( f = 0; f < sizeof( iir_wi ); ++f, ++p )
+  for ( i = 0; i < sizeof( iir_wi ); ++i, ++p )
     *p ^= bitmask;
 }
 
@@ -125,7 +126,7 @@ void _Pragma( "entrypoint" ) iir_main( void )
 {
   register float w;
   int f;
-  volatile register float *ptr_coeff, *ptr_wi1, *ptr_wi2;
+  register volatile float *ptr_coeff, *ptr_wi1, *ptr_wi2;
   register float y;
 
 
