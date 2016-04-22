@@ -40,17 +40,11 @@ void cjpeg_transupp_initSeed( void );
 signed char cjpeg_transupp_randomInteger( void );
 void cjpeg_transupp_init( void );
 int cjpeg_transupp_return( void );
-void cjpeg_transupp_do_flip_v( j_decompress_ptr, j_compress_ptr,
-                                      jvirt_barray_ptr *, jvirt_barray_ptr * );
-void cjpeg_transupp_do_rot_90( j_decompress_ptr, j_compress_ptr,
-                                      jvirt_barray_ptr *, jvirt_barray_ptr * );
-void cjpeg_transupp_do_rot_180( j_decompress_ptr, j_compress_ptr,
-                                       jvirt_barray_ptr *, jvirt_barray_ptr * );
-void cjpeg_transupp_do_rot_270( j_decompress_ptr, j_compress_ptr,
-                                       jvirt_barray_ptr *, jvirt_barray_ptr * );
-void cjpeg_transupp_do_transverse( j_decompress_ptr, j_compress_ptr,
-                                          jvirt_barray_ptr *,
-                                          jvirt_barray_ptr * );
+void cjpeg_transupp_do_flip_v( j_compress_ptr );
+void cjpeg_transupp_do_rot_90( j_compress_ptr );
+void cjpeg_transupp_do_rot_180( j_compress_ptr );
+void cjpeg_transupp_do_rot_270( j_compress_ptr );
+void cjpeg_transupp_do_transverse( j_compress_ptr );
 void cjpeg_transupp_main( void );
 int main( void );
 
@@ -177,10 +171,7 @@ int cjpeg_transupp_return( void )
 /*
   Vertical flip
 */
-void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
-                               j_compress_ptr dstinfo,
-                               jvirt_barray_ptr *src_coef_arrays,
-                               jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_flip_v( j_compress_ptr dstinfo )
 {
   unsigned int MCU_rows, comp_height, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_y;
@@ -198,8 +189,8 @@ void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
   MCU_rows = dstinfo->image_height / ( dstinfo->max_v_samp_factor * DCTSIZE );
 
   int compptr_v_samp_factor = 8;
-  int compptr_height_in_blocks = 19;
-  int compptr_width_in_blocks = 29;
+  unsigned int compptr_height_in_blocks = 19;
+  unsigned int compptr_width_in_blocks = 29;
 
   _Pragma( "loopbound min 3 max 3" )
   for ( ci = 0; ci < dstinfo->num_components;
@@ -258,10 +249,7 @@ void cjpeg_transupp_do_flip_v( j_decompress_ptr srcinfo,
    2. Horizontal mirroring.
   These two steps are merged into a single processing routine.
 */
-void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
-                               j_compress_ptr dstinfo,
-                               jvirt_barray_ptr *src_coef_arrays,
-                               jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_90( j_compress_ptr dstinfo )
 {
   unsigned int MCU_cols, comp_width, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_x, offset_y;
@@ -276,8 +264,8 @@ void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
 
   int compptr_h_samp_factor = 2;
   int compptr_v_samp_factor = 8;
-  int compptr_height_in_blocks = 29;
-  int compptr_width_in_blocks = 19;
+  unsigned int compptr_height_in_blocks = 29;
+  unsigned int compptr_width_in_blocks = 19;
 
 
   _Pragma( "loopbound min 3 max 3" )
@@ -350,10 +338,7 @@ void cjpeg_transupp_do_rot_90( j_decompress_ptr srcinfo,
     2. Transposing the image.
   These two steps are merged into a single processing routine.
 */
-void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
-                                j_compress_ptr dstinfo,
-                                jvirt_barray_ptr *src_coef_arrays,
-                                jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_270( j_compress_ptr dstinfo )
 {
   unsigned int MCU_rows, comp_height, dst_blk_x, dst_blk_y;
   int ci, i, j, offset_x, offset_y;
@@ -368,8 +353,8 @@ void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
 
   int compptr_h_samp_factor = 2;
   int compptr_v_samp_factor = 8;
-  int compptr_height_in_blocks = 29;
-  int compptr_width_in_blocks = 19;
+  unsigned int compptr_height_in_blocks = 29;
+  unsigned int compptr_width_in_blocks = 19;
 
   _Pragma( "loopbound min 3 max 3" )
   for ( ci = 0; ci < dstinfo->num_components;
@@ -439,10 +424,7 @@ void cjpeg_transupp_do_rot_270( j_decompress_ptr srcinfo,
     2. Horizontal mirroring.
   These two steps are merged into a single processing routine.
 */
-void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
-                                j_compress_ptr dstinfo,
-                                jvirt_barray_ptr *src_coef_arrays,
-                                jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_rot_180( j_compress_ptr dstinfo )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
                dst_blk_y;
@@ -451,8 +433,8 @@ void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
 
   int compptr_h_samp_factor = 2;
   int compptr_v_samp_factor = 8;
-  int compptr_width_in_blocks = 29;
-  int compptr_height_in_blocks = 19;
+  unsigned int compptr_width_in_blocks = 29;
+  unsigned int compptr_height_in_blocks = 19;
 
 
   MCU_cols = dstinfo->image_width / ( dstinfo->max_h_samp_factor * DCTSIZE );
@@ -575,10 +557,7 @@ void cjpeg_transupp_do_rot_180( j_decompress_ptr srcinfo,
     3. Horizontal mirroring.
   These steps are merged into a single processing routine.
 */
-void cjpeg_transupp_do_transverse( j_decompress_ptr srcinfo,
-                                   j_compress_ptr dstinfo,
-                                   jvirt_barray_ptr *src_coef_arrays,
-                                   jvirt_barray_ptr *dst_coef_arrays )
+void cjpeg_transupp_do_transverse( j_compress_ptr dstinfo )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
                dst_blk_y;
@@ -587,8 +566,8 @@ void cjpeg_transupp_do_transverse( j_decompress_ptr srcinfo,
 
   int compptr_h_samp_factor = 2;
   int compptr_v_samp_factor = 8;
-  int compptr_height_in_blocks = 29;
-  int compptr_width_in_blocks = 19;
+  unsigned int compptr_height_in_blocks = 29;
+  unsigned int compptr_width_in_blocks = 19;
 
 
   MCU_cols = dstinfo->image_width / ( dstinfo->max_h_samp_factor * DCTSIZE );
@@ -704,33 +683,23 @@ void _Pragma ( "entrypoint" ) cjpeg_transupp_main( void )
   cjpeg_transupp_dstinfo.image_width = 227;
   cjpeg_transupp_dstinfo.image_height = 149;
 
-  cjpeg_transupp_do_flip_v(
-    ( j_decompress_ptr ) 0, &cjpeg_transupp_dstinfo, ( jvirt_barray_ptr * ) 0,
-    ( jvirt_barray_ptr * ) 0 );
+  cjpeg_transupp_do_flip_v( &cjpeg_transupp_dstinfo );
 
   cjpeg_transupp_dstinfo.image_width = 149;
   cjpeg_transupp_dstinfo.image_height = 227;
 
-  cjpeg_transupp_do_rot_90(
-    ( j_decompress_ptr ) 0, &cjpeg_transupp_dstinfo, ( jvirt_barray_ptr * ) 0,
-    ( jvirt_barray_ptr * ) 0 );
-  cjpeg_transupp_do_rot_270(
-    ( j_decompress_ptr ) 0, &cjpeg_transupp_dstinfo, ( jvirt_barray_ptr * ) 0,
-    ( jvirt_barray_ptr * ) 0 );
+  cjpeg_transupp_do_rot_90( &cjpeg_transupp_dstinfo );
+  cjpeg_transupp_do_rot_270( &cjpeg_transupp_dstinfo );
 
   cjpeg_transupp_dstinfo.image_width = 227;
   cjpeg_transupp_dstinfo.image_height = 149;
 
-  cjpeg_transupp_do_rot_180(
-    ( j_decompress_ptr ) 0, &cjpeg_transupp_dstinfo, ( jvirt_barray_ptr * ) 0,
-    ( jvirt_barray_ptr * ) 0 );
+  cjpeg_transupp_do_rot_180( &cjpeg_transupp_dstinfo );
 
   cjpeg_transupp_dstinfo.image_width = 149;
   cjpeg_transupp_dstinfo.image_height = 227;
 
-  cjpeg_transupp_do_transverse(
-    ( j_decompress_ptr ) 0, &cjpeg_transupp_dstinfo, ( jvirt_barray_ptr * ) 0,
-    ( jvirt_barray_ptr * ) 0 );
+  cjpeg_transupp_do_transverse( &cjpeg_transupp_dstinfo );
 }
 
 
