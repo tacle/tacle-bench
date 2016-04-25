@@ -9,13 +9,14 @@
 
   Function: series expansion for computing an exponential integral function
 
-  Source: unknown
+  Source: Book "Numerical Recipes in C"
 
   Original name: expint
 
   Changes: no major functional changes
 
-  License: unknown
+  License: strict, see http://numerical.recipes/aboutNR3license.html
+  We should probably remove the code from the repository!
 
 */
 
