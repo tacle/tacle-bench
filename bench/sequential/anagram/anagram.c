@@ -9,7 +9,7 @@
 
   Function: A program that computes anagrams.
 
-  Source: unknown
+  Source: See below.
 
   Original name: anagram
 
