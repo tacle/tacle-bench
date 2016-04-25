@@ -61,6 +61,6 @@
 
   Changes: no major functional changes
 
-  License: general open-source
+  License: fill in concrete, original license text
 
 */
