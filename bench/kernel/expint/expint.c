@@ -1,3 +1,24 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: expint
+
+  Author: unknown
+
+  Function: series expansion for computing an exponential integral function
+
+  Source: unknown
+
+  Original name: expint
+
+  Changes: no major functional changes
+
+  License: unknown
+
+*/
+
 /************************************************************************
  * 
  * DESCRIPTION: Series expansion for computing an exponential integral
@@ -14,20 +35,20 @@
  ***********************************************************************/
 
 
-/* Forward function prototypes */
-long int expint(int n, long int x);
+/*
+  Forward declaration of functions
+*/
+
+void expint_init();
+long int expint_main( int, long int );
+long int expint_foo( long int );
 
 
-int main( void )
-{
-  expint(50,1);
-  /* with  expint(50,21) as argument, runs the short path
-   in expint.   expint(50,1)  gives the longest execution time */
-  return 0;
+void expint_init() {
+  // empty
 }
 
-
-long int foo( long int x )
+long int expint_foo( long int x )
 {
   return ( x*x+(8*x) ) << ( 4-x );
 }
@@ -35,7 +56,7 @@ long int foo( long int x )
 
 /* Function with same flow, different data types,
    nonsensical calculations */
-long int expint( int n, long int x )
+long int _Pragma( "entrypoint" ) expint_main( int n, long int x )
 {
   int      i,ii,nm1;
   long int a,b,c,d,del,fact,h,psi,ans;
@@ -60,8 +81,8 @@ long int expint( int n, long int x )
       h *= del;
       if (del < 10000)
       {
-	ans=h*-x;
-	return ans;
+        ans=h*-x;
+        return ans;
       }
     }
   }
@@ -76,16 +97,16 @@ long int expint( int n, long int x )
     {
       fact *= -x/i;
       if (i != nm1) {         /* depends on parameter n */
-	del = -fact/(i-nm1);
+        del = -fact/(i-nm1);
       }
       else                  /* this fat piece only runs ONCE */
       {                   /* runs on iter 49 */
-	psi = 0x00FF;
-	_Pragma("loopbound min 49 max 49")
-	for (ii=1;ii<=nm1;ii++) { /*  */
-	  psi += ii + nm1;
-	}
-	del=psi+fact*foo(x);
+        psi = 0x00FF;
+        _Pragma("loopbound min 49 max 49")
+        for (ii=1;ii<=nm1;ii++) { /*  */
+          psi += ii + nm1;
+      }
+        del=psi+fact*expint_foo(x);
       }
       ans += del;
       /* conditional leave removed */
@@ -94,3 +115,12 @@ long int expint( int n, long int x )
   return ans;
 }
 
+int main( void )
+{
+  volatile int arg1 = 50;
+  volatile int arg2 = 1;
+  /* with  expint(50,21) as argument, runs the short path
+   in expint.   expint(50,1)  gives the longest execution time */
+  long int ret = expint_main(arg1, arg2);
+  return (( ret == ( long int ) 3883 ) ? 0 : -1 );
+}
