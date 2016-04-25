@@ -3,9 +3,10 @@
 COMPILER=gcc # Please adapt this line to your favorite compiler.
 #COMPILER=patmos-clang
 
-OPTIONS=" -std=c99 -Wall -Wno-unknown-pragmas -Werror "
+OPTIONS=" -Wall -Wno-unknown-pragmas -Werror "
 
-EXEC=valgrind\ -q
+EXEC= # Adapt if the executable is to be executed via another program
+#EXEC=valgrind\ -q
 #EXEC=pasim
 
 PASS=0
@@ -17,11 +18,9 @@ for dir in */; do
     cd "$dir"
 
     printf "Entering ${dir::-1} \n"
-    # countnegative ludcmp st dijkstra rijndael_enc
-    #for BENCH in countnegative/ ludcmp/ st/; do
-    #for BENCH in dijkstra/ rijndael_enc/; do
+
     for BENCH in */; do
-       cd "$BENCH"
+        cd "$BENCH"
                 
         printf "Checking ${BENCH::-1} ..."
         if [ -f a.out ]; then
@@ -34,10 +33,10 @@ for dir in */; do
         
         
         # Please remove '&>/dev/null' to identify the warnings (if any)
-        $COMPILER $OPTIONS *.c &>/dev/null
+        $COMPILER $OPTIONS *.c  &>/dev/null
         
         if [ -f a.out ]; then
-            $EXEC ./a.out #&>/dev/null
+            $EXEC ./a.out &>/dev/null
             RETURNVALUE=$(echo $?)
             if [ $RETURNVALUE -eq 0 ]; then
                 printf "passed. \n"
