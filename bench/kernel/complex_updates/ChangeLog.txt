@@ -9,7 +9,7 @@ Original provenience: DSP-Stone
 - Introduce return statement
 - Make A, B, C, D global variables
 - Split code into n_complex_updates_init and n_complex_updates_main
-2016-04-15:
+2016-04-25:
 - Rename to complex_updates in order to shorten prefixes
 - Remove second call of pin_down, since this was originally used as a border for
   constant propagation
