@@ -7,9 +7,15 @@
 
   Author: unknown
 
-  Function: A program for performs some vector operations.
+  Function: Creates a filter bank to perform multirate signal processing.
+            The coefficients for the sets of filters are created in the
+            top-level init function, and passed down through the init
+            functions to FIR filter objects.
+            On each branch, a delay, filter, and downsample is performed,
+            followed by an upsample, delay, and filter.
 
-  Source: unknown
+  Source: StreamIt
+          (http://groups.csail.mit.edu/cag/streamit/shtml/benchmarks.shtml)
 
   Original name: filterbank
 
