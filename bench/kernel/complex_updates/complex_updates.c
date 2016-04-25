@@ -34,24 +34,28 @@
 #define TYPE          float
 #define N             16
 
-void complex_updates_pin_down(TYPE *pa, TYPE *pb, TYPE *pc, TYPE *pd) {
-  STORAGE_CLASS int i;
 
-  _Pragma("loopbound min 16 max 16")
-  for (i = 0; i < N; i++) {
-    *pa++ = 2;
-    *pa++ = 1;
-    *pb++ = 2;
-    *pb++ = 5;
-    *pc++ = 3;
-    *pc++ = 4;
-    *pd++ = 0;
-    *pd++ = 0;
-  }
-}
+/*
+  Forward declaration of functions
+*/
+
+void complex_updates_pin_down(TYPE *pa, TYPE *pb, TYPE *pc, TYPE *pd);
+void complex_updates_init(void);
+void complex_updates_main(void);
+int main(void);
+
+
+/*
+  Declaration of global variables
+*/
 
 TYPE complex_updates_A[2 * N], complex_updates_B[2 * N],
     complex_updates_C[2 * N], complex_updates_D[2 * N];
+
+
+/*
+  Initialization- and return-value-related functions
+*/
 
 void complex_updates_init(void) {
   int i;
@@ -70,6 +74,40 @@ void complex_updates_init(void) {
   }
 }
 
+
+void complex_updates_pin_down(TYPE *pa, TYPE *pb, TYPE *pc, TYPE *pd) {
+  STORAGE_CLASS int i;
+
+  _Pragma("loopbound min 16 max 16")
+  for (i = 0; i < N; i++) {
+    *pa++ = 2;
+    *pa++ = 1;
+    *pb++ = 2;
+    *pb++ = 5;
+    *pc++ = 3;
+    *pc++ = 4;
+    *pd++ = 0;
+    *pd++ = 0;
+  }
+}
+
+
+int complex_updates_return(void) {
+  float check_sum = 0;
+  int i;
+
+  for (i = 0; i < N; i++) {
+    check_sum += complex_updates_D[i];
+  }
+
+  return (check_sum != 144.0f);
+}
+
+
+/*
+  Main functions
+*/
+
 void _Pragma("entrypoint") complex_updates_main(void) {
   STORAGE_CLASS TYPE *p_a = &complex_updates_A[0], *p_b = &complex_updates_B[0];
   STORAGE_CLASS TYPE *p_c = &complex_updates_C[0], *p_d = &complex_updates_D[0];
@@ -84,17 +122,6 @@ void _Pragma("entrypoint") complex_updates_main(void) {
     *p_d++ +=          *p_a++ * *p_b++ ;
   }
 
-}
-
-int complex_updates_return(void) {
-  float check_sum = 0;
-  int i;
-
-  for (i = 0; i < N; i++) {
-    check_sum += complex_updates_D[i];
-  }
-
-  return (check_sum != 144.0f);
 }
 
 int main(void) {
