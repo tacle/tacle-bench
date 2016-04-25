@@ -18,3 +18,9 @@ Original provenience: DSP-Stone
 - Fix undefined behavior due to unsequenced modification and access
 - Reformat large arrays using clang-format to 80 columns
 - Apply code formatting with astyle as in the example
+2016-04-25:
+- Remove unnecessary braces in fft_bit_reduct
+- Add void parameter to fft_float2fract
+- Add all forward declarations
+- Move input data into separate file
+- Compute check sum and compare it to expected value in return function
