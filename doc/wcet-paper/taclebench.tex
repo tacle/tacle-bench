@@ -1,0 +1,178 @@
+\documentclass[a4paper,UKenglish]{oasics}
+%This is a template for producing OASIcs articles.
+%See oasics-manual.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+
+\usepackage{microtype}%if unwanted, comment out or use option "draft"
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plain}% the recommended bibstyle
+
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{TACLeBench -- Title is TBD\footnote{This work was partially supported TACLe. \emph{add the right phrase}}}
+%\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
+
+\author[1]{Heiko Falk}
+\author[2]{Add yourself in alphabetical order}
+\affil[1]{Dummy University Computing Laboratory\\
+  Address, Country\\
+  \texttt{open@dummyuni.org}}
+\affil[2]{Department of Informatics, Dummy College\\
+  Address, Country\\
+  \texttt{access@dummycollege.org}}
+\authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+
+\Copyright{Heiko Falk et al.}%mandatory. OASIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+\keywords{Dummy keywords -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
+% Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\serieslogo{}%please provide filename (without suffix)
+\volumeinfo%(easychair interface)
+  {Martin Schoeberl}% editors
+  {2}% number of editors: 1, 2, ....
+  {Conference/workshop/symposium title on which this volume is based on}% event
+  {1}% volume
+  {1}% issue
+  {1}% starting page number
+\EventShortName{}
+\DOI{10.4230/OASIcs.xxx.yyy.p}% to be completed by the volume editor
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We need benchmarks that fit the WCET and embedded community needs,
+ \end{abstract}
+
+\section{Notes}
+
+\todo{Just internal notes to collect bullet points on ideas.}
+
+\begin{itemize}
+\item On issue with original benchmarks optimized away - we can now check with Patmos easily
+\item Working on getting the license correct - issue with code from unknown source
+\item Useful in general for embedded systems/barebone systems where less libraries are available
+\end{itemize}
+
+\section{Introduction}
+\label{sec:intro}
+
+\todo{A brief introduction what the paper is about. It shall include briefly the
+main contributions and findings. The contributions can be bullet listed.}
+
+This paper... \todo{purpose statement, latest in 4th paragraph}
+
+
+The contributions of this paper are: (1) ... (2) ...
+
+This paper is organized in N sections: The following section presents related work.
+Section~\ref{sec:related} presents related work.
+Section~\ref{sec:collect} presents the benchmark collection, its classification, and the updates
+to make them useful.
+Section~\ref{sec:eval} evaluates the benchmark collection on...
+Section~\ref{sec:conclusion} concludes.
+
+\section{Related Work}
+\label{sec:related}
+
+\todo{Show that you know the field. All related work shall be put
+into context or contrast to our current work.}
+
+A paper is cited~\cite{wcet:bench:2012}.
+
+General purpose benchmarking, with a focus on open source and embedded systems.
+
+JemBench.
+
+\section{The Benchmark Collection}
+\label{sec:collect}
+
+
+\subsection{Benchmark Sources}
+
+\todo{what did we collect. How many indirections in collections have there be?
+E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
+(2) SNU-RT Benchmark Suite, (3) MDH, and (4) TACLeBench. How have
+benchmarks  changed? Legal changes?}
+
+\subsection{Classification}
+
+\todo{Talk about kernel, medium size, and application benchmarks and their usage.}
+
+\subsection{Issues with the Original Sources}
+
+
+\todo{Show the issues with code snippets}
+
+\begin{itemize}
+\item Compiler optimization
+\item byte order
+\item low-level access to device registers
+\end{itemize}
+
+\subsection{Usage Recommandations}
+
+\todo{Mmh shall we have this?}
+
+\begin{itemize}
+\item Use a stable version. At the time of this writing we should have V 2.0
+\item Do not edit the benchmarks
+\item Use all benchmarks in your evaluation. Don't introduce a bias in your evaluation by
+\emph{selecting the most representative benchmarks} for your improvement
+\end{itemize}
+
+\subsection{Licenses}
+
+\todo{What we have. The issue with getting the right ones.}
+
+\section{Evaluation}
+\label{sec:eval}
+
+\todo{Computer engineering is a constructive science. We build stuff and we measure.
+Therefore, there shall always be an evaluation section.}
+
+Possible Options for the Evaluation:
+
+\begin{itemize}
+\item Compile for an embedded processor and measure execution time
+\item Compile for Patmos and use pasim for execution cycles
+\item Show how compiler optimizations optimized away the original code and how we fixed this
+\item Complexity numbers with bar charts on execution time and maybe tools
+\item Use some WCET tools
+\end{itemize}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\todo{Rephrase what this paper is about and list the main contributions and results.}
+
+\subparagraph*{Acknowledgements}
+
+\todo{TACLe COST action phrase}
+
+We want to thank \dots for helping in restructuring the benchmarks.
+We want to thank Bendikt Huber for porting the Lift benchmark from Java to C.
+
+\todo{Ack Niclas for contributing DEBIE in open-source.}
+
+\appendix
+\section{Source Access and Compiling the Benchmarks}
+
+
+\bibliography{taclebench}
+
+
+\end{document}
