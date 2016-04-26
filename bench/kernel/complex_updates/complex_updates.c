@@ -30,16 +30,14 @@
 
 */
 
-#define STORAGE_CLASS register
-#define TYPE          float
-#define N             16
+#define N 16
 
 
 /*
   Forward declaration of functions
 */
 
-void complex_updates_pin_down(TYPE *pa, TYPE *pb, TYPE *pc, TYPE *pd);
+void complex_updates_pin_down(float *pa, float *pb, float *pc, float *pd);
 void complex_updates_init(void);
 void complex_updates_main(void);
 int main(void);
@@ -49,7 +47,7 @@ int main(void);
   Declaration of global variables
 */
 
-TYPE complex_updates_A[2 * N], complex_updates_B[2 * N],
+float complex_updates_A[2 * N], complex_updates_B[2 * N],
     complex_updates_C[2 * N], complex_updates_D[2 * N];
 
 
@@ -75,8 +73,8 @@ void complex_updates_init(void) {
 }
 
 
-void complex_updates_pin_down(TYPE *pa, TYPE *pb, TYPE *pc, TYPE *pd) {
-  STORAGE_CLASS int i;
+void complex_updates_pin_down(float *pa, float *pb, float *pc, float *pd) {
+  register int i;
 
   _Pragma("loopbound min 16 max 16")
   for (i = 0; i < N; i++) {
@@ -109,8 +107,8 @@ int complex_updates_return(void) {
 */
 
 void _Pragma("entrypoint") complex_updates_main(void) {
-  STORAGE_CLASS TYPE *p_a = &complex_updates_A[0], *p_b = &complex_updates_B[0];
-  STORAGE_CLASS TYPE *p_c = &complex_updates_C[0], *p_d = &complex_updates_D[0];
+  register float *p_a = &complex_updates_A[0], *p_b = &complex_updates_B[0];
+  register float *p_c = &complex_updates_C[0], *p_d = &complex_updates_D[0];
   int i;
 
   _Pragma( "loopbound min 16 max 16" )

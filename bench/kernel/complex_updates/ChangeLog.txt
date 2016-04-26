@@ -20,3 +20,6 @@ Original provenience: DSP-Stone
 - Add calculation  of checksum on result data, which is used in return statement
 - Apply code formatting with clang-format (manually move loop-bound annotation 
   into separate line and align assignments in complex_updates_main)
+2016-04-25:
+- Replace usages of macros by their expansions:
+  STORAGE_CLASS => register, TYPE => float
