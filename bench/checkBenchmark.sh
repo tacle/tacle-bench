@@ -17,12 +17,12 @@ for dir in */; do
 
     cd "$dir"
 
-    printf "Entering ${dir::-1} \n"
+    printf "Entering ${dir} \n"
 
     for BENCH in */; do
         cd "$BENCH"
                 
-        printf "Checking ${BENCH::-1} ..."
+        printf "Checking ${BENCH} ..."
         if [ -f a.out ]; then
             rm a.out
         fi
@@ -53,7 +53,7 @@ for dir in */; do
         cd ..
     done
 
-    printf "Leaving ${dir::-1} \n\n"
+    printf "Leaving ${dir} \n\n"
     
     cd ..
 done
