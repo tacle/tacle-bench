@@ -66,23 +66,21 @@
 
 */
 
-#define STORAGE_CLASS register
-#define TYPE int
-
 #define N_FFT 1024
 #define NUMBER_OF_BITS 13    /* fract format 1.NUMBER_OF_BITS = 1.13 */
 
-#define BITS_PER_TWID 13      /* bits per twiddle coefficient */
+#define BITS_PER_TWID 13     /* bits per twiddle coefficient */
 #define SHIFT BITS_PER_TWID  /* fractional shift after each multiplication */
 
 /*
   Forward declaration of functions
 */
+
 float fft_exp2f( float x );
 float fft_modff( float x, float *intpart );
 int fft_convert( float value );
-void fft_bit_reduct( STORAGE_CLASS TYPE *int_pointer );
-void fft_pin_down( TYPE input_data[] );
+void fft_bit_reduct( register int *int_pointer );
+void fft_pin_down( int input_data[] );
 void fft_init( void );
 void fft_main( void );
 int fft_return(void);
@@ -92,7 +90,7 @@ int main(void);
   Forward declaration of global variables
 */
 
-TYPE fft_input_data[2 * N_FFT];
+int fft_input_data[2 * N_FFT];
 
 /* precalculated twiddle factors
    for an integer 1024 point FFT
@@ -106,71 +104,14 @@ extern float fft_input[1024];
 int fft_inputfract[N_FFT];
 
 
-/* conversion function to 1.NUMBER_OF_BITS format */
-float fft_exp2f( float x )
+/*
+  Algorithm core function
+*/
+
+void fft_bit_reduct( register int *int_pointer )
 {
-  int i;
-  float ret = 2.0f;
-
-  _Pragma( "loopbound min 13 max 13" )
-  for ( i = 1; i < x; ++i )
-    ret *= 2.0f;
-  return ret;
-}
-
-float fft_modff( float x, float *intpart )
-{
-  if ( intpart ) {
-    *intpart = ( int )x;
-    return x - *intpart;
-  } else
-    return x;
-}
-
-/* conversion function to 1.NUMBER_OF_BITS format */
-int fft_convert( float value )
-{
-  float man, t_val, frac, m, exponent = NUMBER_OF_BITS;
-  int rnd_val;
-  unsigned long int_val;
-  unsigned long pm_val;
-
-  m = fft_exp2f( exponent + 1 )  - 1;
-
-  t_val = value * m ;
-  frac = fft_modff( t_val, &man );
-  if ( frac < 0.0f ) {
-    rnd_val = ( -1 );
-    if ( frac > -0.5f ) rnd_val = 0;
-  } else {
-    rnd_val = 1;
-    if ( frac < 0.5f ) rnd_val = 0;
-  }
-  int_val = man + rnd_val;
-
-  pm_val = int_val ;
-  return ( ( int ) ( pm_val ) ) ;
-}
-
-
-void fft_float2fract(void)
-{
-  float f ;
-  int   j, i ;
-
-  _Pragma( "loopbound min 1024 max 1024" )
-  for ( j = 0 ; j < N_FFT ; j++ ) {
-    f = fft_input[j];
-    i = fft_convert( f );
-    fft_inputfract[j] = i;
-  }
-}
-
-
-void fft_bit_reduct( STORAGE_CLASS TYPE *int_pointer )
-{
-  STORAGE_CLASS TYPE i, j = 0  ;
-  STORAGE_CLASS TYPE tmpr, max = 2, m, n = N_FFT << 1 ;
+  register int i, j = 0  ;
+  register int tmpr, max = 2, m, n = N_FFT << 1 ;
 
   /* do the bit reversal scramble of the input data */
   _Pragma( "loopbound min 1024 max 1024" )
@@ -196,9 +137,9 @@ void fft_bit_reduct( STORAGE_CLASS TYPE *int_pointer )
   }
 
   {
-    STORAGE_CLASS TYPE *data_pointer = &fft_twidtable[0] ;
-    STORAGE_CLASS TYPE *p, *q ;
-    STORAGE_CLASS TYPE tmpi, fr = 0, level, k, l ;
+    register int *data_pointer = &fft_twidtable[0] ;
+    register int *p, *q ;
+    register int tmpi, fr = 0, level, k, l ;
 
     _Pragma( "loopbound min 10 max 10" )
     while ( n > max ) {
@@ -253,36 +194,105 @@ void fft_bit_reduct( STORAGE_CLASS TYPE *int_pointer )
 }
 
 
-void fft_pin_down( TYPE input_data[] )
+/*
+  Initialization- and return-value-related functions
+*/
+
+/* conversion function to 1.NUMBER_OF_BITS format */
+float fft_exp2f( float x )
+{
+  int i;
+  float ret = 2.0f;
+
+  _Pragma( "loopbound min 13 max 13" )
+  for ( i = 1; i < x; ++i )
+    ret *= 2.0f;
+  
+  return ret;
+}
+
+
+float fft_modff( float x, float *intpart )
+{
+  if ( intpart ) {
+    *intpart = ( int )x;
+    return x - *intpart;
+  } else
+    return x;
+}
+
+
+/* conversion function to 1.NUMBER_OF_BITS format */
+int fft_convert( float value )
+{
+  float man, t_val, frac, m, exponent = NUMBER_OF_BITS;
+  int rnd_val;
+  unsigned long int_val;
+  unsigned long pm_val;
+
+  m = fft_exp2f( exponent + 1 )  - 1;
+
+  t_val = value * m ;
+  frac = fft_modff( t_val, &man );
+  if ( frac < 0.0f ) {
+    rnd_val = ( -1 );
+    if ( frac > -0.5f ) rnd_val = 0;
+  } else {
+    rnd_val = 1;
+    if ( frac < 0.5f ) rnd_val = 0;
+  }
+  int_val = man + rnd_val;
+
+  pm_val = int_val ;
+  return ( ( int ) ( pm_val ) ) ;
+}
+
+
+void fft_float2fract(void)
+{
+  float f ;
+  int   j, i ;
+
+  _Pragma( "loopbound min 1024 max 1024" )
+  for ( j = 0 ; j < N_FFT ; j++ ) {
+    f = fft_input[j];
+    i = fft_convert( f );
+    fft_inputfract[j] = i;
+  }
+}
+
+
+void fft_pin_down( int input_data[] )
 {
   /* conversion from input to a 1.13 format */
-
   fft_float2fract() ;
 
-  {
-    int *pd, *ps, f;
+  int *pd, *ps, f;
 
-    pd = &input_data[0];
-    ps = &fft_inputfract[0];
+  pd = &input_data[0];
+  ps = &fft_inputfract[0];
 
-    _Pragma( "loopbound min 1024 max 1024" )
-    for ( f = 0; f < N_FFT; f++ ) {
-      *pd++ = *ps++  ; /* fill in with real data */
-      *pd++ = 0 ;      /* imaginary data is equal zero */
-    }
+  _Pragma( "loopbound min 1024 max 1024" )
+  for ( f = 0; f < N_FFT; f++ ) {
+    *pd++ = *ps++  ; /* fill in with real data */
+    *pd++ = 0 ;      /* imaginary data is equal zero */
   }
 }
 
 
 void fft_init( void )
 {
+  int i;
+  volatile int x = 0;
+  
   fft_pin_down( &fft_input_data[0] );
-}
-
-
-void _Pragma( "entrypoint" ) fft_main( void )
-{
-  fft_bit_reduct( &fft_input_data[0] );
+  
+  /* avoid constant propagation of input values */
+  for ( i = 0; i < 2*N_FFT; i++) {
+    fft_input_data[i] += x;
+    fft_twidtable[i] += x;
+  }
+  
 }
 
 
@@ -296,6 +306,16 @@ int fft_return(void)
   }
   
   return check_sum != 3968;
+}
+
+
+/*
+  Main functions
+*/
+
+void _Pragma( "entrypoint" ) fft_main( void )
+{
+  fft_bit_reduct( &fft_input_data[0] );
 }
 
 

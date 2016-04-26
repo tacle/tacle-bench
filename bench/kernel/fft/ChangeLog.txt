@@ -24,3 +24,10 @@ Original provenience: DSP-Stone
 - Add all forward declarations
 - Move input data into separate file
 - Compute check sum and compare it to expected value in return function
+2016-04-25:
+- Remove unnecessary braces in fft_pin_down
+- Avoid constant propagation through addition with volatile variable 
+  on each element of fft_input_data, fft_twidtable, and fft_input
+- Reorganize functions into logical segments in main source file
+- Replace usage of macros by their expanded values:
+  STORAGE_CLASS => register, TYPE => int
