@@ -1,5 +1,5 @@
-File: matrix1_fixed.c
-Original provenience: DSP-Stone benchmark suite,
+File: matrix1.c
+Original provenience: DSP-Stone benchmark suite, matrix1_fixed
   http://www.ice.rwth-aachen.de/research/tools-projects/entry/detail/dspstone
 
 2016-02-09:
@@ -46,3 +46,12 @@ Original provenience: DSP-Stone benchmark suite,
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+
+2016-04-26:
+- Renamed benchmark: matrix1_fixed -> matrix1
+- Changed prefix in function/variable names (matrix1_fixed -> matrix1)
+- Removed macro definition (#define TYPE int)  and changed 'TYPE' into 'int'
+- Removed macro definition (#define STORAGE_CLASS  register) and changed 'STORAGE_CLASS' 
+  into 'register'
+- Declared initialisation value as volatile
+- Added matrix1_return() function and call to this function from matrix1_main()

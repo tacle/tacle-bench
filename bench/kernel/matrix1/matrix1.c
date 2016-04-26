@@ -3,7 +3,7 @@
   This program is part of the TACLeBench benchmark suite.
   Version V 1.x
 
-  Name: matrix1_fixed
+  Name: matrix1
 
   Author: Juan Martinez Velarde
 
@@ -60,9 +60,6 @@
   Macro definitions
 */
 
-#define STORAGE_CLASS  register
-#define TYPE           int
-
 #define X 10 /* first dimension of array A */
 #define Y 10 /* second dimension of array A, first dimension of array B */
 #define Z 10 /* second dimension of array B */
@@ -72,9 +69,9 @@
   Forward declaration of functions
 */
 
-void matrix1_fixed_pin_down( TYPE A[], TYPE B[], TYPE C[] );
-void matrix1_fixed_init( void );
-void matrix1_fixed_main( void );
+void matrix1_pin_down( int A[], int B[], int C[] );
+void matrix1_init( void );
+void matrix1_main( void );
 int main( void );
 
 
@@ -82,26 +79,27 @@ int main( void );
   Declaration of global variables
 */
 
-TYPE A[X * Y];
-TYPE B[Y * Z];
-TYPE C[X * Z];
+int A[X * Y];
+int B[Y * Z];
+int C[X * Z];
 
 
 /*
   Initialization functions
 */
 
-void matrix1_fixed_pin_down( TYPE A[], TYPE B[], TYPE C[] )
+void matrix1_pin_down( int A[], int B[], int C[] )
 {
   int i;
+  volatile int x = 1;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Y; i++ )
-    A[i] = 1 ;
+    A[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < Y * Z ; i++ )
-    B[i] = 1 ;
+    B[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Z ; i++ )
@@ -109,9 +107,27 @@ void matrix1_fixed_pin_down( TYPE A[], TYPE B[], TYPE C[] )
 }
 
 
-void matrix1_fixed_init( void )
+void matrix1_init( void )
 {
-  matrix1_fixed_pin_down( &A[0], &B[0], &C[0] );
+  matrix1_pin_down( &A[0], &B[0], &C[0] );
+}
+
+/*
+  Return function
+*/
+
+int matrix1_return( void )
+{
+	int i,j;
+	int checksum = 0;
+
+	  _Pragma( "loopbound min 10 max 10" )
+	  for ( i = 0; i <= X; i++ )
+		  _Pragma( "loopbound min 10 max 10" )
+		  for ( j = 0 ; j <= Z ; j++ )
+			  checksum += C[i][j];
+
+	  return ( checksum ==  1000 ? 0 : -1 );
 }
 
 
@@ -119,13 +135,13 @@ void matrix1_fixed_init( void )
   Main functions
 */
 
-void _Pragma ( "entrypoint" ) matrix1_fixed_main( void )
+void _Pragma ( "entrypoint" ) matrix1_main( void )
 {
-  STORAGE_CLASS TYPE *p_a = &A[0];
-  STORAGE_CLASS TYPE *p_b = &B[0];
-  STORAGE_CLASS TYPE *p_c = &C[0];
+  register int *p_a = &A[0];
+  register int *p_b = &B[0];
+  register int *p_c = &C[0];
 
-  STORAGE_CLASS TYPE f, i, k;
+  register int f, i, k;
 
   _Pragma( "loopbound min 10 max 10" )
   for ( k = 0; k < Z; k++ ) {
@@ -148,8 +164,8 @@ void _Pragma ( "entrypoint" ) matrix1_fixed_main( void )
 
 int main( void )
 {
-  matrix1_fixed_init();
-  matrix1_fixed_main();
+  matrix1_init();
+  matrix1_main();
 
-  return 0;
+  return matrix1_return();
 }
