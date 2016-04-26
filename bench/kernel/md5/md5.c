@@ -1,3 +1,24 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: md5.c
+
+  Author: unknown
+
+  Function: MD5 cryptographic hash function (see also RFC 1321).
+
+  Source: RSA Data Security, Inc., MD5 message-digest algorithm
+
+  Original name: md5c.c
+
+  Changes: no major functional changes, inlined include files
+
+  License: see below
+
+*/
+
 // Description: This is the MD5 algorithm comming form the Diffie-Hellman
 // application in the Netbench benchmark suite
 
