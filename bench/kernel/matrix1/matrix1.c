@@ -118,14 +118,12 @@ void matrix1_init( void )
 
 int matrix1_return( void )
 {
-	int i,j;
+	int i;
 	int checksum = 0;
 
-	  _Pragma( "loopbound min 10 max 10" )
-	  for ( i = 0; i <= X; i++ )
-		  _Pragma( "loopbound min 10 max 10" )
-		  for ( j = 0 ; j <= Z ; j++ )
-			  checksum += C[i][j];
+	  _Pragma( "loopbound min 100 max 100" )
+	  for ( i = 0; i <= X*Z; i++ )
+		  checksum += C[i];
 
 	  return ( checksum ==  1000 ? 0 : -1 );
 }
