@@ -343,19 +343,13 @@ void anagram_init( void )
 int anagram_return( void )
 {
   int i;
-  char const *answer1 = "Kay dupe rim ";
-  char const *answer2 = "dupe Kay rim ";
-  int answer1_wrong = 0;
-  int answer2_wrong = 0;
+  char const *answer = "duke rip amy";
 
-  for ( i = 0; i < 13; i++ ) {
-    if ( answer1[ i ] != anagram_buffer[ i ] )
-      answer1_wrong = 1;
-    if ( answer2[ i ] != anagram_buffer[ i ] )
-      answer2_wrong = 1;
-  }
+  for ( i = 0; i < 12; i++ )
+    if ( answer[ i ] != anagram_buffer[ i ] )
+      return 1;
 
-  return answer1_wrong && answer2_wrong;
+  return 0;
 }
 
 
@@ -372,11 +366,11 @@ int anagram_ch2i( int ch )
 
 int anagram_CompareFrequency( char *pch1, char *pch2 )
 {
-  return anagram_auGlobalFrequency[ anagram_ch2i( *pch1 ) ] <
-         anagram_auGlobalFrequency[ anagram_ch2i( *pch2 ) ]
+  return anagram_auGlobalFrequency[ ( (int) *pch1 ) ] <
+         anagram_auGlobalFrequency[ ( (int) *pch2 ) ]
          ? -1 :
-         anagram_auGlobalFrequency[ anagram_ch2i( *pch1 ) ] ==
-         anagram_auGlobalFrequency[ anagram_ch2i( *pch2 ) ]
+         anagram_auGlobalFrequency[ ( (int) *pch1 ) ] ==
+         anagram_auGlobalFrequency[ ( (int) *pch2 ) ]
          ? 0 : 1;
 }
 

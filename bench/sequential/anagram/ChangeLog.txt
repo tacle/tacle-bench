@@ -2,6 +2,9 @@ File: anagram.c
 Original provenience: unknown
 Source: unknown 
 
+2016-04-26:
+- Fixed array out-of-bounds access introduced by earlier change.
+
 2016-04-20:
 - Fixed some compiler warnings.
 - Return value of anagram_return depends on the computation inside
@@ -74,8 +77,8 @@ Source: unknown
 - Fixed compiler warning "macro is not used" by removing unused
   macros MAXWORDS and i2ch.
 - Replaced macro ch2i by proper function.
-- Fixed compiler warning "array subscript is of type 'char' using
-  function ch2i in function CompareFrequency.
+- Fixed compiler warning "array subscript is of type 'char' in
+  function CompareFrequency.
 - Fixed compiler warning "unused variable" by removing variable i
   in function Reset.
 - Fixed compiler warning "no previous extern declaration for 
