@@ -24,7 +24,7 @@ Original provenience: DSP-Stone
 - Add all forward declarations
 - Move input data into separate file
 - Compute check sum and compare it to expected value in return function
-2016-04-25:
+2016-04-26:
 - Remove unnecessary braces in fft_pin_down
 - Avoid constant propagation through addition with volatile variable 
   on each element of fft_input_data, fft_twidtable, and fft_input
