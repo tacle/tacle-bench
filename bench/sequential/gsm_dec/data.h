@@ -1,5 +1,5 @@
-#ifndef DATA_H
-#define DATA_H
+#ifndef GSM_DEC_DATA_H
+#define GSM_DEC_DATA_H
 
 gsm_signal pcmdata[]  = {
   (short)0x0000, (short)0x0000, (short)0x0010, (short)0x0010, (short)0x0010, (short)0x0020, (short)0x0020, (short)0x0018,
@@ -449,4 +449,4 @@ gsm_byte gsmdata[]  = {
   0x46, 0xB6, 0xC8, 0x9B
 };
 
-#endif
+#endif /* GSM_DEC_DATA_H */

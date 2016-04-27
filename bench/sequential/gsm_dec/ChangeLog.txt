@@ -1,4 +1,4 @@
-File: gsm_decode.c
+File: gsm_dec.c
 Original provenience: Jutta Degener and Carsten Bormann, 
                       Technische Universitaet Berlin
 
@@ -6,8 +6,65 @@ Original provenience: Jutta Degener and Carsten Bormann,
 - Add generic TACLeBench header
 - Split code into gsm.h, data.h, config.h, private.h, proto.h
 - Remove code undefined through macros and unnecessay include guards
-- Rename function decode to gsm_decode_main 
+- Rename function decode() to gsm_decode_main()
 - Remove declaration of main
-- Add functions gsm_decode_init, gsm_decode_return
+- Add functions gsm_decode_init(), gsm_decode_return()
 - Remove line: /* lpc.c */
 - Remove line: #undef	P
+2016-04-27:
+- Rename benchmark to from gsm_decode to gsm_dec
+- Remove unused content of proto.h and config.h
+- Remove usages of prototype macros P and GSM_P and checks if standard 
+  prototypes are availables: use standard prototypes
+- Remove functions only defined for debugging purpose
+- Remove block around #ifndef	GSM_TABLE_C, since GSM_TABLE_C is defined, 
+  remove define of GSM_TABLE_C
+- Define SASR macro once, remove blocks if SASR is not defined
+- Remove variables f_fast and f_verbose (both set to 0). Consequently, remove 
+  unused function gsm_option() and the defines GSM_OPT_VERBOSE and GSM_OPT_FAST 
+  only used inside gsm_option()
+- Remove unused variables verbose and fast from struct gsm_state
+- Remove unused function declarations gsm_explode() and gsm_implode()
+- Remove unused defines GSM_PATCHLEVEL, GSM_MINOR, and GSM_MAJOR
+- Remove irrelevant comment "// OK" in line calling function create()
+- Remove unused variable d of type word* from gsm_dec_main()
+- Remove unused parameter struct gsm_state	* S of function Gsm_RPE_Decoding()
+- Remove block in function Gsm_Short_Term_Synthesis_Filter() that is compiled 
+  when FAST macro is defined (per default not activated)
+- Replace macro FILTER by its expanded value Short_term_synthesis_filtering
+  in function Gsm_Short_Term_Synthesis_Filter
+- Remove unused int j in function Short_term_synthesis_filtering
+- Make iteration variable i in function create() unsigned int to avoid compiler 
+  warnings
+- Use rewritten Duff's device for WCET analysis, remove commented original 
+  varinat, keep comment in code marking this change
+- Remove unused variable temp_sat of type longword	in function 
+  APCM_inverse_quantization
+- Remove unused parameter S of type struct gsm_state* in function 
+  Gsm_RPE_Decoding and the respective calls of this function
+- Remove unused function Gsm_Update_of_reconstructed_short_time_residual_signal
+- Remove code block activatable by defining USE_TABLE_MUL, since macro never 
+  defined
+- Rename global variable gsmstate to gsm_dec_state
+- Remove lines with #undef	GSM_P
+- Update function create(): add void parameter to defintion
+- Introduce gsm_dec_state_ptr that points to gsm_dec_state, which is initialized
+  in create(). This is required to maintain the void-void signature for 
+  gsm_dec_init and gsm_dec_main.
+- Remove unused commented version of GSM_MULT_R
+- Move macros GSM_MULT|ADD|SUB into separate header
+- Give include guards unique names: prefix with GSM_DEC_
+- Remove unused functions gsm_div, gsm_add, gsm_mult, gsm_mult_r, gsm_abs, 
+  gsm_L_mult, gsm_L_add, gsm_L_sub, gsm_norm (and array bitoff used in this 
+  function), gsm_L_asl, gsm_L_asr
+- Rename Gsm_Short_Term_Synthesis_Filter to gsm_dec_Short_Term_Synthesis_Filter
+- Rename Gsm_RPE_Decoding to gsm_dec_RPE_Decoding
+- Rename Gsm_Long_Term_Synthesis_Filtering to 
+  gsm_dec_Long_Term_Synthesis_Filtering
+- Rename Gsm_Decoder to gsm_dec_Decoder
+- Remove unused function declaration int decode()
+- Prefix all global symbols with benchmark name
+- Store return value of in introduced variable gsm_dec_result, which is volatile
+  to avoid optimizations on this variable
+- Avoid constant propagation through addition with volatile variable on each 
+  element of the gsm_dec_state structure
