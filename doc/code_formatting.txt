@@ -27,7 +27,7 @@
 - Naming convention of benchmarks: Remove all obsolete type and size information
   as well as obsolete further specifications from the benchmark names. E.g.
     fft_1024_13 -> fft
-    n_complex_updates_float  -> n_complex_updates
+    n_complex_updates_float  -> complex_updates
     basicmath_small -> basicmath
     fir2dim <- fir2dim_float
   Unify the names of encoder/decoder benchmarks to 'name_enc' or 'name_dec',
