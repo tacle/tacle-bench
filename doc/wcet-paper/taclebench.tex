@@ -15,12 +15,18 @@
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
 \newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
 
+\newcommand{\code}[1]{{\small{\texttt{#1}}}}
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+
 % Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{TACLeBench -- Title is TBD\footnote{This work was partially supported TACLe. \emph{add the right phrase}}}
 %\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
 
 \author[1]{Heiko Falk}
-\author[2]{Add yourself in alphabetical order}
+\author[n]{Martin Schoeberl}
+\author[2]{Add yourself in alphabetical order, but keep Heiko first.}
 \affil[1]{Dummy University Computing Laboratory\\
   Address, Country\\
   \texttt{open@dummyuni.org}}
@@ -64,6 +70,8 @@ We need benchmarks that fit the WCET and embedded community needs,
 \item On issue with original benchmarks optimized away - we can now check with Patmos easily
 \item Working on getting the license correct - issue with code from unknown source
 \item Useful in general for embedded systems/barebone systems where less libraries are available
+\item Usage of the benchmarks (version, no subsetting, no source change)
+\item How to contribute
 \end{itemize}
 
 \section{Introduction}
@@ -74,6 +82,22 @@ main contributions and findings. The contributions can be bullet listed.}
 
 This paper... \todo{purpose statement, latest in 4th paragraph}
 
+\todo{We are aiming on self-contained benchmarks, that do not need any
+operating system services, including file IO. Therefore,...}
+
+\todo{Talk about the TACLe COST action and the subgroup around the benchmark
+collection. And plans how to further develop and maintain the collection.}
+
+\todo{Talk about usage of the benchmarks: WCET tools, compiler, hardware
+architecture,...}
+
+The first version of TACLeBench (version 1.0, available
+from\footnote{\url{http://www.tacle.eu/index.php/activities/taclebench}}), which was produced
+by Heiko Falk, was a collection of 102 benchmark programs from several different
+research groups. We keep this first version tagged with ``V1.0'' in the public
+GitHub repository.\footnote{\url{https://github.com/tacle/tacle-bench}}
+The version described in this paper is version 2.0 and tagged as such in the
+repository.
 
 The contributions of this paper are: (1) ... (2) ...
 
@@ -90,7 +114,30 @@ Section~\ref{sec:conclusion} concludes.
 \todo{Show that you know the field. All related work shall be put
 into context or contrast to our current work.}
 
-A paper is cited~\cite{wcet:bench:2012}.
+The M{\"a}lardalen WCET benchmarks is the first collection of programs especially
+intended for benchmarking WCET analysis tools~\cite{wcet:bench:2012}.
+This collection of C programs was collected from several sources in 2005 and
+was used in many WCET research projects and for the WCET Tool Challenge 2006.
+A subset of the M{\"a}lardalen benchmarks has even been translated to
+Java~\cite{jop:volta:rtas2008}. Most benchmarks are relative small, except
+two C programs that have been generated from tools. The benchmarks also
+contain all input data. As this input data is fixed and some programs do not provide
+any return value, good compilers with optimization turned on can optimize
+most of the code away. We include most of the benchmarks from the
+ M{\"a}lardalen WCET benchmark suite in TACLeBench. However, we changed
+ the way input data is represented in variables (make them \code{volatile})
+ and make the return of \code{main} dependent on the benchmark calculation.
+ Furthermore, we dropped benchmarks where this licensing terms are unknown
+ or even disallow distributing the source.
+
+EEMBC
+
+MiBench~\cite{MiBench} We include some of the MiBench benchmarks, especially
+those where it was possible to include the input data with the C source.
+
+Debie~\cite{debie}
+
+PapaBench~\cite{papabench}
 
 General purpose benchmarking, with a focus on open source and embedded systems.
 
