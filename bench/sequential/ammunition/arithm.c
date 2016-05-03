@@ -34,29 +34,19 @@ typedef unsigned int size_t;
    evaluation of remainder, shift, changing size and transformation of
    string into number fix overflow. */
 
-int overflow_bit;
+int ammunition_overflow_bit;
 
-/* This variable stores zero (unsigned) integer of maximal size.
-   Remember that this array is initiated by 0. */
-
-static unsigned char zero_constant_itself [MAX_INTEGER_OPERAND_SIZE];
-
-/* This variable represents zero (unsigned) integer of any size. */
-
-unsigned const char *zero_constant = zero_constant_itself;
-
-
-char isdigit( unsigned char c )
+char ammunition_isdigit( unsigned char c )
 {
-  if ( c >= '0' & c <= '9' )
+  if ( (c >= '0') & (c <= '9') )
     return 1;
   else
     return 0;
 }
 
-int isspace( int c )
+int ammunition_isspace( int c )
 {
-  return c == ' ' | c == '\t' | c == '\n' | c == '\r';
+  return (c == ' ') | (c == '\t') | (c == '\n') | (c == '\r');
 }
 
 
@@ -137,7 +127,7 @@ ammunition_memmove ( void *s1, const void *s2, size_t n )
    Result can be placed in any operand. */
 
 static int
-add_unsigned_integer_without_overflow_reaction
+ammunition_add_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int digit_number;
@@ -164,7 +154,7 @@ add_unsigned_integer_without_overflow_reaction
    any operand. */
 
 static int
-subtract_unsigned_integer_without_overflow_reaction
+ammunition_subtract_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int digit_number;
@@ -189,7 +179,7 @@ subtract_unsigned_integer_without_overflow_reaction
    can be placed in operand. */
 
 static void
-make_complementary_code ( int size, const void *operand, void *result )
+ammunition_make_complementary_code ( int size, const void *operand, void *result )
 {
   int digit_number;
   int carry;
@@ -212,7 +202,7 @@ make_complementary_code ( int size, const void *operand, void *result )
    fixed, 0 otherwise. */
 
 static int
-multiply_unsigned_integer_by_digit_without_overflow_reaction
+ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
 ( int size, void *operand, unsigned int digit )
 {
   int digit_number;
@@ -237,7 +227,7 @@ multiply_unsigned_integer_by_digit_without_overflow_reaction
    equal to the following function.  The function does nothing. */
 
 void
-arithmetic_overflow_reaction ( void )
+ammunition_arithmetic_overflow_reaction ( void )
 {}
 
 
@@ -245,40 +235,8 @@ arithmetic_overflow_reaction ( void )
    equal to the following function.  The function does nothing. */
 
 void
-arithmetic_unsigned_overflow_reaction ( void )
+ammunition_arithmetic_unsigned_overflow_reaction ( void )
 {}
-
-
-/* This page contains functions creating arbitrary precision minimal
-   and maximum constants. */
-
-/* The function creates given size maximal unsigned integer
-   constant. */
-
-void
-unsigned_integer_maximum ( int size, void *result )
-{
-  ammunition_memset ( result, UCHAR_MAX, ( size_t ) size );
-}
-
-/* The function creates given size minimal integer constant. */
-
-void
-integer_minimum ( int size, void *result )
-{
-  ammunition_memset ( result, 0, ( size_t ) size );
-  *( unsigned char * ) result = 1 << ( CHAR_BIT - 1 );
-}
-
-/* The function creates given size maximal integer constant. */
-
-void
-integer_maximum ( int size, void *result )
-{
-  ammunition_memset ( result, UCHAR_MAX, ( size_t ) size );
-  *( unsigned char * ) result = UCHAR_MAX >> 1;
-}
-
 
 
 /* This page contains functions for arbitrary precision addition. */
@@ -289,13 +247,13 @@ integer_maximum ( int size, void *result )
    placed in any operand. */
 
 void
-add_unsigned_integer ( int size, const void *op1, const void *op2,
+ammunition_add_unsigned_integer ( int size, const void *op1, const void *op2,
                        void *result )
 {
-  overflow_bit
-    = add_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
-  if ( overflow_bit != 0 )
-    arithmetic_unsigned_overflow_reaction();
+  ammunition_overflow_bit
+    = ammunition_add_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
+  if ( ammunition_overflow_bit != 0 )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* The function adds integers and fixes overflow reaction if it is
@@ -304,17 +262,17 @@ add_unsigned_integer ( int size, const void *op1, const void *op2,
    placed in any operand. */
 
 void
-add_integer ( int size, const void *op1, const void *op2, void *result )
+ammunition_add_integer ( int size, const void *op1, const void *op2, void *result )
 {
   int op1_sign;
   int sign_equality;
 
   op1_sign = INTEGER_SIGN ( op1 );
   sign_equality = INTEGER_SIGN ( op1 ) == INTEGER_SIGN ( op2 );
-  add_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
-  overflow_bit = sign_equality && ( op1_sign != INTEGER_SIGN ( result ) );
-  if ( overflow_bit != 0 )
-    arithmetic_overflow_reaction();
+  ammunition_add_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
+  ammunition_overflow_bit = sign_equality && ( op1_sign != INTEGER_SIGN ( result ) );
+  if ( ammunition_overflow_bit != 0 )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -327,14 +285,14 @@ add_integer ( int size, const void *op1, const void *op2, void *result )
    Result can be placed in any operand. */
 
 void
-subtract_unsigned_integer ( int size, const void *op1, const void *op2,
+ammunition_subtract_unsigned_integer ( int size, const void *op1, const void *op2,
                             void *result )
 {
-  overflow_bit
-    = subtract_unsigned_integer_without_overflow_reaction ( size, op1, op2,
+  ammunition_overflow_bit
+    = ammunition_subtract_unsigned_integer_without_overflow_reaction ( size, op1, op2,
         result );
-  if ( overflow_bit != 0 )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit != 0 )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* The function subtracts integers and fixes overflow reaction if it
@@ -343,17 +301,17 @@ subtract_unsigned_integer ( int size, const void *op1, const void *op2,
    be placed in any operand. */
 
 void
-subtract_integer ( int size, const void *op1, const void *op2, void *result )
+ammunition_subtract_integer ( int size, const void *op1, const void *op2, void *result )
 {
   int op1_sign;
   int sign_unequality;
 
   op1_sign = INTEGER_SIGN ( op1 );
   sign_unequality = INTEGER_SIGN ( op1 ) != INTEGER_SIGN ( op2 );
-  subtract_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
-  overflow_bit = sign_unequality && ( op1_sign != INTEGER_SIGN ( result ) );
-  if ( overflow_bit != 0 )
-    arithmetic_overflow_reaction();
+  ammunition_subtract_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
+  ammunition_overflow_bit = sign_unequality && ( op1_sign != INTEGER_SIGN ( result ) );
+  if ( ammunition_overflow_bit != 0 )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -365,7 +323,7 @@ subtract_integer ( int size, const void *op1, const void *op2, void *result )
    Result can be placed in any operand. */
 
 static int
-multiply_unsigned_integer_without_overflow_reaction
+ammunition_multiply_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int op1_digit_number;
@@ -416,14 +374,14 @@ multiply_unsigned_integer_without_overflow_reaction
    be placed in any operand. */
 
 void
-multiply_unsigned_integer ( int size, const void *op1, const void *op2,
+ammunition_multiply_unsigned_integer ( int size, const void *op1, const void *op2,
                             void *result )
 {
-  overflow_bit =
-    multiply_unsigned_integer_without_overflow_reaction ( size, op1, op2,
+  ammunition_overflow_bit =
+    ammunition_multiply_unsigned_integer_without_overflow_reaction ( size, op1, op2,
         result );
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* The function multiplys integers and fixes overflow reaction if it
@@ -432,7 +390,7 @@ multiply_unsigned_integer ( int size, const void *op1, const void *op2,
    be placed in any operand. */
 
 void
-multiply_integer ( int size, const void *op1, const void *op2, void *result )
+ammunition_multiply_integer ( int size, const void *op1, const void *op2, void *result )
 {
   int negative_result_flag;
   unsigned char op1_complementary [MAX_INTEGER_OPERAND_SIZE];
@@ -445,30 +403,30 @@ multiply_integer ( int size, const void *op1, const void *op2, void *result )
   if ( INTEGER_SIGN ( op1 ) ) {
     /* May be integer overflow. But result is correct because
        it is unsigned. */
-    make_complementary_code ( size, op1, op1_complementary );
+    ammunition_make_complementary_code ( size, op1, op1_complementary );
     abs_op1 = ( unsigned const char * )op1_complementary;
   } else
     abs_op1 = ( unsigned const char * )op1;
   if ( INTEGER_SIGN ( op2 ) ) {
     /* May be integer overflow.  But result is correct because
        it is unsigned. */
-    make_complementary_code ( size, op2, op2_complementary );
+    ammunition_make_complementary_code ( size, op2, op2_complementary );
     abs_op2 = ( unsigned const char * )op2_complementary;
   } else
     abs_op2 = ( unsigned const char * )op2;
-  overflow_bit =
-    multiply_unsigned_integer_without_overflow_reaction ( size, abs_op1,
+  ammunition_overflow_bit =
+    ammunition_multiply_unsigned_integer_without_overflow_reaction ( size, abs_op1,
         abs_op2, result );
   unsigned_result_sign = INTEGER_SIGN ( result );
   if ( negative_result_flag )
-    make_complementary_code ( size, result, result );
+    ammunition_make_complementary_code ( size, result, result );
   if ( unsigned_result_sign
        && ( !negative_result_flag
             || INTEGER_SIGN ( result ) != unsigned_result_sign ) )
     /* Unsigned result can not be represented as integer. */
-    overflow_bit = 1;
-  if ( overflow_bit )
-    arithmetic_overflow_reaction();
+    ammunition_overflow_bit = 1;
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -481,7 +439,7 @@ multiply_integer ( int size, const void *op1, const void *op2, void *result )
    in Knuth's book. */
 
 static int
-divide_unsigned_integer_without_overflow_reaction
+ammunition_divide_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int scaled_op1_digit_number;
@@ -530,12 +488,12 @@ divide_unsigned_integer_without_overflow_reaction
   ammunition_memcpy ( scaled_op1 + 1, op1, ( size_t ) size );
   *scaled_op1 = 0;
 
-  multiply_unsigned_integer_by_digit_without_overflow_reaction
+  ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
   ( size + 1, scaled_op1, scale );
 
   ammunition_memcpy ( normalized_op2, op2, ( size_t ) size );
 
-  multiply_unsigned_integer_by_digit_without_overflow_reaction
+  ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
   ( size, normalized_op2, scale );
 
   _Pragma( "loopbound min 0 max 0" )
@@ -571,10 +529,10 @@ divide_unsigned_integer_without_overflow_reaction
                         normalized_op2 + first_nonzero_digit_number,
                         ( size_t ) ( size - first_nonzero_digit_number ) );
     *extended_normalized_op2 = 0;
-    multiply_unsigned_integer_by_digit_without_overflow_reaction
+    ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
     ( size - first_nonzero_digit_number + 1, extended_normalized_op2,
       q_approximation );
-    if ( subtract_unsigned_integer_without_overflow_reaction
+    if ( ammunition_subtract_unsigned_integer_without_overflow_reaction
          ( size - first_nonzero_digit_number + 1,
            scaled_op1 + scaled_op1_digit_number, extended_normalized_op2,
            scaled_op1 + scaled_op1_digit_number ) ) {
@@ -585,7 +543,7 @@ divide_unsigned_integer_without_overflow_reaction
                           ( size_t ) ( size - first_nonzero_digit_number ) );
       *extended_normalized_op2 = 0;
 
-      add_unsigned_integer_without_overflow_reaction
+      ammunition_add_unsigned_integer_without_overflow_reaction
       ( size - first_nonzero_digit_number + 1,
         scaled_op1 + scaled_op1_digit_number, extended_normalized_op2,
         scaled_op1 + scaled_op1_digit_number );
@@ -605,13 +563,13 @@ divide_unsigned_integer_without_overflow_reaction
    placed in any operand. */
 
 void
-divide_unsigned_integer ( int size, const void *op1, const void *op2,
+ammunition_divide_unsigned_integer ( int size, const void *op1, const void *op2,
                           void *result )
 {
-  overflow_bit =
-    divide_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  ammunition_overflow_bit =
+    ammunition_divide_unsigned_integer_without_overflow_reaction ( size, op1, op2, result );
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* The function divides integers and fixes overflow reaction if it is
@@ -620,7 +578,7 @@ divide_unsigned_integer ( int size, const void *op1, const void *op2,
    placed in any operand. */
 
 void
-divide_integer ( int size, const void *op1, const void *op2, void *result )
+ammunition_divide_integer ( int size, const void *op1, const void *op2, void *result )
 {
   int negative_result_flag;
   unsigned char op1_complementary [MAX_INTEGER_OPERAND_SIZE];
@@ -633,30 +591,30 @@ divide_integer ( int size, const void *op1, const void *op2, void *result )
   if ( INTEGER_SIGN ( op1 ) ) {
     /* May be integer overflow for minimal int. But result is correct because
        it is unsigned. */
-    make_complementary_code ( size, op1, op1_complementary );
+    ammunition_make_complementary_code ( size, op1, op1_complementary );
     abs_op1 = ( unsigned const char * )op1_complementary;
   } else
     abs_op1 = ( unsigned const char * )op1;
   if ( INTEGER_SIGN ( op2 ) ) {
     /* May be integer overflow for minimal int.  But result is correct
        because it is unsigned. */
-    make_complementary_code ( size, op2, op2_complementary );
+    ammunition_make_complementary_code ( size, op2, op2_complementary );
     abs_op2 = ( unsigned const char * )op2_complementary;
   } else
     abs_op2 = ( unsigned const char * )op2;
-  overflow_bit =
-    divide_unsigned_integer_without_overflow_reaction ( size, abs_op1,
+  ammunition_overflow_bit =
+    ammunition_divide_unsigned_integer_without_overflow_reaction ( size, abs_op1,
         abs_op2, result );
   unsigned_result_sign = INTEGER_SIGN ( result );
   if ( negative_result_flag )
-    make_complementary_code ( size, result, result );
+    ammunition_make_complementary_code ( size, result, result );
   if ( unsigned_result_sign
        && ( !negative_result_flag
             || INTEGER_SIGN ( result ) != unsigned_result_sign ) )
     /* Unsigned result can not be represented as integer. */
-    overflow_bit = 1;
-  if ( overflow_bit )
-    arithmetic_overflow_reaction();
+    ammunition_overflow_bit = 1;
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -669,40 +627,20 @@ divide_integer ( int size, const void *op1, const void *op2, void *result )
    needed.  Result can be placed in any operand. */
 
 void
-unsigned_integer_remainder ( int size, const void *op1, const void *op2,
+ammunition_unsigned_integer_remainder ( int size, const void *op1, const void *op2,
                              void *result )
 {
   unsigned char temporary [MAX_INTEGER_OPERAND_SIZE];
 
-  divide_unsigned_integer ( size, op1, op2, temporary );
-  if ( overflow_bit )
+  ammunition_divide_unsigned_integer ( size, op1, op2, temporary );
+  if ( ammunition_overflow_bit )
     /* Reaction on zero is called from `divide_unsigned_integer'. */
     ammunition_memset ( result, 0, ( size_t ) size );
   else {
-    multiply_unsigned_integer ( size, temporary, op2, temporary );
-    subtract_unsigned_integer ( size, op1, temporary, result );
+    ammunition_multiply_unsigned_integer ( size, temporary, op2, temporary );
+    ammunition_subtract_unsigned_integer ( size, op1, temporary, result );
   }
 }
-
-/* The function evaluates remainder of division of integers as `op1 -
-   (op1/op2)*op2' and fixes overflow reaction if it is needed.  Result
-   can be placed in any operand. */
-
-void
-integer_remainder ( int size, const void *op1, const void *op2, void *result )
-{
-  unsigned char temporary [MAX_INTEGER_OPERAND_SIZE];
-
-  divide_integer ( size, op1, op2, temporary );
-  if ( overflow_bit )
-    /* Reaction on zero is called from `divide_integer'. */
-    ammunition_memset ( result, 0, ( size_t ) size );
-  else {
-    multiply_integer ( size, temporary, op2, temporary );
-    subtract_integer ( size, op1, temporary, result );
-  }
-}
-
 
 
 /* This page contains functions for arbitrary precision number shifts. */
@@ -716,7 +654,7 @@ integer_remainder ( int size, const void *op1, const void *op2, void *result )
    not equal to source operand.  Result can be placed in operand. */
 
 void
-unsigned_integer_shift_right ( int size, const void *operand,
+ammunition_unsigned_integer_shift_right ( int size, const void *operand,
                                unsigned int bits, void *result )
 {
   int byte_number;
@@ -725,14 +663,14 @@ unsigned_integer_shift_right ( int size, const void *operand,
   int bit_shift;
   int byte_shift;
 
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   byte_shift = bits / CHAR_BIT;
   bit_shift = bits % CHAR_BIT;
   _Pragma( "loopbound min 0 max 3" )
   for ( byte_number = ( byte_shift >= size ? 0 : size - byte_shift );
         byte_number < size; byte_number++ ) {
     if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
       break;
     }
   }
@@ -753,10 +691,10 @@ unsigned_integer_shift_right ( int size, const void *operand,
       carry = ( byte << ( CHAR_BIT - bit_shift ) ) & UCHAR_MAX;
     }
     if ( carry != 0 )
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
   }
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* This function makes right arithmetic shift of integer of given size
@@ -768,7 +706,7 @@ unsigned_integer_shift_right ( int size, const void *operand,
    operand.  Result can be placed in operand. */
 
 void
-integer_shift_right ( int size, const void *operand, unsigned int bits,
+ammunition_integer_shift_right ( int size, const void *operand, unsigned int bits,
                       void *result )
 {
   int byte_number;
@@ -779,14 +717,14 @@ integer_shift_right ( int size, const void *operand, unsigned int bits,
   int operand_sign;
 
   operand_sign = INTEGER_SIGN ( operand );
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   byte_shift = bits / CHAR_BIT;
   bit_shift = bits % CHAR_BIT;
   _Pragma( "loopbound min 0 max 3" )
   for ( byte_number = ( byte_shift >= size ? 0 : size - byte_shift );
         byte_number < size; byte_number++ ) {
     if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
       break;
     }
   }
@@ -809,10 +747,10 @@ integer_shift_right ( int size, const void *operand, unsigned int bits,
       carry = ( byte << ( CHAR_BIT - bit_shift ) ) & UCHAR_MAX;
     }
     if ( carry != 0 )
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
   }
-  if ( overflow_bit )
-    arithmetic_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 /* This function makes left shift of unsigned integer of given size on
@@ -824,7 +762,7 @@ integer_shift_right ( int size, const void *operand, unsigned int bits,
    equal to source operand.  Result can be placed in operand. */
 
 void
-unsigned_integer_shift_left ( int size, const void *operand,
+ammunition_unsigned_integer_shift_left ( int size, const void *operand,
                               unsigned int bits, void *result )
 {
   int byte_number;
@@ -833,14 +771,14 @@ unsigned_integer_shift_left ( int size, const void *operand,
   int bit_shift;
   int byte_shift;
 
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   byte_shift = bits / CHAR_BIT;
   bit_shift = bits % CHAR_BIT;
   _Pragma( "loopbound min 0 max 2" )
   for ( byte_number = 0; byte_number < byte_shift && byte_number < size;
         byte_number++ ) {
     if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
       break;
     }
   }
@@ -862,10 +800,10 @@ unsigned_integer_shift_left ( int size, const void *operand,
       carry = byte >> ( CHAR_BIT - bit_shift );
     }
     if ( carry != 0 )
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
   }
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* This function makes left arithmetic shift of integer of given size
@@ -877,7 +815,7 @@ unsigned_integer_shift_left ( int size, const void *operand,
    operand.  Result can be placed in operand. */
 
 void
-integer_shift_left ( int size, const void *operand, unsigned int bits,
+ammunition_integer_shift_left ( int size, const void *operand, unsigned int bits,
                      void *result )
 {
   int byte_number;
@@ -888,7 +826,7 @@ integer_shift_left ( int size, const void *operand, unsigned int bits,
   int operand_sign;
 
   operand_sign = INTEGER_SIGN ( operand );
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   byte_shift = bits / CHAR_BIT;
   bit_shift = bits % CHAR_BIT;
   _Pragma( "loopbound min 0 max 2" )
@@ -896,7 +834,7 @@ integer_shift_left ( int size, const void *operand, unsigned int bits,
         byte_number++ ) {
     if ( ( ( unsigned char * ) operand ) [byte_number]
          != ( operand_sign ? UCHAR_MAX : 0 ) ) {
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
       break;
     }
   }
@@ -919,12 +857,12 @@ integer_shift_left ( int size, const void *operand, unsigned int bits,
     }
     if ( carry != ( ( unsigned ) ( operand_sign ? UCHAR_MAX : 0 )
                     >> ( CHAR_BIT - bit_shift ) ) )
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
   }
   if ( operand_sign != INTEGER_SIGN ( result ) )
-    overflow_bit = 1;
-  if ( overflow_bit )
-    arithmetic_overflow_reaction();
+    ammunition_overflow_bit = 1;
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -935,7 +873,7 @@ integer_shift_left ( int size, const void *operand, unsigned int bits,
 /* This function makes bitwise `or' of two integers of given size. */
 
 void
-integer_or ( int size, const void *op1, const void *op2, void *result )
+ammunition_integer_or ( int size, const void *op1, const void *op2, void *result )
 {
   int byte_number;
 
@@ -951,16 +889,16 @@ integer_or ( int size, const void *op1, const void *op2, void *result )
    size. */
 
 void
-unsigned_integer_or ( int size, const void *op1, const void *op2, void *result )
+ammunition_unsigned_integer_or ( int size, const void *op1, const void *op2, void *result )
 {
-  integer_or ( size, op1, op2, result );
+  ammunition_integer_or ( size, op1, op2, result );
 }
 
 
 /* This function makes bitwise `and' of two integers of given size. */
 
 void
-integer_and ( int size, const void *op1, const void *op2, void *result )
+ammunition_integer_and ( int size, const void *op1, const void *op2, void *result )
 {
   int byte_number;
 
@@ -976,17 +914,17 @@ integer_and ( int size, const void *op1, const void *op2, void *result )
    size. */
 
 void
-unsigned_integer_and ( int size, const void *op1, const void *op2,
+ammunition_unsigned_integer_and ( int size, const void *op1, const void *op2,
                        void *result )
 {
-  integer_and ( size, op1, op2, result );
+  ammunition_integer_and ( size, op1, op2, result );
 }
 
 
 /* This function makes bitwise `not' of integer of given size. */
 
 void
-integer_not ( int size, const void *operand, void *result )
+ammunition_integer_not ( int size, const void *operand, void *result )
 {
   int byte_number;
 
@@ -1001,9 +939,9 @@ integer_not ( int size, const void *operand, void *result )
    size. */
 
 void
-unsigned_integer_not ( int size, const void *operand, void *result )
+ammunition_unsigned_integer_not ( int size, const void *operand, void *result )
 {
-  integer_not ( size, operand, result );
+  ammunition_integer_not ( size, operand, result );
 }
 
 
@@ -1016,7 +954,7 @@ unsigned_integer_not ( int size, const void *operand, void *result )
    otherwise. */
 
 int
-eq_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_eq_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
   return ammunition_memcmp ( op1, op2, ( size_t ) size ) == 0;
 }
@@ -1025,7 +963,7 @@ eq_unsigned_integer ( int size, const void *op1, const void *op2 )
    function returns 1 if integers are equal, 0 otherwise. */
 
 int
-eq_integer ( int size, const void *op1, const void *op2 )
+ammunition_eq_integer ( int size, const void *op1, const void *op2 )
 {
   return ammunition_memcmp ( op1, op2, ( size_t ) size ) == 0;
 }
@@ -1035,7 +973,7 @@ eq_integer ( int size, const void *op1, const void *op2 )
    equal, 0 otherwise. */
 
 int
-ne_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_ne_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
   return ammunition_memcmp ( op1, op2, ( size_t ) size ) != 0;
 }
@@ -1044,7 +982,7 @@ ne_unsigned_integer ( int size, const void *op1, const void *op2 )
    The function returns 1 if integers are not equal, 0 otherwise. */
 
 int
-ne_integer ( int size, const void *op1, const void *op2 )
+ammunition_ne_integer ( int size, const void *op1, const void *op2 )
 {
   return ammunition_memcmp ( op1, op2, ( size_t ) size ) != 0;
 }
@@ -1057,7 +995,7 @@ ne_integer ( int size, const void *op1, const void *op2 )
    second, 0 otherwise. */
 
 static int
-bytes_comparison ( const void *op1, const void *op2, int size )
+ammunition_bytes_comparison ( const void *op1, const void *op2, int size )
 {
   const unsigned char *str1 = ( unsigned const char * )op1;
   const unsigned char *str2 = ( unsigned const char * )op2;
@@ -1083,9 +1021,9 @@ bytes_comparison ( const void *op1, const void *op2, int size )
    otherwise. */
 
 int
-gt_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_gt_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
-  return bytes_comparison ( op1, op2, size ) > 0;
+  return ammunition_bytes_comparison ( op1, op2, size ) > 0;
 }
 
 /* This function compares two integers of given size on that the first
@@ -1093,18 +1031,18 @@ gt_unsigned_integer ( int size, const void *op1, const void *op2 )
    first integer is greater than the second, 0 otherwise. */
 
 int
-gt_integer ( int size, const void *op1, const void *op2 )
+ammunition_gt_integer ( int size, const void *op1, const void *op2 )
 {
   if ( INTEGER_SIGN ( op1 ) == 0 ) {
     if ( INTEGER_SIGN ( op2 ) == 0 )
-      return bytes_comparison ( op1, op2, size ) > 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) > 0;
     else
       return 1; /* TRUE */
   } else
     if ( INTEGER_SIGN ( op2 ) == 0 )
       return 0; /*FALSE*/
     else
-      return bytes_comparison ( op1, op2, size ) > 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) > 0;
 }
 
 /* This function compares two unsigned integers of given size on that
@@ -1113,9 +1051,9 @@ gt_integer ( int size, const void *op1, const void *op2 )
    otherwise. */
 
 int
-lt_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_lt_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
-  return bytes_comparison ( op1, op2, size ) < 0;
+  return ammunition_bytes_comparison ( op1, op2, size ) < 0;
 }
 
 /* This function compares two integers of given size on that the first
@@ -1123,18 +1061,18 @@ lt_unsigned_integer ( int size, const void *op1, const void *op2 )
    first integer is less than the second, 0 otherwise. */
 
 int
-lt_integer ( int size, const void *op1, const void *op2 )
+ammunition_lt_integer ( int size, const void *op1, const void *op2 )
 {
   if ( INTEGER_SIGN ( op1 ) == 0 ) {
     if ( INTEGER_SIGN ( op2 ) == 0 )
-      return bytes_comparison ( op1, op2, size ) < 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) < 0;
     else
       return 0; /*FALSE*/
   } else
     if ( INTEGER_SIGN ( op2 ) == 0 )
       return 1; /* TRUE */
     else
-      return bytes_comparison ( op1, op2, size ) < 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) < 0;
 }
 
 /* This function compares two unsigned integers of given size on that
@@ -1143,9 +1081,9 @@ lt_integer ( int size, const void *op1, const void *op2 )
    equal to the second, 0 otherwise. */
 
 int
-ge_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_ge_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
-  return bytes_comparison ( op1, op2, size ) >= 0;
+  return ammunition_bytes_comparison ( op1, op2, size ) >= 0;
 }
 
 /* This function compares two integers of given size on that the first
@@ -1154,18 +1092,18 @@ ge_unsigned_integer ( int size, const void *op1, const void *op2 )
    second, 0 otherwise. */
 
 int
-ge_integer ( int size, const void *op1, const void *op2 )
+ammunition_ge_integer ( int size, const void *op1, const void *op2 )
 {
   if ( INTEGER_SIGN ( op1 ) == 0 ) {
     if ( INTEGER_SIGN ( op2 ) == 0 )
-      return bytes_comparison ( op1, op2, size ) >= 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) >= 0;
     else
       return 1; /* TRUE */
   } else
     if ( INTEGER_SIGN ( op2 ) == 0 )
       return 0; /*FALSE*/
     else
-      return bytes_comparison ( op1, op2, size ) >= 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) >= 0;
 }
 
 /* This function compares two unsigned integers of given size on that
@@ -1174,9 +1112,9 @@ ge_integer ( int size, const void *op1, const void *op2 )
    equal to the second, 0 otherwise. */
 
 int
-le_unsigned_integer ( int size, const void *op1, const void *op2 )
+ammunition_le_unsigned_integer ( int size, const void *op1, const void *op2 )
 {
-  return bytes_comparison ( op1, op2, size ) <= 0;
+  return ammunition_bytes_comparison ( op1, op2, size ) <= 0;
 }
 
 /* This function compares two integers of given size on that the first
@@ -1185,18 +1123,18 @@ le_unsigned_integer ( int size, const void *op1, const void *op2 )
    otherwise. */
 
 int
-le_integer ( int size, const void *op1, const void *op2 )
+ammunition_le_integer ( int size, const void *op1, const void *op2 )
 {
   if ( INTEGER_SIGN ( op1 ) == 0 ) {
     if ( INTEGER_SIGN ( op2 ) == 0 )
-      return bytes_comparison ( op1, op2, size ) <= 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) <= 0;
     else
       return 0; /*FALSE*/
   } else
     if ( INTEGER_SIGN ( op2 ) == 0 )
       return 1; /* TRUE */
     else
-      return bytes_comparison ( op1, op2, size ) <= 0;
+      return ammunition_bytes_comparison ( op1, op2, size ) <= 0;
 }
 
 
@@ -1209,12 +1147,12 @@ le_integer ( int size, const void *op1, const void *op2 )
    size.  Result can be placed in operand. */
 
 void
-change_unsigned_integer_size ( int operand_size, const void *operand,
+ammunition_change_unsigned_integer_size ( int operand_size, const void *operand,
                                int result_size, void *result )
 {
   int operand_digit_number;
 
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   if ( operand_size <= result_size ) {
     ammunition_memmove ( ( char * ) result + result_size - operand_size, operand,
                          ( size_t ) operand_size );
@@ -1225,15 +1163,15 @@ change_unsigned_integer_size ( int operand_size, const void *operand,
           operand_digit_number < operand_size - result_size;
           operand_digit_number++ ) {
       if ( ( ( unsigned char * ) operand ) [operand_digit_number] != 0 ) {
-        overflow_bit = 1;
+        ammunition_overflow_bit = 1;
         break;
       }
     }
     ammunition_memmove ( result, ( char * ) operand + operand_size - result_size,
                          ( size_t ) result_size );
   }
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* The function changes size of integer.  The function fixes overflow
@@ -1241,13 +1179,13 @@ change_unsigned_integer_size ( int operand_size, const void *operand,
    can be placed in operand. */
 
 void
-change_integer_size ( int operand_size, const void *operand,
+ammunition_change_integer_size ( int operand_size, const void *operand,
                       int result_size, void *result )
 {
   int operand_digit_number;
   int operand_sign;
 
-  overflow_bit = 0;
+  ammunition_overflow_bit = 0;
   operand_sign = INTEGER_SIGN ( operand );
   if ( operand_size <= result_size ) {
     ammunition_memmove ( ( char * ) result + result_size - operand_size, operand,
@@ -1261,17 +1199,17 @@ change_integer_size ( int operand_size, const void *operand,
           operand_digit_number++ ) {
       if ( ( ( unsigned char * ) operand ) [operand_digit_number]
            != ( operand_sign ? UCHAR_MAX : 0 ) ) {
-        overflow_bit = 1;
+        ammunition_overflow_bit = 1;
         break;
       }
     }
     ammunition_memmove ( result, ( char * ) operand + operand_size - result_size,
                          ( size_t ) result_size );
     if ( operand_sign != INTEGER_SIGN ( result ) )
-      overflow_bit = 1;
+      ammunition_overflow_bit = 1;
   }
-  if ( overflow_bit )
-    arithmetic_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -1284,7 +1222,7 @@ change_integer_size ( int operand_size, const void *operand,
    function returns the result string. */
 
 char *
-unsigned_integer_to_string ( int size, const void *operand, char *result )
+ammunition_unsigned_integer_to_string ( int size, const void *operand, char *result )
 {
   int digit_number;
   int i;
@@ -1325,17 +1263,17 @@ unsigned_integer_to_string ( int size, const void *operand, char *result )
    numbers.  The function returns the result string. */
 
 char *
-integer_to_string ( int size, const void *operand, char *result )
+ammunition_integer_to_string ( int size, const void *operand, char *result )
 {
   unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
 
   if ( !INTEGER_SIGN ( operand ) )
-    return unsigned_integer_to_string ( size, operand, result );
+    return ammunition_unsigned_integer_to_string ( size, operand, result );
   ammunition_memcpy ( operand_copy, operand, ( size_t ) size );
   /* May be integer overflow. But result is correct because it is unsigned. */
-  make_complementary_code ( size, operand_copy, operand_copy );
+  ammunition_make_complementary_code ( size, operand_copy, operand_copy );
   *result = '-';
-  unsigned_integer_to_string ( size, operand_copy, result + 1 );
+  ammunition_unsigned_integer_to_string ( size, operand_copy, result + 1 );
   return result;
 }
 
@@ -1349,7 +1287,7 @@ integer_to_string ( int size, const void *operand, char *result )
    otherwise. */
 
 static int
-add_digit_to_unsigned_integer_without_overflow_reaction
+ammunition_add_digit_to_unsigned_integer_without_overflow_reaction
 ( int size, void *operand, unsigned int digit )
 {
   int digit_number;
@@ -1379,21 +1317,21 @@ add_digit_to_unsigned_integer_without_overflow_reaction
    overflow is fixed, 0 otherwise. */
 
 static int
-string_to_unsigned_integer_without_overflow_reaction
+ammunition_string_to_unsigned_integer_without_overflow_reaction
 ( int size, const char *operand, void *result, char **first_nondigit )
 {
   int overflow_flag;
 
   ammunition_memset ( result, 0, ( size_t ) size );
   _Pragma( "loopbound min 0 max 10" )
-  for ( overflow_flag = 0; isdigit ( *operand ); operand++ ) {
+  for ( overflow_flag = 0; ammunition_isdigit ( *operand ); operand++ ) {
     overflow_flag
       = overflow_flag
-        || multiply_unsigned_integer_by_digit_without_overflow_reaction
+        || ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
         ( size, result, 10 );
     overflow_flag
       = overflow_flag
-        || add_digit_to_unsigned_integer_without_overflow_reaction
+        || ammunition_add_digit_to_unsigned_integer_without_overflow_reaction
         ( size, result, *operand - '0' );
   }
   *first_nondigit = ( char * ) operand;
@@ -1411,18 +1349,18 @@ string_to_unsigned_integer_without_overflow_reaction
    address of the first nondigit in the source string. */
 
 char *
-unsigned_integer_from_string ( int size, const char *operand, void *result )
+ammunition_unsigned_integer_from_string ( int size, const char *operand, void *result )
 {
   char *first_nondigit;
 
   _Pragma( "loopbound min 0 max 0" )
-  while ( isspace ( *operand ) )
+  while ( ammunition_isspace ( *operand ) )
     operand++;
-  overflow_bit
-    = string_to_unsigned_integer_without_overflow_reaction
+  ammunition_overflow_bit
+    = ammunition_string_to_unsigned_integer_without_overflow_reaction
       ( size, operand, result, &first_nondigit );
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
   return first_nondigit;
 }
 
@@ -1437,14 +1375,14 @@ unsigned_integer_from_string ( int size, const char *operand, void *result )
    of the first nondigit in the source string. */
 
 char *
-integer_from_string ( int size, const char *operand, void *result )
+ammunition_integer_from_string ( int size, const char *operand, void *result )
 {
   int negative_number_flag;
   char *first_nondigit;
   int unsigned_result_sign;
 
   _Pragma( "loopbound min 0 max 0" )
-  while ( isspace ( *operand ) )
+  while ( ammunition_isspace ( *operand ) )
     operand++;
   negative_number_flag = 0; /* FALSE */
   if ( *operand == '+' )
@@ -1454,20 +1392,20 @@ integer_from_string ( int size, const char *operand, void *result )
       operand++;
       negative_number_flag = 1; /* TRUE */
     }
-  overflow_bit
-    = string_to_unsigned_integer_without_overflow_reaction
+  ammunition_overflow_bit
+    = ammunition_string_to_unsigned_integer_without_overflow_reaction
       ( size, operand, result, &first_nondigit );
   unsigned_result_sign = INTEGER_SIGN ( result );
   if ( negative_number_flag )
     /* May be integer overflow when `result' is correct.  But result
        is correct because it is unsigned. */
-    make_complementary_code ( size, result, result );
-  overflow_bit
-    = overflow_bit || ( unsigned_result_sign
+    ammunition_make_complementary_code ( size, result, result );
+  ammunition_overflow_bit
+    = ammunition_overflow_bit || ( unsigned_result_sign
                         && ( !negative_number_flag
                              || INTEGER_SIGN ( result ) != unsigned_result_sign ) );
-  if ( overflow_bit )
-    arithmetic_unsigned_overflow_reaction();
+  if ( ammunition_overflow_bit )
+    ammunition_arithmetic_unsigned_overflow_reaction();
   return first_nondigit;
 }
 
