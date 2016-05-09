@@ -108,6 +108,7 @@ void sha_byte_reverse( LONG *buffer, int count )
 /* initialize the SHA digest */
 void sha_init( void )
 {
+	int i;
   sha_info.digest[0] = 0x67452301L;
   sha_info.digest[1] = 0xefcdab89L;
   sha_info.digest[2] = 0x98badcfeL;
@@ -115,6 +116,8 @@ void sha_init( void )
   sha_info.digest[4] = 0xc3d2e1f0L;
   sha_info.count_lo = 0L;
   sha_info.count_hi = 0L;
+  for(i=0;i<16;i++)
+	  sha_info.data[i]=0;
 }
 
 size_t sha_fread( void *ptr, size_t size, size_t count,
@@ -183,6 +186,7 @@ void sha_stream( struct SHA_INFO *sha_info, struct SHA_MY_FILE *fin )
   _Pragma( "loopbound min 5 max 5" )
   while ( ( i = sha_fread( data, 1, BLOCK_SIZE, fin ) ) > 0 )
     sha_update( sha_info, data, i );
+
   sha_final( sha_info );
 }
 
@@ -197,17 +201,14 @@ void sha_main( void )
 
 int sha_return( void )
 {
-  int i=0;
-  LONG sum=0;
-  for(i=0;i<16;i++)
-	sum+=sha_info.data[i];
-
-  return (( int )  sum );
+  int sum=0;
+  sum = sha_info.data[14] + sha_info.data[15];
+  return ( sum - 261944 != 0);
 }
 
 int main ( void )
 {
   sha_init();
   sha_main();
-  return ( sha_return()+ 1532778765 != 0 );
+  return ( sha_return() );
 }
