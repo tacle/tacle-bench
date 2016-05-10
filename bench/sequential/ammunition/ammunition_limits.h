@@ -1,5 +1,5 @@
-#ifndef __AMMUNITION_LIMITS__
-#define __AMMUNITION_LIMITS__
+#ifndef AMMUNITION_LIMITS_H
+#define AMMUNITION_LIMITS_H
 
 #ifndef CHAR_BIT
 #define CHAR_BIT 8
@@ -32,4 +32,4 @@
 #define INT_MIN (-INT_MAX-1)
 #endif
 
-#endif /* #ifndef __AMMUNITION_LIMITS__ */
+#endif /* #ifndef AMMUNITION_LIMITS_H */

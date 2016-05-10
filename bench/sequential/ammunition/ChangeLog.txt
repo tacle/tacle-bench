@@ -37,3 +37,20 @@ Original provenience: DINO programming language
   and set_integer_overflow_reaction
 - Remove block #ifndef MAX_INTEGER_OPERAND_SIZE, set definition of 
   MAX_INTEGER_OPERAND_SIZE to 128, since this is default
+2016-05-10:
+- Integrate new version of arithm library from ammunition repository from 
+  dino repository on github (commit: db9cfab042c332abb234ec8d72750103010981c1), 
+  which hanles arithmetic shifts by negative numbers. This change now makes all 
+  test cases in ammunition.c pass. Update headers unsigned int bits => int bits
+- Remove assert statements
+- Fix memcmp implementation: dereferencing pointer was missing
+- Add loop-bound annotation to memcmp
+- Fix strcmp implementation
+- Integrate working versions of memcpy and memset from pm benchmark
+- Update signature of ammunition_memcpy to original version: 
+  void *memcpy(void *dest, const void *src, size_t n);
+- Move functions from libc into separate file, introduce header files
+  ammunition_limits.h, ammunition_stdio.h, ammunition_stdlib.h, 
+  ammunition_string.h
+- Fix overflow in sprintf_d: change datatype of variable 'copyOfNumber' from int
+  to long, since the negative value of INT_MIN is undefined

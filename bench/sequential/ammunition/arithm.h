@@ -53,13 +53,13 @@ extern void ammunition_unsigned_integer_remainder ( int size, const void *op1,
     const void *op2, void *result );
 
 extern void ammunition_unsigned_integer_shift_right ( int size, const void *operand,
-    unsigned int bits, void *result );
+    int bits, void *result );
 extern void ammunition_integer_shift_right ( int size, const void *operand,
-                                  unsigned int bits, void *result );
+                                  int bits, void *result );
 extern void ammunition_integer_shift_left ( int size, const void *operand,
-                                 unsigned int bits, void *result );
+                                  int bits, void *result );
 extern void ammunition_unsigned_integer_shift_left ( int size, const void *operand,
-    unsigned int bits, void *result );
+    int bits, void *result );
 
 extern void ammunition_integer_or ( int size, const void *op1,
                          const void *op2, void *result );

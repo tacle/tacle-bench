@@ -24,9 +24,8 @@
 */
 
 #include "arithm.h"
+#include "ammunition_string.h"
 
-
-typedef unsigned int size_t;
 
 /* This variable can have only two values 0 or 1.  The value `1'
    corresponds to overflow.  The variable value are modified by all
@@ -36,91 +35,6 @@ typedef unsigned int size_t;
 
 int ammunition_overflow_bit;
 
-char ammunition_isdigit( unsigned char c )
-{
-  if ( (c >= '0') & (c <= '9') )
-    return 1;
-  else
-    return 0;
-}
-
-int ammunition_isspace( int c )
-{
-  return (c == ' ') | (c == '\t') | (c == '\n') | (c == '\r');
-}
-
-
-
-/* This page contains functions common for all package functions. */
-
-static void *
-ammunition_memcpy ( void *to, const void *from, size_t size )
-{
-  char *cto = ( char * ) to;
-  const char *cfrom = ( const char * ) from;
-
-  _Pragma( "loopbound min 2 max 6" )
-  while ( size > 0 ) {
-    *cto++ = *cfrom;
-    size--;
-  }
-  return to;
-}
-
-
-static void *
-ammunition_memset ( void *to, int value, size_t size )
-{
-  char *cto = ( char * ) to;
-
-  _Pragma( "loopbound min 0 max 4" )
-  while ( size > 0 ) {
-    *cto++ = value;
-    size--;
-  }
-  return to;
-}
-
-static int
-ammunition_memcmp ( const void *mem1, const void *mem2, size_t size )
-{
-  const unsigned char *m1 = ( unsigned const char * )mem1;
-  const unsigned char *m2 = ( unsigned const char * )mem2;
-
-  _Pragma( "loopbound min 0 max 0" )
-  while ( size > 0 ) {
-    if ( m1 != m2 )
-      return ( m1 < m2 ? -1 : 1 );
-    m1++;
-    m2++;
-    size--;
-  }
-  return 0;
-}
-
-
-/* The following function is an analog of standard C function
-   `memmove'.  The function returns the first operand. */
-
-static void *
-ammunition_memmove ( void *s1, const void *s2, size_t n )
-{
-  int i;
-
-  if ( ( ( char * ) s1 < ( char * ) s2 && ( char * ) s1 + n <= ( char * ) s2 )
-       || ( ( char * ) s2 < ( char * ) s1 && ( char * ) s2 + n <= ( char * ) s1 ) )
-    return ( void * ) ammunition_memcpy ( s1, s2, n );
-  if ( ( char * ) s1 < ( char * ) s2 && ( char * ) s1 + n > ( char * ) s2 ) {
-    _Pragma( "loopbound min 0 max 4" )
-    for ( i = 0; ( size_t ) i < n; i++ )
-      ( ( char * ) s1 ) [i] = ( ( char * ) s2 ) [i];
-  } else {
-    _Pragma( "loopbound min 0 max 4" )
-    for ( i = n - 1; i >= 0; i-- )
-      ( ( char * ) s1 )[i] = ( ( char * ) s2 ) [i];
-  }
-  return s1;
-}
 
 /* The following function adds unsigned integers.  The function
    returns 1 if unsigned integer overflow is fixed, 0 otherwise.
@@ -398,7 +312,7 @@ ammunition_multiply_integer ( int size, const void *op1, const void *op2, void *
   unsigned const char *abs_op1;
   unsigned const char *abs_op2;
   int unsigned_result_sign;
-
+  
   negative_result_flag = INTEGER_SIGN ( op1 ) != INTEGER_SIGN ( op2 );
   if ( INTEGER_SIGN ( op1 ) ) {
     /* May be integer overflow. But result is correct because
@@ -655,7 +569,7 @@ ammunition_unsigned_integer_remainder ( int size, const void *op1, const void *o
 
 void
 ammunition_unsigned_integer_shift_right ( int size, const void *operand,
-                               unsigned int bits, void *result )
+                               int bits, void *result )
 {
   int byte_number;
   unsigned byte;
@@ -663,38 +577,46 @@ ammunition_unsigned_integer_shift_right ( int size, const void *operand,
   int bit_shift;
   int byte_shift;
 
-  ammunition_overflow_bit = 0;
-  byte_shift = bits / CHAR_BIT;
-  bit_shift = bits % CHAR_BIT;
-  _Pragma( "loopbound min 0 max 3" )
-  for ( byte_number = ( byte_shift >= size ? 0 : size - byte_shift );
-        byte_number < size; byte_number++ ) {
-    if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      ammunition_overflow_bit = 1;
-      break;
+    
+  if (bits < 0)
+    ammunition_unsigned_integer_shift_left (size, operand, -bits, result);
+  else
+    {
+      ammunition_overflow_bit = 0;
+      byte_shift = bits / CHAR_BIT;
+      bit_shift = bits % CHAR_BIT;
+      _Pragma( "loopbound min 0 max 3" )
+      for (byte_number = (byte_shift >= size ? 0 : size - byte_shift);
+           byte_number < size; byte_number++)
+        if (((unsigned char *) operand) [byte_number] != 0)
+          {
+            ammunition_overflow_bit = 1;
+            break;
+          }
+      if (byte_shift >= size)
+        ammunition_memset (result, 0, (size_t) size);
+      else
+        {
+          ammunition_memmove ((char *) result + byte_shift, operand,
+                   (size_t) (size - byte_shift));
+          ammunition_memset (result, 0, (size_t) byte_shift);
+          if (bit_shift == 0)
+            return;
+          _Pragma( "loopbound min 3 max 3" )
+          for (byte_number = byte_shift, carry = 0; byte_number < size;
+               byte_number++)
+            {
+              byte = ((unsigned char *) result) [byte_number];
+              ((unsigned char *) result) [byte_number]
+                = carry | (byte >> bit_shift);
+              carry = (byte << (CHAR_BIT - bit_shift)) & UCHAR_MAX;
+            }
+          if (carry != 0)
+            ammunition_overflow_bit = 1;
+        }
+      if (ammunition_overflow_bit)
+        ammunition_arithmetic_unsigned_overflow_reaction();
     }
-  }
-  if ( byte_shift >= size )
-    ammunition_memset ( result, 0, ( size_t ) size );
-  else {
-    ammunition_memmove ( ( char * ) result + byte_shift, operand,
-                         ( size_t ) ( size - byte_shift ) );
-    ammunition_memset ( result, 0, ( size_t ) byte_shift );
-    if ( bit_shift == 0 )
-      return ;
-    _Pragma( "loopbound min 3 max 3" )
-    for ( byte_number = byte_shift, carry = 0; byte_number < size;
-          byte_number++ ) {
-      byte = ( ( unsigned char * ) result ) [byte_number];
-      ( ( unsigned char * ) result ) [byte_number]
-        = carry | ( byte >> bit_shift );
-      carry = ( byte << ( CHAR_BIT - bit_shift ) ) & UCHAR_MAX;
-    }
-    if ( carry != 0 )
-      ammunition_overflow_bit = 1;
-  }
-  if ( ammunition_overflow_bit )
-    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* This function makes right arithmetic shift of integer of given size
@@ -706,7 +628,7 @@ ammunition_unsigned_integer_shift_right ( int size, const void *operand,
    operand.  Result can be placed in operand. */
 
 void
-ammunition_integer_shift_right ( int size, const void *operand, unsigned int bits,
+ammunition_integer_shift_right ( int size, const void *operand, int bits,
                       void *result )
 {
   int byte_number;
@@ -716,41 +638,47 @@ ammunition_integer_shift_right ( int size, const void *operand, unsigned int bit
   int byte_shift;
   int operand_sign;
 
-  operand_sign = INTEGER_SIGN ( operand );
-  ammunition_overflow_bit = 0;
-  byte_shift = bits / CHAR_BIT;
-  bit_shift = bits % CHAR_BIT;
-  _Pragma( "loopbound min 0 max 3" )
-  for ( byte_number = ( byte_shift >= size ? 0 : size - byte_shift );
-        byte_number < size; byte_number++ ) {
-    if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      ammunition_overflow_bit = 1;
-      break;
+  if (bits < 0)
+    ammunition_integer_shift_left (size, operand, -bits, result);
+  else
+    {
+      operand_sign = INTEGER_SIGN (operand);
+      ammunition_overflow_bit = 0;
+      byte_shift = bits / CHAR_BIT;
+      bit_shift = bits % CHAR_BIT;
+      _Pragma( "loopbound min 0 max 3" )
+      for (byte_number = (byte_shift >= size ? 0 : size - byte_shift);
+           byte_number < size; byte_number++)
+        if (((unsigned char *) operand) [byte_number] != 0)
+          {
+            ammunition_overflow_bit = 1;
+            break;
+          }
+      if (byte_shift >= size)
+        ammunition_memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) size);
+      else
+        {
+          ammunition_memmove ((char *) result + byte_shift, operand,
+                   (size_t) (size - byte_shift));
+          ammunition_memset (result, (operand_sign ? UCHAR_MAX : 0), (size_t) byte_shift);
+          if (bit_shift == 0)
+            return;
+          carry = (((operand_sign ? UCHAR_MAX : 0) << (CHAR_BIT - bit_shift))
+                   & UCHAR_MAX);
+          _Pragma( "loopbound min 3 max 3" )
+          for (byte_number = byte_shift; byte_number < size; byte_number++)
+            {
+              byte = ((unsigned char *) result) [byte_number];
+              ((unsigned char *) result) [byte_number]
+                = carry | (byte >> bit_shift);
+              carry = (byte << (CHAR_BIT - bit_shift)) & UCHAR_MAX;
+            }
+          if (carry != 0)
+            ammunition_overflow_bit = 1;
+        }
+      if (ammunition_overflow_bit)
+        ammunition_arithmetic_overflow_reaction();
     }
-  }
-  if ( byte_shift >= size )
-    ammunition_memset ( result, ( operand_sign ? UCHAR_MAX : 0 ), ( size_t ) size );
-  else {
-    ammunition_memmove ( ( char * ) result + byte_shift, operand,
-                         ( size_t ) ( size - byte_shift ) );
-    ammunition_memset ( result, ( operand_sign ? UCHAR_MAX : 0 ),
-                        ( size_t ) byte_shift );
-    if ( bit_shift == 0 )
-      return ;
-    carry = ( ( ( operand_sign ? UCHAR_MAX : 0 ) << ( CHAR_BIT - bit_shift ) )
-              & UCHAR_MAX );
-    _Pragma( "loopbound min 3 max 3" )
-    for ( byte_number = byte_shift; byte_number < size; byte_number++ ) {
-      byte = ( ( unsigned char * ) result ) [byte_number];
-      ( ( unsigned char * ) result ) [byte_number]
-        = carry | ( byte >> bit_shift );
-      carry = ( byte << ( CHAR_BIT - bit_shift ) ) & UCHAR_MAX;
-    }
-    if ( carry != 0 )
-      ammunition_overflow_bit = 1;
-  }
-  if ( ammunition_overflow_bit )
-    ammunition_arithmetic_overflow_reaction();
 }
 
 /* This function makes left shift of unsigned integer of given size on
@@ -763,7 +691,7 @@ ammunition_integer_shift_right ( int size, const void *operand, unsigned int bit
 
 void
 ammunition_unsigned_integer_shift_left ( int size, const void *operand,
-                              unsigned int bits, void *result )
+                              int bits, void *result )
 {
   int byte_number;
   unsigned byte;
@@ -771,39 +699,46 @@ ammunition_unsigned_integer_shift_left ( int size, const void *operand,
   int bit_shift;
   int byte_shift;
 
-  ammunition_overflow_bit = 0;
-  byte_shift = bits / CHAR_BIT;
-  bit_shift = bits % CHAR_BIT;
-  _Pragma( "loopbound min 0 max 2" )
-  for ( byte_number = 0; byte_number < byte_shift && byte_number < size;
-        byte_number++ ) {
-    if ( ( ( unsigned char * ) operand ) [byte_number] != 0 ) {
-      ammunition_overflow_bit = 1;
-      break;
+  if (bits < 0)
+    ammunition_unsigned_integer_shift_right (size, operand, -bits, result);
+  else
+    {
+      ammunition_overflow_bit = 0;
+      byte_shift = bits / CHAR_BIT;
+      bit_shift = bits % CHAR_BIT;
+      _Pragma( "loopbound min 0 max 2" )
+      for (byte_number = 0; byte_number < byte_shift && byte_number < size;
+           byte_number++)
+        if (((unsigned char *) operand) [byte_number] != 0)
+          {
+            ammunition_overflow_bit = 1;
+            break;
+          }
+      if (byte_shift >= size)
+        ammunition_memset (result, 0, (size_t) size);
+      else
+        {
+          ammunition_memmove (result, (char *) operand + byte_shift,
+                   (size_t) (size - byte_shift));
+          ammunition_memset ((char *) result + (size - byte_shift), 0,
+                  (size_t) byte_shift);
+          if (bit_shift == 0)
+            return;
+          _Pragma( "loopbound min 2 max 3" )
+          for (byte_number = size - byte_shift - 1, carry = 0;
+               byte_number >= 0; byte_number--)
+            {
+              byte = ((unsigned char *) result) [byte_number];
+              ((unsigned char *) result) [byte_number]
+                = carry | (byte << bit_shift);
+              carry = byte >> (CHAR_BIT - bit_shift);
+            }
+          if (carry != 0)
+            ammunition_overflow_bit = 1;
+        }
+      if (ammunition_overflow_bit)
+        ammunition_arithmetic_unsigned_overflow_reaction();
     }
-  }
-  if ( byte_shift >= size )
-    ammunition_memset ( result, 0, ( size_t ) size );
-  else {
-    ammunition_memmove ( result, ( char * ) operand + byte_shift,
-                         ( size_t ) ( size - byte_shift ) );
-    ammunition_memset ( ( char * ) result + ( size - byte_shift ), 0,
-                        ( size_t ) byte_shift );
-    if ( bit_shift == 0 )
-      return ;
-    _Pragma( "loopbound min 2 max 3" )
-    for ( byte_number = size - byte_shift - 1, carry = 0;
-          byte_number >= 0; byte_number-- ) {
-      byte = ( ( unsigned char * ) result ) [byte_number];
-      ( ( unsigned char * ) result ) [byte_number]
-        = carry | ( byte << bit_shift );
-      carry = byte >> ( CHAR_BIT - bit_shift );
-    }
-    if ( carry != 0 )
-      ammunition_overflow_bit = 1;
-  }
-  if ( ammunition_overflow_bit )
-    ammunition_arithmetic_unsigned_overflow_reaction();
 }
 
 /* This function makes left arithmetic shift of integer of given size
@@ -815,7 +750,7 @@ ammunition_unsigned_integer_shift_left ( int size, const void *operand,
    operand.  Result can be placed in operand. */
 
 void
-ammunition_integer_shift_left ( int size, const void *operand, unsigned int bits,
+ammunition_integer_shift_left ( int size, const void *operand, int bits,
                      void *result )
 {
   int byte_number;
@@ -824,45 +759,52 @@ ammunition_integer_shift_left ( int size, const void *operand, unsigned int bits
   int bit_shift;
   int byte_shift;
   int operand_sign;
-
-  operand_sign = INTEGER_SIGN ( operand );
-  ammunition_overflow_bit = 0;
-  byte_shift = bits / CHAR_BIT;
-  bit_shift = bits % CHAR_BIT;
-  _Pragma( "loopbound min 0 max 2" )
-  for ( byte_number = 0; byte_number < byte_shift && byte_number < size;
-        byte_number++ ) {
-    if ( ( ( unsigned char * ) operand ) [byte_number]
-         != ( operand_sign ? UCHAR_MAX : 0 ) ) {
-      ammunition_overflow_bit = 1;
-      break;
+  
+  if (bits < 0)
+    ammunition_integer_shift_right (size, operand, -bits, result);
+  else
+    {
+      operand_sign = INTEGER_SIGN (operand);
+      ammunition_overflow_bit = 0;
+      byte_shift = bits / CHAR_BIT;
+      bit_shift = bits % CHAR_BIT;
+      _Pragma( "loopbound min 0 max 2" )
+      for (byte_number = 0; byte_number < byte_shift && byte_number < size;
+           byte_number++)
+        if (((unsigned char *) operand) [byte_number]
+            != (operand_sign ? UCHAR_MAX : 0))
+          {
+            ammunition_overflow_bit = 1;
+            break;
+          }
+      if (byte_shift >= size)
+        ammunition_memset (result, 0, (size_t) size);
+      else
+        {
+          ammunition_memmove (result, (char *) operand + byte_shift,
+                   (size_t) (size - byte_shift));
+          ammunition_memset ((char *) result + (size - byte_shift), 0,
+                  (size_t) byte_shift);
+          if (bit_shift == 0)
+            return;
+          _Pragma( "loopbound min 2 max 3" )
+          for (byte_number = size - byte_shift - 1, carry = 0;
+               byte_number >= 0; byte_number--)
+            {
+              byte = ((unsigned char *) result) [byte_number];
+              ((unsigned char *) result) [byte_number]
+                = carry | (byte << bit_shift);
+              carry = byte >> (CHAR_BIT - bit_shift);
+            }
+          if (carry != ((unsigned) (operand_sign ? UCHAR_MAX : 0)
+                        >> (CHAR_BIT - bit_shift)))
+            ammunition_overflow_bit = 1;
+        }
+      if (operand_sign != INTEGER_SIGN (result))
+        ammunition_overflow_bit = 1;
+      if (ammunition_overflow_bit)
+        ammunition_arithmetic_overflow_reaction();
     }
-  }
-  if ( byte_shift >= size )
-    ammunition_memset ( result, 0, ( size_t ) size );
-  else {
-    ammunition_memmove ( result, ( char * ) operand + byte_shift,
-                         ( size_t ) ( size - byte_shift ) );
-    ammunition_memset ( ( char * ) result + ( size - byte_shift ), 0,
-                        ( size_t ) byte_shift );
-    if ( bit_shift == 0 )
-      return ;
-    _Pragma( "loopbound min 2 max 3" )
-    for ( byte_number = size - byte_shift - 1, carry = 0;
-          byte_number >= 0; byte_number-- ) {
-      byte = ( ( unsigned char * ) result ) [byte_number];
-      ( ( unsigned char * ) result ) [byte_number]
-        = carry | ( byte << bit_shift );
-      carry = byte >> ( CHAR_BIT - bit_shift );
-    }
-    if ( carry != ( ( unsigned ) ( operand_sign ? UCHAR_MAX : 0 )
-                    >> ( CHAR_BIT - bit_shift ) ) )
-      ammunition_overflow_bit = 1;
-  }
-  if ( operand_sign != INTEGER_SIGN ( result ) )
-    ammunition_overflow_bit = 1;
-  if ( ammunition_overflow_bit )
-    ammunition_arithmetic_overflow_reaction();
 }
 
 
@@ -1217,12 +1159,15 @@ ammunition_change_integer_size ( int operand_size, const void *operand,
 /* This page contains functions for conversion of arbitrary precision
    numbers to ascii representation. */
 
-/* This function transforms unsigned integer of given size to decimal
-   ascii representation.  Sign is absent in result string.  The
-   function returns the result string. */
+/* This function transforms unsigned integer of given size to BASE
+   ascii representation.  BASE should be between 2 and 36 including
+   them.  Digits more 9 are represented by 'a', 'b' etc.  Sign is
+   absent in result string.  The function returns the result
+   string. */
 
 char *
-ammunition_unsigned_integer_to_string ( int size, const void *operand, char *result )
+ammunition_unsigned_integer_to_based_string (int size, const void *operand, int base,
+				  char *result)
 {
   int digit_number;
   int i;
@@ -1232,52 +1177,79 @@ ammunition_unsigned_integer_to_string ( int size, const void *operand, char *res
   int length;
   int temporary;
   unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
-
-  ammunition_memcpy ( operand_copy, operand, ( size_t ) size );
+  
+  ammunition_memcpy (operand_copy, operand, (size_t) size);
   length = 0;
   _Pragma( "loopbound min 1 max 10" )
   do {
     nonzero_flag = 0 /* FALSE */;
     _Pragma( "loopbound min 2 max 6" )
-    for ( digit_number = 0, remainder = 0; digit_number < size; digit_number++ ) {
-      divisable = remainder * ( UCHAR_MAX + 1 ) + operand_copy [digit_number];
-      remainder = divisable % 10;
-      operand_copy [digit_number] = ( unsigned char ) ( divisable / 10 );
-      if ( operand_copy [digit_number] != 0 )
-        nonzero_flag = 1 /* TRUE */;
-    }
-    result [length++] = ( unsigned char ) ( '0' + remainder );
-  } while ( nonzero_flag );
+    for (digit_number = 0, remainder = 0; digit_number < size; digit_number++)
+      {
+        divisable = remainder * (UCHAR_MAX + 1) + operand_copy [digit_number];
+        remainder = divisable % base;
+        operand_copy [digit_number] = (unsigned char) (divisable / base);
+        if (operand_copy [digit_number] != 0)
+          nonzero_flag = 1 /* TRUE */;
+      }
+    result [length++] = (unsigned char) (remainder < 10 ? '0' + remainder
+					 : 'a' + remainder - 10);
+  } while (nonzero_flag);
   result [length] = '\0';
   _Pragma( "loopbound min 0 max 5" )
-  for ( i = 0; i < length / 2; i++ ) {
-    temporary = result [i];
-    result [i] = result [length - i - 1];
-    result [length - i - 1] = temporary;
-  }
+  for (i = 0; i < length/2; i++)
+    {
+      temporary = result [i];
+      result [i] = result [length - i - 1];
+      result [length - i - 1] = temporary;
+    }
   return result;
 }
+
+
+/* This function transforms unsigned integer of given size to decimal
+   ascii representation.  Sign is absent in result string.  The
+   function returns the result string. */
+
+char *
+ammunition_unsigned_integer_to_string ( int size, const void *operand, char *result )
+{
+  return ammunition_unsigned_integer_to_based_string (size, operand, 10, result);
+}
+
+
+/* This function transforms integer of given size to BASE ascii
+   representation.  BASE should be between 2 and 36 including them.
+   Digits more 9 are represented by 'a', 'b' etc.  Sign is present in
+   result string only for negative numbers.  The function returns the
+   result string. */
+
+static char *
+ammunition_integer_to_based_string (int size, const void *operand, int base, char *result)
+{
+  unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
+
+  if (!INTEGER_SIGN (operand))
+    return ammunition_unsigned_integer_to_based_string (size, operand, base, result);
+  ammunition_memcpy (operand_copy, operand, (size_t) size);
+  /* May be integer overflow. But result is correct because it is unsigned. */
+  ammunition_make_complementary_code (size, operand_copy, operand_copy);
+  *result = '-';
+  ammunition_unsigned_integer_to_based_string (size, operand_copy, base, result + 1);
+  return result;
+}
+
+
 
 /* This function transforms integer of given size to decimal ascii
    representation.  Sign is present in result string only for negative
    numbers.  The function returns the result string. */
 
 char *
-ammunition_integer_to_string ( int size, const void *operand, char *result )
+ammunition_integer_to_string (int size, const void *operand, char *result)
 {
-  unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
-
-  if ( !INTEGER_SIGN ( operand ) )
-    return ammunition_unsigned_integer_to_string ( size, operand, result );
-  ammunition_memcpy ( operand_copy, operand, ( size_t ) size );
-  /* May be integer overflow. But result is correct because it is unsigned. */
-  ammunition_make_complementary_code ( size, operand_copy, operand_copy );
-  *result = '-';
-  ammunition_unsigned_integer_to_string ( size, operand_copy, result + 1 );
-  return result;
+  return ammunition_integer_to_based_string (size, operand, 10, result);
 }
-
-
 
 /* This page contains functions for conversion of decimal ascii
    representation to arbitrary precision numbers.  */
