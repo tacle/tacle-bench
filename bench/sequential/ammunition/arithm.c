@@ -40,8 +40,7 @@ int ammunition_overflow_bit;
    returns 1 if unsigned integer overflow is fixed, 0 otherwise.
    Result can be placed in any operand. */
 
-static int
-ammunition_add_unsigned_integer_without_overflow_reaction
+int ammunition_add_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int digit_number;
@@ -67,8 +66,7 @@ ammunition_add_unsigned_integer_without_overflow_reaction
    than the second) is fixed, 0 otherwise.  Result can be placed in
    any operand. */
 
-static int
-ammunition_subtract_unsigned_integer_without_overflow_reaction
+int ammunition_subtract_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int digit_number;
@@ -92,8 +90,8 @@ ammunition_subtract_unsigned_integer_without_overflow_reaction
 /* The following function makes complementary code of number.  Result
    can be placed in operand. */
 
-static void
-ammunition_make_complementary_code ( int size, const void *operand, void *result )
+void ammunition_make_complementary_code
+( int size, const void *operand, void *result )
 {
   int digit_number;
   int carry;
@@ -115,8 +113,7 @@ ammunition_make_complementary_code ( int size, const void *operand, void *result
    size).  The function returns 1 if unsigned integer overflow is
    fixed, 0 otherwise. */
 
-static int
-ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
+int ammunition_multiply_unsigned_integer_by_digit_without_overflow_reaction
 ( int size, void *operand, unsigned int digit )
 {
   int digit_number;
@@ -236,8 +233,7 @@ ammunition_subtract_integer ( int size, const void *op1, const void *op2, void *
    returns 1 if unsigned integer overflow is fixed, 0 otherwise.
    Result can be placed in any operand. */
 
-static int
-ammunition_multiply_unsigned_integer_without_overflow_reaction
+int ammunition_multiply_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int op1_digit_number;
@@ -352,8 +348,7 @@ ammunition_multiply_integer ( int size, const void *op1, const void *op2, void *
    0 otherwise.  Result can be placed in any operand.  See algorithm
    in Knuth's book. */
 
-static int
-ammunition_divide_unsigned_integer_without_overflow_reaction
+int ammunition_divide_unsigned_integer_without_overflow_reaction
 ( int size, const void *op1, const void *op2, void *result )
 {
   int scaled_op1_digit_number;
@@ -936,8 +931,7 @@ ammunition_ne_integer ( int size, const void *op1, const void *op2 )
    greater than the second, - 1 if the first operand is less than the
    second, 0 otherwise. */
 
-static int
-ammunition_bytes_comparison ( const void *op1, const void *op2, int size )
+int ammunition_bytes_comparison ( const void *op1, const void *op2, int size )
 {
   const unsigned char *str1 = ( unsigned const char * )op1;
   const unsigned char *str2 = ( unsigned const char * )op2;
@@ -972,8 +966,7 @@ ammunition_gt_unsigned_integer ( int size, const void *op1, const void *op2 )
    operand is greater than the second.  The function returns 1 if the
    first integer is greater than the second, 0 otherwise. */
 
-int
-ammunition_gt_integer ( int size, const void *op1, const void *op2 )
+int ammunition_gt_integer ( int size, const void *op1, const void *op2 )
 {
   if ( INTEGER_SIGN ( op1 ) == 0 ) {
     if ( INTEGER_SIGN ( op2 ) == 0 )
@@ -1224,7 +1217,7 @@ ammunition_unsigned_integer_to_string ( int size, const void *operand, char *res
    result string only for negative numbers.  The function returns the
    result string. */
 
-static char *
+char *
 ammunition_integer_to_based_string (int size, const void *operand, int base, char *result)
 {
   unsigned char operand_copy [MAX_INTEGER_OPERAND_SIZE];
@@ -1258,8 +1251,7 @@ ammunition_integer_to_string (int size, const void *operand, char *result)
    function returns 1 if unsigned integer overflow is fixed, 0
    otherwise. */
 
-static int
-ammunition_add_digit_to_unsigned_integer_without_overflow_reaction
+int ammunition_add_digit_to_unsigned_integer_without_overflow_reaction
 ( int size, void *operand, unsigned int digit )
 {
   int digit_number;
@@ -1288,8 +1280,7 @@ ammunition_add_digit_to_unsigned_integer_without_overflow_reaction
    through the parameter.  The function returns 1 if unsigned integer
    overflow is fixed, 0 otherwise. */
 
-static int
-ammunition_string_to_unsigned_integer_without_overflow_reaction
+int ammunition_string_to_unsigned_integer_without_overflow_reaction
 ( int size, const char *operand, void *result, char **first_nondigit )
 {
   int overflow_flag;

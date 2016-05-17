@@ -124,20 +124,20 @@ int ammunition_bits_test()
 
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < sizeof ( str ) * CHAR_BIT; i++ )
-    if ( !is_zero_bit_string ( str, i, ( sizeof ( str ) * CHAR_BIT - i ) / 2 + 1 ) )
+    if ( !ammunition_is_zero_bit_string ( str, i, ( sizeof ( str ) * CHAR_BIT - i ) / 2 + 1 ) )
       result = 1;
   bit_string_set ( str, 13, 1, 35 );
   _Pragma( "loopbound min 13 max 13" )
   for ( i = 0; i < 13; i++ )
-    if ( !is_zero_bit_string ( str, i, 13 - i ) )
+    if ( !ammunition_is_zero_bit_string ( str, i, 13 - i ) )
       result = 1;
   _Pragma( "loopbound min 35 max 35" )
   for ( i = 13; i < 48; i++ )
-    if ( is_zero_bit_string ( str, i, 48 - i ) )
+    if ( ammunition_is_zero_bit_string ( str, i, 48 - i ) )
       result = 1;
   _Pragma( "loopbound min 16 max 16" )
   for ( i = 48; i < sizeof ( str ) * CHAR_BIT; i++ )
-    if ( !is_zero_bit_string ( str, i, sizeof ( str ) * CHAR_BIT - i ) )
+    if ( !ammunition_is_zero_bit_string ( str, i, sizeof ( str ) * CHAR_BIT - i ) )
       result = 1;
 
   /* Test 3 */
@@ -146,11 +146,11 @@ int ammunition_bits_test()
   _Pragma( "loopbound min 42 max 42" )
   for ( i = 0; i + i / 2 + 1 < sizeof ( str ) * CHAR_BIT; i++ ) {
     bit_string_set ( str, i, 1, i / 2 + 1 );
-    if ( !is_zero_bit_string ( str, 0, i - 1 ) )
+    if ( !ammunition_is_zero_bit_string ( str, 0, i - 1 ) )
       result = 1;
-    if ( is_zero_bit_string ( str, i, i / 2 + 1 ) )
+    if ( ammunition_is_zero_bit_string ( str, i, i / 2 + 1 ) )
       result = 1;
-    if ( !is_zero_bit_string ( str, i + i / 2 + 1,
+    if ( !ammunition_is_zero_bit_string ( str, i + i / 2 + 1,
                                sizeof ( str ) * CHAR_BIT - ( i + i / 2 + 1 ) ) )
       result = 1;
     bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
@@ -163,16 +163,16 @@ int ammunition_bits_test()
   bit_string_set ( str1, 2, 1, 40 );
   _Pragma( "loopbound min 42 max 42" )
   for ( i = 0; i < 42; i++ )
-    if ( bit_string_comparison ( str, i, str1, i, 42 - i ) != 0 )
+    if ( ammunition_bit_string_comparison ( str, i, str1, i, 42 - i ) != 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
   for ( i = 0; i < 43; i++ )
-    if ( bit_string_comparison ( str, i, str1, i, sizeof ( str ) * CHAR_BIT - i )
+    if ( ammunition_bit_string_comparison ( str, i, str1, i, sizeof ( str ) * CHAR_BIT - i )
          <= 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
   for ( i = 0; i < 43; i++ )
-    if ( bit_string_comparison ( str1, i, str, i, sizeof ( str ) * CHAR_BIT - i )
+    if ( ammunition_bit_string_comparison ( str1, i, str, i, sizeof ( str ) * CHAR_BIT - i )
          >= 0 )
       result = 1;
 
@@ -182,8 +182,8 @@ int ammunition_bits_test()
   bit_string_set ( str, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
-    bit_string_copy ( str1, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( bit_string_comparison ( str1, i + 5, str, i,
+    ammunition_bit_string_copy ( str1, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison ( str1, i + 5, str, i,
                                  sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
@@ -197,8 +197,8 @@ int ammunition_bits_test()
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
     bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
     bit_string_set ( str, 2, 1, 43 );
-    bit_string_move ( str, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( bit_string_comparison ( str, i + 5, str1, i,
+    ammunition_bit_string_move ( str, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison ( str, i + 5, str1, i,
                                  sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
@@ -212,8 +212,8 @@ int ammunition_bits_test()
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
     bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
     bit_string_set ( str, 2, 1, 43 );
-    bit_string_move ( str, i, str, i + 5, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( bit_string_comparison ( str, i, str1, i + 5,
+    ammunition_bit_string_move ( str, i, str, i + 5, sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison ( str, i, str1, i + 5,
                                  sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }

@@ -22,7 +22,7 @@
    non-negative and can be greater than CHAR_BIT. */
 
 int
-is_zero_bit_string ( const void *start_byte, int bit_displacement,
+ammunition_is_zero_bit_string ( const void *start_byte, int bit_displacement,
                      int bit_length )
 {
   const unsigned char *current_byte = ( unsigned const char * )start_byte;
@@ -99,7 +99,7 @@ bit_string_set ( void *start_byte, int bit_displacement, int bit,
    be non-overlapped. */
 
 void
-bit_string_copy ( void *to, int to_bit_displacement,
+ammunition_bit_string_copy ( void *to, int to_bit_displacement,
                   const void *from, int from_bit_displacement,
                   int bit_length )
 {
@@ -157,10 +157,9 @@ bit_string_copy ( void *to, int to_bit_displacement,
    non-negative and can be greater than CHAR_BIT.  The bit string must
    be non-overlapped. */
 
-static void
-reverse_bit_string_copy ( void *to, int to_bit_displacement,
-                          const void *from, int from_bit_displacement,
-                          int bit_length )
+void ammunition_reverse_bit_string_copy ( void *to, int to_bit_displacement,
+                               const void *from, int from_bit_displacement,
+                               int bit_length )
 {
   unsigned char *current_to_byte = ( unsigned char * )to;
   const unsigned char *current_from_byte = ( unsigned const char * )from;
@@ -223,7 +222,7 @@ reverse_bit_string_copy ( void *to, int to_bit_displacement,
    be overlapped. */
 
 void
-bit_string_move ( void *to, int to_bit_displacement,
+ammunition_bit_string_move ( void *to, int to_bit_displacement,
                   const void *from, int from_bit_displacement, int bit_length )
 {
   unsigned char *current_to_byte = ( unsigned char * )to;
@@ -238,10 +237,10 @@ bit_string_move ( void *to, int to_bit_displacement,
   if ( current_from_byte > current_to_byte
        || ( current_from_byte == current_to_byte
             && from_bit_displacement > to_bit_displacement ) )
-    bit_string_copy ( current_to_byte, to_bit_displacement,
+    ammunition_bit_string_copy ( current_to_byte, to_bit_displacement,
                       current_from_byte, from_bit_displacement, bit_length );
   else
-    reverse_bit_string_copy ( current_to_byte, to_bit_displacement,
+    ammunition_reverse_bit_string_copy ( current_to_byte, to_bit_displacement,
                               current_from_byte, from_bit_displacement,
                               bit_length );
 }
@@ -254,7 +253,7 @@ bit_string_move ( void *to, int to_bit_displacement,
    and can be greater than CHAR_BIT. */
 
 int
-bit_string_comparison ( const void *str1, int bit_displacement1,
+ammunition_bit_string_comparison ( const void *str1, int bit_displacement1,
                         const void *str2, int bit_displacement2,
                         int bit_length )
 {

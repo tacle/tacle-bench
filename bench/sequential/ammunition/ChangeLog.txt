@@ -54,3 +54,5 @@ Original provenience: DINO programming language
   ammunition_string.h
 - Fix overflow in sprintf_d: change datatype of variable 'copyOfNumber' from int
   to long, since the negative value of INT_MIN is undefined
+  2016-05-17:
+- Remove all static declarations of global functions
