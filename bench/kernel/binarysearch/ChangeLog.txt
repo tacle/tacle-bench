@@ -4,19 +4,20 @@ Original provenience: Mälardalen benchmark suite,
 
 2015-10-10:
 - Removed original header comment, replaced by TACLeBench header.
-- Added prefix "bs_" to all global symbols.
+- Added prefix "binarysearch_" to all global symbols.
 - Added explicit forward declarations of functions, removed obsolete forward
   declaration of function binary_search.
-- Replaced initialization of global array "bs_data" by TACLeBench-compliant
-  initialization code.
-- Added new global variable "bs_result" to store the found return value.
-- Added new function bs_return producing the searched data element as return
+- Replaced initialization of global array "binarysearch_data" by
+  TACLeBench-compliant initialization code.
+- Added new global variable "binarysearch_result" to store the found return
   value.
-- Removed global variable "bs_cnt1" that was used for profiling.
-- Added new function bs_main according to TACLeBench guidelines. bs_main is
-  annotated as entry-point for timing analysis.
-- Corrected flow fact in function "bs_binary_search" to cover the interval
-  [1, 4] instead of [4, 4].
+- Added new function binarysearch_return producing the searched data element as
+  return value.
+- Removed global variable "binarysearch_cnt1" that was used for profiling.
+- Added new function binarysearch_main according to TACLeBench guidelines.
+  binarysearch_main is annotated as entry-point for timing analysis.
+- Corrected flow fact in function "binarysearch_binary_search" to cover the
+  interval [1, 4] instead of [4, 4].
 - Applied code formatting according to the following rules
   - Lines shall not be wider than 80 characters; whenever possible, appropriate
     line breaks shall be inserted to keep lines below 80 characters
@@ -28,7 +29,8 @@ Original provenience: Mälardalen benchmark suite,
   - In comma- or colon-separated argument lists, one whitespace is put after
     each comma/colon
   - Names of functions and global variables all start with a benchmark-specific
-    prefix (here: bs_) followed by lowercase letter (e.g., bs_square)
+    prefix (here: binarysearch_) followed by lowercase letter (e.g.,
+    binarysearch_square)
   - For pointer types, one whitespace is put before the '*'
   - Operators within expressions shall be preceded and followed by one
     whitespace

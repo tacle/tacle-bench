@@ -35,12 +35,12 @@
   Forward declaration of functions
 */
 
-void bs_initSeed( void );
-long bs_randomInteger( void );
-void bs_init( void );
-int bs_return( void );
-int bs_binary_search( int );
-void bs_main( void );
+void binarysearch_initSeed( void );
+long binarysearch_randomInteger( void );
+void binarysearch_init( void );
+int binarysearch_return( void );
+int binarysearch_binary_search( int );
+void binarysearch_main( void );
 int main( void );
 
 
@@ -48,16 +48,16 @@ int main( void );
   Declaration of global variables
 */
 
-volatile int bs_seed;
+volatile int binarysearch_seed;
 
-struct bs_DATA {
+struct binarysearch_DATA {
   int key;
   int value;
 };
 
-struct bs_DATA bs_data[ 15 ];
+struct binarysearch_DATA binarysearch_data[ 15 ];
 
-int bs_result;
+int binarysearch_result;
 
 
 /*
@@ -65,41 +65,42 @@ int bs_result;
 */
 
 /*
-  bs_initSeed initializes the seed used in the "random" number generator.
+  binarysearch_initSeed initializes the seed used in the "random" number
+  generator.
 */
-void bs_initSeed( void )
+void binarysearch_initSeed( void )
 {
-  bs_seed = 0;
+  binarysearch_seed = 0;
 }
 
 
 /*
-  bs_RandomInteger generates "random" integers between 0 and 8094.
+  binarysearch_RandomInteger generates "random" integers between 0 and 8094.
 */
-long bs_randomInteger( void )
+long binarysearch_randomInteger( void )
 {
-  bs_seed = ( ( bs_seed * 133 ) + 81 ) % 8095;
-  return( bs_seed );
+  binarysearch_seed = ( ( binarysearch_seed * 133 ) + 81 ) % 8095;
+  return( binarysearch_seed );
 }
 
 
-void bs_init( void )
+void binarysearch_init( void )
 {
   int i;
 
-  bs_initSeed();
+  binarysearch_initSeed();
 
   _Pragma( "loopbound min 15 max 15" )
   for ( i = 0; i < 15; ++i ) {
-    bs_data[ i ].key = bs_randomInteger();
-    bs_data[ i ].value = bs_randomInteger();
+    binarysearch_data[ i ].key = binarysearch_randomInteger();
+    binarysearch_data[ i ].value = binarysearch_randomInteger();
   }
 }
 
 
-int bs_return( void )
+int binarysearch_return( void )
 {
-  return( bs_result );
+  return( binarysearch_result );
 }
 
 
@@ -107,7 +108,7 @@ int bs_return( void )
   Algorithm core functions
 */
 
-int bs_binary_search( int x )
+int binarysearch_binary_search( int x )
 {
   int fvalue, mid, up, low;
 
@@ -119,13 +120,13 @@ int bs_binary_search( int x )
   while ( low <= up ) {
     mid = ( low + up ) >> 1;
 
-    if ( bs_data[ mid ].key == x ) {
+    if ( binarysearch_data[ mid ].key == x ) {
       /* Item found */
       up = low - 1;
-      fvalue = bs_data[ mid ].value;
+      fvalue = binarysearch_data[ mid ].value;
     } else
 
-    if ( bs_data[ mid ].key > x )
+    if ( binarysearch_data[ mid ].key > x )
       /* Item not found */
       up = mid - 1;
     else
@@ -140,16 +141,16 @@ int bs_binary_search( int x )
   Main functions
 */
 
-void _Pragma( "entrypoint" ) bs_main( void )
+void _Pragma( "entrypoint" ) binarysearch_main( void )
 {
-  bs_result = bs_binary_search( 8 );
+  binarysearch_result = binarysearch_binary_search( 8 );
 }
 
 
 int main( void )
 {
-  bs_init();
-  bs_main();
+  binarysearch_init();
+  binarysearch_main();
 
-  return( bs_return() - (-1) != 0 );
+  return( binarysearch_return() - (-1) != 0 );
 }
