@@ -253,6 +253,18 @@ void md5_orig_init ( MD5_CTX *context )                                        /
   context->state[1] = 0xefcdab89;
   context->state[2] = 0x98badcfe;
   context->state[3] = 0x10325476;
+  context->state[4] = 0x0;
+  context->state[5] = 0x0;
+  context->state[6] = 0x0;
+  context->state[7] = 0x0;
+  context->state[8] = 0x0;
+  context->state[9] = 0x0;
+  context->state[10] = 0x0;
+  context->state[11] = 0x0;
+  context->state[12] = 0x0;
+  context->state[13] = 0x0;
+  context->state[14] = 0x0;
+  context->state[15] = 0x0;
 }
 
 /* MD5 block update operation. Continues an MD5 message-digest
