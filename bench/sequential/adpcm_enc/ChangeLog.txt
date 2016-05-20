@@ -30,3 +30,5 @@ Original provenience: C Algorithms for Real-Time DSP by P. M. Embree
   avoid constant-propagation optimizations through the compoiler 
 - Add computation of check sum
 - Add return return statement: zero if check sum is correct
+2016-05-20:
+- Apply code formatting with astyle

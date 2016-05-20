@@ -54,6 +54,9 @@ int adpcm_enc_fabs( int n );
 int adpcm_enc_cos( int n );
 int adpcm_enc_sin( int n );
 int adpcm_enc_abs( int n );
+void adpcm_enc_init(void);
+void adpcm_enc_main(void);
+int adpcm_enc_return(void);
 int main(void);
 
 /*
@@ -728,7 +731,7 @@ int adpcm_enc_return(void)
   Main functions
 */
 
-void _Pragma( "entrypoint" ) adpcm_main(void)
+void _Pragma( "entrypoint" ) adpcm_enc_main(void)
 {
   int i;
   /* MAX: 2 */
@@ -742,7 +745,7 @@ void _Pragma( "entrypoint" ) adpcm_main(void)
 int main(void)
 {
   adpcm_enc_init();
-  adpcm_main();
+  adpcm_enc_main();
   
   return adpcm_enc_return();
 }
