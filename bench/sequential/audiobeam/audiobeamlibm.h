@@ -1,14 +1,30 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: quicksortlibm.c
+
+  Author: Ian Lance Taylor
+
+  Function: IEEE754 software library routines.
+
+  Source: Sun Microsystems and Cygnus
+
+  Original name: Unknown
+
+  Changes: No major functional changes.
+
+  License: See audiobeamlibm.c
+
+*/
+
 #ifndef AUDIOBEAM_LIBM
 #define AUDIOBEAM_LIBM
 
 #define audiobeam_M_PI 3.14159265358979323846
 
-// Often used variables/consts
-#ifdef __STDC__
 static  const float
-#else
-static  float
-#endif
 audiobeam_one    =  1.0f,
 audiobeam_tiny   =  1.0e-30f,
 audiobeam_half   =  5.0000000000e-01, /* 0x3f000000 */
@@ -17,7 +33,6 @@ audiobeam_two8   =  2.5600000000e+02, /* 0x43800000 */
 audiobeam_twon8  =  3.9062500000e-03, /* 0x3b800000 */
 audiobeam_zero   =  0.0;
 
-// The following defines map the math functions to specialized calls
 #define audiobeam_cos      audiobeam___cosf
 #define audiobeam_fabs     audiobeam___fabsf
 #define audiobeam_fabsf    audiobeam___fabsf

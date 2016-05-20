@@ -1,10 +1,10 @@
 #include "liftlibio.h"
 
 /* Global variables */
-int lift_ctrl_io_in[10];
-int lift_ctrl_io_out[4];
-int lift_ctrl_io_analog[4];
-int lift_ctrl_io_led[16];
+int lift_ctrl_io_in[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int lift_ctrl_io_out[4] = {0, 0, 0, 0};
+int lift_ctrl_io_analog[4] = {0, 0, 0, 0};
+int lift_ctrl_io_led[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int lift_ctrl_dly1;
 int lift_ctrl_dly2;
 

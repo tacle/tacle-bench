@@ -99,12 +99,39 @@ void audiobeam_init()
 {
   audiobeam_input_pos = 0;
   audiobeam_checksum = 0;
+
+  unsigned int i;
+  unsigned char *p;
+  volatile char bitmask = 0;
+
+  /*
+    Apply volatile XOR-bitmask to entire input array.
+  */
+  p = ( unsigned char * ) &audiobeam_input[ 0 ];
+  _Pragma( "loopbound min 23040 max 23040" )
+  for ( i = 0; i < sizeof( audiobeam_input ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &audiobeam_mic_locations[ 0 ];
+  _Pragma( "loopbound min 180 max 180" )
+  for ( i = 0; i < sizeof( audiobeam_mic_locations ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &audiobeam_source_location[ 0 ];
+  _Pragma( "loopbound min 12 max 12" )
+  for ( i = 0; i < sizeof( audiobeam_source_location ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &audiobeam_origin_location[ 0 ];
+  _Pragma( "loopbound min 12 max 12" )
+  for ( i = 0; i < sizeof( audiobeam_origin_location ); ++i, ++p )
+    *p ^= bitmask;
 }
 
 
 int audiobeam_return()
 {
-  return audiobeam_checksum - 255;
+  return ( audiobeam_checksum +1!= 0 );
 }
 
 
@@ -132,9 +159,8 @@ float *audiobeam_parse_line( float *float_arr, int num_mic )
   int i;
 
   _Pragma( "loopbound min 15 max 15" )
-  for ( i = 0; i < num_mic; i++ ) {
+  for ( i = 0; i < num_mic; i++ )
     float_arr[i] = audiobeam_input[audiobeam_input_pos++];
-  }
 
   return float_arr;
 }
@@ -147,9 +173,8 @@ long int audiobeam_find_max_in_arr( float *arr, int size )
 
   _Pragma( "loopbound min 15 max 15" )
   for ( i = 0; i < size; i++ ) {
-    if ( arr[i] > max ) {
+    if ( arr[i] > max )
       max = arr[i];
-    }
   }
 
   return audiobeam_ceil( max );
@@ -163,9 +188,8 @@ long int audiobeam_find_min_in_arr( float *arr, int size )
 
   _Pragma( "loopbound min 15 max 15" )
   for ( i = 0; i < size; i++ ) {
-    if ( arr[i] < min ) {
+    if ( arr[i] < min )
       min = arr[i];
-    }
   }
 
   return audiobeam_floor( min );
@@ -174,21 +198,19 @@ long int audiobeam_find_min_in_arr( float *arr, int size )
 
 int audiobeam_wrapped_inc_offset( int i, int offset, int max_i )
 {
-  if ( i + offset > max_i ) {
+  if ( i + offset > max_i )
     return ( i + offset - max_i - 1 );
-  } else {
+  else
     return ( i + offset );
-  }
 }
 
 
 int audiobeam_wrapped_dec_offset( int i, int offset, int max_i )
 {
-  if ( i - offset < 0 ) {
+  if ( i - offset < 0 )
     return ( max_i - ( offset - i ) + 1 );
-  } else {
+  else
     return ( i - offset );
-  }
 }
 
 
@@ -285,9 +307,8 @@ void audiobeam_calc_delays( float *distances, float *delays, int sound_speed,
   int i;
 
   _Pragma( "loopbound min 15 max 15" )
-  for ( i = 0; i < num_mic; i++ ) {
+  for ( i = 0; i < num_mic; i++ )
     delays[i] = ( distances[i] / sound_speed ) * sampling_rate;
-  }
 }
 
 
@@ -297,9 +318,8 @@ void audiobeam_adjust_delays( float *delays, int num_mic )
   long int min_delay = audiobeam_find_min_in_arr ( delays, num_mic ) - 1;
 
   _Pragma( "loopbound min 15 max 15" )
-  for ( i = 0; i < num_mic; i++ ) {
+  for ( i = 0; i < num_mic; i++ )
     delays[i] -= min_delay;
-  }
 }
 
 
@@ -355,9 +375,8 @@ float audiobeam_calculate_energy( float *samples, int num_samples )
   float sum = 0.0;
 
   _Pragma( "loopbound min 0 max 0" )
-  for ( i = 0; i < num_samples; i++ ) {
+  for ( i = 0; i < num_samples; i++ )
     sum += ( samples[i] * samples[i] );
-  }
 
   return sum;
 }
@@ -388,15 +407,13 @@ float audiobeam_do_beamforming( struct audiobeam_PreprocessedDelays
     // Inline wrap around here
     // Low index gets index of sample right before desired sample
     low_index = queue_head + delay_floor;
-    if ( low_index > max_delay ) {
+    if ( low_index > max_delay )
       low_index -= ( max_delay + 1 );
-    }
 
     // High index gets index of sample right after desired sample
     high_index = queue_head + delay_ceil;
-    if ( high_index > max_delay ) {
+    if ( high_index > max_delay )
       high_index -= ( max_delay + 1 );
-    }
 
     // i gives the value of the microphone we want. However, since
     // the array only has microphones first_mic to last_mic, we
@@ -408,11 +425,10 @@ float audiobeam_do_beamforming( struct audiobeam_PreprocessedDelays
                            + sample_queue[low_index][i] );
 
     // If we have microphone weights, multiply the value by the weight
-    if ( weights != 0 ) {
+    if ( weights != 0 )
       sum += ( interpolated_value * weights[i] );
-    } else {
+    else
       sum += interpolated_value;
-    }
   }
 
   return sum;
@@ -441,18 +457,17 @@ int audiobeam_process_signal( struct audiobeam_Delays *delays, int num_mic,
 
   _Pragma( "loopbound min 13 max 13" )
   for ( i = 0; i < delays->max_delay - 1; i++ ) {
-    if ( audiobeam_input_pos < 5760 ) {
+    if ( audiobeam_input_pos < 5760 )
       audiobeam_parse_line( ( queue->sample_queue )[queue->head], 15 );
-    } else {
+    else
       return -1;
-    }
     queue->head = audiobeam_wrapped_inc( queue->head, delays->max_delay );
   }
   _Pragma( "loopbound min 371 max 371" )
   for ( i = 0; ( i < window ) || ( window < 0 ) ; i++ ) {
-    if ( audiobeam_input_pos < 5760 ) {
+    if ( audiobeam_input_pos < 5760 )
       audiobeam_parse_line( ( queue->sample_queue )[queue->head], 15 );
-    } else {
+    else {
       done = 1;
       break;
     }
@@ -468,9 +483,8 @@ int audiobeam_process_signal( struct audiobeam_Delays *delays, int num_mic,
 
       value = value / num_mic;
 
-      if ( beamform_results != 0 ) {
+      if ( beamform_results != 0 )
         beamform_results[j][i] = value;
-      }
     }
 
     queue->tail = queue->head;
@@ -495,11 +509,10 @@ int audiobeam_calc_beamforming_result( struct audiobeam_Delays *delays,
   float *weights = 0;
 
   if ( hamming ) {
-    if ( ( 15 % 2 ) == 1 ) {
+    if ( ( 15 % 2 ) == 1 )
       weights = audiobeam_calc_weights_left_only( 15 );
-    } else {
+    else
       weights = audibeam_calc_weights_lr( 15 );
-    }
   }
 
   done = audiobeam_process_signal( delays, 15, 16000,
@@ -508,9 +521,8 @@ int audiobeam_calc_beamforming_result( struct audiobeam_Delays *delays,
 
   if ( beamform_results != 0 ) {
     _Pragma( "loopbound min 1 max 1" )
-    for ( i = 0; i < num_beams; i++ ) {
+    for ( i = 0; i < num_beams; i++ )
       energies[i] = audiobeam_calculate_energy( beamform_results[i], window );
-    }
   }
   return done;
 }

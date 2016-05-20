@@ -37,14 +37,36 @@ int main( void );
   Declaration of global variables
 */
 
+unsigned int prime_x;
+unsigned int prime_y;
 int prime_result;
+volatile int prime_seed;
 
 
 /*
   Initialization- and return-value-related functions
 */
 
-void prime_init () {}
+
+void st_initSeed()
+{
+  prime_seed = 0;
+}
+
+
+unsigned int prime_randomInteger()
+{
+  prime_seed = ( ( prime_seed * 133 ) + 81 ) % 8095;
+  return ( prime_seed );
+}
+
+
+void prime_init ()
+{
+  prime_x = prime_randomInteger();
+  prime_y = prime_randomInteger();
+}
+
 
 int prime_return ()
 {
@@ -73,7 +95,8 @@ unsigned char prime_prime ( unsigned int n )
   unsigned int i;
   if ( prime_even ( n ) )
     return ( n == 2 );
-  _Pragma( "loopbound min 73 max 357" )
+  _Pragma( "loopbound min 2 max 16" )
+  
   for ( i = 3; i * i <= n; i += 2 ) {
     if ( prime_divides ( i, n ) ) /* ai: loop here min 0 max 357 end; */
       return 0;
@@ -96,11 +119,9 @@ void prime_swap ( unsigned int *a, unsigned int *b )
 
 void _Pragma( "entrypoint" ) prime_main()
 {
-  unsigned int x =  21649;
-  unsigned int y = 513239;
-  prime_swap ( &x, &y );
+  prime_swap ( &prime_x, &prime_y );
 
-  prime_result = !( prime_prime( x ) && prime_prime( y ) );
+  prime_result = !( !prime_prime( prime_x ) && !prime_prime( prime_y ) );
 }
 
 
@@ -109,7 +130,7 @@ int main( void )
   prime_init();
   prime_main();
 
-  return ( prime_return() );
+  return ( prime_return() ) ;
 }
 
 

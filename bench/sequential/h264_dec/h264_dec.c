@@ -58,11 +58,34 @@ struct h264dec_img_par h264dec_img;
 
 int h264dec_return ()
 {
-  return h264dec_img_mpr[0][0] + h264dec_dec_picture_imgUV[0][0][0] - 128;
+  return ( h264dec_img_mpr[0][0] + h264dec_dec_picture_imgUV[0][0][0] + 128 !=
+           0 );
 }
 
 void h264dec_init ()
 {
+  unsigned int i;
+  unsigned char *p;
+  volatile char bitmask = 0;
+
+  /*
+    Apply volatile XOR-bitmask to entire input array.
+  */
+  p = ( unsigned char * ) &h264dec_mv_array[ 0 ];
+  _Pragma( "loopbound min 33800 max 33800" )
+  for ( i = 0; i < sizeof( h264dec_mv_array ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &h264dec_list_imgUV[ 0 ];
+  _Pragma( "loopbound min 16200 max 16200" )
+  for ( i = 0; i < sizeof( h264dec_list_imgUV ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &h264dec_img_m7[ 0 ];
+  _Pragma( "loopbound min 1024 max 1024" )
+  for ( i = 0; i < sizeof( h264dec_img_m7 ); ++i, ++p )
+    *p ^= bitmask;
+
   h264dec_img.mb_cr_size_x = 8;
   h264dec_img.mb_cr_size_y = 8;
   h264dec_img.num_blk8x8_uv = 2;
@@ -153,9 +176,9 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                   fw_refframe = ref_idx = 0;
                   i1 = ( i4 + ii ) * f1_x + h264dec_mv_array[jf][ifx][0];
 
-                  if ( !curr_mb_field ) {
+                  if ( !curr_mb_field )
                     j1 = ( j4 + jj ) * f1_y + h264dec_mv_array[jf][ifx][1];
-                  } else {
+                  else {
                     if ( mb_nr % 2 == 0 ) {
                       j1 = ( ( img->pix_c_y / 2 ) + jj + joff ) * f1_y +
                            h264dec_mv_array[jf][ifx][1];
@@ -502,13 +525,13 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                       }
                   } else {
                     if ( img->direct_spatial_mv_pred_flag
-                         && direct_pdir == 1 ) {
+                         && direct_pdir == 1 )
                       img->mpr[ii + ioff][jj + joff] = bw_pred;
-                    } else
+                    else
                       if ( img->direct_spatial_mv_pred_flag
-                           && direct_pdir == 0 ) {
+                           && direct_pdir == 0 )
                         img->mpr[ii + ioff][jj + joff] = fw_pred;
-                      } else {
+                      else {
                         img->mpr[ii + ioff][jj + joff] = ( fw_pred + bw_pred
                                                            +
                                                            1 ) / 2;

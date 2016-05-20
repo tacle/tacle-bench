@@ -45,13 +45,25 @@ char duff_target[100];
 
 void duff_init()
 {
+  unsigned int i;
+  unsigned char *p;
+  volatile char bitmask = 0;
+
   duff_initialize( duff_source, 100 );
+
+  /*
+    Apply volatile XOR-bitmask to entire input array.
+  */
+  p = ( unsigned char * ) &duff_source[ 0 ];
+  _Pragma( "loopbound min 400 max 400" )
+  for ( i = 0; i < sizeof( duff_source ); ++i, ++p )
+    *p ^= bitmask;
 }
 
 
 int duff_return( void )
 {
-  return duff_target[28] - 72;
+  return ( duff_target[28] - 72 != 0 );
 }
 
 
@@ -64,9 +76,8 @@ void duff_initialize( char *arr, int length )
   int i;
 
   _Pragma( "loopbound min 100 max 100" )
-  for ( i = 0; i < length; i++ ) {
+  for ( i = 0; i < length; i++ )
     arr[i] = length - i;
-  }
 }
 
 
