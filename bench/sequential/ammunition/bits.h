@@ -41,18 +41,20 @@
       & ~(1 << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))\
      | ((bit) << (CHAR_BIT - 1 - (bit_displacement) % CHAR_BIT)))
 
-int ammunition_is_zero_bit_string ( const void *start_byte, int bit_displacement,
-                         int bit_length );
-void bit_string_set ( void *start_byte, int bit_displacement, int bit,
-                      int bit_length );
+int ammunition_is_zero_bit_string ( const void *start_byte,
+                                    int bit_displacement,
+                                    int bit_length );
+void ammunition_bit_string_set ( void *start_byte, int bit_displacement,
+                                 int bit,
+                                 int bit_length );
 void ammunition_bit_string_copy ( void *to, int to_bit_displacement,
-                       const void *from, int from_bit_displacement,
-                       int bit_length );
+                                  const void *from, int from_bit_displacement,
+                                  int bit_length );
 void ammunition_bit_string_move ( void *to, int to_bit_displacement,
-                       const void *from, int from_bit_displacement,
-                       int bit_length );
+                                  const void *from, int from_bit_displacement,
+                                  int bit_length );
 int ammunition_bit_string_comparison ( const void *str1, int bit_displacement1,
-                            const void *str2, int bit_displacement2,
-                            int bit_length );
+                                       const void *str2, int bit_displacement2,
+                                       int bit_length );
 
 #endif /* #ifndef __BITS__ */

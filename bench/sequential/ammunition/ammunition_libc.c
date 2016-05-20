@@ -13,7 +13,7 @@
 
 char ammunition_isdigit( unsigned char c )
 {
-  if ( (c >= '0') & (c <= '9') )
+  if ( ( c >= '0' ) & ( c <= '9' ) )
     return 1;
   else
     return 0;
@@ -21,27 +21,27 @@ char ammunition_isdigit( unsigned char c )
 
 int ammunition_isspace( int c )
 {
-  return (c == ' ') | (c == '\t') | (c == '\n') | (c == '\r');
+  return ( c == ' ' ) | ( c == '\t' ) | ( c == '\n' ) | ( c == '\r' );
 }
 
-void* ammunition_memcpy(void *dest, const void *src, size_t size )
+void *ammunition_memcpy( void *dest, const void *src, size_t size )
 {
   size_t i;
   _Pragma( "loopbound min 2 max 6" )
   for ( i = 0; i < size; i++ )
     ( ( unsigned char * )dest )[i] = ( ( unsigned char * )src )[i];
-  
+
   return dest;
 }
 
 
-void* ammunition_memset( void *s, int c, size_t n )
+void *ammunition_memset( void *s, int c, size_t n )
 {
   size_t i;
   _Pragma( "loopbound min 0 max 4" )
   for ( i = 0; i < n; i++ )
     ( ( unsigned char * )s )[i] = ( unsigned char )c;
-  
+
   return s;
 }
 
@@ -50,11 +50,11 @@ int ammunition_memcmp ( const void *mem1, const void *mem2, size_t size )
 {
   const unsigned char *p1 = mem1, *p2 = mem2;
   _Pragma( "loopbound min 0 max 4" )
-  while(size--)
-      if( *p1 != *p2 )
-          return (*p1 - *p2);
-      else
-          p1++,p2++;
+  while ( size-- )
+    if ( *p1 != *p2 )
+      return ( *p1 - *p2 );
+    else
+      p1++, p2++;
   return 0;
 }
 
@@ -62,12 +62,13 @@ int ammunition_memcmp ( const void *mem1, const void *mem2, size_t size )
 /* The following function is an analog of standard C function
    `memmove'.  The function returns the first operand. */
 
-void* ammunition_memmove ( void *s1, const void *s2, size_t n )
+void *ammunition_memmove ( void *s1, const void *s2, size_t n )
 {
   int i;
 
   if ( ( ( char * ) s1 < ( char * ) s2 && ( char * ) s1 + n <= ( char * ) s2 )
-       || ( ( char * ) s2 < ( char * ) s1 && ( char * ) s2 + n <= ( char * ) s1 ) )
+       || ( ( char * ) s2 < ( char * ) s1
+            && ( char * ) s2 + n <= ( char * ) s1 ) )
     return ( void * ) ammunition_memcpy ( s1, s2, n );
   if ( ( char * ) s1 < ( char * ) s2 && ( char * ) s1 + n > ( char * ) s2 ) {
     _Pragma( "loopbound min 0 max 4" )
@@ -84,9 +85,9 @@ void* ammunition_memmove ( void *s1, const void *s2, size_t n )
 int ammunition_strcmp ( const char *str1, const char *str2 )
 {
   _Pragma( "loopbound min 1 max 4008" )
-  while(*str1 && (*str1==*str2))
-    str1++,str2++;
-  return *(const unsigned char*)str1-*(const unsigned char*)str2;
+  while ( *str1 && ( *str1 == *str2 ) )
+    str1++, str2++;
+  return *( const unsigned char * )str1 - *( const unsigned char * )str2;
 }
 
 int ammunition_atoi ( const char *str )

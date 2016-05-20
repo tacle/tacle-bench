@@ -13,7 +13,6 @@ Original provenience: DINO programming language
 - Remove usages and comments related to the macros
     HAVE_MEMMOVE, NDEBUG, HAVE_MEMCMP
 - Remove comment related to unused NO_TEMPLATE macro
-- Apply code formatting with astyle
 2016-05-02:
 - Change C++ style comments to ISO C90 compliant comments
 - Avoid mixing declarations and code: move declaration of variable writePos in 
@@ -56,3 +55,9 @@ Original provenience: DINO programming language
   to long, since the negative value of INT_MIN is undefined
   2016-05-17:
 - Remove all static declarations of global functions
+- Rename variables 'digit_number' to digit_num to keep lines below 80 characters
+- Rename op1_digit_number to op1_digit_number and op1_digit_num in function 
+  'ammunition_multiply_unsigned_integer_without_overflow_reaction'
+- Rename variable 'scaled_op1_digit_number' in function 
+  'ammunition_divide_unsigned_integer_without_overflow_reaction'
+- Apply code formatting with astyle

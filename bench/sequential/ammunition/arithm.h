@@ -33,72 +33,89 @@
 
 extern int ammunition_overflow_bit;
 
-extern void ammunition_add_unsigned_integer ( int size, const void *op1, const void *op2,
-                                   void *result );
+extern void ammunition_add_unsigned_integer ( int size, const void *op1,
+    const void *op2,
+    void *result );
 extern void ammunition_add_integer ( int size, const void *op1, const void *op2,
-                          void *result );
+                                     void *result );
 extern void ammunition_subtract_unsigned_integer ( int size, const void *op1,
-                                        const void *op2, void *result );
-extern void ammunition_subtract_integer ( int size, const void *op1, const void *op2,
-                               void *result );
+    const void *op2, void *result );
+extern void ammunition_subtract_integer ( int size, const void *op1,
+    const void *op2,
+    void *result );
 extern void ammunition_multiply_unsigned_integer ( int size, const void *op1,
-                                        const void *op2, void *result );
-extern void ammunition_multiply_integer ( int size, const void *op1, const void *op2,
-                               void *result );
+    const void *op2, void *result );
+extern void ammunition_multiply_integer ( int size, const void *op1,
+    const void *op2,
+    void *result );
 extern void ammunition_divide_unsigned_integer ( int size, const void *op1,
-                                      const void *op2, void *result );
-extern void ammunition_divide_integer ( int size, const void *op1, const void *op2,
-                             void *result );
+    const void *op2, void *result );
+extern void ammunition_divide_integer ( int size, const void *op1,
+                                        const void *op2,
+                                        void *result );
 extern void ammunition_unsigned_integer_remainder ( int size, const void *op1,
     const void *op2, void *result );
 
-extern void ammunition_unsigned_integer_shift_right ( int size, const void *operand,
+extern void ammunition_unsigned_integer_shift_right ( int size,
+    const void *operand,
     int bits, void *result );
 extern void ammunition_integer_shift_right ( int size, const void *operand,
-                                  int bits, void *result );
+    int bits, void *result );
 extern void ammunition_integer_shift_left ( int size, const void *operand,
-                                  int bits, void *result );
-extern void ammunition_unsigned_integer_shift_left ( int size, const void *operand,
+    int bits, void *result );
+extern void ammunition_unsigned_integer_shift_left ( int size,
+    const void *operand,
     int bits, void *result );
 
 extern void ammunition_integer_or ( int size, const void *op1,
-                         const void *op2, void *result );
+                                    const void *op2, void *result );
 extern void ammunition_unsigned_integer_or ( int size, const void *op1,
-                                  const void *op2, void *result );
+    const void *op2, void *result );
 extern void ammunition_integer_and ( int size, const void *op1,
-                          const void *op2, void *result );
+                                     const void *op2, void *result );
 extern void ammunition_unsigned_integer_and ( int size, const void *op1,
-                                   const void *op2, void *result );
-extern void ammunition_integer_not ( int size, const void *operand, void *result );
+    const void *op2, void *result );
+extern void ammunition_integer_not ( int size, const void *operand,
+                                     void *result );
 extern void ammunition_unsigned_integer_not ( int size, const void *operand,
-                                   void *result );
+    void *result );
 
-extern int ammunition_eq_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_eq_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_eq_integer ( int size, const void *op1, const void *op2 );
-extern int ammunition_ne_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_ne_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_ne_integer ( int size, const void *op1, const void *op2 );
-extern int ammunition_gt_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_gt_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_gt_integer ( int size, const void *op1, const void *op2 );
-extern int ammunition_lt_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_lt_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_lt_integer ( int size, const void *op1, const void *op2 );
-extern int ammunition_ge_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_ge_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_ge_integer ( int size, const void *op1, const void *op2 );
-extern int ammunition_le_unsigned_integer ( int size, const void *op1, const void *op2 );
+extern int ammunition_le_unsigned_integer ( int size, const void *op1,
+    const void *op2 );
 extern int ammunition_le_integer ( int size, const void *op1, const void *op2 );
 
 extern void ammunition_change_unsigned_integer_size
 ( int operand_size, const void *operand, int result_size, void *result );
-extern void ammunition_change_integer_size ( int operand_size, const void *operand,
-                                  int result_size, void *result );
+extern void ammunition_change_integer_size ( int operand_size,
+    const void *operand,
+    int result_size, void *result );
 
-extern char *ammunition_unsigned_integer_to_string ( int size, const void *operand,
+extern char *ammunition_unsigned_integer_to_string ( int size,
+    const void *operand,
     char *result );
-extern char *ammunition_integer_to_string ( int size, const void *operand, char *result );
+extern char *ammunition_integer_to_string ( int size, const void *operand,
+    char *result );
 
-extern char *ammunition_unsigned_integer_from_string ( int size, const char *operand,
+extern char *ammunition_unsigned_integer_from_string ( int size,
+    const char *operand,
     void *result );
 extern char *ammunition_integer_from_string ( int size, const char *operand,
-                                   void *result );
+    void *result );
 
 char ammunition_isdigit( unsigned char c );
 int ammunition_isspace( int c );

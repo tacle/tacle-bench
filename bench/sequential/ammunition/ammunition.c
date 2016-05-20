@@ -124,9 +124,10 @@ int ammunition_bits_test()
 
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < sizeof ( str ) * CHAR_BIT; i++ )
-    if ( !ammunition_is_zero_bit_string ( str, i, ( sizeof ( str ) * CHAR_BIT - i ) / 2 + 1 ) )
+    if ( !ammunition_is_zero_bit_string (
+           str, i, ( sizeof ( str ) * CHAR_BIT - i ) / 2 + 1 ) )
       result = 1;
-  bit_string_set ( str, 13, 1, 35 );
+  ammunition_bit_string_set ( str, 13, 1, 35 );
   _Pragma( "loopbound min 13 max 13" )
   for ( i = 0; i < 13; i++ )
     if ( !ammunition_is_zero_bit_string ( str, i, 13 - i ) )
@@ -137,7 +138,8 @@ int ammunition_bits_test()
       result = 1;
   _Pragma( "loopbound min 16 max 16" )
   for ( i = 48; i < sizeof ( str ) * CHAR_BIT; i++ )
-    if ( !ammunition_is_zero_bit_string ( str, i, sizeof ( str ) * CHAR_BIT - i ) )
+    if ( !ammunition_is_zero_bit_string ( str, i,
+                                          sizeof ( str ) * CHAR_BIT - i ) )
       result = 1;
 
   /* Test 3 */
@@ -145,76 +147,81 @@ int ammunition_bits_test()
 
   _Pragma( "loopbound min 42 max 42" )
   for ( i = 0; i + i / 2 + 1 < sizeof ( str ) * CHAR_BIT; i++ ) {
-    bit_string_set ( str, i, 1, i / 2 + 1 );
+    ammunition_bit_string_set ( str, i, 1, i / 2 + 1 );
     if ( !ammunition_is_zero_bit_string ( str, 0, i - 1 ) )
       result = 1;
     if ( ammunition_is_zero_bit_string ( str, i, i / 2 + 1 ) )
       result = 1;
-    if ( !ammunition_is_zero_bit_string ( str, i + i / 2 + 1,
-                               sizeof ( str ) * CHAR_BIT - ( i + i / 2 + 1 ) ) )
+    if ( !ammunition_is_zero_bit_string (
+           str, i + i / 2 + 1, sizeof ( str ) * CHAR_BIT - ( i + i / 2 + 1 ) ) )
       result = 1;
-    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
+    ammunition_bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
   }
 
   /* Test 4 */
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set ( str, 2, 1, 43 );
-  bit_string_set ( str1, 2, 1, 40 );
+  ammunition_bit_string_set ( str, 2, 1, 43 );
+  ammunition_bit_string_set ( str1, 2, 1, 40 );
   _Pragma( "loopbound min 42 max 42" )
   for ( i = 0; i < 42; i++ )
     if ( ammunition_bit_string_comparison ( str, i, str1, i, 42 - i ) != 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
   for ( i = 0; i < 43; i++ )
-    if ( ammunition_bit_string_comparison ( str, i, str1, i, sizeof ( str ) * CHAR_BIT - i )
+    if ( ammunition_bit_string_comparison ( str, i, str1, i,
+                                            sizeof ( str ) * CHAR_BIT - i )
          <= 0 )
       result = 1;
   _Pragma( "loopbound min 43 max 43" )
   for ( i = 0; i < 43; i++ )
-    if ( ammunition_bit_string_comparison ( str1, i, str, i, sizeof ( str ) * CHAR_BIT - i )
+    if ( ammunition_bit_string_comparison ( str1, i, str, i,
+                                            sizeof ( str ) * CHAR_BIT - i )
          >= 0 )
       result = 1;
 
   /* Test 5 */
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set ( str, 2, 1, 43 );
+  ammunition_bit_string_set ( str, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
-    ammunition_bit_string_copy ( str1, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( ammunition_bit_string_comparison ( str1, i + 5, str, i,
-                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
+    ammunition_bit_string_copy ( str1, i + 5, str, i,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison (
+           str1, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
 
   /* Test 6 */
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set ( str, 2, 1, 43 );
-  bit_string_set ( str1, 2, 1, 43 );
+  ammunition_bit_string_set ( str, 2, 1, 43 );
+  ammunition_bit_string_set ( str1, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
-    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
-    bit_string_set ( str, 2, 1, 43 );
-    ammunition_bit_string_move ( str, i + 5, str, i, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( ammunition_bit_string_comparison ( str, i + 5, str1, i,
-                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
+    ammunition_bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
+    ammunition_bit_string_set ( str, 2, 1, 43 );
+    ammunition_bit_string_move ( str, i + 5, str, i,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison (
+           str, i + 5, str1, i, sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
 
   /* Test 7 */
   ammunition_reset_str_bits( str, str1 );
 
-  bit_string_set ( str, 2, 1, 43 );
-  bit_string_set ( str1, 2, 1, 43 );
+  ammunition_bit_string_set ( str, 2, 1, 43 );
+  ammunition_bit_string_set ( str1, 2, 1, 43 );
   _Pragma( "loopbound min 59 max 59" )
   for ( i = 0; i + 5 < sizeof ( str ) * CHAR_BIT; i++ ) {
-    bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
-    bit_string_set ( str, 2, 1, 43 );
-    ammunition_bit_string_move ( str, i, str, i + 5, sizeof ( str ) * CHAR_BIT - i - 5 );
-    if ( ammunition_bit_string_comparison ( str, i, str1, i + 5,
-                                 sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
+    ammunition_bit_string_set ( str, 0, 0, sizeof ( str ) * CHAR_BIT );
+    ammunition_bit_string_set ( str, 2, 1, 43 );
+    ammunition_bit_string_move ( str, i, str, i + 5,
+                                 sizeof ( str ) * CHAR_BIT - i - 5 );
+    if ( ammunition_bit_string_comparison (
+           str, i, str1, i + 5, sizeof ( str ) * CHAR_BIT - i - 5 ) != 0 )
       result = 1;
   }
 
@@ -225,11 +232,11 @@ int ammunition_bits_test()
 int ammunition_arithm_test()
 {
   int result = 0;
-  
+
   /* Test 1 */
   int i;
-  char str [20], s[20], d[4], e[4], g[6];  
-  
+  char str [20], s[20], d[4], e[4], g[6];
+
   ammunition_integer_from_string ( 4, "-2147483649", d );
   if ( !ammunition_overflow_bit )
     result = 1;
@@ -239,7 +246,7 @@ int ammunition_arithm_test()
     result = 1;
   ammunition_integer_to_string( 4, d, s );
   if ( ammunition_strcmp ( s, str ) != 0 )
-      result = 1;
+    result = 1;
   ammunition_integer_from_string ( 4, "2147483648", d );
   if ( !ammunition_overflow_bit )
     result = 1;
@@ -1147,7 +1154,7 @@ void ammunition_init( void )
   ammunition_result = 0;
 }
 
-int ammunition_return(void)
+int ammunition_return( void )
 {
   return ammunition_result;
 }
