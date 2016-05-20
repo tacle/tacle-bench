@@ -41,14 +41,13 @@ volatile int gsm_dec_result;
 
 extern word gsm_dec_sub( word a, word b );
 extern word gsm_dec_asl( word a, int n );
-static void gsm_dec_Decoding_of_the_coded_Log_Area_Ratios(
+void gsm_dec_Decoding_of_the_coded_Log_Area_Ratios(
   word *LARc,    /* coded log area ratio [0..7]  IN  */
   word *LARpp ); /* out: decoded ..      */
 
-static void gsm_dec_Coefficients_0_12( word *LARpp_j_1, word *LARpp_j,
-                                       word *LARp );
+void gsm_dec_Coefficients_0_12( word *LARpp_j_1, word *LARpp_j, word *LARp );
 
-static void gsm_dec_LARp_to_rp( word *LARp ); /* [0..7] IN/OUT  */
+void gsm_dec_LARp_to_rp( word *LARp ); /* [0..7] IN/OUT  */
 
 extern int gsm_dec_decode( gsm, gsm_byte *, gsm_signal * );
 
@@ -70,43 +69,44 @@ void gsm_dec_RPE_Decoding( word xmaxcr, word Mcr,
                            word *xMcr,  /* [0..12], 3 bits IN  */
                            word *erp ); /* [0..39]         OUT */
 
-static void gsm_dec_RPE_grid_positioning( word Mc,  /* grid position  IN  */
-    word *xMp, /* [0..12]    IN  */
-    word *ep   /* [0..39]    OUT */
-                                        );
-static void gsm_dec_APCM_inverse_quantization(
-    word *xMc,   /* [0..12]      IN  */
-    word mant, word exp,
-    word *xMp ); /* [0..12]      OUT */
+void gsm_dec_RPE_grid_positioning( word Mc,  /* grid position  IN  */
+                                   word *xMp, /* [0..12]    IN  */
+                                   word *ep   /* [0..39]    OUT */
+                                 );
+
+void gsm_dec_APCM_inverse_quantization( word *xMc,   /* [0..12]      IN  */
+                                        word mant, word exp,
+                                        word *xMp ); /* [0..12]      OUT */
 
 extern word gsm_dec_asr( word a, int n );
 
-static void APCM_quantization_xmaxc_to_exp_mant(
-    word xmaxc,       /* IN   */
-    word *exp_out,    /* OUT  */
-    word *mant_out ); /* OUT  */
+void gsm_dec_APCM_quantization_xmaxc_to_exp_mant(
+  word xmaxc,       /* IN   */
+  word *exp_out,    /* OUT  */
+  word *mant_out ); /* OUT  */
 
-static void gsm_dec_Postprocessing( struct gsm_state *S, word *s );
+void gsm_dec_Postprocessing( struct gsm_state *S, word *s );
 
-static void gsm_dec_Coefficients_13_26( word *LARpp_j_1, word *LARpp_j,
-                                        word *LARp );
+void gsm_dec_Coefficients_13_26( word *LARpp_j_1, word *LARpp_j,
+                                 word *LARp );
 
-static void gsm_dec_Coefficients_40_159( word *LARpp_j, word *LARp );
+void gsm_dec_Coefficients_40_159( word *LARpp_j, word *LARp );
 
-static void gsm_dec_Short_term_synthesis_filtering( struct gsm_state *S,
+void gsm_dec_Short_term_synthesis_filtering( struct gsm_state *S,
     word *rrp, /* [0..7]          IN  */
     int k,     /* k_end - k_start     */
     word *wt,  /* [0..k-1]        IN  */
     word *sr   /* [0..k-1]        OUT */
-);
+                                           );
 
 void gsm_dec_Short_Term_Synthesis_Filter(
   struct gsm_state *S, word *LARcr, /* received log area ratios [0..7] IN  */
   word *wt,                         /* received d [0..159]             IN  */
   word *s                           /* signal   s [0..159]             OUT */
 );
-static void gsm_dec_Coefficients_27_39( word *LARpp_j_1, word *LARpp_j,
-                                        word *LARp );
+
+void gsm_dec_Coefficients_27_39( word *LARpp_j_1, word *LARpp_j, word *LARp );
+
 gsm gsm_dec_create( void );
 void gsm_dec_init( void );
 void gsm_dec_main( void );
@@ -138,7 +138,7 @@ word gsm_dec_asl( word a, int n )
 
 /* 4.2.8 */
 
-static void gsm_dec_Decoding_of_the_coded_Log_Area_Ratios(
+void gsm_dec_Decoding_of_the_coded_Log_Area_Ratios(
   word *LARc,   /* coded log area ratio [0..7]  IN  */
   word *LARpp ) /* out: decoded ..      */
 {
@@ -199,12 +199,12 @@ static void gsm_dec_Decoding_of_the_coded_Log_Area_Ratios(
   analysis and synthesis filters operate with four different sets of
   coefficients, derived from the previous set of decoded LARs(LARpp(j-1))
   and the actual set of decoded LARs (LARpp(j))
-  
+
   (Initial value: LARpp(j-1)[1..8] = 0.)
 */
 
-static void gsm_dec_Coefficients_0_12( word *LARpp_j_1, word *LARpp_j,
-                                       word *LARp )
+
+void gsm_dec_Coefficients_0_12( word *LARpp_j_1, word *LARpp_j, word *LARp )
 {
   int i;
   longword ltmp;
@@ -218,7 +218,7 @@ static void gsm_dec_Coefficients_0_12( word *LARpp_j_1, word *LARpp_j,
 
 /* 4.2.9.2 */
 
-static void gsm_dec_LARp_to_rp(word *LARp) /* [0..7] IN/OUT  */
+void gsm_dec_LARp_to_rp( word *LARp ) /* [0..7] IN/OUT  */
 /*
   The input of this procedure is the interpolated LARp[0..7] array.
   The reflection coefficients, rp[i], are used in the analysis
@@ -229,8 +229,8 @@ static void gsm_dec_LARp_to_rp(word *LARp) /* [0..7] IN/OUT  */
   word temp;
   longword ltmp;
 
-  _Pragma("loopbound min 8 max 8")
-  for (i = 1; i <= 8; i++, LARp++) {
+  _Pragma( "loopbound min 8 max 8" )
+  for ( i = 1; i <= 8; i++, LARp++ ) {
 
     /* temp = GSM_ABS( *LARp );
 
@@ -241,16 +241,16 @@ static void gsm_dec_LARp_to_rp(word *LARp) /* [0..7] IN/OUT  */
      * *LARp = *LARp < 0 ? -temp : temp;
     */
 
-    if (*LARp < 0) {
-      temp = *LARp == MIN_WORD ? MAX_WORD : -(*LARp);
-      *LARp = -((temp < 11059) ? temp << 1
-                               : ((temp < 20070) ? temp + 11059
-                                                 : GSM_ADD(temp >> 2, 26112)));
+    if ( *LARp < 0 ) {
+      temp = *LARp == MIN_WORD ? MAX_WORD : -( *LARp );
+      *LARp = -( ( temp < 11059 ) ? temp << 1
+                 : ( ( temp < 20070 ) ? temp + 11059
+                     : GSM_ADD( temp >> 2, 26112 ) ) );
     } else {
       temp = *LARp;
-      *LARp = (temp < 11059)
-                  ? temp << 1
-                  : ((temp < 20070) ? temp + 11059 : GSM_ADD(temp >> 2, 26112));
+      *LARp = ( temp < 11059 )
+              ? temp << 1
+              : ( ( temp < 20070 ) ? temp + 11059 : GSM_ADD( temp >> 2, 26112 ) );
     }
   }
 }
@@ -306,7 +306,7 @@ void gsm_dec_Long_Term_Synthesis_Filtering(
 
   /*  Decoding of the LTP gain bcr
   */
-  brp = gsm_QLB[bcr];
+  brp = gsm_dec_QLB[bcr];
 
   /*  Computation of the reconstructed short term residual
       signal drp[0..39]
@@ -335,16 +335,16 @@ void gsm_dec_RPE_Decoding( word xmaxcr, word Mcr,
   word exp, mant;
   word xMp[13];
 
-  APCM_quantization_xmaxc_to_exp_mant( xmaxcr, &exp, &mant );
+  gsm_dec_APCM_quantization_xmaxc_to_exp_mant( xmaxcr, &exp, &mant );
   gsm_dec_APCM_inverse_quantization( xMcr, mant, exp, xMp );
   gsm_dec_RPE_grid_positioning( Mcr, xMp, erp );
 }
 
 /* 4.2.17 */
-static void gsm_dec_RPE_grid_positioning(
-    word Mc,   /* grid position IN  */
-    word *xMp, /* [0..12]       IN  */
-    word *ep   /* [0..39]       OUT */)
+void gsm_dec_RPE_grid_positioning(
+  word Mc,   /* grid position IN  */
+  word *xMp, /* [0..12]       IN  */
+  word *ep   /* [0..39]       OUT */ )
 /*
   This procedure computes the reconstructed long term residual signal
   ep[0..39] for the LTP analysis filter.  The inputs are the Mc
@@ -382,10 +382,10 @@ static void gsm_dec_RPE_grid_positioning(
 }
 
 /* 4.2.16 */
-static void gsm_dec_APCM_inverse_quantization( word *xMc, /* [0..12] IN  */
-    word mant,
-    word exp,
-    word *xMp ) /* [0..12] OUT */
+void gsm_dec_APCM_inverse_quantization( word *xMc, /* [0..12] IN  */
+                                        word mant,
+                                        word exp,
+                                        word *xMp ) /* [0..12] OUT */
 /*
   This part is for decoding the RPE sequence of coded xMc[0..12]
   samples to obtain the xMp[0..12] array.  Table 4.6 is used to get
@@ -396,7 +396,7 @@ static void gsm_dec_APCM_inverse_quantization( word *xMc, /* [0..12] IN  */
   word temp, temp1, temp2, temp3;
   longword ltmp;
 
-  temp1 = gsm_FAC[mant];       /* see 4.2-15 for mant */
+  temp1 = gsm_dec_FAC[mant];       /* see 4.2-15 for mant */
   temp2 = gsm_dec_sub( 6, exp ); /* see 4.2-15 for exp  */
   temp3 = gsm_dec_asl( 1, gsm_dec_sub( temp2, 1 ) );
 
@@ -430,9 +430,9 @@ word gsm_dec_asr( word a, int n )
 
 /* rpe.c */
 /* 4.12.15 */
-static void APCM_quantization_xmaxc_to_exp_mant( word xmaxc,      /* IN   */
-                                                 word *exp_out,   /* OUT  */
-                                                 word *mant_out ) /* OUT  */
+void gsm_dec_APCM_quantization_xmaxc_to_exp_mant( word xmaxc,      /* IN   */
+                                                  word *exp_out,   /* OUT  */
+                                                  word *mant_out ) /* OUT  */
 {
   word exp, mant;
 
@@ -463,7 +463,7 @@ static void APCM_quantization_xmaxc_to_exp_mant( word xmaxc,      /* IN   */
 /*
   4.3 FIXED POINT IMPLEMENTATION OF THE RPE-LTP DECODER
 */
-static void gsm_dec_Postprocessing( struct gsm_state *S, word *s )
+void gsm_dec_Postprocessing( struct gsm_state *S, word *s )
 {
   int k;
   word msr = S->msr;
@@ -479,8 +479,7 @@ static void gsm_dec_Postprocessing( struct gsm_state *S, word *s )
   S->msr = msr;
 }
 
-static void gsm_dec_Coefficients_13_26( word *LARpp_j_1, word *LARpp_j,
-                                        word *LARp )
+void gsm_dec_Coefficients_13_26( word *LARpp_j_1, word *LARpp_j, word *LARp )
 {
   int i;
   longword ltmp;
@@ -489,7 +488,7 @@ static void gsm_dec_Coefficients_13_26( word *LARpp_j_1, word *LARpp_j,
     *LARp = GSM_ADD( SASR( *LARpp_j_1, 1 ), SASR( *LARpp_j, 1 ) );
 }
 
-static void gsm_dec_Coefficients_40_159( word *LARpp_j, word *LARp )
+void gsm_dec_Coefficients_40_159( word *LARpp_j, word *LARp )
 {
   int i;
 
@@ -498,41 +497,41 @@ static void gsm_dec_Coefficients_40_159( word *LARpp_j, word *LARp )
     *LARp = *LARpp_j;
 }
 
-static void 
-gsm_dec_Short_term_synthesis_filtering(struct gsm_state *S,
-                                       word *rrp,   /* [0..7]          IN  */
-                                       int k,       /* k_end - k_start     */
-                                       word *wt,    /* [0..k-1]        IN  */
-                                       word *sr ) { /* [0..k-1]        OUT */
+void gsm_dec_Short_term_synthesis_filtering( struct gsm_state *S,
+                                             word *rrp,   /* [0..7]      IN  */
+                                             int k,       /* k_end - k_start */
+                                             word *wt,    /* [0..k-1]    IN  */
+                                             word *sr )   /* [0..k-1]    OUT */
+{
   word *v = S->v;
   int i;
   word sri, tmp1, tmp2;
   longword ltmp; /* for GSM_ADD  & GSM_SUB */
 
-  _Pragma("loopbound min 12 max 118")
-  while (--k) {
+  _Pragma( "loopbound min 12 max 118" )
+  while ( --k ) {
     sri = *wt++;
-    _Pragma("loopbound min 8 max 8")
-    for (i = 8; i--;) {
+    _Pragma( "loopbound min 8 max 8" )
+    for ( i = 8; i--; ) {
 
       /* sri = GSM_SUB( sri, gsm_mult_r( rrp[i], v[i] ) );
       */
       tmp1 = rrp[i];
       tmp2 = v[i];
       tmp2 =
-          (tmp1 == MIN_WORD && tmp2 == MIN_WORD
-               ? MAX_WORD
-               : 0x0FFFF & (((longword)tmp1 * (longword)tmp2 + 16384) >> 15));
+        ( tmp1 == MIN_WORD && tmp2 == MIN_WORD
+          ? MAX_WORD
+          : 0x0FFFF & ( ( ( longword )tmp1 * ( longword )tmp2 + 16384 ) >> 15 ) );
 
-      sri = GSM_SUB(sri, tmp2);
+      sri = GSM_SUB( sri, tmp2 );
 
       /* v[i+1] = GSM_ADD( v[i], gsm_mult_r( rrp[i], sri ) );
       */
-      tmp1 = (tmp1 == MIN_WORD && sri == MIN_WORD
-                  ? MAX_WORD
-                  : 0x0FFFF & (((longword)tmp1 * (longword)sri + 16384) >> 15));
+      tmp1 = ( tmp1 == MIN_WORD && sri == MIN_WORD
+               ? MAX_WORD
+               : 0x0FFFF & ( ( ( longword )tmp1 * ( longword )sri + 16384 ) >> 15 ) );
 
-      v[i + 1] = GSM_ADD(v[i], tmp1);
+      v[i + 1] = GSM_ADD( v[i], tmp1 );
     }
     *sr++ = v[0] = sri;
   }
@@ -569,8 +568,7 @@ void gsm_dec_Short_Term_Synthesis_Filter(
   gsm_dec_Short_term_synthesis_filtering( S, LARp, 120, wt + 40, s + 40 );
 }
 
-static void gsm_dec_Coefficients_27_39( word *LARpp_j_1, word *LARpp_j,
-                                        word *LARp )
+void gsm_dec_Coefficients_27_39( word *LARpp_j_1, word *LARpp_j, word *LARp )
 {
   int i;
   longword ltmp;
@@ -742,8 +740,8 @@ void gsm_dec_main( void )
 
   _Pragma( "loopbound min 1 max 1" )
   for ( i = 0; i < SAMPLES; i++ ) {
-    if ( gsm_dec_decode( r, gsmdata + i * sizeof( gsm_frame ),
-                         pcmdata + i * 160 ) ) {
+    if ( gsm_dec_decode( r, gsm_dec_gsmdata + i * sizeof( gsm_frame ),
+                         gsm_dec_pcmdata + i * 160 ) ) {
       gsm_dec_result = 1;
       return;
     }

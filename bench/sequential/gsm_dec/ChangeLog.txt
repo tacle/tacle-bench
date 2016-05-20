@@ -78,3 +78,7 @@ Original provenience: Jutta Degener and Carsten Bormann,
 - Apply code formatting with with astyle
 - Manual text formattings: removal of empty lines in function prototypes, 
 - Indent all multi-line block comments by two spaces
+2016-05-10:
+- Remove 'static' declaration of global variables and functions
+- Remove unused global variables 'gsm_DLB', 'gsm_INVA', 'gsm_MAC', 'gsm_MIC', 
+  'gsm_A', 'gsm_B', 'gsm_H'
