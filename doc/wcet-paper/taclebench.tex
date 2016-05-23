@@ -6,6 +6,8 @@
 
 \usepackage{microtype}%if unwanted, comment out or use option "draft"
 
+\usepackage{booktabs}
+
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
 
 \bibliographystyle{plain}% the recommended bibstyle
@@ -163,6 +165,133 @@ benchmarks  changed? Legal changes?}
 \item Schedulability analysis using taskset generator
 \end{itemize}
 
+\todo{The following is a verbatim copy from the TACLe website.
+Needs to be updated and put into a nice table, like the following template.}
+
+\begin{table}
+  \centering
+  \caption{TECLeBench benchmarks}
+  \label{tab:bench}
+  \begin{tabular}{llrl}
+    \toprule
+    Name & Description & Code Size (LoC) & Origin \\
+    \midrule
+    adpcm\_decoder & ADPCM decoder & 406 & ??? \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{verbatim}
+ Sequential Benchmarks:
+Name 	Description 	Code Size (LoC) 1 	Origin
+adpcm_decoder 	ADPCM decoder 	406 	MRTC
+adpcm_encoder 	ADPCM encoder 	434 	MRTC
+adpcm_g721_board_test 	ADPCM transcoder 	661 	DSPStone
+adpcm_g721_verify 	ADPCM verification 	673 	DSPStone
+ammunition 	C compiler arithmetic stress test 	2508 	misc
+anagram 	Word anagram computation 	440 	misc
+audiobeam 	Audio beam former 	985 	StreamIt
+basicmath_small 	Basic mathematical calculations (cubic function solving, integer square roots, angle conversion) 	1001 	MiBench
+binarysearch 	Binary search of 15 integers 	35 	MRTC
+bitcount 	Couting number of bits in an integer array 	202 	MiBench
+bitonic 	Bitonic sorting network 	56 	StreamIt
+bsort100 	Bubblesort program 	54 	MRTC
+cjpeg_jpeg6b_transupp 	JPEG image transcoding routines 	1599 	MediaBench
+cjpeg_jpeg6b_wrbmp 	JPEG image bitmap writing code 	1296 	MediaBench
+codecs_codhuff 	Huffman encoding with a file source to compress 	373 	misc
+codecs_codrle1 	RLE type 1 encoding with a file source to compress 	110 	misc
+codecs_dcodhuff 	Huffman decoding with a file source to decompress 	221 	misc
+codecs_dcodrle1 	RLE type 1 decoding with a file source to decompress 	60 	misc
+complex_multiply_fixed 	Multiplication of complex numbers 	22 	DSPStone
+complex_multiply_float 	Multiplication of complex numbers 	22 	DSPStone
+complex_update_fixed 	Multiply-add with complex numbers 	26 	DSPStone
+complex_update_float 	Multiply-add with complex numbers 	28 	DSPStone
+compressdata 	Data compression program adopted from SPEC95 	203 	MRTC
+convolution_fixed 	Convolution filter 	27 	DSPStone
+convolution_float 	Convolution filter 	27 	DSPStone
+countnegative 	Counts non-negative numbers in a matrix 	73 	MRTC
+cover 	Artificial code with lots of different control flow paths 	231 	MRTC
+crc 	CRC computation on 40 bytes of data 	68 	MRTC
+dijkstra 	All pairs shortest path 	227 	MiBench
+dot_product_fixed 	Dot product of vectors 	22 	DSPStone
+dot_product_float 	Dot product of vectors 	24 	DSPStone
+duff 	Duff's device 	44 	MRTC
+edn 	FIR filter calculations 	204 	MRTC
+epic 	Efficient pyramid image coder 	994 	MediaBench
+expint 	Series expansion for computing an exponential integral function. 	62 	MRTC
+fac 	Faculty function 	21 	MRTC
+fdct 	Fast discrete cosine transform 	143 	MRTC
+fft_16_7 	16-point FFT, 7 bits per twiddle 	149 	DSPStone
+fft_16_13 	16-point FFT, 13 bits per twiddle 	156 	DSPStone
+fft_1024_7 	1024-point FFT, 7 bits per twiddle 	282 	DSPStone
+fft_1024_13 	1024-point FFT, 13 bits per twiddle 	311 	DSPStone
+fft1 	1024-point FFT using the Cooly-Turkey algorithm 	140 	MRTC
+fibcall 	Simple iterative Fibonacci calculation 	22 	MRTC
+filterbank 	Filter bank for multirate signal processing 	75 	StreamIt
+fir 	FIR filter over a sample of 700 items 	225 	MRTC
+fir2dim_fixed 	2-dimensional FIR filter convolution 	81 	DSPStone
+fir2dim_float 	2-dimensional FIR filter convolution 	81 	DSPStone
+fir_fixed 	FIR filter 	40 	DSPStone
+fir_float 	FIR filter 	40 	DSPStone
+fmref 	Software FM radio with equalizer 	680 	StreamIt
+g721_encode 	CCITT G.721 encoder 	901 	misc
+g723_encode 	CCITT G.723 encoder 	898 	misc
+gsm 	Complete GSM 06.10 provisional standard codec 	2382 	MediaBench
+gsm_decode 	GSM 06.10 provisional standard decoder 	1368 	MediaBench
+gsm_encode 	GSM 06.10 provisional standard encoder 	1940 	MediaBench
+h264dec_ldecode_block 	H.264 block decoding functions 	1574 	MediaBench
+h264dec_ldecode_macroblock 	H.264 macroblock decoding 	1144 	MediaBench
+iir_biquad_N_sections_fixed 	Biquad IIR 4 sections filter 	42 	DSPStone
+iir_biquad_N_sections_float 	Biquad IIR 4 sections filter 	43 	DSPStone
+iir_biquad_one_section_fixed 	Biquad IIR 1 section filter 	25 	DSPStone
+iir_biquad_one_section_float 	Biquad IIR 1 section filter 	25 	DSPStone
+insertsort 	Insertion sort 	61 	MRTC
+janne_complex 	Artificial code where the inner loop's max. iterations depend on the outer loop 	61 	MRTC
+jfdctint 	Discrete-cosine transformation on a 8x8 pixel block 	221 	MRTC
+lcdnum 	Read ten values, output half to LCD 	62 	MRTC
+lms 	LMS adaptive signal enhancement 	160 	MRTC
+lms_fixed 	Least-Mean-Square filter 	44 	DSPStone
+lms_float 	Least-Mean-Square filter 	44 	DSPStone
+ludcmp 	LU decomposition 	86 	MRTC
+matmult 	20x20 matrix multiplication 	57 	MRTC
+matrix1x3_fixed 	1x3 matrix multiplication 	23 	DSPStone
+matrix1x3_float 	1x3 matrix multiplication 	41 	DSPStone
+matrix1_fixed 	Generic matrix multiplication 	48 	DSPStone
+matrix1_float 	Generic matrix multiplication 	49 	DSPStone
+md5 	Message digest algorithm 	336 	NetBench
+minver 	Floating point matrix inversion 	159 	MRTC
+mpeg2 	MPEG2 motion estimation 	1533 	MediaBench
+n_complex_updates_fixed 	Multiply-add with vectors of complex numbers 	38 	DSPStone
+n_complex_updates_float 	Multiply-add with vectors of complex numbers 	38 	DSPStone
+n_real_updates_fixed 	Multiply-add with vectors of real numbers 	29 	DSPStone
+n_real_updates_float 	Multiply-add with vectors of real numbers 	29 	DSPStone
+ndes 	Complex embedded code 	407 	MRTC
+petrinet 	Petri net simulation 	500 	MRTC
+pm 	Pattern match kernel 	558 	misc
+prime 	Prime number test 	34 	MRTC
+qsort 	Quick sort of string arrays 	2716 	MiBench
+qsort-exam 	Non-recursive quicksort 	84 	MRTC
+qurt 	Root computation of quadratic equations 	88 	MRTC
+real_update_fixed 	Multiply-add with real numbers 	21 	DSPStone
+real_update_float 	Multiply-add with real numbers 	24 	DSPStone
+recursion 	Artificial recursive code 	16 	MRTC
+rijndael_decoder 	Rijndael AES decryption 	3043 	MiBench
+rijndael_encoder 	Rijndael AES encryption 	1024 	MiBench
+select 	Select the Nth largest number in a floating point array 	62 	MRTC
+sha 	NIST secure hash algorithm 	509 	MiBench
+sqrt 	Square root function implemented by Taylor series 	45 	MRTC
+st 	Statistics program (sum, mean, variance, std. deviation, correlation) 	106 	MRTC
+startup_fixed 	V32 modem startup code 	99 	DSPStone
+statemate 	Statechart simulation of a car window lift control 	1053 	MRTC
+susan 	MR image recognition algorithm 	1984 	MiBench
+test3 	Artificial WCET analysis stress test 	3985 	misc
+Parallel Benchmarks:
+Name 	Description 	#Tasks 	Code Size (LoC) 1 	Origin
+Debie 	DEBIE-1 instrument observing micro-meteoroids and small space debris 	8 	6094 	Tidorum Ltd
+PapaBench 	UAV autopilot and fly-by-wire software 	10 	6644 	Paparazzi
+\end{verbatim}
+
+
 \subsection{Issues with the Original Sources}
 
 
@@ -187,7 +316,8 @@ does not allow open-source distribution. We removed those benchmarks from the or
 \item Loop bounds added
 \end{itemize}
 
-\subsection{Usage Recommandations}
+
+\subsection{Usage Recommendations}
 
 \todo{Mmh shall we have this?}
 
