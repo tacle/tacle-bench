@@ -675,7 +675,7 @@ void adpcm_dec_init()
 int adpcm_dec_return()
 {
   int i;
-  int check_sum;
+  int check_sum = 0;
 
   for (i = 0; i < IN_END; i += 2)
   {
