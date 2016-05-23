@@ -144,19 +144,27 @@ Section~\ref{sec:conclusion} concludes.
 into context or contrast to our current work.}
 
 The M{\"a}lardalen WCET benchmarks is the first collection of programs especially
-intended for benchmarking WCET analysis tools~\cite{wcet:bench:2012}.
-This collection of C programs was collected from several sources in 2005 and
-was used in many WCET research projects and for the WCET Tool Challenge 2006.
+intended for benchmarking WCET analysis tools, with a focus on program flow analysis~\cite{wcet:bench:2012}.
+This collection of C programs was an attempt to organise a number of codes, which had up to then been floating around
+in the research community, into a repository with a more systematic treatment of meta-data and easy web access.
+It was collected from several sources in 2005, and has since then been
+used in many WCET research projects as well as for the WCET Tool Challenge 2006.
 A subset of the M{\"a}lardalen benchmarks has even been translated to
-Java~\cite{jop:volta:rtas2008}. Most benchmarks are relative small, except
+Java~\cite{jop:volta:rtas2008}. Most benchmarks are relatively small, except
 two C programs that have been generated from tools. The benchmarks also
-contain all input data. As this input data is fixed and some programs do not provide
-any return value, good compilers with optimization turned on can optimize
+contain all input data. This effectively turns them into single-path programs, which
+makes them less suitable for evaluating tools that can handle multi-path codes. To remedy that,
+some of the benchmarks are equipped with suggested input ranges that override the fixed
+input data in the code. The user is however then responsible to use the proper settings of the tool,
+or to create an appropriate test harness, such that the programs are analysed with the specified input ranges
+rather than the fixed input data. Another consequence of the fact that the
+input data is fixed, and that some programs do not provide
+any return value, is that good compilers with optimization turned on can optimize
 most of the code away. We include most of the benchmarks from the
- M{\"a}lardalen WCET benchmark suite in TACLeBench. However, we changed
- the way input data is represented in variables (make them \code{volatile})
- and make the return of \code{main} dependent on the benchmark calculation.
- Furthermore, we dropped benchmarks where this licensing terms are unknown
+ M{\"a}lardalen WCET benchmark suite in TACLeBench. However, to prohibit the unwanted compiler optimizations we changed
+ the way input data is represented in variables (made them \code{volatile}),
+ and made the return of \code{main} dependent on the benchmark calculation.
+ Furthermore, we dropped benchmarks where the licensing terms are unknown
  or even disallow distributing the source.
 
 EEMBC
