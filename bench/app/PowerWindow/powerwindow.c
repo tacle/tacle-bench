@@ -1,21 +1,26 @@
 /*
- * File: ert_main.c
- *
- * Code generated for Simulink model 'PW_Control_PSG'.
- *
- * Model version                  : 1.489
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Tue Jun 30 15:05:32 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
- */
 
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
 
-#include <stdio.h>
+ Name: powerwindow
 
+ Author: University of Antwerp
+
+ Function: powerwindow implement the powerwindow that can be seen in cars nowadays. 
+	The window can be controled by either driver or passenger. When an object is 
+	detected between the window frame and the glass during the raising of the glass,
+	the glass will lower down for some distance.
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow.c
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
+*/
+
+#include "powerwindow_HeaderFiles/powerwindow.h" 
 #include "powerwindow_HeaderFiles/powerwindow_controlexclusion.h"       /* Control Model's header file */
 #include "powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front.h"/* debounce Model's header file */
 #include "powerwindow_HeaderFiles/powerwindow_model_reference_types.h"
@@ -30,7 +35,6 @@ void powerwindow_input_initialize(void);
 void powerwindow_initialize(void);
 void powerwindow_Booleaninputarray_initialize(powerwindow_boolean_T*, powerwindow_boolean_T*);
 void powerwindow_Uint8inputarray_initialize(powerwindow_uint8_T*, powerwindow_uint8_T*);
-void powerwindow_GetErrorStatus(void);
 int powerwindow_return(void);
 static inline long powerwindow_get_cycles(void);
 void powerwindow_main(void);
@@ -198,22 +202,7 @@ void powerwindow_initialize(void)
     powerwindow_main_inputcyclecounter=0;
 }
 
-void powerwindow_GetErrorStatus(void)
-{
-    while (powerwindow_rtmGetErrorStatus(powerwindow_debounce_passenger_Front_M) == (NULL))
-    {
-        /*  Perform other application tasks here */
-    }
-    while (powerwindow_rtmGetErrorStatus(powerwindow_controlexclusion_M) == (NULL))
-    {
-        /*  Perform other application tasks here */
-    }
-    while (powerwindow_rtmGetErrorStatus(powerwindow_powerwindow_control_M) == (NULL))
-    {
-        /*  Perform other application tasks here */
-    }
 
-}
 int powerwindow_return(void)
 {
     /* Terminate model */
@@ -306,7 +295,7 @@ void powerwindow_main(void)
 
 int main(void)
 {
-    long tic, toc, tictoc;
+//    long tic, toc, tictoc;	/*Uncomment to output the execution time*/
     /* Attach powerwindow_main to a timer or interrupt service routine with
      * period 0.005 seconds (the model's base sample time) here.  The
      * call syntax for powerwindow_main is
@@ -315,7 +304,7 @@ int main(void)
      */
     powerwindow_initialize();
     powerwindow_input_initialize();
-    tic = powerwindow_get_cycles();
+//    tic = powerwindow_get_cycles();	/*Uncomment to output the execution time*/
     while(powerwindow_main_inputcyclecounter<2021)
     {
 
@@ -323,15 +312,13 @@ int main(void)
         powerwindow_main();
         powerwindow_main_inputcyclecounter++;
     }
+//    toc = powerwindow_get_cycles();	/*Uncomment to output the execution time*/
+//    tictoc = toc-tic;			/*Uncomment to output the execution time*/
+//    printf("%ld\n",tictoc );  	/*Uncomment to output the execution time*/
 
-    toc = powerwindow_get_cycles();
-    tictoc = toc-tic;
-    printf("%ld\n",tictoc );
-
-    powerwindow_GetErrorStatus();
-    /* Disable powerwindow_main() here */
 
     return( powerwindow_return() );
+
 }
 
 /*

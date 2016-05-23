@@ -18,8 +18,14 @@
 
   Changes: no major functional change
 
-  License: general open-source
+  License: may be used, modified, and re-distributed freely, but
+           the SNU-RT Benchmark Suite must be acknowledged
 
+*/
+
+/*
+  This program is derived from the SNU-RT Benchmark Suite for Worst
+  Case Timing Analysis by Sung-Soo Lim
 */
 
 /*

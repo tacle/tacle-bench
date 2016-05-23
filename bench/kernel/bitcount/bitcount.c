@@ -7,13 +7,13 @@
 
   Author: Bob Stout & Auke Reitsma
 
-  Function:
+  Function: test program for bit counting functions
 
   Source: www.snippest.com
 
-  Changes: a brief summary of major functional changes (not formatting)
+  Changes: no major functional changes
 
-  License: general open-source
+  License: May be used, modified, and re-distributed freely.
 
 */
 
@@ -26,12 +26,11 @@
    Global variables
 */
 
-unsigned long bitcount_randseed = 1;
+unsigned long bitcount_randseed;
 int bitcount_res;
 unsigned long bitcount_seed;
-unsigned long bitcount_n = 0;
-unsigned int bitcount_iterations = 10;
-int bitcount_returnValue;
+unsigned long bitcount_n;
+unsigned int bitcount_iterations;
 
 /*
    First declaration of the functions
@@ -46,7 +45,8 @@ int main( void );
 
 static int bitcount_bit_shifter( long int x )
 {
-  int i, n;
+  int n;
+  unsigned int i;
 
   _Pragma( "loopbound min 31 max 31" )
   for ( i = n = 0; x && ( i < ( sizeof( long ) * 8 ) ); ++i, x >>= 1 )
@@ -56,7 +56,7 @@ static int bitcount_bit_shifter( long int x )
 
 int bitcount_return()
 {
-  return bitcount_returnValue;
+  return bitcount_n;
 }
 
 void bitcount_init()
@@ -91,7 +91,7 @@ unsigned long bitcount_random( void )
 
 void bitcount_main()
 {
-  int i, j;
+  unsigned int i, j;
   _Pragma( "loopbound min 8 max 8" )
   for ( i = 0; i < FUNCS; i++ ) {
     _Pragma( "loopbound min 10 max 10" )
@@ -128,14 +128,13 @@ void bitcount_main()
           bitcount_res = bitcount_bit_shifter( bitcount_seed );
           break;
         default:
-          bitcount_returnValue = 1;
+          break;
       }
       bitcount_n += bitcount_res;
     }
   }
   _Pragma( "flowrestriction 1*ntbl_bitcount <= 8*call_ntbl" )
   _Pragma( "flowrestriction 1*btbl_bitcount <= 4*call_btbl" )
-  bitcount_returnValue = 0;
 }
 
 int main( void )
@@ -143,5 +142,5 @@ int main( void )
   bitcount_init();
   bitcount_main();
 
-  return ( bitcount_return() );
+  return ( bitcount_return() + (-1095) != 0 );
 }

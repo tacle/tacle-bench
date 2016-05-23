@@ -13,7 +13,7 @@
 
     Changes: The benchmark was changed to use the g723 encoder
 
-    License: "Unristricted use" (see license.txt)
+    License: "Unrestricted use" (see license.txt)
 
 */
 

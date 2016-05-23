@@ -1,0 +1,63 @@
+File: ammunition.c
+Original provenience: DINO programming language
+
+2016-03-03:
+- Add generic TACLeBench header
+- Prefix global functions with benchmark name
+- Introduce volatile result variable for return statements
+- Split code into ammunition_init and ammunition_main
+- Fix compiler warnings "array subscript is of type 'char'":
+    char => unsigned char
+- Fix compiler warnings "'&&' within '||'":
+    Place additional parentheses
+- Remove usages and comments related to the macros
+    HAVE_MEMMOVE, NDEBUG, HAVE_MEMCMP
+- Remove comment related to unused NO_TEMPLATE macro
+2016-05-02:
+- Change C++ style comments to ISO C90 compliant comments
+- Avoid mixing declarations and code: move declaration of variable writePos in 
+  functions ammunition_sprintf_d and ammunition_sprintf_u
+- Change datatype in function ammunition_bits_test of iteration variables i and 
+  j from int to unsigned int to avoid comparison between signed and unsigned 
+  integer expressions
+- Add forward declarations to ammunition.c
+- Introduce variable ammunition_result
+- Parantheses around comparison in functions ammunition_isdigit and 
+  ammunition_isspace
+- Remove usage of limits.h, move definitions of limits into separate file 
+  ammunition_limits.h
+- Remove unconditional assignments of variable result to zero after each test in
+  functions ammunition_bits_test and ammunition_arithm_test
+- Remove unused functions unsigned_integer_maximum, integer_minimum, 
+  integer_maximum, integer_remainder
+- Remove unused declaration of function default_arithmetic_overflow_reaction
+- Remove unused variables zero_constant_itself, zero_constant
+- Remove unused declarations of functions set_unsigned_integer_overflow_reaction
+  and set_integer_overflow_reaction
+- Remove block #ifndef MAX_INTEGER_OPERAND_SIZE, set definition of 
+  MAX_INTEGER_OPERAND_SIZE to 128, since this is default
+2016-05-10:
+- Integrate new version of arithm library from ammunition repository from 
+  dino repository on github (commit: db9cfab042c332abb234ec8d72750103010981c1), 
+  which hanles arithmetic shifts by negative numbers. This change now makes all 
+  test cases in ammunition.c pass. Update headers unsigned int bits => int bits
+- Remove assert statements
+- Fix memcmp implementation: dereferencing pointer was missing
+- Add loop-bound annotation to memcmp
+- Fix strcmp implementation
+- Integrate working versions of memcpy and memset from pm benchmark
+- Update signature of ammunition_memcpy to original version: 
+  void *memcpy(void *dest, const void *src, size_t n);
+- Move functions from libc into separate file, introduce header files
+  ammunition_limits.h, ammunition_stdio.h, ammunition_stdlib.h, 
+  ammunition_string.h
+- Fix overflow in sprintf_d: change datatype of variable 'copyOfNumber' from int
+  to long, since the negative value of INT_MIN is undefined
+  2016-05-17:
+- Remove all static declarations of global functions
+- Rename variables 'digit_number' to digit_num to keep lines below 80 characters
+- Rename op1_digit_number to op1_digit_number and op1_digit_num in function 
+  'ammunition_multiply_unsigned_integer_without_overflow_reaction'
+- Rename variable 'scaled_op1_digit_number' in function 
+  'ammunition_divide_unsigned_integer_without_overflow_reaction'
+- Apply code formatting with astyle

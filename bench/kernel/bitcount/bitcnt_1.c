@@ -5,15 +5,15 @@
 
   Name: bitcnt_1.c
 
-  Author: Bob Stout & Auke Reitsma
+  Author: Ratko Tomic
 
-  Function:
+  Function: Test program for bit counting functions
 
-  Source:
+  Source: http://www.snippets.org/.
 
-  Changes: a brief summary of major functional changes (not formatting)
+  Changes: no major functional changes
 
-  License: general open-source
+  License: May be used, modified, and re-distributed freely.
 
 */
 

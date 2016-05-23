@@ -1,11 +1,20 @@
-/* Copyright 1990-2013 The MathWorks, Inc. */
-
 /*
- * File: rtw_solver.h
- *
- * Abstract:
- *   Type definitions for continuous-time solver support.
- *
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_rtw_solver.h
+
+ Author: University of Antwerp
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_rtw_solver.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
  */
 
 #ifndef powerwindow___RTW_SOLVER_H__

@@ -41,7 +41,7 @@
   Changes: Moved initialisation code from jfdctint_main() to jfdctint_init(),
            added checksum calculation in jfdctint_return()
 
-  License: Public Domain
+  License: see README
 
 */
 
@@ -139,6 +139,8 @@ int main( void );
 int jfdctint_data[ 64 ];
 
 
+const int JFDCTINT_CHECKSUM = 1668124;
+
 void jfdctint_init()
 {
   int i, seed;
@@ -162,7 +164,7 @@ int jfdctint_return()
   int i;
   for ( i = 0; i < 64; ++i )
     checksum += jfdctint_data[ i ];
-  return checksum;
+  return ( ( checksum == JFDCTINT_CHECKSUM ) ? 0 : -1 );
 }
 
 

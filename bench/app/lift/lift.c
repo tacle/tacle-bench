@@ -15,7 +15,7 @@
 
   Changes: no major functional changes
 
-  License: unknown
+  License: GPL version 3 or later
 
 */
 
@@ -51,6 +51,33 @@ int lift_checksum;/* Checksum */
 
 void lift_init()
 {
+  unsigned int i;
+  unsigned char *p;
+  volatile char bitmask = 0;
+
+  /*
+    Apply volatile XOR-bitmask to entire input array.
+  */
+  p = ( unsigned char * ) &lift_ctrl_io_in[ 0 ];
+  _Pragma( "loopbound min 40 max 40" )
+  for ( i = 0; i < sizeof( lift_ctrl_io_in ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &lift_ctrl_io_out[ 0 ];
+  _Pragma( "loopbound min 16 max 16" )
+  for ( i = 0; i < sizeof( lift_ctrl_io_out ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &lift_ctrl_io_analog[ 0 ];
+  _Pragma( "loopbound min 16 max 16" )
+  for ( i = 0; i < sizeof( lift_ctrl_io_analog ); ++i, ++p )
+    *p ^= bitmask;
+
+  p = ( unsigned char * ) &lift_ctrl_io_led[ 0 ];
+  _Pragma( "loopbound min 64 max 64" )
+  for ( i = 0; i < sizeof( lift_ctrl_io_led ); ++i, ++p )
+    *p ^= bitmask;
+
   lift_checksum = 0;
   lift_ctrl_init();
 }
@@ -58,7 +85,7 @@ void lift_init()
 
 int lift_return()
 {
-  return lift_checksum;
+  return ( lift_checksum - 4006889 != 0 );
 }
 
 
@@ -90,7 +117,7 @@ void  _Pragma( "entrypoint" ) lift_main()
     lift_simio_adc3 = 0;
     /* run lift_controller */
     lift_controller();
-    if ( 1000 > 0 && i++ >= 1000 )
+    if ( i++ >= 1000 )
       break;
   }
 }

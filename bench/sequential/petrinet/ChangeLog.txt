@@ -46,3 +46,8 @@ http://www.mrtc.mdh.se/projects/wcet/wcet_bench/nsichneu/nsichneu.c
   - Operators within expressions shall be preceded and followed by one
     whitespace
 
+2016-04-05:
+- Return '0' on success
+
+2016-06-06:
+- Fixed generation of return value

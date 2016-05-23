@@ -5,8 +5,7 @@
 
   Name: Petrinet
 
-  Author: Friedhelm Stappert, C-LAB, Paderborn, Germany, fst@c-lab.de
-          Copyright (c) 1998/1999, C-LAB, Paderborn
+  Author: Friedhelm Stappert, C-LAB, Paderborn, Germany
 
   Function: Simulate an extended Petri Net
             Automatically generated code containing large amounts of
@@ -16,7 +15,7 @@
 
   Changes: no major functional changes
 
-  License: unknown
+  License: may be used, modified, and re-distributed freely
 
 */
 
@@ -52,6 +51,7 @@ volatile long petrinet_P2_marking_member_0[ 5 ];
 volatile int  petrinet_P3_is_marked = 0;
 volatile long petrinet_P3_marking_member_0[ 6 ];
 
+const long PETRINET_CHECKSUM = 0;
 
 int _Pragma ( "entrypoint" ) petrinet_main( void )
 {
@@ -938,9 +938,17 @@ int petrinet_return( void )
   // TODO: use something from the Px_... arrays
   int checksum = 0;
   int i;
+
+  for ( i = 0; i < 3; ++i )
+    checksum += petrinet_P1_marking_member_0[i];
+
+  for ( i = 0; i < 5; ++i )
+    checksum += petrinet_P2_marking_member_0[i];
+
   for ( i = 0; i < 6; ++i )
     checksum += petrinet_P3_marking_member_0[i];
-  return checksum;
+
+  return ( ( checksum == PETRINET_CHECKSUM ) ? 0 : -1 );
 }
 
 

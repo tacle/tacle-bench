@@ -21,6 +21,12 @@ Original provenience: network section of MiBench
 - Applied code formatting with astyle as in the example
 - Added general TACLeBench header to beginning of source code
 
+2016-03-15:
+- Return 0 if checksum is as expected, -1 otherwise
+- Make all initializations explicit
+- Touch input matrix with volatile to rule out optimizations
+- Add entrypoint pragma
+
 Files: input.h, input.c
 Original provenience: network section of MiBench
 

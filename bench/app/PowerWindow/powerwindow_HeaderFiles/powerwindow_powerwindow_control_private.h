@@ -1,16 +1,20 @@
 /*
- * File: powerwindow_control_private.h
- *
- * Code generated for Simulink model 'powerwindow_control'.
- *
- * Model version                  : 1.50
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Wed Jul 01 16:05:29 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_powerwindow_control_private.h
+
+ Author: University of Antwerp
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
  */
 
 #ifndef powerwindow_RTW_HEADER_powerwindow_control_private_h_

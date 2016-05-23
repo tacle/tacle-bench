@@ -1,9 +1,22 @@
 /*
- * Copyright 1984-2014 The MathWorks, Inc.
- * All Rights Reserved.
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_tmwtypes.h
+
+ Author: University of Antwerp
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_tmwtypes.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
  */
 
-/* Copyright 1995-2014 The MathWorks, Inc. */
 #if defined(_MSC_VER)
 # pragma once
 #endif

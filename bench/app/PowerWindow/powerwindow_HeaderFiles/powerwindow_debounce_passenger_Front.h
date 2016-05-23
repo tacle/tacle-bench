@@ -1,16 +1,20 @@
 /*
- * File: debounce_passenger_Front.h
- *
- * Code generated for Simulink model 'debounce_passenger_Front'.
- *
- * Model version                  : 1.489
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Tue Jun 30 15:05:32 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
+
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_debounce_passenger_Front.h
+
+ Author: University of Antwerp
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_debounce_passenger_Front.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
  */
 
 #ifndef powerwindow_RTW_HEADER_debounce_passenger_Front_h_

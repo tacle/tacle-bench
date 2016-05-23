@@ -40,6 +40,7 @@ typedef struct pm_float_array_t {
   int          size[3];
   unsigned int ndims;
   unsigned int rctype;
+  char padding[4];
 } pm_float_array_t;
 
 
@@ -70,6 +71,7 @@ typedef struct pm_data_t {
   int   profile_size; /* the length of the pattern */
   int   num_templates; /* the number of library templates */
   int   elsize; /* the size of a single fp number */
+  char padding[4];
 } pm_data_t;
 
 
@@ -98,7 +100,7 @@ extern float pm_lib_data[ 60 ][ 64 ];
 extern float pm_pattern_data[ 60 ][ 64 ];
 
 /* some magic number */
-#define MIN_NOISE 1e-10f
+#define pm_MIN_NOISE 1e-10f
 
 /* main data structures used by the benchmark */
 static pm_data_t pm_data;
@@ -126,6 +128,7 @@ static float pm_init_array_8[110];
 void pm_init_lib( pm_float_array_t *lib )
 {
   int i;
+  volatile int do_not_optimize_away = 0;
 
   lib->rctype = 1;
   lib->ndims = 2;
@@ -137,6 +140,10 @@ void pm_init_lib( pm_float_array_t *lib )
   for ( i = 0; i < 60; i++ )
     pm_lib_ptr[i] = pm_lib_data[i];
 
+  _Pragma( "loopbound min 60 max 60" )
+  for ( i = 0; i < 60; i++ )
+    pm_lib_ptr[i] += do_not_optimize_away;
+
   lib->data = *pm_lib_ptr;
   lib->datav = ( void * )pm_lib_ptr;
 }
@@ -145,6 +152,7 @@ void pm_init_lib( pm_float_array_t *lib )
 void pm_init_pattern( pm_float_array_t *pattern )
 {
   int i;
+  volatile int do_not_optimize_away = 0;
 
   pattern->rctype = 1;
   pattern->ndims = 2;
@@ -155,6 +163,10 @@ void pm_init_pattern( pm_float_array_t *pattern )
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
     pm_pattern_ptr[i] = pm_pattern_data[i];
+
+  _Pragma( "loopbound min 60 max 60" )
+  for ( i = 0; i < 60; i++ )
+    pm_pattern_ptr[i] += do_not_optimize_away;
 
   pattern->data = *pm_pattern_ptr;
   pattern->datav = ( void * )pm_pattern_ptr;
@@ -169,7 +181,7 @@ void pm_init( void )
 
 int pm_return( void )
 {
-  return pm_result;
+  return pm_result - 12;
 }
 
 
@@ -184,19 +196,6 @@ void _Pragma( "entrypoint" ) pm_main( void )
   pm_init_data( &pm_data, &pm_lib, &pm_pattern );
   pm_result = pm_kernel( &pm_data );
   pm_clean( &pm_data );
-}
-
-
-/*
-  Main function
-*/
-
-int main( void )
-{
-  pm_init();
-  pm_main();
-
-  return pm_return();
 }
 
 
@@ -283,8 +282,8 @@ int pm_kernel( pm_data_t *pmdata )
 
   int match_index; /* the index of the most likely template that matches the
                       test pattern */
-  int min_MSE_index = shift_size + 1; /* the index of the range shifts with
-                                         the lowest mean square error */
+  int min_MSE_index; /* the index of the range shifts with
+                        the lowest mean square error */
   unsigned int num_template_exceed,
            num_test_exceed; /* the number of pixels exceeded the test pattern
                                and a library template */
@@ -498,7 +497,7 @@ int pm_kernel( pm_data_t *pmdata )
       tmp1 = *fptr + noise_shift2;
 
       if ( tmp1 == 0.0f )
-        tmp1 = MIN_NOISE;
+        tmp1 = pm_MIN_NOISE;
 
       *fptr = 10.0f * pm_log10f( pm_fabs( tmp1 ) ) + test_noise_db;
 
@@ -729,4 +728,17 @@ int pm_kernel( pm_data_t *pmdata )
   }
 
   return match_index;
+}
+
+
+/*
+  Main function
+*/
+
+int main( void )
+{
+  pm_init();
+  pm_main();
+
+  return pm_return();
 }

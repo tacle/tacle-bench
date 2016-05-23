@@ -20,3 +20,10 @@ Original provenience: Mälardalen benchmark suite, www.mrtc.....
 - Changed C++ style comments to C style comments
 - Applied code formatting with astyle as in the example
 - Added general TACLeBench header to beginning of source code
+
+2016-03-15:
+- Return 0 if checksum is as expected, -1 otherwise
+- Add entrypoint pragma
+
+2016-04-20:
+- Cast "expected" return value to int for comparison

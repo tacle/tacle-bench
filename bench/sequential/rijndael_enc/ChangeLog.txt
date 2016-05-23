@@ -16,6 +16,16 @@ Source: security section of MiBench
 - Added general TACLeBench header to beginning of source code
 - Rename to rijndael_enc.c
 
+2016-03-15:
+- Return 0 if checksum is as expected, -1 otherwise
+- Add entrypoint pragma
+- Make inputs volatile (or touch them with a volatile) to rule out
+  optimizations
+
+2016-04-20:
+- Cast "expected" return value to int for comparison
+- Make loop counter in rijndael_enc_init unsigned
+
 Files: aes.c, aes.h, aestab.h
 Source: security section of MiBench
 
@@ -38,6 +48,14 @@ Source: security section of MiBench
 - Break lines in overly long macros
 - Protect macros
 - Applied code formatting with astyle as in the example
+
+2016-04-20:
+- Remove unused macros s, ff_poly, ff_hi, m1, m2, m3, FFmulX,
+  fwd_mcol, fwd_var, inv_var, si, so, fwd_rnd, inv_rnd, fwd_lrnd,
+  inv_lrnd, locals, l_copy, state_in, state_out, round, i_table,
+  li_table
+- Remove unused arrays rijndael_enc_s_box, rijndael_enc_inv_s_box,
+  rijndael_enc_it_tab, rijndael_enc_il_tab
 
 Files: glibc_common.h, my_file.h
 Source: security section of MiBench

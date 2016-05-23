@@ -5,7 +5,7 @@
 
   Name: binarysearch
 
-  Author: S.-S. Lim <sslim@archi.snu.ac.kr>
+  Author: Sung-Soo Lim <sslim@archi.snu.ac.kr>
 
   Function: binarysearch performs binary search in an array of 15 integer
     elements.
@@ -18,10 +18,16 @@
 
   Original name: bs
 
-  Changes: no major functional changed
+  Changes: No major functional changes.
 
-  License: general open-source
+  License: May be used, modified, and re-distributed freely, but
+           the SNU-RT Benchmark Suite must be acknowledged
 
+*/
+
+/*
+  This program is derived from the SNU-RT Benchmark Suite for Worst
+  Case Timing Analysis by Sung-Soo Lim
 */
 
 
@@ -29,10 +35,12 @@
   Forward declaration of functions
 */
 
-void bs_init( void );
-int bs_return( void );
-int bs_binary_search( int );
-void bs_main( void );
+void binarysearch_initSeed( void );
+long binarysearch_randomInteger( void );
+void binarysearch_init( void );
+int binarysearch_return( void );
+int binarysearch_binary_search( int );
+void binarysearch_main( void );
 int main( void );
 
 
@@ -40,58 +48,59 @@ int main( void );
   Declaration of global variables
 */
 
-struct bs_DATA {
+volatile int binarysearch_seed;
+
+struct binarysearch_DATA {
   int key;
   int value;
 };
 
-struct bs_DATA bs_data[ 15 ];
+struct binarysearch_DATA binarysearch_data[ 15 ];
 
-int bs_result;
+int binarysearch_result;
 
 
 /*
   Initialization- and return-value-related functions
 */
 
-void bs_init( void )
+/*
+  binarysearch_initSeed initializes the seed used in the "random" number
+  generator.
+*/
+void binarysearch_initSeed( void )
 {
-  bs_data[ 0 ].key = 1;
-  bs_data[ 0 ].value = 100;
-  bs_data[ 1 ].key = 5;
-  bs_data[ 1 ].value = 200;
-  bs_data[ 2 ].key = 6;
-  bs_data[ 2 ].value = 300;
-  bs_data[ 3 ].key = 7;
-  bs_data[ 3 ].value = 700;
-  bs_data[ 4 ].key = 8;
-  bs_data[ 4 ].value = 900;
-  bs_data[ 5 ].key = 9;
-  bs_data[ 5 ].value = 250;
-  bs_data[ 6 ].key = 10;
-  bs_data[ 6 ].value = 400;
-  bs_data[ 7 ].key = 11;
-  bs_data[ 7 ].value = 600;
-  bs_data[ 8 ].key = 12;
-  bs_data[ 8 ].value = 800;
-  bs_data[ 9 ].key = 13;
-  bs_data[ 9 ].value = 1500;
-  bs_data[ 10 ].key = 14;
-  bs_data[ 10 ].value = 1200;
-  bs_data[ 11 ].key = 15;
-  bs_data[ 11 ].value = 110;
-  bs_data[ 12 ].key = 16;
-  bs_data[ 12 ].value = 140;
-  bs_data[ 13 ].key = 17;
-  bs_data[ 13 ].value = 133;
-  bs_data[ 14 ].key = 18;
-  bs_data[ 14 ].value = 10;
+  binarysearch_seed = 0;
 }
 
 
-int bs_return( void )
+/*
+  binarysearch_RandomInteger generates "random" integers between 0 and 8094.
+*/
+long binarysearch_randomInteger( void )
 {
-  return( bs_result );
+  binarysearch_seed = ( ( binarysearch_seed * 133 ) + 81 ) % 8095;
+  return( binarysearch_seed );
+}
+
+
+void binarysearch_init( void )
+{
+  int i;
+
+  binarysearch_initSeed();
+
+  _Pragma( "loopbound min 15 max 15" )
+  for ( i = 0; i < 15; ++i ) {
+    binarysearch_data[ i ].key = binarysearch_randomInteger();
+    binarysearch_data[ i ].value = binarysearch_randomInteger();
+  }
+}
+
+
+int binarysearch_return( void )
+{
+  return( binarysearch_result );
 }
 
 
@@ -99,7 +108,7 @@ int bs_return( void )
   Algorithm core functions
 */
 
-int bs_binary_search( int x )
+int binarysearch_binary_search( int x )
 {
   int fvalue, mid, up, low;
 
@@ -111,13 +120,13 @@ int bs_binary_search( int x )
   while ( low <= up ) {
     mid = ( low + up ) >> 1;
 
-    if ( bs_data[ mid ].key == x ) {
+    if ( binarysearch_data[ mid ].key == x ) {
       /* Item found */
       up = low - 1;
-      fvalue = bs_data[ mid ].value;
+      fvalue = binarysearch_data[ mid ].value;
     } else
 
-    if ( bs_data[ mid ].key > x )
+    if ( binarysearch_data[ mid ].key > x )
       /* Item not found */
       up = mid - 1;
     else
@@ -132,16 +141,16 @@ int bs_binary_search( int x )
   Main functions
 */
 
-void _Pragma ( "entrypoint" ) bs_main( void )
+void _Pragma( "entrypoint" ) binarysearch_main( void )
 {
-  bs_result = bs_binary_search( 8 );
+  binarysearch_result = binarysearch_binary_search( 8 );
 }
 
 
 int main( void )
 {
-  bs_init();
-  bs_main();
+  binarysearch_init();
+  binarysearch_main();
 
-  return( bs_return() );
+  return( binarysearch_return() - (-1) != 0 );
 }

@@ -1,7 +1,7 @@
 /*
 
   This program is part of the TACLeBench benchmark suite.
-  Version V 1.x
+  Version V 2.0
 
   Name: dijkstra
 
@@ -11,7 +11,7 @@
 
   Source: network section of MiBench
 
-  Changes: made some variables local, compute checksum
+  Changes: Made some variables local, compute checksum
 
   License: GPL
 
@@ -46,9 +46,9 @@ struct _QITEM {
 */
 struct _NODE dijkstra_rgnNodes[NUM_NODES];
 
-int dijkstra_queueCount = 0;
-int dijkstra_queueNext = 0;
-struct _QITEM *dijkstra_queueHead = ( struct _QITEM * )0;
+int dijkstra_queueCount;
+int dijkstra_queueNext;
+struct _QITEM *dijkstra_queueHead;
 struct _QITEM dijkstra_queueItems[QUEUE_SIZE];
 
 int dijkstra_checksum = 0;
@@ -67,11 +67,26 @@ int main( void );
 
 void dijkstra_init( void )
 {
+  int i, k;
+  volatile int x = 0;
+  _Pragma( "loopbound min 100 max 100" )
+  for ( i = 0; i < NUM_NODES; i++ ) {
+    _Pragma( "loopbound min 100 max 100" )
+    for ( k = 0; k < NUM_NODES; k++ ) {
+      dijkstra_AdjMatrix[i][k] ^= x;
+    }
+  }
+
+  dijkstra_queueCount = 0;
+  dijkstra_queueNext = 0;
+  dijkstra_queueHead = ( struct _QITEM * )0;
+
+  dijkstra_checksum = 0;
 }
 
 int dijkstra_return( void )
 {
-  return dijkstra_checksum;
+  return ( ( dijkstra_checksum == 25 ) ? 0 : -1 );
 }
 
 int dijkstra_enqueue( int node, int dist, int prev )
@@ -157,7 +172,7 @@ int dijkstra_find( int chStart, int chEnd )
   return 0;
 }
 
-void dijkstra_main( void )
+void _Pragma( "entrypoint" ) dijkstra_main( void )
 {
   int i, j;
 

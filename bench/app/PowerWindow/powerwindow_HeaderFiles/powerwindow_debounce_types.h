@@ -1,18 +1,21 @@
 /*
- * File: debounce_types.h
- *
- * Code generated for Simulink model 'debounce'.
- *
- * Model version                  : 1.34
- * Simulink Coder version         : 8.7 (R2014b) 08-Sep-2014
- * C/C++ source code generated on : Tue Jun 30 15:05:13 2015
- *
- * Target selection: ert.tlc
- * Embedded hardware selection: Atmel->AVR
- * Code generation objectives: Unspecified
- * Validation result: Not run
- */
 
+ This program is part of the TACLeBench benchmark suite.
+ Version V 1.x
+
+ Name: powerwindow_debounce_types.h
+
+ Author: University of Antwerp
+
+ Function: headerfile
+
+ Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_debounce_types.h
+
+ Changes: a brief summary of major functional changes and formatting)
+
+ License: GNU General Public License
+
+ */
 #ifndef powerwindow_RTW_HEADER_debounce_types_h_
 #define powerwindow_RTW_HEADER_debounce_types_h_
 

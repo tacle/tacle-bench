@@ -1,3 +1,24 @@
+/*
+
+  This program is part of the TACLeBench benchmark suite.
+  Version V 2.0
+
+  Name: md5.c
+
+  Author: unknown
+
+  Function: MD5 cryptographic hash function (see also RFC 1321).
+
+  Source: RSA Data Security, Inc., MD5 message-digest algorithm
+
+  Original name: md5c.c
+
+  Changes: no major functional changes, inlined include files
+
+  License: see below
+
+*/
+
 // Description: This is the MD5 algorithm comming form the Diffie-Hellman
 // application in the Netbench benchmark suite
 
@@ -158,24 +179,27 @@ typedef struct {
   unsigned char output[16];
 } R_RANDOM_STRUCT;
 
-void MD5Init PROTO_LIST ((MD5_CTX *));
-void MD5Update PROTO_LIST
-  ((MD5_CTX *, unsigned char *, unsigned int));
-void MD5Final PROTO_LIST ((unsigned char [64], MD5_CTX *));
-static void MD5_memset PROTO_LIST ((POINTER, int, unsigned int));
-static void MD5Transform PROTO_LIST ((UINT4 [4], unsigned char [64]));
-static void Encode PROTO_LIST ((unsigned char *, UINT4 *, int));
-static void Decode PROTO_LIST ((UINT4 *, unsigned char *, unsigned int));
-static void MD5_memcpy PROTO_LIST ((POINTER, POINTER, unsigned int));
-void R_memset (POINTER output, int value, unsigned int len );
-void memset_x( unsigned char *ptr, int value, unsigned long len );
-int R_RandomInit (R_RANDOM_STRUCT *randomStruct);
-int R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigned int blockLen );
-static void InitRandomStruct ( R_RANDOM_STRUCT *randomStruct );
-int R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomStruct );
+void md5_orig_init PROTO_LIST ((MD5_CTX *));
+void md5_update PROTO_LIST ((MD5_CTX *, unsigned char *, unsigned int));
+void md5_final PROTO_LIST ((unsigned char [64], MD5_CTX *));
+void md5_memset PROTO_LIST ((POINTER, int, unsigned int));
+void md5_transform PROTO_LIST ((UINT4 [4], unsigned char [64]));
+void md5_encode PROTO_LIST ((unsigned char *, UINT4 *, int));
+void md5_decode PROTO_LIST ((UINT4 *, unsigned char *, unsigned int));
+void md5_memcpy PROTO_LIST ((POINTER, POINTER, unsigned int));
+void md5_R_memset (POINTER output, int value, unsigned int len );
+void md5_memset_x( unsigned char *ptr, int value, unsigned long len );
+int md5_R_RandomInit (R_RANDOM_STRUCT *randomStruct);
+int md5_R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigned int blockLen );
+void md5_InitRandomStruct ( R_RANDOM_STRUCT *randomStruct );
+int md5_R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomStruct );
+
+int md5_main(void);
+void md5_init(void);
+
 int main(void);
 
-static unsigned char PADDING[64] = {
+unsigned char md5_PADDING[64] = {
   0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -219,7 +243,7 @@ static unsigned char PADDING[64] = {
 
 /* MD5 initialization. Begins an MD5 operation, writing a new context.
  */
-void MD5Init ( MD5_CTX *context )                                        /* context */ 
+void md5_orig_init ( MD5_CTX *context )                                        /* context */ 
 {
   context->count[0] = context->count[1] = 0;
 
@@ -229,13 +253,25 @@ void MD5Init ( MD5_CTX *context )                                        /* cont
   context->state[1] = 0xefcdab89;
   context->state[2] = 0x98badcfe;
   context->state[3] = 0x10325476;
+  context->state[4] = 0x0;
+  context->state[5] = 0x0;
+  context->state[6] = 0x0;
+  context->state[7] = 0x0;
+  context->state[8] = 0x0;
+  context->state[9] = 0x0;
+  context->state[10] = 0x0;
+  context->state[11] = 0x0;
+  context->state[12] = 0x0;
+  context->state[13] = 0x0;
+  context->state[14] = 0x0;
+  context->state[15] = 0x0;
 }
 
 /* MD5 block update operation. Continues an MD5 message-digest
      operation, processing another message block, and updating the
      context.
  */
-void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen )
+void md5_update (MD5_CTX *context, unsigned char *input, unsigned int inputLen )
 //MD5_CTX *context;                                        /* context */
 //unsigned char *input;                                /* input block */
 //unsigned int inputLen;                     /* length of input block */
@@ -256,13 +292,12 @@ void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen )
   /* Transform as many times as possible.
    */
   if (inputLen >= partLen) {
-    MD5_memcpy
-      ((POINTER)&context->buffer[index], (POINTER)input, partLen);
-    MD5Transform (context->state, context->buffer);
+    md5_memcpy ((POINTER)&context->buffer[index], (POINTER)input, partLen);
+    md5_transform (context->state, context->buffer);
   
     _Pragma("loopbound min 0 max 0")
     for (i = partLen; i + 63 < inputLen; i += 64) {
-      MD5Transform (context->state, &input[i]);
+      md5_transform (context->state, &input[i]);
     }
     
     index = 0;
@@ -271,15 +306,13 @@ void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen )
     i = 0;
   
   /* Buffer remaining input */
-  MD5_memcpy 
-    ((POINTER)&context->buffer[index], (POINTER)&input[i],
-     inputLen-i);
+  md5_memcpy ((POINTER)&context->buffer[index], (POINTER)&input[i], inputLen-i);
 }
 
 /* MD5 finalization. Ends an MD5 message-digest operation, writing the
      the message digest and zeroizing the context.
  */
-void MD5Final (unsigned char digest[64], MD5_CTX *context )
+void md5_final (unsigned char digest[64], MD5_CTX *context )
 //unsigned char digest[16];                         /* message digest */
 //MD5_CTX *context;                                       /* context */
 {
@@ -287,28 +320,28 @@ void MD5Final (unsigned char digest[64], MD5_CTX *context )
   unsigned int index, padLen;
 
   /* Save number of bits */
-  Encode (bits, context->count, 8);
+  md5_encode (bits, context->count, 8);
 
   /* Pad out to 56 mod 64.
    */
   index = (unsigned int)((context->count[0] >> 3) & 0x3f);
   padLen = (index < 56) ? (56 - index) : (120 - index);
-  MD5Update (context, PADDING, padLen);
+  md5_update (context, md5_PADDING, padLen);
   
   /* Append length (before padding) */
-  MD5Update (context, bits, 8);
+  md5_update (context, bits, 8);
 
   /* Store state in digest */
-  Encode (digest, context->state, 64);
+  md5_encode (digest, context->state, 64);
   
   /* Zeroize sensitive information.
    */
-  MD5_memset ((POINTER)context, 0, sizeof (*context));
+  md5_memset ((POINTER)context, 0, sizeof (*context));
 }
 
 /* Note: Replace "for loop" with standard memset if possible.
  */
-static void MD5_memset ( POINTER output, int value, unsigned int len )
+void md5_memset ( POINTER output, int value, unsigned int len )
 {
   unsigned int i;
   
@@ -320,11 +353,11 @@ static void MD5_memset ( POINTER output, int value, unsigned int len )
 
 /* MD5 basic transformation. Transforms state based on block.
  */
-static void MD5Transform ( UINT4 state[4], unsigned char block[64] )
+void md5_transform ( UINT4 state[4], unsigned char block[64] )
 {
   UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
   
-  Decode (x, block, 64);
+  md5_decode (x, block, 64);
 
   /* Round 1 */
   FF (a, b, c, d, x[ 0], S11, 0xd76aa478); /* 1 */
@@ -405,13 +438,13 @@ static void MD5Transform ( UINT4 state[4], unsigned char block[64] )
   
   /* Zeroize sensitive information.
    */
-  MD5_memset ((POINTER)x, 0, sizeof (x));
+  md5_memset ((POINTER)x, 0, sizeof (x));
 }
 
 /* Encodes input (UINT4) into output (unsigned char). Assumes len is
      a multiple of 4.
  */
-static void Encode ( unsigned char *output, UINT4 *input, int len )
+void md5_encode ( unsigned char *output, UINT4 *input, int len )
 {
   int i = 0, 
 	       j;
@@ -429,7 +462,7 @@ static void Encode ( unsigned char *output, UINT4 *input, int len )
 /* Decodes input (unsigned char) into output (UINT4). Assumes len is
      a multiple of 4.
  */
-static void Decode ( UINT4 *output, unsigned char *input, unsigned int len )
+void md5_decode ( UINT4 *output, unsigned char *input, unsigned int len )
 {
   unsigned int i, j;
 
@@ -442,7 +475,7 @@ static void Decode ( UINT4 *output, unsigned char *input, unsigned int len )
 
 /* Note: Replace "for loop" with standard memcpy if possible.
  */
-static void MD5_memcpy ( POINTER output, POINTER input, unsigned int len )
+void md5_memcpy ( POINTER output, POINTER input, unsigned int len )
 {
   unsigned int i;
   
@@ -454,18 +487,18 @@ static void MD5_memcpy ( POINTER output, POINTER input, unsigned int len )
 
 /////////////////// end md5c.c ////////////////////////
 
-void R_memset (POINTER output, int value, unsigned int len )
+void md5_R_memset (POINTER output, int value, unsigned int len )
 //POINTER output;                                             /* output block */
 //int value;                                                         /* value */
 //unsigned int len;                                        /* length of block */
 {
   if (len)
-    memset_x (output, value, len);
+    md5_memset_x (output, value, len);
 }
 
 
 // Basic implementation of C's memset
-void memset_x( unsigned char *ptr, int value, unsigned long len )
+void md5_memset_x( unsigned char *ptr, int value, unsigned long len )
 {
   _Pragma("loopbound min 16 max 64")
   while( len-- ) {
@@ -476,17 +509,17 @@ void memset_x( unsigned char *ptr, int value, unsigned long len )
 }
 
 
-int R_RandomInit (R_RANDOM_STRUCT *randomStruct)
+int md5_R_RandomInit (R_RANDOM_STRUCT *randomStruct)
 //R_RANDOM_STRUCT *randomStruct;                      /* new random structure */
 {
   randomStruct->bytesNeeded = RANDOM_BYTES_NEEDED;
-  R_memset ((POINTER)randomStruct->state, 0, sizeof (randomStruct->state));
+  md5_R_memset ((POINTER)randomStruct->state, 0, sizeof (randomStruct->state));
   randomStruct->outputAvailable = 0;
   
   return (0);
 }
 
-int R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigned int blockLen )
+int md5_R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigned int blockLen )
 //R_RANDOM_STRUCT *randomStruct;                          /* random structure */
 //unsigned char *block;                          /* block of values to mix in */
 //unsigned int blockLen;                                   /* length of block */
@@ -495,9 +528,9 @@ int R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigne
   unsigned char digest[64];
   unsigned int i, x;
   
-  MD5Init (&context);
-  MD5Update (&context, block, blockLen);
-  MD5Final (digest, &context);
+  md5_orig_init (&context);
+  md5_update (&context, block, blockLen);
+  md5_final (digest, &context);
 
   /* add digest to state */
   x = 0;
@@ -516,7 +549,7 @@ int R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigne
   
   /* Zeroize sensitive information.
    */
-  R_memset ((POINTER)digest, 0, sizeof (digest));
+  md5_R_memset ((POINTER)digest, 0, sizeof (digest));
   x = 0;
   
   return (0);
@@ -528,27 +561,27 @@ int R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, unsigne
      the same every time.  To produce random bytes, the random struct
      needs random seeds!
  */
-static void InitRandomStruct ( R_RANDOM_STRUCT *randomStruct )
+void md5_InitRandomStruct ( R_RANDOM_STRUCT *randomStruct )
 {
   static unsigned char seedByte = 0;
   unsigned int bytesNeeded;
   
-  R_RandomInit (randomStruct);
+  md5_R_RandomInit (randomStruct);
   
   /* Initialize with all zero seed bytes, which will not yield an actual
        random number output.
    */
   _Pragma("loopbound min 257 max 257")
   while (1) {
-    R_GetRandomBytesNeeded (&bytesNeeded, randomStruct);
+    md5_R_GetRandomBytesNeeded (&bytesNeeded, randomStruct);
     if (bytesNeeded == 0)
       break;
     
-    R_RandomUpdate (randomStruct, &seedByte, 1);
+    md5_R_RandomUpdate (randomStruct, &seedByte, 1);
   }
 }
 
-int R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomStruct )
+int md5_R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomStruct )
 //unsigned int *bytesNeeded;                 /* number of mix-in bytes needed */
 //R_RANDOM_STRUCT *randomStruct;                          /* random structure */
 {
@@ -557,24 +590,36 @@ int R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomS
   return (0);
 }
 
+void md5_init( void )
+{
+  // no initialisation needed
+}
 
-int main(void)
+int md5_main( void )
 {
   R_RANDOM_STRUCT randomStruct;
   R_RANDOM_STRUCT randomStruct2;
   /* We first generate parameters, and then do some key exchange each followed by a key computation...*/
   int keys_exchanged = 0;
   
-  InitRandomStruct (&randomStruct);
+  md5_InitRandomStruct (&randomStruct);
   
   _Pragma("loopbound min 10 max 10")
   while (keys_exchanged != EXCHANGEKEYS ) {
       keys_exchanged++;
-      InitRandomStruct (&randomStruct2);
+      md5_InitRandomStruct (&randomStruct2);
   }
 
   int ret = randomStruct.bytesNeeded + randomStruct2.bytesNeeded;
 
+  return ret;
+}
+
+int main( void )
+{
+  md5_init();
+  int ret = md5_main();
+  // printf("%d\n", ret);
   return ret;
 }
 

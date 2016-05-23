@@ -51,3 +51,13 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
   - ONE (used only once)
   - RIGHT_SHIFT (used only once)
   
+2016-04-05:
+- Return '0' on success
+
+2016-04-06:
+- Fixed generation of return value
+
+2016-04-21:
+- Fixed checksum value
+- Fixed license
+

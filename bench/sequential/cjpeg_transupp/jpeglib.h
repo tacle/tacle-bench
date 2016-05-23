@@ -16,7 +16,7 @@
 
   Original name: cjpeg
 
-  Changes: no major functional changes
+  Changes: No major functional changes.
 
   License: See the accompanying README file.
 

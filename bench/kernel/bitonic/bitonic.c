@@ -39,6 +39,7 @@ int bitonic_a[ 32 ];         // the array to be sorted
 const int BITONIC_ASCENDING = 1;
 const int BITONIC_DESCENDING = 0;
 
+const int BITONIC_CHECKSUM = 55;
 
 /*
   Initialization- and return-value-related functions
@@ -61,7 +62,7 @@ int bitonic_return( void )
 
   checksum += bitonic_a[ 0 ] + bitonic_a[ 21 ] + bitonic_a[ 31 ];
 
-  return ( checksum );
+  return ( ( checksum == BITONIC_CHECKSUM ) ? 0 : -1 );
 }
 
 

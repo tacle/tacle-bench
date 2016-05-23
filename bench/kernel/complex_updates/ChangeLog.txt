@@ -1,0 +1,25 @@
+File: complex_updates.c
+Original provenience: DSP-Stone
+
+2016-03-02:
+- Rename n_complex_updates_float to n_complex_updates
+- Add generic TACLeBench header
+- Prefix global function with benchmark name
+- Avoid accepting arbitrary number of parameters
+- Introduce return statement
+- Make A, B, C, D global variables
+- Split code into n_complex_updates_init and n_complex_updates_main
+2016-04-25:
+- Rename to complex_updates in order to shorten prefixes
+- Remove second call of pin_down, since this was originally used as a border for
+  constant propagation
+- Move pin_down call into init function
+- Add operation on input data with volatile variable to completely prevent 
+  constant propagation
+- Prefix all global symbols with benchmark name
+- Add calculation  of checksum on result data, which is used in return statement
+- Apply code formatting with clang-format (manually move loop-bound annotation 
+  into separate line and align assignments in complex_updates_main)
+2016-04-25:
+- Replace usages of macros by their expansions:
+  STORAGE_CLASS => register, TYPE => float

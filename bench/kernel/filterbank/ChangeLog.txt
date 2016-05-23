@@ -2,6 +2,10 @@ File: filterbank.c
 Original provenience: unknown 
 Source: unknown 
 
+2016-04-20:
+- Add static global variable filterbank_return_value that depends on the
+  computation inside of filterbank_main, return this value in filterbank_return.
+
 2016-01-06:
 - Added original name to generic TACLeBench header.
 - Applied TACLeBench formatting rules via

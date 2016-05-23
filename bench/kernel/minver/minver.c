@@ -14,8 +14,8 @@
 
     Changes: a brief summary of major functional changes (not formatting)
 
-    License:  may be used, modified, and re-distributed freely, but
-            the SNU-RT Benchmark Suite must be acknowledged
+    License: may be used, modified, and re-distributed freely, but
+             the SNU-RT Benchmark Suite must be acknowledged
 
 */
 

@@ -24,6 +24,7 @@ Original provenience:
 - Added generic TACLeBench header to line 1
 - Changed function {name} to bitcount_{name}
 - Changed global variable bits to bitcount_bits
+- Made int i volatile to prevent compiler optimalizations
 - Added the bitcount_init3() function to initialize bitcount_bits during the init fase
 - Applied Code Style 
 
@@ -36,6 +37,7 @@ Original provenience:
 - Added generic TACLeBench header to line 1
 - Changed function {name} to bitcount_{name}
 - Changed global variable bits to bitcount_bits
+- Made int i volatile to prevent compiler optimalizations
 - Added the bitcount_init4() function to initialize bitcount_bits during the init fase
 - Applied Code Style 
 

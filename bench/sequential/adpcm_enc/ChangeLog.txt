@@ -1,0 +1,34 @@
+File: adpcm_enc.c
+Original provenience: C Algorithms for Real-Time DSP by P. M. Embree
+
+2016-03-07:
+- Rename adpcm_encode to adpcm_enc
+- Add generic TACLeBench header
+- Remove #define Seoul_Mate around main
+- Remove swedish comment after setting frequency to 2000
+- Introduce adpcm_enc_init, adpcm_main, adpcm_return
+- Make test_data and compressed global variables
+2016-04-26:
+- Remove forward declarations of functions gaussian, iir_filter, fir_filter, 
+  fft, setup_codec, key_down, int_enable, int_disable, flags, getinput, 
+  sendout, which are never defined
+- Remove commented declarations of invqxl and invqah
+- Remove unused structure COMPLEX
+- Remove prefix my_ from functions names my_fabs, my_cos, my_sin, my_abs
+- Prefix all global symbols with benchmark name
+- Remove variables accumc and accumd together with their initialization loop, 
+  since they are never read 
+- Remove unused variables xs and xd
+- Remove unused array wl_table
+- Remove unused variable rs and rh
+- Remove unused variables and their initializations (only required for decoder):
+  ilr, yl, rl, dec_deth, dec_del_bpl, dec_plt, dec_plt1, dec_plt2, dec_szl, 
+  dec_spl, dec_sl, dec_rlt1, dec_rlt2, dec_rlt, dec_al1, dec_al2, dl, dec_nbl, 
+  dec_yh, dec_dh, dec_nbh, dec_rh2, dec_ah1, dec_ah2, dec_ph, dec_sph, dec_sh, 
+  dec_rh, dec_ph1, dec_ph2, 
+- Add addition on each element of input data with volatile variable to 
+  avoid constant-propagation optimizations through the compoiler 
+- Add computation of check sum
+- Add return return statement: zero if check sum is correct
+2016-05-20:
+- Apply code formatting with astyle

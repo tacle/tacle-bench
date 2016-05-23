@@ -1,0 +1,39 @@
+File: bsort.c
+Original provenience: Mälardalen benchmark suite,
+Source: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/bsort100/bsort100.c
+
+2016-04-20:
+- Check upon call of bsort_return that bsort_Array is sorted.
+
+2016-03-15:
+- Renamed file from bsort100.c to bsort.c.
+- Introduced comments to split file in sections for forward 
+  declarations, global variables, initialization-related and 
+  return-value-related functions, core benchmark functions, and 
+  main routine.
+- Added functions bsort_init and bsort_main that call 
+  bsort_Initialize and bsort_BubbleSort, respectively.  
+- Added function bsort_return that handles the return value.  
+- Renamed function Initialize to bsort_Initialize.
+- Renamed function BubbleSort to bsort_BubbleSort.
+- Replaced preprocessor defines NUMELEMS and MAXDIM by unificated
+  define bsort_SIZE, fixed bug that caused the first element of the
+  array to be ignored during sorting.
+- Replaced preprocessor defines TRUE, FALSE, WORSTCASE and
+  KNOWN_VALUE by their values.
+- Fixed compiler warning "unused variable 'Seed'" by removing the
+  offending variable.
+- Fixed compiler warning "no previous extern declaration for
+  non-static variable" by making global variables static.
+- Fixed compiler warning "unused variable 'LastIndex'" by removing 
+  the offending variable.
+- Fixed compiler warning "declaration shadows a variable in the
+  global scope" by renaming global variable Array to bsort_Array.
+- Fixed compiler warning "// comments are not allowed in this
+  language" by removing dead code.
+- Replaced comment describing purpose of benchmark with generic
+  TACLeBench header.
+- Applied TACLeBench formatting rules via
+  astyle --options=doc/example/astylerc.txt
+- Tested conformance to C90 via
+  clang -fsyntax-only -Weverything -Wno-unknown-pragmas -pedantic -std=c90

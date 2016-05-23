@@ -2,6 +2,9 @@ File: cover.c
 Original provenience: Mälardalen benchmark suite,
 Source: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/cover/cover.c
 
+2016-03-15:
+- Made sure that cover_return returns value 0.
+
 2016-01-06:
 - Added original name to generic TACLeBench header.
 - Applied TACLeBench formatting rules via

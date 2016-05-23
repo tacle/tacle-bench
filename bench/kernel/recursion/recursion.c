@@ -12,7 +12,9 @@
   Source: MRTC
           http://www.mrtc.mdh.se/projects/wcet/wcet_bench/recursion/recursion.c
 
-  License: general open-source
+  Changes: no major functional changes
+
+  License: May be used, modified, and re-distributed freely.
 
 */
 
@@ -35,7 +37,8 @@ int main ( void );
 
 void recursion_init()
 {
-  recursion_input = 10;
+  int volatile temp_input = 10;
+  recursion_input = temp_input;
 }
 
 
@@ -65,6 +68,5 @@ int main( void )
 {
   recursion_init();
   recursion_main();
-
-  return ( recursion_return() );
+  return ( recursion_return() + (-89) != 0 );
 }

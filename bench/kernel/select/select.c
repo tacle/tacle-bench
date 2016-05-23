@@ -38,15 +38,21 @@
 
   Changes: no major functional changes
 
-  License: unknown
+  License: may be used, modified, and re-distributed freely, but
+           the SNU-RT Benchmark Suite must be acknowledged
 
+*/
+
+/*
+  This program is derived from the SNU-RT Benchmark Suite for Worst
+  Case Timing Analysis by Sung-Soo Lim
 */
 
 /*
   Forward declaration of functions
 */
 void select_init( void );
-float select_return( void );
+int select_return( void );
 int select_main( void );
 int main( void );
 
@@ -58,6 +64,7 @@ int main( void );
 float select_selected = 0.0;
 float select_arr[ 20 ];
 
+const float SELECT_SELECTED_VALUE = 35.0f;
 
 #define SWAP(a,b) do { temp = (a); (a) = (b); (b) = temp; } while (0)
 
@@ -87,9 +94,9 @@ void select_init( void )
 }
 
 
-float select_return( void )
+int select_return( void )
 {
-  return select_selected;
+  return ( ( select_selected == SELECT_SELECTED_VALUE ) ? 0 : -1 );
 }
 
 

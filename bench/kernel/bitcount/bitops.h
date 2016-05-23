@@ -7,13 +7,13 @@
 
   Author: Bob Stout & Auke Reitsma
 
-  Function:
+  Function: test program for bit counting functions
 
   Source:
 
-  Changes: a brief summary of major functional changes (not formatting)
+  Changes: no major functional changes
 
-  License: general open-source
+  License: May be used, modified, and re-distributed freely.
 
 */
 
@@ -36,6 +36,7 @@ int bitcount_bitcount( long i );
 **  bitcount_3.c
 */
 void bitcount_init3( void );
+int bitcount_ntbl_bitcount( long int x );
 int bitcount_BW_btbl_bitcount( long int x );
 int bitcount_AR_btbl_bitcount( long int x );
 

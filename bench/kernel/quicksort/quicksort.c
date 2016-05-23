@@ -15,7 +15,7 @@
 
   Original name: qsort
 
-  Changes: no major functional changes
+  Changes: No major functional changes.
 
   License: GPL
 
@@ -112,7 +112,7 @@ int quicksort_return( void )
 
 void quicksort_str( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
 
 
@@ -163,7 +163,7 @@ void quicksort_str( char *a, unsigned long n, unsigned long es )
 
 void quicksort_vec( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
 
 
@@ -235,5 +235,5 @@ int main( void )
   quicksort_init();
   quicksort_main();
 
-  return ( quicksort_return() );
+  return ( quicksort_return() - 1527923179 != 0 );
 }

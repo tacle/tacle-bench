@@ -10,6 +10,7 @@ Original provenience: Lift Controller, see README file
   only run_lift remains, i.e., test_lift.data.c/h and test_lift.c removed.
 - Makefile removed, file can now be compiled using 'gcc lift.c'
 - 'uint16_t' replaced by 'unsigned short int' to get rid of 'stdint.h;
+- changed LEVEL_POS_LENGTH from 14 to 16 (16 values were initialized).
 - added an additional global variable 'int checksum'
 - added function pre-fix 'lift_' to each function
 - added function int lift_return() returning the checksum and lift_init()
