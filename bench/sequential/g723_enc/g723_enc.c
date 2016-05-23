@@ -202,7 +202,7 @@ int g723_enc_fmult(
   int   srn )
 {
   short   anmag, anexp, anmant;
-  short   wanexp, wanmag, wanmant;
+  short   wanexp, wanmant;
   short   retval;
 
   anmag = ( an > 0 ) ? an : ( ( -an ) & 0x1FFF );
@@ -295,11 +295,6 @@ int
 g723_enc_predictor_pole(
   struct g723_enc_state *state_ptr )
 {
-  int retval1 , retval2, retval;
-
-  retval1 = g723_enc_fmult( state_ptr->a[1] >> 2, state_ptr->sr[1] );
-  retval2 = g723_enc_fmult( state_ptr->a[0] >> 2, state_ptr->sr[0] );
-
   return ( g723_enc_fmult( state_ptr->a[1] >> 2, state_ptr->sr[1] ) +
            g723_enc_fmult( state_ptr->a[0] >> 2, state_ptr->sr[0] ) );
 }
@@ -437,12 +432,11 @@ g723_enc_update(
   struct g723_enc_state *state_ptr )  /* coder state pointer */
 {
   int   cnt;
-  short   mag, exp, mant; /* Adaptive predictor, FLOAT A */
+  short   mag, exp; /* Adaptive predictor, FLOAT A */
   short   a2p;    /* LIMC */
   short   a1ul;   /* UPA1 */
-  short   ua2, pks1;  /* UPA2 */
-  short   uga2a, fa1;
-  short   uga2b;
+  short   pks1;  /* UPA2 */
+  short   fa1;
   char    tr;   /* tone/transition detector */
   short   ylint, thr2, dqthr;
   short     ylfrac, thr1;
@@ -848,21 +842,16 @@ int g723_enc_return()
 void _Pragma( "entrypoint" ) g723_enc_main()
 {
 //  struct g72x_state state;
-  unsigned char   sample_char;
   short   sample_short; //mv
   unsigned char   code;
   int     resid;
   int     in_coding;
-  int     in_size;
   unsigned    *in_buf;
-  int     ( *enc_routine )();
   int     enc_bits;
-  char path[80];
   int i = 0;
 
   enc_bits = 3;
   in_coding = AUDIO_ENCODING_ALAW;
-  in_size = sizeof ( short );
   in_buf = ( unsigned * )&sample_short;
 
   _Pragma( "loopbound min 256 max 256" )
