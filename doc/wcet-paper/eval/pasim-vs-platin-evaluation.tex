@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+
+\def\resultfile{wcet.csv}
+%
+\begin{document}
+%
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  xtick=data,
+  ymin=-1,
+  width=18cm,
+  height=10cm,
+  axis y line*=left,
+  ylabel={\# Cycles},
+  xlabel={Benchmark},
+  xticklabels={},
+]
+
+\addplot +[
+  nodes near coords,
+  point meta=explicit symbolic
+  ]
+  table [x=position,
+      y=pasim,
+      meta=benchmark,
+] {\resultfile};
+
+\end{axis}
+\end{tikzpicture}
+\end{document}
