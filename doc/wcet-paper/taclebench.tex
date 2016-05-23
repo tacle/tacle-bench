@@ -61,7 +61,11 @@
 \maketitle
 
 \begin{abstract}
+\todo{Martin will work on this.}
+
 We need benchmarks that fit the WCET and embedded community needs,
+
+
  \end{abstract}
 
 \section{Notes}
@@ -78,6 +82,26 @@ We need benchmarks that fit the WCET and embedded community needs,
 
 \section{Introduction}
 \label{sec:intro}
+
+\todo{Martin will work on this.}
+
+     Good, realistic benchmark suites are essential for the evaluation and comparison of code-level timing analysis techniques. Existing benchmarking suites for CLTA do not cover multi-core software. TACLeBench provides a freely available and comprehensive benchmark suite for timing analysis, featuring complex multi-core benchmarks in the near future. TACLeBench will be continuously extended by novel benchmarks, especially by parallel multi-task/multi-core benchmarks. The overall goal is to establish TACLeBench as the standard benchmarking suite for timing analysis worldwide.
+
+    TACLeBench is a collection of currently 102 benchmark programs from several different research groups and tool vendors around the world. These benchmarks are provided as ANSI-C 99 source codes. The source codes are 100\% self-contained; no dependencies to system-specific header files via \code{\#include} directives exist, eventually used functions from math libraries are also provided in the form of C source code. Furthermore, almost all benchmarks are processor-independent and can be compiled and evaluated for any kind of target processor. The only exception is PapaBench which uses architecture-dependent I/O addresses and which currently supports Atmel AVR processors.
+
+    Since TACLeBench addresses the needs imposed by timing analysis tools, all benchmarks are completely annotated with flow facts. These flow facts are directly incorporated into the ANSI-C source codes using Pragmas at a high level of abstraction. For example, the following source code snippet states that the shown loop iterates between 50 and 100 times, depending on the data dependency via variable \code{maxIter}:
+
+\begin{verbatim}
+      _Pragma( "loopbound min 50 max 100" )
+
+      for ( i = 1; i <= maxIter; i++ )
+
+        Array[i] = i * fact * KNOWN_VALUE;
+
+\end{verbatim}
+    You can find a complete description of the used flow fact language in the download section of this website.
+
+    If you would like to share your very own benchmarks with us, feel free to contact Heiko Falk (Heiko (dot) Falk (at) tuhh (dot) de) in order to have your source codes included in TACLeBench.
 
 \todo{A brief introduction what the paper is about. It shall include briefly the
 main contributions and findings. The contributions can be bullet listed.}
