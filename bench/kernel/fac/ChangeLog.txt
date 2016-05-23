@@ -15,5 +15,7 @@ Original provenience: MDH WCET BENCHMARK SUITE
    return-value-related functions first, followed by algorithm core
    functions, followed by main functions
  - Applied code formatting with astyle as in the example
+
+2016-03-09:
  - Subtract expected result from return value, such that the return code of the
    program is 0 if success.

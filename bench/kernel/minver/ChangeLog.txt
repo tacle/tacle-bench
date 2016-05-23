@@ -20,3 +20,10 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
    return-value-related functions first, followed by algorithm core
    functions, followed by main functions
  - Applied code formatting with astyle as in the example
+
+2016-03-09
+ - Removed static keyword from global minver_a array.
+
+2016-05-23
+ - Added addition of volatile to test data to avoid constant propagation
+ - Added check_sum and comparison with expected value

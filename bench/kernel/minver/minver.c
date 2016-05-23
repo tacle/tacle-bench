@@ -42,7 +42,7 @@ int main( void );
     Declaration of global variables
 */
 
-static double  minver_a[ 3 ][ 3 ] = {
+double  minver_a[ 3 ][ 3 ] = {
   3.0, -6.0,  7.0,
   9.0,  0.0, -5.0,
   5.0, -8.0,  6.0,
@@ -51,25 +51,7 @@ double minver_b[ 3 ][ 3 ];
 double minver_c[ 3 ][ 3 ];
 double minver_aa[ 3 ][ 3 ];
 double minver_a_i[ 3 ][ 3 ];
-double minver_e[ 3 ][ 3 ];
 double minver_det;
-
-
-/*
-    Initialization- and return-value-related functions
-*/
-
-void minver_init()
-{
-
-}
-
-
-int minver_return()
-{
-  return 0;
-}
-
 
 /*
     Arithmetic math functions
@@ -213,6 +195,39 @@ int minver_minver( int row, int col, double eps )
   minver_det = w1;
   return ( 0 );
 
+}
+
+/*
+    Initialization- and return-value-related functions
+*/
+
+void minver_init()
+{
+  int i,j;
+  volatile int x = 0;
+
+  _Pragma( "loopbound min 3 max 3" )
+  for ( i = 0; i < 3; i++ ) {
+    _Pragma( "loopbound min 3 max 3" )
+    for ( j = 0; j < 3; j++ )
+      minver_a[ i ][ j ] += x;
+  }
+}
+
+
+int minver_return()
+{
+  int i,j;
+  double check_sum = 0;
+
+  _Pragma( "loopbound min 3 max 3" )
+  for ( i = 0; i < 3; i++ ) {
+    _Pragma( "loopbound min 3 max 3" )
+    for ( j = 0; j < 3; j++ )
+      check_sum += minver_a_i[ i ][ j ];
+  }
+  /* Avoid double comparison */
+  return (int)(check_sum*100) != 48;
 }
 
 

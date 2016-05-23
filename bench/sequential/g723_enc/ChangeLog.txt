@@ -14,3 +14,13 @@ Original provenience: SUN Microsystems
    return-value-related functions first, followed by algorithm core
    functions, followed by main functions
  - Applied code formatting with astyle as in the example
+
+ 2016-03-09:
+ - Renamed global variables, prepended g723_enc_
+ - Removed static keyword from global variables
+ - Renamed datatype from g723_enc_g72x_state to g723_enc_state
+ - Renamed function g723_enc_g72x_init_state to g723_enc_init_state
+
+ 2016-05-23:
+ - Added initialization with volatile int
+ - Added check_sum and comparison with expected result

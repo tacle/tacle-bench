@@ -30,7 +30,7 @@
    to variable names in the bit level description of the coding algorithm
    included in this Recommendation.
 */
-struct g723_enc_g72x_state {
+struct g723_enc_state {
   long yl;  /* Locked or steady state step size multiplier. */
   short yu; /* Unlocked or non-steady state step size multiplier. */
   short dms;  /* Short term energy estimate. */
@@ -62,11 +62,11 @@ struct g723_enc_g72x_state {
 */
 
 int g723_enc_abs( int num );
-void g723_enc_g72x_init_state( struct g723_enc_g72x_state *state_ptr );
-int g723_enc_predictor_zero( struct g723_enc_g72x_state *state_ptr );
+void g723_enc_init_state( struct g723_enc_state *state_ptr );
+int g723_enc_predictor_zero( struct g723_enc_state *state_ptr );
 int g723_enc_fmult( int an, int srn );
-int g723_enc_predictor_pole( struct g723_enc_g72x_state *state_ptr );
-int g723_enc_step_size( struct g723_enc_g72x_state *state_ptr );
+int g723_enc_predictor_pole( struct g723_enc_state *state_ptr );
+int g723_enc_step_size( struct g723_enc_state *state_ptr );
 int g723_enc_quantize(
   int   d,  /* Raw difference signal sample */
   int   y,  /* Step size multiplier */
@@ -84,7 +84,7 @@ void g723_enc_update(
   int   dq,   /* quantized prediction difference */
   int   sr,   /* reconstructed signal */
   int   dqsez,    /* difference from 2-pole predictor */
-  struct g723_enc_g72x_state *state_ptr ); /* coder state pointer */
+  struct g723_enc_state *state_ptr ); /* coder state pointer */
 int g723_enc_quan(
   int   val,
   short   *table,
@@ -98,7 +98,7 @@ int g723_enc_ulaw2linear( unsigned char u_val );
 int g723_enc_g723_24_encoder(
   int sample,
   int in_coding,
-  struct g723_enc_g72x_state *state_ptr );
+  struct g723_enc_state *state_ptr );
 int g723_enc_pack_output(
   unsigned  char  code,
   int     bits );
@@ -112,9 +112,9 @@ int main( void );
   Declaration of global variables
 */
 
-struct g723_enc_g72x_state state;
+struct g723_enc_state state;
 
-unsigned int INPUT[256] = {
+unsigned int g723_enc_INPUT[256] = {
   51, 17, 31, 53, 95, 17, 70, 22, 49, 12,  8, 39, 28, 37, 99, 54,
   77, 65, 77, 78, 83, 15, 63, 31, 35, 92, 52, 40, 61, 79, 94, 87,
   87, 68, 76, 58, 39, 35, 20, 83, 42, 46, 98, 12, 21, 96, 74, 41,
@@ -135,9 +135,9 @@ unsigned int INPUT[256] = {
 
 
 
-unsigned int OUTPUT[256];
+unsigned int g723_enc_OUTPUT[256];
 
-short power2[15] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
+short g723_enc_power2[15] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
                     0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000
                    };
 
@@ -147,18 +147,18 @@ short power2[15] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
    magnitude values.
 */
 
-short qtab_723_24[3] = {8, 218, 331};
+short g723_enc_qtab_723_24[3] = {8, 218, 331};
 
 /*
    Maps G.721 code word to reconstructed scale factor normalized log
    magnitude values.
 */
-static short  _dqlntab[16] = { -2048, 4, 135, 213, 273, 323, 373, 425,
+short  g723_enc_dqlntab[16] = { -2048, 4, 135, 213, 273, 323, 373, 425,
                                425, 373, 323, 273, 213, 135, 4, -2048
                              };
 
 /* Maps G.721 code word to log of scale factor multiplier. */
-static short  _witab[16] = { -12, 18, 41, 64, 112, 198, 355, 1122,
+short  g723_enc_witab[16] = { -12, 18, 41, 64, 112, 198, 355, 1122,
                              1122, 355, 198, 112, 64, 41, 18, -12
                            };
 /*
@@ -166,7 +166,7 @@ static short  _witab[16] = { -12, 18, 41, 64, 112, 198, 355, 1122,
    term averages are computed and then compared to give an indication
    how stationary (steady state) the signal is.
 */
-static short  _fitab[16] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
+short g723_enc_fitab[16] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
                             0xE00, 0x600, 0x200, 0x200, 0x200, 0, 0, 0
                            };
 
@@ -188,56 +188,6 @@ static short  _fitab[16] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
 #define SEG_MASK  (0x70)    /* Segment field mask. */
 
 /*
-  Initialization- and return-value-related functions
-*/
-
-/*
-   g723_enc_g72x_init_state()
-
-   This routine initializes and/or resets the g72x_state structure
-   pointed to by 'state_ptr'.
-   All the initial state values are specified in the CCITT G.721 document.
-*/
-void
-g723_enc_g72x_init_state(
-  struct g723_enc_g72x_state *state_ptr )
-{
-  int   cnta;
-
-  state_ptr->yl = 34816;
-  state_ptr->yu = 544;
-  state_ptr->dms = 0;
-  state_ptr->dml = 0;
-  state_ptr->ap = 0;
-
-  _Pragma( "loopbound min 2 max 2" )
-  for ( cnta = 0; cnta < 2; cnta++ ) {
-    state_ptr->a[cnta] = 0;
-    state_ptr->pk[cnta] = 0;
-    state_ptr->sr[cnta] = 32;
-  }
-  _Pragma( "loopbound min 6 max 6" )
-  for ( cnta = 0; cnta < 6; cnta++ ) {
-    state_ptr->b[cnta] = 0;
-    state_ptr->dq[cnta] = 32;
-  }
-  state_ptr->td = 0;
-}
-
-
-void g723_enc_init()
-{
-  g723_enc_g72x_init_state( &state );
-}
-
-
-int g723_enc_return()
-{
-  return 0;
-}
-
-
-/*
   Arithmetic math functions
 */
 
@@ -256,7 +206,7 @@ int g723_enc_fmult(
   short   retval;
 
   anmag = ( an > 0 ) ? an : ( ( -an ) & 0x1FFF );
-  anexp = g723_enc_quan( anmag, power2, 3 ) - 6;
+  anexp = g723_enc_quan( anmag, g723_enc_power2, 3 ) - 6;
   anmant = ( anmag == 0 ) ? 32 :
            ( anexp >= 0 ) ? anmag >> anexp : anmag << -anexp;
   wanexp = anexp + ( ( srn >> 6 ) & 0xF ) - 13;
@@ -321,7 +271,7 @@ int g723_enc_quan(
 */
 int
 g723_enc_predictor_zero(
-  struct g723_enc_g72x_state *state_ptr )
+  struct g723_enc_state *state_ptr )
 {
   int   i;
   int   sezi;
@@ -343,7 +293,7 @@ g723_enc_predictor_zero(
 */
 int
 g723_enc_predictor_pole(
-  struct g723_enc_g72x_state *state_ptr )
+  struct g723_enc_state *state_ptr )
 {
   int retval1 , retval2, retval;
 
@@ -362,7 +312,7 @@ g723_enc_predictor_pole(
 */
 int
 g723_enc_step_size(
-  struct g723_enc_g72x_state *state_ptr )
+  struct g723_enc_state *state_ptr )
 {
   int   y;
   int   dif;
@@ -413,7 +363,7 @@ g723_enc_quantize(
      Compute base 2 log of 'd', and store in 'dl'.
   */
   dqm = g723_enc_abs( d );
-  exp = g723_enc_quan( dqm >> 1, power2, 15 );
+  exp = g723_enc_quan( dqm >> 1, g723_enc_power2, 15 );
   mant = ( ( dqm << 7 ) >> exp ) & 0x7F;  /* Fractional portion. */
   dl = ( exp << 7 ) + mant;
 
@@ -484,7 +434,7 @@ g723_enc_update(
   int   dq,   /* quantized prediction difference */
   int   sr,   /* reconstructed signal */
   int   dqsez,    /* difference from 2-pole predictor */
-  struct g723_enc_g72x_state *state_ptr )  /* coder state pointer */
+  struct g723_enc_state *state_ptr )  /* coder state pointer */
 {
   int   cnt;
   short   mag, exp, mant; /* Adaptive predictor, FLOAT A */
@@ -625,7 +575,7 @@ g723_enc_update(
   if ( mag == 0 )
     state_ptr->dq[0] = ( dq >= 0 ) ? 0x20 : 0xFC20;
   else {
-    exp = g723_enc_quan( mag, power2, 15 );
+    exp = g723_enc_quan( mag, g723_enc_power2, 15 );
     state_ptr->dq[0] = ( dq >= 0 ) ?
                        ( exp << 6 ) + ( ( mag << 6 ) >> exp ) :
                        ( exp << 6 ) + ( ( mag << 6 ) >> exp ) - 0x400;
@@ -638,12 +588,12 @@ g723_enc_update(
     state_ptr->sr[0] = 0x20;
   else
     if ( sr > 0 ) {
-      exp = g723_enc_quan( sr, power2, 15 );
+      exp = g723_enc_quan( sr, g723_enc_power2, 15 );
       state_ptr->sr[0] = ( exp << 6 ) + ( ( sr << 6 ) >> exp );
     } else
       if ( sr > -32768 ) {
         mag = -sr;
-        exp = g723_enc_quan( mag, power2, 15 );
+        exp = g723_enc_quan( mag, g723_enc_power2, 15 );
         state_ptr->sr[0] =  ( exp << 6 ) + ( ( mag << 6 ) >> exp ) - 0x400;
       } else
         state_ptr->sr[0] = 0xFC20;
@@ -754,7 +704,7 @@ int
 g723_enc_g723_24_encoder(
   int   sl,
   int   in_coding,
-  struct g723_enc_g72x_state *state_ptr )
+  struct g723_enc_state *state_ptr )
 {
   short   sei, sezi, se, sez; /* ACCUM */
   short   d;      /* SUBTA */
@@ -786,14 +736,14 @@ g723_enc_g723_24_encoder(
 
   /* quantize prediction difference d */
   y = g723_enc_step_size( state_ptr ); /* quantizer step size */
-  i = g723_enc_quantize( d, y, qtab_723_24, 3 ); /* i = ADPCM code */
-  dq = g723_enc_reconstruct( i & 4, _dqlntab[i], y ); /* quantized diff. */
+  i = g723_enc_quantize( d, y, g723_enc_qtab_723_24, 3 ); /* i = ADPCM code */
+  dq = g723_enc_reconstruct( i & 4, g723_enc_dqlntab[i], y ); /* quantized diff. */
 
   sr = ( dq < 0 ) ? se - ( dq & 0x3FFF ) : se + dq; /* reconstructed signal */
 
   dqsez = sr + sez - se;    /* pole prediction diff. */
 
-  g723_enc_update( 3, y, _witab[i], _fitab[i], dq, sr, dqsez, state_ptr );
+  g723_enc_update( 3, y, g723_enc_witab[i], g723_enc_fitab[i], dq, sr, dqsez, state_ptr );
 
   return ( i );
 }
@@ -820,13 +770,76 @@ g723_enc_pack_output(
     out_buffer >>= 8;
     //fwrite(&out_byte, sizeof (char), 1, fp_out);
     //fwrite(&out_byte, 1, 1, fp_out);
-    OUTPUT[i] = out_byte;
+    g723_enc_OUTPUT[i] = out_byte;
     i =  i + 1;
   }
 
   return ( out_bits > 0 );
 }
 
+/*
+  Initialization- and return-value-related functions
+*/
+
+/*
+   g723_enc_init_state()
+
+   This routine initializes and/or resets the g72x_state structure
+   pointed to by 'state_ptr'.
+   All the initial state values are specified in the CCITT G.721 document.
+*/
+void
+g723_enc_init_state(
+  struct g723_enc_state *state_ptr )
+{
+  int   cnta;
+
+  state_ptr->yl = 34816;
+  state_ptr->yu = 544;
+  state_ptr->dms = 0;
+  state_ptr->dml = 0;
+  state_ptr->ap = 0;
+
+  _Pragma( "loopbound min 2 max 2" )
+  for ( cnta = 0; cnta < 2; cnta++ ) {
+    state_ptr->a[cnta] = 0;
+    state_ptr->pk[cnta] = 0;
+    state_ptr->sr[cnta] = 32;
+  }
+  _Pragma( "loopbound min 6 max 6" )
+  for ( cnta = 0; cnta < 6; cnta++ ) {
+    state_ptr->b[cnta] = 0;
+    state_ptr->dq[cnta] = 32;
+  }
+  state_ptr->td = 0;
+}
+
+
+void g723_enc_init()
+{
+  int i;
+  volatile int x = 0;
+  g723_enc_init_state( &state );
+
+   _Pragma( "loopbound min 256 max 256" )
+  for ( i = 0; i < 256; i++ ) {
+    g723_enc_INPUT[i] += x;
+  }
+}
+
+
+int g723_enc_return()
+{ 
+  int i;
+  int check_sum = 0;
+
+   _Pragma( "loopbound min 256 max 256" )
+  for ( i = 0; i < 256; i++ ) {
+    check_sum += g723_enc_OUTPUT[i];
+  }
+
+  return ( check_sum != 24284 );
+}
 
 /*
   Main functions
@@ -854,7 +867,7 @@ void _Pragma( "entrypoint" ) g723_enc_main()
 
   _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < 256; i++ ) {
-    *in_buf = INPUT[i];
+    *in_buf = g723_enc_INPUT[i];
     code = g723_enc_g723_24_encoder( sample_short, in_coding, &state );
     resid = g723_enc_pack_output( code, enc_bits );
   }
