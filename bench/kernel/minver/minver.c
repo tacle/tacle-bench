@@ -43,9 +43,9 @@ int main( void );
 */
 
 double  minver_a[ 3 ][ 3 ] = {
-  3.0, -6.0,  7.0,
-  9.0,  0.0, -5.0,
-  5.0, -8.0,  6.0,
+  {3.0, -6.0,  7.0},
+  {9.0,  0.0, -5.0},
+  {5.0, -8.0,  6.0},
 };
 double minver_b[ 3 ][ 3 ];
 double minver_c[ 3 ][ 3 ];
@@ -102,7 +102,7 @@ int  minver_mmul( int row_a, int col_a, int row_b, int col_b )
 int minver_minver( int row, int col, double eps )
 {
 
-  int work[ 500 ], i, j, k, r, iw, s, t, u, v;
+  int work[ 500 ], i, j, k, r, iw;
   double w, wmax, pivot, api, w1;
 
   if ( row < 2 || row > 500 || eps <= 0.0 )
@@ -129,8 +129,6 @@ int minver_minver( int row, int col, double eps )
       return ( 1 );
     }
     w1 *= pivot;
-    u = k * col;
-    v = r * col;
     if ( r != k ) {
       w1 = -w;
       iw = work[ k ];
@@ -138,8 +136,6 @@ int minver_minver( int row, int col, double eps )
       work[ r ] = iw;
       _Pragma( "loopbound min 3 max 3" )
       for ( j = 0; j < row; j++ ) {
-        s = u + j;
-        t = v + j;
         w = minver_a[ k ][ j ];
         minver_a[ k ][ j ] = minver_a[ r ][ j ];
         minver_a[ r ][ j ] = w;
@@ -151,8 +147,6 @@ int minver_minver( int row, int col, double eps )
     _Pragma( "loopbound min 3 max 3" )
     for ( i = 0; i < row; i++ ) {
       if ( i != k ) {
-        v = i * col;
-        s = v + k;
         w = minver_a[ i ][ k ];
         if ( w != 0.0 ) {
           _Pragma( "loopbound min 3 max 3" )
@@ -182,9 +176,6 @@ int minver_minver( int row, int col, double eps )
       work[ i ] = iw;
       _Pragma( "loopbound min 3 max 3" )
       for ( j = 0; j < row; j++ ) {
-        u = j * col;
-        s = u + i;
-        t = u + k;
         w = minver_a [k ][ i ];
         minver_a[ k ][ i ] = minver_a[ k ][ k ];
         minver_a[ k ][ k ] = w;
