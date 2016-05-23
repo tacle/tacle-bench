@@ -20,3 +20,10 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
    return-value-related functions first, followed by algorithm core
    functions, followed by main functions
  - Applied code formatting with astyle as in the example
+
+2016-03-09:
+ - Removed static keyword for global variables
+ - Renamed global variables, prepended adpcm_dec
+
+ 2016-05-23:
+ - Check sum added and checked against the expected value
