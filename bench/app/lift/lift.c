@@ -85,7 +85,7 @@ void lift_init()
 
 int lift_return()
 {
-  return ( lift_checksum - 4006889 != 0 );
+  return ( lift_checksum - 4005888 != 0 );
 }
 
 

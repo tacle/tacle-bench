@@ -2,7 +2,7 @@
 #include "liftlibcontrol.h"
 
 /* Global variables */
-int lift_levelPos[14];
+int lift_levelPos[16];
 int lift_one_level;
 
 /**
