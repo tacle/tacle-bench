@@ -15,3 +15,7 @@ Original provenience: David Bourgin (David.Bourgin@ufrima.imag.fr)
 - Added generic TACLeBench header replacing previous header
 - Included license from compress.txt
 - Applied code formatting with astyle
+
+2016-05-24:
+- Changed type of j to unsigned to avoid warning
+- Removed static declarations
