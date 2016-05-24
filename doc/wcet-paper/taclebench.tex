@@ -31,28 +31,28 @@
 \title{TACLeBench -- Title is TBD\footnote{This work was partially supported by COST Action IC1202 Timing Analysis on Code-Level (TACLe).}}
 %\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
 
+% Heiko first, rest in alphabetical order
 \author[1]{Heiko Falk}
-\author[6]{Sebastian Altmeyer}
+\author[2]{Sebastian Altmeyer}
 \author[3]{Bj{\"o}rn Lisper}
-\author[2]{Wolfgang Puffitsch}
-\author[4]{Christine Rochange}
-\author[2]{Martin Schoeberl}
-\author[2]{Rasmus Bo S{\o}rensen}
-\author[5]{Peter W{\"a}gemann}
-\author[2]{Add yourself in alphabetical order, but keep Heiko first.}
+\author[4]{Wolfgang Puffitsch}
+\author[5]{Christine Rochange}
+\author[4]{Martin Schoeberl}
+\author[4]{Rasmus Bo S{\o}rensen}
+\author[6]{Peter W{\"a}gemann}
 \affil[1]{Dummy University Computing Laboratory\\
   Address, Country\\
   \texttt{open@dummyuni.org}}
-\affil[2]{Technical University of Denmark, Department of Applied Mathematics and Computer Science, Denmark\\
-  \texttt{\{wopu, masca,rboso\}@dtu.dk}}
+\affil[2]{University of Amsterdam, The Netherlands\\
+  \texttt{altmeyer@uva.nl}}
 \affil[3]{M{\"a}lardalen, University, School of Innovation, Design, and Engineering, Sweden\\
   \texttt{bjorn.lisper@mdh.se}}
-\affil[4]{University of Toulouse, France\\
+\affil[4]{Technical University of Denmark, Department of Applied Mathematics and Computer Science, Denmark\\
+  \texttt{\{wopu, masca,rboso\}@dtu.dk}}
+\affil[5]{University of Toulouse, France\\
   \texttt{rochange@irit.fr}}
-\affil[5]{Friedrich-Alexander University Erlangen-Nürnberg, Germany\\
+\affil[6]{Friedrich-Alexander University Erlangen-Nürnberg, Germany\\
   \texttt{waegemann@cs.fau.de}}
-\affil[5]{University of Amsterdam, The Netherlands\\
-  \texttt{altmeyer@uva.nl}}
 
   \authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
@@ -385,7 +385,14 @@ Therefore, there shall always be an evaluation section.}
 \end{figure}
 
 \subsection{Checking Sanity}
-\todo{Comparison compiler warning in TACLeBench v1 with v2}
+In order to improve the code quality of the TACLeBench suite, we used different 
+compilers (e.g., clang, gcc) to identify shortcomings in the code of each benchmark in an 
+automated way. Additionally, we exploited Clang's static 
+analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} to further reveal 
+programming bugs in the benchmark suite. We extended this sanity checker with additional 
+TACLeBench-specific passes to identify if all benchmark are compliant to the code-formatting rules.
+\todo{Comparison compiler warning in TACLeBench v1 with v2, problem: expint was in 1.0, but is no 
+longer in 2.0 and PowerWindow was added for 2.0}
 
 Possible Options for the Evaluation:
 
