@@ -113,7 +113,7 @@ void h264_dec_decode_one_macroblock( struct h264_dec_img_par *img )
   int ii0, jj0, ii1, jj1, if1, jf1, if0, jf0;
   int f1_x, f1_y, f2_x, f2_y, f3, f4;
 
-  short ref_idx, fw_refframe = -1, bw_refframe = -1;
+  short fw_refframe = -1, bw_refframe = -1;
   int mv_mode, pred_dir, intra_prediction; // = currMB->ref_frame;
   short fw_ref_idx = -1, bw_ref_idx = -1;
 
