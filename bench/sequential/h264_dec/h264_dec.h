@@ -7,10 +7,10 @@ typedef enum {
   I_SLICE,
   SP_SLICE,
   SI_SLICE
-} h264dec_SliceType;
+} h264_dec_SliceType;
 
 // image parameters
-typedef struct h264dec_img_par {
+typedef struct h264_dec_img_par {
   int direct_spatial_mv_pred_flag;
   int type;
   int width_cr;
@@ -24,6 +24,6 @@ typedef struct h264dec_img_par {
   int mb_cr_size_x;
   int mb_cr_size_y;
 
-} h264dec_ImageParameters;
+} h264_dec_ImageParameters;
 
 #endif

@@ -3,7 +3,7 @@
   This program is part of the TACLeBench benchmark suite.
   Version V 2.0
 
-  Name: h264dec_ldecode_macroblock.c
+  Name: h264_dec_ldecode_macroblock.c
 
   Author: Inge Lille-Langoy et al.
 
@@ -12,7 +12,7 @@
   Source: MediaBench II
           http://euler.slu.edu/~fritts/mediabench (mirror)
 
-  Original name: h264dec_ldecode_macroblock.c
+  Original name: h264_dec_ldecode_macroblock.c
 
   Changes: no functional changes
 
@@ -32,10 +32,10 @@
   Forward declaration of functions
 */
 
-void h264dec_init ();
-int h264dec_return ();
-void h264dec_decode_one_macroblock( struct h264dec_img_par *img );
-void h264dec_main( void );
+void h264_dec_init ();
+int h264_dec_return ();
+void h264_dec_decode_one_macroblock( struct h264_dec_img_par *img );
+void h264_dec_main( void );
 int main( void );
 
 
@@ -43,26 +43,26 @@ int main( void );
   Declaration of global variables
 */
 
-extern signed char h264dec_mv_array[65][65][2];
-extern short h264dec_list_imgUV[2][45][45];
-extern int h264dec_img_m7[16][16];
+extern signed char h264_dec_mv_array[65][65][2];
+extern short h264_dec_list_imgUV[2][45][45];
+extern int h264_dec_img_m7[16][16];
 
-char h264dec_img_mpr[7][7];
-char h264dec_dec_picture_imgUV[2][64][54];
-struct h264dec_img_par h264dec_img;
+char h264_dec_img_mpr[7][7];
+char h264_dec_dec_picture_imgUV[2][64][54];
+struct h264_dec_img_par h264_dec_img;
 
 
 /*
   Initialization- and return-value-related functions
 */
 
-int h264dec_return ()
+int h264_dec_return ()
 {
-  return ( h264dec_img_mpr[0][0] + h264dec_dec_picture_imgUV[0][0][0] + 128 !=
+  return ( h264_dec_img_mpr[0][0] + h264_dec_dec_picture_imgUV[0][0][0] + 128 !=
            0 );
 }
 
-void h264dec_init ()
+void h264_dec_init ()
 {
   unsigned int i;
   unsigned char *p;
@@ -71,32 +71,32 @@ void h264dec_init ()
   /*
     Apply volatile XOR-bitmask to entire input array.
   */
-  p = ( unsigned char * ) &h264dec_mv_array[ 0 ];
+  p = ( unsigned char * ) &h264_dec_mv_array[ 0 ];
   _Pragma( "loopbound min 33800 max 33800" )
-  for ( i = 0; i < sizeof( h264dec_mv_array ); ++i, ++p )
+  for ( i = 0; i < sizeof( h264_dec_mv_array ); ++i, ++p )
     *p ^= bitmask;
 
-  p = ( unsigned char * ) &h264dec_list_imgUV[ 0 ];
+  p = ( unsigned char * ) &h264_dec_list_imgUV[ 0 ];
   _Pragma( "loopbound min 16200 max 16200" )
-  for ( i = 0; i < sizeof( h264dec_list_imgUV ); ++i, ++p )
+  for ( i = 0; i < sizeof( h264_dec_list_imgUV ); ++i, ++p )
     *p ^= bitmask;
 
-  p = ( unsigned char * ) &h264dec_img_m7[ 0 ];
+  p = ( unsigned char * ) &h264_dec_img_m7[ 0 ];
   _Pragma( "loopbound min 1024 max 1024" )
-  for ( i = 0; i < sizeof( h264dec_img_m7 ); ++i, ++p )
+  for ( i = 0; i < sizeof( h264_dec_img_m7 ); ++i, ++p )
     *p ^= bitmask;
 
-  h264dec_img.mb_cr_size_x = 8;
-  h264dec_img.mb_cr_size_y = 8;
-  h264dec_img.num_blk8x8_uv = 2;
-  h264dec_img.pix_c_x = 256;
-  h264dec_img.pix_c_y = 256;
-  h264dec_img.width_cr = 352;
-  h264dec_img.apply_weights = 0;
-  h264dec_img.direct_spatial_mv_pred_flag = 1;
-  h264dec_img.type = 1;
-  h264dec_img.wp_round_chroma = 0;
-  h264dec_img.chroma_log2_weight_denom = 0;
+  h264_dec_img.mb_cr_size_x = 8;
+  h264_dec_img.mb_cr_size_y = 8;
+  h264_dec_img.num_blk8x8_uv = 2;
+  h264_dec_img.pix_c_x = 256;
+  h264_dec_img.pix_c_y = 256;
+  h264_dec_img.width_cr = 352;
+  h264_dec_img.apply_weights = 0;
+  h264_dec_img.direct_spatial_mv_pred_flag = 1;
+  h264_dec_img.type = 1;
+  h264_dec_img.wp_round_chroma = 0;
+  h264_dec_img.chroma_log2_weight_denom = 0;
 }
 
 
@@ -104,7 +104,7 @@ void h264dec_init ()
   Algorithm core functions
 */
 
-void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
+void h264_dec_decode_one_macroblock( struct h264_dec_img_par *img )
 {
   int i = 0, j = 0, ii = 0, jj = 0, i1 = 0, j1 = 0, j4 = 0, i4 = 0;
   int uv;
@@ -173,19 +173,18 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                 _Pragma( "loopbound min 4 max 4" )
                 for ( ii = 0; ii < 4; ii++ ) {
                   ifx = ( ( i4 + ii ) / ( img->mb_cr_size_x / 4 ) ) % 64;
-                  fw_refframe = ref_idx = 0;
-                  i1 = ( i4 + ii ) * f1_x + h264dec_mv_array[jf][ifx][0];
+                  i1 = ( i4 + ii ) * f1_x + h264_dec_mv_array[jf][ifx][0];
 
                   if ( !curr_mb_field )
-                    j1 = ( j4 + jj ) * f1_y + h264dec_mv_array[jf][ifx][1];
+                    j1 = ( j4 + jj ) * f1_y + h264_dec_mv_array[jf][ifx][1];
                   else {
                     if ( mb_nr % 2 == 0 ) {
                       j1 = ( ( img->pix_c_y / 2 ) + jj + joff ) * f1_y +
-                           h264dec_mv_array[jf][ifx][1];
+                           h264_dec_mv_array[jf][ifx][1];
                     } else {
                       j1 = ( ( img->pix_c_y - img->mb_cr_size_y ) / 2
                              + jj + joff ) * f1_y +
-                           h264dec_mv_array[jf][ifx][1];
+                           h264_dec_mv_array[jf][ifx][1];
                     }
                     ++mb_nr;
                   }
@@ -219,11 +218,11 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
 
                   if ( img->apply_weights ) {
                   } else {
-                    h264dec_img_mpr[ii + ioff][jj + joff]
-                      = ( if0 * jf0 * h264dec_list_imgUV[uv][jj0][ii0]
-                          + if1 * jf0 * h264dec_list_imgUV[uv][jj0][ii1]
-                          + if0 * jf1 * h264dec_list_imgUV[uv][jj1][ii0]
-                          + if1 * jf1 * h264dec_list_imgUV[uv][jj1][ii1]
+                    h264_dec_img_mpr[ii + ioff][jj + joff]
+                      = ( if0 * jf0 * h264_dec_list_imgUV[uv][jj0][ii0]
+                          + if1 * jf0 * h264_dec_list_imgUV[uv][jj0][ii1]
+                          + if0 * jf1 * h264_dec_list_imgUV[uv][jj1][ii0]
+                          + if1 * jf1 * h264_dec_list_imgUV[uv][jj1][ii1]
                           + f4 ) / f3;
                   }
                 }
@@ -254,19 +253,19 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
 
                     if ( direct_pdir == 0 || direct_pdir == 2 ) {
                       i1 = ( img->pix_c_x + ii + ioff ) * f1_x +
-                           h264dec_mv_array[jf][ifx][0];
+                           h264_dec_mv_array[jf][ifx][0];
 
                       if ( !curr_mb_field ) {
                         j1 = ( img->pix_c_y + jj + joff ) * f1_y +
-                             h264dec_mv_array[jf][ifx][1];
+                             h264_dec_mv_array[jf][ifx][1];
                       } else {
                         if ( mb_nr % 2 == 0 ) {
                           j1 = ( ( img->pix_c_y ) / 2 + jj + joff ) *
-                               f1_y + h264dec_mv_array[jf][ifx][1];
+                               f1_y + h264_dec_mv_array[jf][ifx][1];
                         } else {
                           j1 = ( ( img->pix_c_y - img->mb_cr_size_y )
                                  / 2 + jj + joff ) * f1_y
-                               + h264dec_mv_array[jf][ifx][1];
+                               + h264_dec_mv_array[jf][ifx][1];
                         }
                       }
 
@@ -304,30 +303,30 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                       jf0 = f1_y - jf1;
 
                       fw_pred = ( if0 * jf0 *
-                                  h264dec_list_imgUV[uv][jj0][ii0] +
+                                  h264_dec_list_imgUV[uv][jj0][ii0] +
                                   if1 * jf0 *
-                                  h264dec_list_imgUV[uv][jj0][ii1] +
+                                  h264_dec_list_imgUV[uv][jj0][ii1] +
                                   if0 * jf1 *
-                                  h264dec_list_imgUV[uv][jj1][ii0] +
+                                  h264_dec_list_imgUV[uv][jj1][ii0] +
                                   if1 * jf1 *
-                                  h264dec_list_imgUV[uv][jj1][ii1] +
+                                  h264_dec_list_imgUV[uv][jj1][ii1] +
                                   f4 ) / f3;
                     }
                     if ( direct_pdir == 1 || direct_pdir == 2 ) {
                       i1 = ( img->pix_c_x + ii + ioff ) * f1_x +
-                           h264dec_mv_array[jf][ifx][0];
+                           h264_dec_mv_array[jf][ifx][0];
 
                       if ( !curr_mb_field ) {
                         j1 = ( img->pix_c_y + jj + joff ) * f1_y +
-                             h264dec_mv_array[jf][ifx][1];
+                             h264_dec_mv_array[jf][ifx][1];
                       } else {
                         if ( mb_nr % 2 == 0 ) {
                           j1 = ( ( img->pix_c_y ) / 2 + jj + joff ) * f1_y
-                               + h264dec_mv_array[jf][ifx][1];
+                               + h264_dec_mv_array[jf][ifx][1];
                         } else {
                           j1 = ( ( img->pix_c_y - img->mb_cr_size_y ) / 2
                                  + jj + joff ) * f1_y
-                               + h264dec_mv_array[jf][ifx][1];
+                               + h264_dec_mv_array[jf][ifx][1];
                         }
                       }
                       if ( active_sps_chroma_format_idc == 1 )
@@ -360,13 +359,13 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                       jf0 = f1_y - jf1;
 
                       bw_pred = ( if0 * jf0 *
-                                  h264dec_list_imgUV[uv][jj0][ii0] +
+                                  h264_dec_list_imgUV[uv][jj0][ii0] +
                                   if1 * jf0 *
-                                  h264dec_list_imgUV[uv][jj0][ii1] +
+                                  h264_dec_list_imgUV[uv][jj0][ii1] +
                                   if0 * jf1 *
-                                  h264dec_list_imgUV[uv][jj1][ii0] +
+                                  h264_dec_list_imgUV[uv][jj1][ii0] +
                                   if1 * jf1 *
-                                  h264dec_list_imgUV[uv][jj1][ii1] +
+                                  h264_dec_list_imgUV[uv][jj1][ii1] +
                                   f4 ) / f3;
                     }
 
@@ -378,19 +377,19 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                     bw_ref_idx = bw_refframe;
 
                     i1 = ( img->pix_c_x + ii + ioff ) * f1_x +
-                         h264dec_mv_array[jf][ifx][0];
+                         h264_dec_mv_array[jf][ifx][0];
 
                     if ( !curr_mb_field ) {
                       j1 = ( img->pix_c_y + jj + joff ) * f1_y +
-                           h264dec_mv_array[jf][ifx][1];
+                           h264_dec_mv_array[jf][ifx][1];
                     } else {
                       if ( mb_nr % 2 == 0 ) {
                         j1 = ( ( img->pix_c_y ) / 2 + jj + joff ) * f1_y +
-                             h264dec_mv_array[jf][ifx][1];
+                             h264_dec_mv_array[jf][ifx][1];
                       } else {
                         j1 = ( ( img->pix_c_y - img->mb_cr_size_y ) / 2
                                + jj + joff ) * f1_y
-                             + h264dec_mv_array[jf][ifx][1];
+                             + h264_dec_mv_array[jf][ifx][1];
                       }
                     }
 
@@ -424,26 +423,26 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                     if0 = f1_x - if1;
                     jf0 = f1_y - jf1;
 
-                    fw_pred = ( if0 * jf0 * h264dec_list_imgUV[uv][jj0][ii0] +
-                                if1 * jf0 * h264dec_list_imgUV[uv][jj0][ii1] +
-                                if0 * jf1 * h264dec_list_imgUV[uv][jj1][ii0] +
-                                if1 * jf1 * h264dec_list_imgUV[uv][jj1][ii1] +
+                    fw_pred = ( if0 * jf0 * h264_dec_list_imgUV[uv][jj0][ii0] +
+                                if1 * jf0 * h264_dec_list_imgUV[uv][jj0][ii1] +
+                                if0 * jf1 * h264_dec_list_imgUV[uv][jj1][ii0] +
+                                if1 * jf1 * h264_dec_list_imgUV[uv][jj1][ii1] +
                                 f4 ) / f3;
 
                     i1 = ( img->pix_c_x + ii + ioff ) * f1_x +
-                         h264dec_mv_array[jf][ifx][0];
+                         h264_dec_mv_array[jf][ifx][0];
 
                     if ( !curr_mb_field ) {
                       j1 = ( img->pix_c_y + jj + joff ) * f1_y +
-                           h264dec_mv_array[jf][ifx][1];
+                           h264_dec_mv_array[jf][ifx][1];
                     } else {
                       if ( mb_nr % 2 == 0 ) {
                         j1 = ( ( img->pix_c_y ) / 2 + jj + joff ) * f1_y
-                             + h264dec_mv_array[jf][ifx][1];
+                             + h264_dec_mv_array[jf][ifx][1];
                       } else {
                         j1 = ( ( img->pix_c_y - img->mb_cr_size_y ) / 2 + jj
                                + joff ) * f1_y
-                             + h264dec_mv_array[jf][ifx][1];
+                             + h264_dec_mv_array[jf][ifx][1];
                       }
                     }
 
@@ -475,10 +474,10 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
                     if0 = f1_x - if1;
                     jf0 = f1_y - jf1;
 
-                    bw_pred = ( if0 * jf0 * h264dec_list_imgUV[uv][jj0][ii0] +
-                                if1 * jf0 * h264dec_list_imgUV[uv][jj0][ii1] +
-                                if0 * jf1 * h264dec_list_imgUV[uv][jj1][ii0] +
-                                if1 * jf1 * h264dec_list_imgUV[uv][jj1][ii1] +
+                    bw_pred = ( if0 * jf0 * h264_dec_list_imgUV[uv][jj0][ii0] +
+                                if1 * jf0 * h264_dec_list_imgUV[uv][jj0][ii1] +
+                                if0 * jf1 * h264_dec_list_imgUV[uv][jj1][ii0] +
+                                if1 * jf1 * h264_dec_list_imgUV[uv][jj1][ii1] +
                                 f4 ) / f3;
                   }
 
@@ -549,9 +548,9 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
               _Pragma( "loopbound min4 max 4" )
               for ( ; jj < 4; jj++ ) {
                 if ( !residue_transform_flag ) {
-                  h264dec_dec_picture_imgUV[uv][( j4 + jj ) % 64]
+                  h264_dec_dec_picture_imgUV[uv][( j4 + jj ) % 64]
                   [( i4 + ii ) % 54]
-                    = h264dec_img_m7[ii][jj];
+                    = h264_dec_img_m7[ii][jj];
                 }
               }
             }
@@ -573,9 +572,9 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
             for ( ii = 0; ii < 4; ii++ )
               _Pragma( "loopbound min 4 max 4" )
               for ( jj = 0; jj < 4; jj++ ) {
-                h264dec_dec_picture_imgUV[uv][( j4 + jj ) % 64]
+                h264_dec_dec_picture_imgUV[uv][( j4 + jj ) % 64]
                 [( i4 + ii ) % 54]
-                  = h264dec_img_m7[ii][jj];
+                  = h264_dec_img_m7[ii][jj];
               }
           }
         }
@@ -589,16 +588,16 @@ void h264dec_decode_one_macroblock( struct h264dec_img_par *img )
   Main functions
 */
 
-void _Pragma( "entrypoint" )  h264dec_main( void )
+void _Pragma( "entrypoint" )  h264_dec_main( void )
 {
-  h264dec_decode_one_macroblock( &h264dec_img );
+  h264_dec_decode_one_macroblock( &h264_dec_img );
 }
 
 
 int main( void )
 {
-  h264dec_init();
-  h264dec_main();
+  h264_dec_init();
+  h264_dec_main();
 
-  return ( h264dec_return() );
+  return ( h264_dec_return() );
 }
