@@ -10,6 +10,8 @@
 
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{tikz}
+\usepackage{pgfplots}
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
 
@@ -35,6 +37,7 @@
 \author[4]{Christine Rochange}
 \author[2]{Martin Schoeberl}
 \author[2]{Rasmus Bo S{\o}rensen}
+\author[5]{Peter W{\"a}gemann}
 \author[2]{Add yourself in alphabetical order, but keep Heiko first.}
 \affil[1]{Dummy University Computing Laboratory\\
   Address, Country\\
@@ -45,6 +48,8 @@
   \texttt{bjorn.lisper@mdh.se}}
 \affil[4]{University of Toulouse, France\\
   \texttt{rochange@irit.fr}}
+\affil[5]{Friedrich-Alexander University Erlangen-Nürnberg, Germany\\
+  \texttt{waegemann@cs.fau.de}}
 
   \authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
@@ -362,6 +367,16 @@ down the original authors of the benchmark.
 
 \todo{Computer engineering is a constructive science. We build stuff and we measure.
 Therefore, there shall always be an evaluation section.}
+\todo{Properly discuss Figure~\ref{fig:execution-times}}
+\begin{figure}[t]
+  \def\resultfile{eval/wcet.csv}
+  \input{eval/pasim-eval.tikz}
+  \caption{Execution times in TACLeBench vary from \todo{x} to \todo{y} on the patmos architecture.}
+  \label{fig:execution-times}
+\end{figure}
+
+\subsection{Checking Sanity}
+\todo{Comparison compiler warning in TACLeBench v1 with v2}
 
 Possible Options for the Evaluation:
 
