@@ -27,6 +27,8 @@ unsigned char prime_divides ( unsigned int n, unsigned int m );
 unsigned char prime_even ( unsigned int n );
 unsigned char prime_prime ( unsigned int n );
 void prime_swap ( unsigned int *a, unsigned int *b );
+unsigned int prime_randomInteger();
+void prime_initSeed();
 void prime_init ();
 int prime_return ();
 void prime_main ();
@@ -48,7 +50,7 @@ volatile int prime_seed;
 */
 
 
-void st_initSeed()
+void prime_initSeed()
 {
   prime_seed = 0;
 }
@@ -63,6 +65,8 @@ unsigned int prime_randomInteger()
 
 void prime_init ()
 {
+  prime_initSeed();
+
   prime_x = prime_randomInteger();
   prime_y = prime_randomInteger();
 }
