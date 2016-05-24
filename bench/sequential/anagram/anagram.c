@@ -218,7 +218,7 @@ int anagram_main( void );
 int anagram_return( void );
 int anagram_ch2i( int ch );
 void anagram_AddWords( void );
-void anagram_BuildMask( char *pchPhrase );
+void anagram_BuildMask( char const *pchPhrase );
 void anagram_BuildWord( char *pchWord );
 void anagram_DumpWords( void );
 void anagram_FindAnagram( anagram_Quad *pqMask,
@@ -235,8 +235,8 @@ void anagram_SortCandidates( void );
   Declaration of global variables
 */
 
-extern char *anagram_achPhrase[ 3 ];
-extern char *anagram_dictionary[ anagram_DICTWORDS ];
+extern char const *anagram_achPhrase[ 3 ];
+extern char const *anagram_dictionary[ anagram_DICTWORDS ];
 
 /* candidates we've found so far */
 static anagram_PWord anagram_apwCand[ anagram_MAXCAND ];
@@ -394,7 +394,7 @@ void anagram_Reset( void )
 }
 
 
-void anagram_BuildMask( char *pchPhrase )
+void anagram_BuildMask( char const *pchPhrase )
 {
   int i;
   int ch;

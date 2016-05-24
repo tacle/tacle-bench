@@ -2,6 +2,12 @@ File: anagram.c
 Original provenience: unknown
 Source: unknown 
 
+2016-05-24:
+- Changed type of global variables anagram_achPhrase and
+  anagram_dictionary to `char const *[]`.
+- Changed parameter type of function anagram_BuildMask to
+  `char const *`.
+
 2016-04-26:
 - Fixed array out-of-bounds access introduced by earlier change.
 
