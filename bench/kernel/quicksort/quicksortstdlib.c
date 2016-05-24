@@ -27,12 +27,9 @@
 
 int quicksort_strcmp( const char *str1, const char *str2 )
 {
-  int pos = 0;
-
-
   _Pragma( "loopbound min 0 max 11" )
   while ( *str1 && ( *str1 == *str2 ) )
-    ++str1, ++str2, ++count;
+    ++str1, ++str2;
 
   return( *(const unsigned char *)str1 - *(const unsigned char *)str2 );
 }
