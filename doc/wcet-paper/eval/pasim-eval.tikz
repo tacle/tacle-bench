@@ -1,0 +1,44 @@
+%
+\makeatletter
+\pgfplotsset{
+    /pgfplots/flexible xticklabels from table/.code n args={3}{%
+        \pgfplotstableread[#3]{#1}\coordinate@table
+        \pgfplotstablegetcolumn{#2}\of{\coordinate@table}\to\pgfplots@xticklabels
+        \let\pgfplots@xticklabel=\pgfplots@user@ticklabel@list@x
+    }
+}
+\makeatother
+%
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  xtick=data,
+  ymin=0,
+  xmin=-1,
+  xmax=56,
+  ymax=2000000000,
+  xtick pos=left,
+  ytick pos=left,
+  font=\tiny,
+  width=0.99\textwidth,
+  height=0.4\textwidth,
+  bar width=4pt,
+  axis y line*=left,
+  ylabel={\# Cycles},
+  ylabel style={anchor=south, yshift=-20},
+  flexible xticklabels from table={\resultfile}{benchmark}{col sep=space},
+  xticklabel style={rotate=50,anchor=east,xshift=1},
+  ymode=log,
+]
+%
+\addplot [%
+  draw=black, 
+  fill=gray!5!blue!70, %
+  top color=gray!5!blue!20, bottom color=gray!5!blue!60,
+  ]
+  table [x=position,
+         y=pasim,
+] {\resultfile};
+\end{axis}
+\end{tikzpicture}
+%
