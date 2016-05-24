@@ -30,8 +30,9 @@
 %\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
 
 \author[1]{Heiko Falk}
-\author[2]{Wolfgang Puffitsch}
 \author[3]{Bj{\"o}rn Lisper}
+\author[2]{Wolfgang Puffitsch}
+\author[4]{Christine Rochange}
 \author[2]{Martin Schoeberl}
 \author[2]{Rasmus Bo S{\o}rensen}
 \author[2]{Add yourself in alphabetical order, but keep Heiko first.}
@@ -42,6 +43,9 @@
   \texttt{\{wopu, masca,rboso\}@dtu.dk}}
 \affil[3]{M{\"a}lardalen, University, School of Innovation, Design, and Engineering, Sweden\\
   \texttt{bjorn.lisper@mdh.se}}
+\affil[4]{University of Toulouse, France\\
+  \texttt{rochange@irit.fr}}
+
   \authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
 \Copyright{Heiko Falk et al.}%mandatory. OASIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
@@ -178,7 +182,14 @@ those where it was possible to include the input data with the C source.
 
 Debie~\cite{debie}
 
-PapaBench~\cite{papabench}
+PapaBench~\cite{papabench} has been derived from  Paparazzi\footnote{\url{https://wiki.paparazziuav.org/}}, 
+an open-source hardware and software project for the design of unmaned aerial vehicles.  PapaBench includes 
+two software components of this project, that run on separate processors communicating through an SPI link:
+the \textit{fly-by-wire} part controls the flight (engine and flaps control, stabilization, radio-communication 
+with the ground, support for infrared sensors, etc.) while the \textit{autopilot} part controls the GPS and 
+executes the flight plan (which is decided offline). Both software parts  cumulate 13 tasks that are subject
+to precedence constraints and 6 interrupt service routines.
+
 
 General purpose benchmarking, with a focus on open source and embedded systems.
 
