@@ -12,3 +12,6 @@ Original provenience: David Bourgin (David.Bourgin@ufrima.imag.fr)
 - Added generic TACLeBench header replacing previous header
 - Included license from compress.txt
 - Corrected loop bounds in huff_dec_read_header()
+
+2016-05-24:
+- static removed and huff_dec prefix added

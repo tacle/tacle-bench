@@ -68,13 +68,13 @@ typedef struct {
 
 void huff_dec_init( void );
 int huff_dec_return( void );
-static int huff_dec_end_of_data();
-static int huff_dec_read_byte();
-static void huff_dec_write_byte( char ch );
-static unsigned char huff_dec_read_code_1_bit();
-static unsigned int huff_dec_read_code_n_bits( unsigned int n );
-static void huff_dec_read_header( t_bin_val codes_table[257] );
-static huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
+int huff_dec_end_of_data();
+int huff_dec_read_byte();
+void huff_dec_write_byte( char ch );
+unsigned char huff_dec_read_code_1_bit();
+unsigned int huff_dec_read_code_n_bits( unsigned int n );
+void huff_dec_read_header( t_bin_val codes_table[257] );
+huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
     huff_dec_t_tree heap[514] );
 void huff_dec_main( void );
 int main( void );
@@ -87,8 +87,8 @@ int main( void );
 static int huff_dec_input_pos;
 static int huff_dec_output_pos;
 static char huff_dec_output[1024];
-unsigned char byte_nb_to_read = 0;
-unsigned int val_to_read = 0;
+unsigned char huff_dec_byte_nb_to_read = 0;
+unsigned int huff_dec_val_to_read = 0;
 
 
 /*
@@ -160,25 +160,25 @@ int huff_dec_return( void )
   Input / output functions
 */
 
-static int huff_dec_end_of_data()
+int huff_dec_end_of_data()
 {
   return huff_dec_input_pos >= huff_dec_encoded_len;
 }
 
 
-static int huff_dec_read_byte()
+int huff_dec_read_byte()
 {
   return huff_dec_encoded[huff_dec_input_pos++];
 }
 
 
-static void huff_dec_write_byte( char ch )
+void huff_dec_write_byte( char ch )
 {
   huff_dec_output[huff_dec_output_pos++] = ch;
 }
 
 
-static unsigned char huff_dec_read_code_1_bit()
+unsigned char huff_dec_read_code_1_bit()
 /* Returned parameters: Returns an unsigned integer with the 0-bit (on the
                         right of the integer) valid
    Action: Reads the next bit in the stream of data to compress
@@ -186,18 +186,18 @@ static unsigned char huff_dec_read_code_1_bit()
    The source must have enough bits to read
 */
 {
-  if ( byte_nb_to_read ) {
-    byte_nb_to_read--;
-    return ( ( val_to_read >> byte_nb_to_read ) & 1 );
+  if ( huff_dec_byte_nb_to_read ) {
+    huff_dec_byte_nb_to_read--;
+    return ( ( huff_dec_val_to_read >> huff_dec_byte_nb_to_read ) & 1 );
   } else {
-    val_to_read = huff_dec_read_byte();
-    byte_nb_to_read = 7;
-    return ( ( val_to_read >> 7 ) & 1 );
+    huff_dec_val_to_read = huff_dec_read_byte();
+    huff_dec_byte_nb_to_read = 7;
+    return ( ( huff_dec_val_to_read >> 7 ) & 1 );
   }
 }
 
 
-static unsigned int huff_dec_read_code_n_bits( unsigned int n )
+unsigned int huff_dec_read_code_n_bits( unsigned int n )
 /* Returned parameters: Returns an unsigned integer with the n-bits (on the
                         right of the integer) valid
    Action: Reads the next n bits in the stream of data to compress
@@ -211,18 +211,18 @@ static unsigned int huff_dec_read_code_n_bits( unsigned int n )
   _Pragma ( "loopbound min 1 max 1" )
   while ( i ) {
     _Pragma ( "loopbound min 0 max 2" )
-    while ( ( byte_nb_to_read < 9 ) && ( !huff_dec_end_of_data() ) ) {
-      val_to_read = ( val_to_read << 8 ) + huff_dec_read_byte();
-      byte_nb_to_read += 8;
+    while ( ( huff_dec_byte_nb_to_read < 9 ) && ( !huff_dec_end_of_data() ) ) {
+      huff_dec_val_to_read = ( huff_dec_val_to_read << 8 ) + huff_dec_read_byte();
+      huff_dec_byte_nb_to_read += 8;
     }
-    if ( i >= byte_nb_to_read ) {
-      result = ( result << byte_nb_to_read ) + val_to_read;
-      i -= byte_nb_to_read;
-      byte_nb_to_read = 0;
+    if ( i >= huff_dec_byte_nb_to_read ) {
+      result = ( result << huff_dec_byte_nb_to_read ) + huff_dec_val_to_read;
+      i -= huff_dec_byte_nb_to_read;
+      huff_dec_byte_nb_to_read = 0;
     } else {
-      result = ( result << i ) +
-               ( ( val_to_read >> ( byte_nb_to_read - i ) ) & ( ( 1 << i ) - 1 ) );
-      byte_nb_to_read -= i;
+      result = ( result << i ) + ( ( huff_dec_val_to_read >>
+        ( huff_dec_byte_nb_to_read - i ) ) & ( ( 1 << i ) - 1 ) );
+      huff_dec_byte_nb_to_read -= i;
       i = 0;
     }
   }
@@ -230,7 +230,7 @@ static unsigned int huff_dec_read_code_n_bits( unsigned int n )
 }
 
 
-static void huff_dec_read_header( t_bin_val codes_table[257] )
+void huff_dec_read_header( t_bin_val codes_table[257] )
 /* Returned parameters: The contain of 'codes_table' is modified
    Action: Rebuilds the binary encoding array by using the header
    Errors: An input/output error could disturb the running of the program
@@ -298,7 +298,7 @@ static void huff_dec_read_header( t_bin_val codes_table[257] )
 }
 
 
-static huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
+huff_dec_t_tree *huff_dec_tree_encoding( t_bin_val codes_table[257],
     huff_dec_t_tree heap[514] )
 /* Returned parameters: A binary tree is returned
    Action: Returns the decoding binary tree built from 'codes_table'
