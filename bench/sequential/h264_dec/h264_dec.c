@@ -542,10 +542,10 @@ void h264_dec_decode_one_macroblock( struct h264_dec_img_par *img )
           }
 
           if ( !smb ) {
-            _Pragma( "loopbound min4 max 4" )
+            _Pragma( "loopbound min 4 max 4" )
             for ( ii = 0; ii < 4; ii++ ) {
               jj = 0;
-              _Pragma( "loopbound min4 max 4" )
+              _Pragma( "loopbound min 4 max 4" )
               for ( ; jj < 4; jj++ ) {
                 if ( !residue_transform_flag ) {
                   h264_dec_dec_picture_imgUV[uv][( j4 + jj ) % 64]
