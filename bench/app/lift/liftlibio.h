@@ -6,7 +6,7 @@ extern int lift_ctrl_io_in[10];
 extern int lift_ctrl_io_out[4];
 extern int lift_ctrl_io_analog[4];
 extern int lift_ctrl_io_led[16];
-extern int lift_ctrl_dly1, ctrl_dly2;
+extern int lift_ctrl_dly1, lift_ctrl_dly2;
 
 /* Simulated hardware */
 extern volatile int lift_simio_in;
