@@ -54,7 +54,7 @@ void audiobeam_calc_distances( float *source_location,
 void audiobeam_calc_delays( float *distances, float *delays, int sound_speed,
                             int sampling_rate, int num_mic );
 void audiobeam_adjust_delays( float *delays, int num_mic );
-float *audibeam_calc_weights_lr ( int num_mic );
+float *audiobeam_calc_weights_lr ( int num_mic );
 float *audiobeam_calc_weights_left_only ( int num_mic );
 float audiobeam_calculate_energy( float *samples, int num_samples );
 float audiobeam_do_beamforming( struct audiobeam_PreprocessedDelays
@@ -323,7 +323,7 @@ void audiobeam_adjust_delays( float *delays, int num_mic )
 }
 
 
-float *audibeam_calc_weights_lr ( int num_mic )
+float *audiobeam_calc_weights_lr ( int num_mic )
 {
   float *weights = ( float * ) audiobeam_malloc( num_mic * sizeof( float ) );
   int index = 0;
@@ -453,8 +453,6 @@ int audiobeam_process_signal( struct audiobeam_Delays *delays, int num_mic,
 
   audiobeam_preprocess_delays( preprocessed_delays, delays->delay_values[0] );
 
-  i = 0;
-
   _Pragma( "loopbound min 13 max 13" )
   for ( i = 0; i < delays->max_delay - 1; i++ ) {
     if ( audiobeam_input_pos < 5760 )
@@ -512,7 +510,7 @@ int audiobeam_calc_beamforming_result( struct audiobeam_Delays *delays,
     if ( ( 15 % 2 ) == 1 )
       weights = audiobeam_calc_weights_left_only( 15 );
     else
-      weights = audibeam_calc_weights_lr( 15 );
+      weights = audiobeam_calc_weights_lr( 15 );
   }
 
   done = audiobeam_process_signal( delays, 15, 16000,

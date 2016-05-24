@@ -62,16 +62,16 @@ audiobeam_C5  =  2.0875723372e-09f, /* 0x310f74f6 */
 audiobeam_C6  = -1.1359647598e-11f; /* 0xad47d74e */
 
 static const float
-S1  = -1.6666667163e-01f, /* 0xbe2aaaab */
-S2  =  8.3333337680e-03f, /* 0x3c088889 */
-S3  = -1.9841270114e-04f, /* 0xb9500d01 */
-S4  =  2.7557314297e-06f, /* 0x3638ef1b */
-S5  = -2.5050759689e-08f, /* 0xb2d72f34 */
-S6  =  1.5896910177e-10f; /* 0x2f2ec9d3 */
+audiobeam_S1  = -1.6666667163e-01f, /* 0xbe2aaaab */
+audiobeam_S2  =  8.3333337680e-03f, /* 0x3c088889 */
+audiobeam_S3  = -1.9841270114e-04f, /* 0xb9500d01 */
+audiobeam_S4  =  2.7557314297e-06f, /* 0x3638ef1b */
+audiobeam_S5  = -2.5050759689e-08f, /* 0xb2d72f34 */
+audiobeam_S6  =  1.5896910177e-10f; /* 0x2f2ec9d3 */
 
 static const float
-two25   =  3.355443200e+07f,  /* 0x4c000000 */
-twom25  =  2.9802322388e-08f; /* 0x33000000 */
+audiobeam_two25   =  3.355443200e+07f,  /* 0x4c000000 */
+audiobeam_twom25  =  2.9802322388e-08f; /* 0x33000000 */
 
 
 int audiobeam___ieee754_rem_pio2f( float x, float *y )
@@ -196,9 +196,9 @@ float audiobeam___kernel_sinf( float x, float y, int iy )
   }
   z =  x * x;
   v =  z * x;
-  r =  S2 + z * ( S3 + z * ( S4 + z * ( S5 + z * S6 ) ) );
-  if ( iy == 0 ) return x + v * ( S1 + z * r );
-  else      return x - ( ( z * ( audiobeam_half * y - v * r ) - y ) - v * S1 );
+  r =  audiobeam_S2 + z * ( audiobeam_S3 + z * ( audiobeam_S4 + z * ( audiobeam_S5 + z * audiobeam_S6 ) ) );
+  if ( iy == 0 ) return x + v * ( audiobeam_S1 + z * r );
+  else      return x - ( ( z * ( audiobeam_half * y - v * r ) - y ) - v * audiobeam_S1 );
 }
 
 
@@ -226,6 +226,8 @@ float audiobeam___cosf( float x )
     if ( ix >= 0x7f800000 ) return x - x;
 
     else {
+      y[0] = 0.0;
+      y[1] = 0.0;
       n = audiobeam___ieee754_rem_pio2f( x, y );
       switch ( n & 3 ) {
         case 0:
@@ -282,7 +284,7 @@ float audiobeam___floorf( float x )
 }
 
 
-int __isinff ( float x )
+int audiobeam___isinff ( float x )
 {
   int ix, t;
   AUDIOBEAM_GET_FLOAT_WORD( ix, x );
@@ -300,7 +302,7 @@ float audiobeam___scalbnf ( float x, int n )
   k = ( ix & 0x7f800000 ) >> 23;
   if ( k == 0 ) {
     if ( ( ix & 0x7fffffff ) == 0 ) return x;
-    x *= two25;
+    x *= audiobeam_two25;
     AUDIOBEAM_GET_FLOAT_WORD( ix, x );
     k = ( ( ix & 0x7f800000 ) >> 23 ) - 25;
   }
@@ -321,7 +323,7 @@ float audiobeam___scalbnf ( float x, int n )
            x );
   k += 25;
   AUDIOBEAM_SET_FLOAT_WORD( x, ( ix & 0x807fffff ) | ( k << 23 ) );
-  return x * twom25;
+  return x * audiobeam_twom25;
 }
 
 
