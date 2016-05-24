@@ -32,6 +32,7 @@
 %\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
 
 \author[1]{Heiko Falk}
+\author[6]{Sebastian Altmeyer}
 \author[3]{Bj{\"o}rn Lisper}
 \author[2]{Wolfgang Puffitsch}
 \author[4]{Christine Rochange}
@@ -50,6 +51,8 @@
   \texttt{rochange@irit.fr}}
 \affil[5]{Friedrich-Alexander University Erlangen-Nürnberg, Germany\\
   \texttt{waegemann@cs.fau.de}}
+\affil[5]{University of Amsterdam, The Netherlands\\
+  \texttt{altmeyer@uva.nl}}
 
   \authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
@@ -180,7 +183,6 @@ most of the code away. We include most of the benchmarks from the
  Furthermore, we dropped benchmarks where the licensing terms are unknown
  or even disallow distributing the source.
 
-EEMBC
 
 MiBench~\cite{MiBench} We include some of the MiBench benchmarks, especially
 those where it was possible to include the input data with the C source.
@@ -195,8 +197,15 @@ with the ground, support for infrared sensors, etc.) while the \textit{autopilot
 executes the flight plan (which is decided offline). Both software parts  cumulate 13 tasks that are subject
 to precedence constraints and 6 interrupt service routines.
 
+The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides their own benchmark suite dedicated to the evaluation of 
+the performance of embedded hardware and embedded software.
+The benchmarks are divided into subset according to the target domain, e.g., the automotve domain, phones and tables, but also big data and cloud computing.
+To improve comparability between different processors and systems, the consortium provides a sophisticated test-harness which allows to derive certifiable scores.
+The test-harness, being a clear advantage in terms of comparability and certifiability, constitutes a hinderance in terms of portability and usability.
+Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variaty of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
+Furtheremore, in stark contrast to the aformentioned benchmark suites, and especially to TACLeBench, the EEMBC benchmarks are not published under an open-source license. 
+Instead, the benchmarks are behind a paywall, even for purely academic research.
 
-General purpose benchmarking, with a focus on open source and embedded systems.
 
 JemBench.
 
