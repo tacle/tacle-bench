@@ -376,7 +376,14 @@ Therefore, there shall always be an evaluation section.}
 \end{figure}
 
 \subsection{Checking Sanity}
-\todo{Comparison compiler warning in TACLeBench v1 with v2}
+In order to improve the code quality of the TACLeBench suite, we used different 
+compilers (e.g., clang, gcc) to identify shortcomings in the code of each benchmark in an 
+automated way. Additionally, we exploited Clang's static 
+analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} to further reveal 
+programming bugs in the benchmark suite. We extended this sanity checker with additional 
+TACLeBench-specific passes to identify if all benchmark are compliant to the code-formatting rules.
+\todo{Comparison compiler warning in TACLeBench v1 with v2, problem: expint was in 1.0, but is no 
+longer in 2.0 and PowerWindow was added for 2.0}
 
 Possible Options for the Evaluation:
 
