@@ -69,22 +69,21 @@ typedef struct {
 
 void huff_enc_init( void );
 int huff_enc_return( void );
-static void huff_enc_beginning_of_data();
-static int huff_enc_end_of_data();
-static int huff_enc_read_byte();
-static void huff_enc_write_byte( char ch );
-static void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val );
-static void huff_enc_fill_encoding( void );
-static void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] );
-static int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 );
-static void huff_enc_swapi( char *ii, char *ij, unsigned long es );
-static char *huff_enc_pivot( char *a, unsigned long n, unsigned long es );
-static void huff_enc_qsort( char *a, unsigned long n, unsigned long es );
-static huff_enc_t_tree *huff_enc_build_tree_encoding(
-  huff_enc_t_tree heap[514] );
-static void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
+void huff_enc_beginning_of_data();
+int huff_enc_end_of_data();
+int huff_enc_read_byte();
+void huff_enc_write_byte( char ch );
+void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val );
+void huff_enc_fill_encoding( void );
+void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] );
+int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 );
+void huff_enc_swapi( char *ii, char *ij, unsigned long es );
+char *huff_enc_pivot( char *a, unsigned long n, unsigned long es );
+void huff_enc_qsort( char *a, unsigned long n, unsigned long es );
+huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] );
+void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
     huff_enc_t_bin_val codes_table[257], huff_enc_t_bin_val *code_val );
-static void huff_enc_create_codes_table( huff_enc_t_tree *tree,
+void huff_enc_create_codes_table( huff_enc_t_tree *tree,
     huff_enc_t_bin_val codes_table[257] );
 void huff_enc_main();
 int main( void );
@@ -170,31 +169,31 @@ int huff_enc_return( void )
   Input / output functions
 */
 
-static void huff_enc_beginning_of_data()
+void huff_enc_beginning_of_data()
 {
   huff_enc_input_pos = 0;
 }
 
 
-static int huff_enc_end_of_data()
+int huff_enc_end_of_data()
 {
   return huff_enc_input_pos >= huff_enc_plaintext_len;
 }
 
 
-static int huff_enc_read_byte()
+int huff_enc_read_byte()
 {
   return huff_enc_plaintext[huff_enc_input_pos++];
 }
 
 
-static void huff_enc_write_byte( char ch )
+void huff_enc_write_byte( char ch )
 {
   huff_enc_output[huff_enc_output_pos++] = ch;
 }
 
 
-static void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val )
+void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val )
 /* Returned parameters: None
    Action: Writes in the output stream the value binary-coded into 'bin_val'
    Errors: An input/output error could disturb the running of the program
@@ -226,7 +225,7 @@ static void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val )
 }
 
 
-static void huff_enc_fill_encoding( void )
+void huff_enc_fill_encoding( void )
 /* Returned parameters: None
    Action: Fills the last byte to write in the output stream with zero values
    Errors: An input/output error could disturb the running of the program
@@ -238,7 +237,7 @@ static void huff_enc_fill_encoding( void )
 }
 
 
-static void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
+void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
 /* Returned parameters: None
    Action: Writes the header in the stream of codes
    Errors: An input/output error could disturb the running of the program
@@ -298,7 +297,7 @@ static void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
 }
 
 
-static int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 )
+int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 )
 /* Returned parameters: Returns a comparison status
    Action: Returns a negative, zero or positive integer depending on the weight
            of 'tree2' is less than, equal to, or greater than the weight of
@@ -313,7 +312,7 @@ static int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 )
 }
 
 
-static void huff_enc_swapi( char *ii, char *ij, unsigned long es )
+void huff_enc_swapi( char *ii, char *ij, unsigned long es )
 {
   char *i, *j, c;
 
@@ -329,7 +328,7 @@ static void huff_enc_swapi( char *ii, char *ij, unsigned long es )
 }
 
 
-static char *huff_enc_pivot( char *a, unsigned long n, unsigned long es )
+char *huff_enc_pivot( char *a, unsigned long n, unsigned long es )
 {
   long j;
   char *pi, *pj, *pk;
@@ -356,9 +355,9 @@ static char *huff_enc_pivot( char *a, unsigned long n, unsigned long es )
 }
 
 
-static void huff_enc_qsort( char *a, unsigned long n, unsigned long es )
+void huff_enc_qsort( char *a, unsigned long n, unsigned long es )
 {
-  long j;
+  unsigned long j;
   char *pi, *pj, *pn;
   unsigned int flowfactdummy = 0;
 
@@ -406,8 +405,7 @@ static void huff_enc_qsort( char *a, unsigned long n, unsigned long es )
 }
 
 
-static huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree
-    heap[514] )
+huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
 /* Returned parameters: Returns a tree of encoding
    Action: Generates an Huffman encoding tree based on the data from
            the stream to compress
@@ -471,7 +469,7 @@ static huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree
 }
 
 
-static void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
+void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
     huff_enc_t_bin_val codes_table[257],
     huff_enc_t_bin_val *code_val )
 /* Returned parameters: The data of 'codes_table' can have been modified
@@ -512,7 +510,7 @@ static void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
 }
 
 
-static void huff_enc_create_codes_table( huff_enc_t_tree *tree,
+void huff_enc_create_codes_table( huff_enc_t_tree *tree,
     huff_enc_t_bin_val codes_table[257] )
 /* Returned parameters: The data in 'codes_table' will be modified
    Action: Stores the encoding tree as a binary encoding table to speed up
