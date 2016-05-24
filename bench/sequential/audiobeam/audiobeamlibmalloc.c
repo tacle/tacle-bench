@@ -1,21 +1,14 @@
 #include "audiobeamlibmalloc.h"
 
-char simulated_heap[2652];
-unsigned int freeHeapPos;
+#define AUDIOBEAM_HEAP_SIZE 10000
+
+static char audiobeam_simulated_heap[AUDIOBEAM_HEAP_SIZE];
+static unsigned int audiobeam_freeHeapPos;
 
 void *audiobeam_malloc( unsigned int numberOfBytes )
 {
-  unsigned int offset;
-
-  #if __SIZEOF_POINTER__ == 8
-  offset = ( ( unsigned long )simulated_heap +  freeHeapPos ) % 4;
-  #elif
-  offset = ( ( unsigned int )simulated_heap +  freeHeapPos ) % 4;
-  #endif
-
-  if ( offset )
-    freeHeapPos += 4 - offset;
-  void *currentPos = ( void * )&simulated_heap[freeHeapPos];
-  freeHeapPos += numberOfBytes;
+  void *currentPos = ( void * )&audiobeam_simulated_heap[ audiobeam_freeHeapPos ];
+  /* Get a 4-byte address for alignment purposes */
+  audiobeam_freeHeapPos += ( ( numberOfBytes + 4 ) & ( unsigned int )0xfffffffc );
   return currentPos;
 }
