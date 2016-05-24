@@ -97,7 +97,7 @@ int fir2dim_return()
   Helper functions
 */
 
-void pin_down( float *pimage, float *parray, float *pcoeff, float *poutput )
+void fir2dim_pin_down( float *pimage, float *parray, float *pcoeff, float *poutput )
 {
   register float    i, f;
 
@@ -148,11 +148,9 @@ void _Pragma( "entrypoint" ) fir2dim_main()
   register float *poutput = &fir2dim_output[0]       ;
   int k, f, i;
 
-  pin_down( &fir2dim_image[0], &fir2dim_array[0],
+  fir2dim_pin_down( &fir2dim_image[0], &fir2dim_array[0],
             &fir2dim_coefficients[0], &fir2dim_output[0] );
 
-  parray  = &fir2dim_array[0]        ;
-  pcoeff  = &fir2dim_coefficients[0] ;
   poutput = &fir2dim_output[0]       ;
 
   _Pragma( "loopbound min 4 max 4" )
@@ -185,7 +183,7 @@ void _Pragma( "entrypoint" ) fir2dim_main()
 
   fir2dim_result = fir2dim_output[0] + fir2dim_output[5] + fir2dim_array[9];
 
-  pin_down( &fir2dim_image[0], &fir2dim_array[0],
+  fir2dim_pin_down( &fir2dim_image[0], &fir2dim_array[0],
             &fir2dim_coefficients[0], &fir2dim_output[0] );
 }
 
