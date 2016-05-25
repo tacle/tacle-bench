@@ -102,7 +102,8 @@ int  minver_mmul( int row_a, int col_a, int row_b, int col_b )
 int minver_minver( int row, int col, double eps )
 {
 
-  int work[ 500 ], i, j, k, r, iw;
+  int work[ 500 ], i, j, k, iw;
+  int r = 0;
   double w, wmax, pivot, api, w1;
 
   if ( row < 2 || row > 500 || eps <= 0.0 )

@@ -27,3 +27,6 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 2016-05-23
  - Added addition of volatile to test data to avoid constant propagation
  - Added check_sum and comparison with expected value
+
+2016-05-25
+ - Initialized variable r in function minver_minver()
