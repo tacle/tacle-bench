@@ -270,6 +270,8 @@ and we include it in TACLeBench.
 
 
 \subsection{Benchmark Sources}
+The benchmarks included in TACLeBench are sourced from other collections of benchmarks or as single source files publicly available.
+We have specified the origin of each benchmark listed in tables~\ref{tab:bench_kernel}-\ref{tab:bench_test}.
 
 \todo{what did we collect. How many indirections in collections have there be?
 E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
@@ -279,10 +281,10 @@ benchmarks  changed? Legal changes?}
 \todo{Rasmus}
 
 \subsection{Classification}
-
-\todo{Talk about kernel, medium size, and application benchmarks: Rasmus}
-\todo{The \# of lines of code was found using the linux utility \code{slocclount} and is measured in source lines of code (SLoC).}
-
+In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
+As a measure of the size and complexity of each benchmark, we present the number of source lines of code (SLOC) of each benchmark.
+The SLOC numbers where found using the Linux utility \code{sloccount}.
+The collection of benchmarks is divided into five classes: Kernel, sequential, application, test, and parallel.
 
 
 
@@ -292,9 +294,10 @@ benchmarks  changed? Legal changes?}
 \begin{tabular}{lp{6cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
-     &             &     (SLoC) & \\ \midrule
+     &             &     (SLOC) & \\ \midrule
 binarysearch & Binary search of 15 integers & 67 & MRTC \\
-bitcount & Couting number of bits in an integer array & 230  & snippest \\
+bitcount & Couting number of bits in an integer array & 230  & Bob Stout \&\\
+     &             &           &  Auke Reitsma \\
 bitonic &  Bitonic sorting network  & 73 & MiBench \\
 bsort & Bubblesort program & 60 & MRTC \\
 complex\_updates &  Multiply-add with vectors of complex numbers & 59 & DSPStone \\
@@ -323,13 +326,16 @@ st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 12
 \end{tabular}
 \end{table}
 
-\begin{table}
+The class of kernel benchmarks is a set of synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
+The kernel benchmarks of TACLeBench are listed in table~\ref{tab:bench_kernel}, and the size of the kernel benchmarks are from 36 SLOC to 2049 SLOC.
+
+\begin{table}[h]
 \centering
 \caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}  
 \begin{tabular}{lp{5cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
-   & &  (SLoC) & \\ \midrule
+   & &  (SLOC) & \\ \midrule
 adpcm\_dec & ADPCM decoder & 398 & SNU-RT \\
 adpcm\_enc &  ADPCM encoder  & 410  & SNU-RT \\
 ammunition & C compiler arithmetic stress test  & 2448 & DINO \\
@@ -357,6 +363,10 @@ susan &  MR image recognition algorithm & 8782 & MiBench \\
 \end{tabular}
 \end{table}
 
+The class of sequential benchmarks implement large functions block such as encoders and decoders that are used in many embedded systems.
+The sequential benchmarks of TACLeBench are listed in table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 242 SLOC to 12601 SLOC.
+The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
+
 
 \begin{table}
 \centering
@@ -364,12 +374,15 @@ susan &  MR image recognition algorithm & 8782 & MiBench \\
 \begin{tabular}{lp{5cm}rrr}
 \toprule
 Name & Description & \#Tasks &Code Size & Origin\\
-     &             &         &(SLoC) & \\ \midrule
+     &             &         &(SLOC) & \\ \midrule
 Debie&  DEBIE-1 instrument observing micro-meteoroids and small space debris &8 &  6615 & Tidorum Ltd \\
 PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The class of parallel benchmarks, shown in table~\ref{tab:bench_parallel}, contains two benchmarks, the Debie benchmark and the PapaBench benchmark.
+These two benchmarks are comparable in size and in the number of tasks.
 
 \begin{table}
 \centering
@@ -378,12 +391,15 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \toprule
 Name & Description & \#Tasks & Code Size & Origin\\
 
-     &             &         &     (SLoC) & \\ \midrule
+     &             &         &     (SLOC) & \\ \midrule
 lift & A lift controller & 1 & 395 & Martin Schoeberl\\
 Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The class of application benchmarks are shown in table~\ref{tab:bench_app}.
+The application benchmarks are derived from real applications, with simulated input stimuli.
 
 \begin{table}
 \centering
@@ -391,13 +407,15 @@ Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \begin{tabular}{lp{5cm}rp{2.5cm}}
 \toprule
 Name & Description & Code Size & Origin\\
-     &             &  (SLoC) & \\ \midrule
+     &             &  (SLOC) & \\ \midrule
 cover &  Artificial code with lots of different control flow paths  & 636  & MRTC \\
 duff & Duff's device  & 67 & MRTC \\
 test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarlandes \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The class of test benchmarks are shown in table~\ref{tab:bench_test}, and contain three artificial test programs of various size that stress test the WCET analysis tools.
 
 
 \subsection{Benchmark Usage}
