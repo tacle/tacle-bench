@@ -8,7 +8,6 @@
 
 \usepackage{booktabs}
 
-\usepackage{longtable}
 \usepackage{array}
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -241,92 +240,119 @@ Based on taskset descriptions
 \todo{The following is a verbatim copy from the TACLe website.
 Needs to be updated and put into a nice table, like the following template.}
 
-\begin{center}
-\begin{longtable}{lp{5cm}rr}
- \caption{TACLeBench benchmarks}  \label{tab:bench} \\
-  \toprule Name & Description & Code Size & Origin\\
+\begin{table}
+\centering
+\caption{\label{tab:bench_kernel}TACLeBench kernel benchmarks}  
+\begin{tabular}{lp{6cm}rr}
+\toprule
+Name & Description & Code Size & Origin\\
+     &             &     (LoC) & \\ \midrule
+binarysearch & Binary search of 15 integers & 67 & MRTC \\
+bitcount & Couting number of bits in an integer array & 230  & snippest \\
+bitonic &  Bitonic sorting network  & 73 & MiBench \\
+bsort & Bubblesort program & 60 & MRTC \\
+complex\_updates &  Multiply-add with vectors of complex numbers & 59 & DSPStone \\
+countnegative &  Counts non-negative numbers in a matrix  & 78 & MRTC \\
+crc &  CRC computation on 40 bytes of data  & 81 & SNU-RT \\
+fac &  Factorial function & 40 & MRTC \\
+fft &  1024-point FFT, 13 bits per twiddle  & 488  & DSPStone \\
+filterbank & Filter bank for multirate signal processing  & 89 & StreamIt \\
+fir2dim &  2-dimensional FIR filter convolution & 119 & DSPStone \\
+iir &  Biquad IIR 4 sections filter & 67 & DSPStone \\
+insertsort & Insertion sort & 70 & MRTC \\
+jfdctint & Discrete-cosine transformation on a 8x8 pixel block  & 150  & MRTC \\
+lms &  LMS adaptive signal enhancement  & 160  & MRTC \\
+ludcmp & LU decomposition & 111 & MRTC \\
+matrix1 &  Generic matrix multiplication  & 63 & DSPStone \\
+md5 &  Message digest algorithm & 355  & NetBench \\
+minver & Floating point matrix inversion  & 176  & MRTC \\
+pm & Pattern match kernel & 1571  & HPEC \\
+prime &  Prime number test  & 67 & MRTC \\
+quicksort &  Quick sort of string arrays  & 1613 & MiBench \\
+recursion &  Artificial recursive code  & 36 & MRTC \\
+select & Select the Nth largest number in a floating point array  & 102 & MRTC \\
+sha &  NIST secure hash algorithm & 2049  & MiBench \\
+st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 127  & MRTC \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}  
+\begin{tabular}{lp{5cm}rr}
+\toprule
+Name & Description & Code Size & Origin\\
    & &  (LoC) & \\ \midrule
-  \endfirsthead
-
-  \multicolumn{4}{c}%
-  {{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
-  \toprule Name & Description & Code Size & Origin\\
-   & &  (LoC) & \\ \midrule
-  \endhead
-
-  \midrule  \multicolumn{4}{r}{Continued on next page} \\ \bottomrule
-  \endfoot
-
-  \bottomrule
-  \endlastfoot
-
-    adpcm\_dec & ADPCM decoder & 398 & SNU-RT \\
-    adpcm\_enc &  ADPCM encoder  & 410  & SNU-RT \\
-    ammunition & C compiler arithmetic stress test  & 2448 & DINO \\
-    anagram &  Word anagram computation & 2772  & misc \\
-    audiobeam &  Audio beam former  & 6653  & StreamIt \\
-    %basicmath\_small &  Basic mathematical calculations (cubic function solving, integer square roots, angle conversion) & 1001 & MiBench \\
-    binarysearch & Binary search of 15 integers & 67 & MRTC \\
-    bitcount & Couting number of bits in an integer array & 230  & snippest \\
-    bitonic &  Bitonic sorting network  & 73 & MiBench \\
-    bsort & Bubblesort program & 60 & MRTC \\
-    cjpeg\_transupp &  JPEG image transcoding routines  & 673 & MediaBench \\
-    cjpeg\_wrbmp & JPEG image bitmap writing code & 965 & IJG \\
-    complex\_updates &  Multiply-add with vectors of complex numbers & 59 & DSPStone \\
-    countnegative &  Counts non-negative numbers in a matrix  & 78 & MRTC \\
-    cover &  Artificial code with lots of different control flow paths  & 636  & MRTC \\
-    crc &  CRC computation on 40 bytes of data  & 81 & SNU-RT \\
-    dijkstra & All pairs shortest path  & 247  & MiBench \\
-    duff & Duff's device  & 67 & MRTC \\
-    epic & Efficient pyramid image coder  & 979  & MediaBench \\
-
-    fac &  Factorial function & 40 & MRTC \\
-    fft &  1024-point FFT, 13 bits per twiddle  & 488  & DSPStone \\
-    filterbank & Filter bank for multirate signal processing  & 89 & StreamIt \\
-    fir2dim &  2-dimensional FIR filter convolution & 119 & DSPStone \\
-    fmref &  Software FM radio with equalizer & 680  & StreamIt \\
-    g723\_enc &  CCITT G.723 encoder  & 546  & SUN Microsystems \\
-    gsm\_dec & GSM provisional standard decoder & 1426 & MediaBench \\
-    gsm\_enc & GSM provisional standard encoder & 1951 & MediaBench \\
-    h264\_dec &  H.264 block decoding functions & 1053 & MediaBench \\
-    huff\_dec &  Huffman decoding with a file source to decompress  & 242  & misc \\
-    huff\_enc & Huffman encoding with a file source to compress  & 386  & misc \\
-    iir &  Biquad IIR 4 sections filter & 67 & DSPStone \\
-    insertsort & Insertion sort & 70 & MRTC \\
-    jfdctint & Discrete-cosine transformation on a 8x8 pixel block  & 150  & MRTC \\
-    lms &  LMS adaptive signal enhancement  & 160  & MRTC \\
-    ludcmp & LU decomposition & 111 & MRTC \\
-    matrix1 &  Generic matrix multiplication  & 63 & DSPStone \\
-    md5 &  Message digest algorithm & 355  & NetBench \\
-    minver & Floating point matrix inversion  & 176  & MRTC \\
-    mpeg2 &  MPEG2 motion estimation  & 12601 & MediaBench \\
-    ndes & Complex embedded code  & 299  & MRTC \\
-
-    petrinet & Petri net simulation & 500  & MRTC \\
-    pm & Pattern match kernel & 1571  & misc \\
-    prime &  Prime number test  & 67 & MRTC \\
-
-    quicksort &  Quick sort of string arrays  & 1613 & MiBench \\
-    recursion &  Artificial recursive code  & 36 & MRTC \\
-    rijndael\_dec & Rijndael AES decryption  & 2922 & MiBench \\
-    rijndael\_enc & Rijndael AES encryption  & 2749 & MiBench \\
-    select & Select the Nth largest number in a floating point array  & 102 & MRTC \\
-    sha &  NIST secure hash algorithm & 2049  & MiBench \\
-    st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 127  & MRTC \\
-    statemate &  Statechart simulation of a car window lift control & 1107 & MRTC \\
-    susan &  MR image recognition algorithm & 8782 & MiBench \\
-    test3 &  Artificial WCET analysis stress test & 4297 & misc \\
-\end{longtable}
-\end{center}
+adpcm\_dec & ADPCM decoder & 398 & SNU-RT \\
+adpcm\_enc &  ADPCM encoder  & 410  & SNU-RT \\
+ammunition & C compiler arithmetic stress test  & 2448 & DINO \\
+anagram &  Word anagram computation & 2772  & Raymond Chen \\
+audiobeam &  Audio beam former  & 6653  & StreamIt \\
+cjpeg\_transupp &  JPEG image transcoding routines  & 673 & MediaBench \\
+cjpeg\_wrbmp & JPEG image bitmap writing code & 965 & IJG \\
+dijkstra & All pairs shortest path  & 247  & MiBench \\
+epic & Efficient pyramid image coder  & 979  & MediaBench \\
+fmref &  Software FM radio with equalizer & 680  & StreamIt \\
+g723\_enc &  CCITT G.723 encoder  & 546  & SUN Microsystems \\
+gsm\_dec & GSM provisional standard decoder & 1426 & MediaBench \\
+gsm\_enc & GSM provisional standard encoder & 1951 & MediaBench \\
+h264\_dec &  H.264 block decoding functions & 1053 & MediaBench \\
+huff\_dec &  Huffman decoding with a file source to decompress  & 242  & David Bourgin \\
+huff\_enc & Huffman encoding with a file source to compress  & 386  & David Bourgin \\
+mpeg2 &  MPEG2 motion estimation  & 12601 & MediaBench \\
+ndes & Complex embedded code  & 299  & MRTC \\
+petrinet & Petri net simulation & 500  & MRTC \\
+rijndael\_dec & Rijndael AES decryption  & 2922 & MiBench \\
+rijndael\_enc & Rijndael AES encryption  & 2749 & MiBench \\
+statemate &  Statechart simulation of a car window lift control & 1107 & MRTC \\
+susan &  MR image recognition algorithm & 8782 & MiBench \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
-\begin{verbatim}
-Parallel Benchmarks:
-Name 	Description 	#Tasks 	Code Size (LoC) 1 	Origin
-Debie 	DEBIE-1 instrument observing micro-meteoroids and small space debris 	8 	6094 	Tidorum Ltd
-PapaBench 	UAV autopilot and fly-by-wire software 	10 	6644 	Paparazzi
-Powerwindow Distributed powerwindow control software  5 413	CoSys-Lab
-\end{verbatim}
+\begin{table}
+\centering
+\caption{\label{tab:bench_parallel}TACLeBench parallel benchmarks}  
+\begin{tabular}{lp{5cm}rrr}
+\toprule
+Name & Description & \#Tasks &Code Size & Origin\\
+     &             &         &(LoC) & \\ \midrule
+Debie&  DEBIE-1 instrument observing micro-meteoroids and small space debris &8 &  6615 & Tidorum Ltd \\
+PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{\label{tab:bench_app}TACLeBench application benchmarks}  
+\begin{tabular}{lp{5cm}rrr}
+\toprule
+Name & Description & \#Tasks & Code Size & Origin\\
+     &             &         &     (LoC) & \\ \midrule
+lift & A lift controller & 1 & 395 & Benedikt Huber\\
+Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{\label{tab:bench_test}TACLeBench test benchmarks}  
+\begin{tabular}{lp{5cm}rp{2.5cm}}
+\toprule
+Name & Description & Code Size & Origin\\
+     &             &  (LoC) & \\ \midrule
+cover &  Artificial code with lots of different control flow paths  & 636  & MRTC \\
+duff & Duff's device  & 67 & MRTC \\
+test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarlandes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 
 
 \subsection{Issues with the Original Sources}
