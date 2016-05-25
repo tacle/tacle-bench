@@ -19,3 +19,6 @@ Original provenience: David Bourgin (David.Bourgin@ufrima.imag.fr)
 2016-05-24:
 - Changed type of j to unsigned to avoid warning
 - Removed static declarations
+
+2016-05-25:
+- Precise types to avoid gcc++ warnings

@@ -105,7 +105,7 @@ static unsigned char huff_enc_val_to_write = 0;
 */
 
 #define huff_enc_plaintext_len 600
-static char *huff_enc_plaintext =
+static const char *huff_enc_plaintext =
   "You are doubtless asking \"How can I reduce the data size without losing "
   "some informations?\". It's easy to answer to this question. I'll only take "
   "an example. I'm sure you have heard about the morse. This system established "
@@ -305,8 +305,8 @@ int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 )
    Errors: None
 */
 {
-  huff_enc_t_tree *const *tree1 = t1;
-  huff_enc_t_tree *const *tree2 = t2;
+  huff_enc_t_tree *const *tree1 = ( huff_enc_t_tree *const * ) t1;
+  huff_enc_t_tree *const *tree2 = ( huff_enc_t_tree *const * ) t2;
   return ( ( *tree2 )->weight ^ ( *tree1 )->weight )
          ? ( ( ( *tree2 )->weight < ( *tree1 )->weight ) ? -1 : 1 ) : 0;
 }
@@ -435,7 +435,7 @@ huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
     occurrences_table[256]->weight = 1;
 
     /* Sorts the occurrences table depending on the weight of each character */
-    huff_enc_qsort( ( void * )occurrences_table, 257, sizeof( huff_enc_t_tree * ) );
+    huff_enc_qsort( ( char * )occurrences_table, 257, sizeof( huff_enc_t_tree * ) );
 
     for ( i = 256; ( i != 0 ) && ( !occurrences_table[i]->weight ); i-- )
       ;
@@ -458,7 +458,7 @@ huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
 
       //qsort( ( char * )occurrences_table, i + 1, sizeof( *huff_enc_t_tree ),
       //huff_enc_weighhuff_enc_t_tree_comp );
-      huff_enc_qsort( ( void * )occurrences_table, i + 1,
+      huff_enc_qsort( ( char * )occurrences_table, i + 1,
                       sizeof( huff_enc_t_tree * ) );
 
       if ( i )      /* Is there an other node in the occurrence tables? */

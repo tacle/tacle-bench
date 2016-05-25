@@ -96,7 +96,7 @@ unsigned int huff_dec_val_to_read = 0;
 */
 
 #define huff_dec_plaintext_len 600
-static char *huff_dec_plaintext =
+static const char *huff_dec_plaintext =
   "You are doubtless asking \"How can I reduce the data size without losing "
   "some informations?\". It's easy to answer to this question. I'll only take "
   "an example. I'm sure you have heard about the morse. This system established "
