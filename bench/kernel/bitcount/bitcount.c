@@ -35,7 +35,7 @@ unsigned int bitcount_iterations;
 /*
    First declaration of the functions
 */
-static int bitcount_bit_shifter( long int x );
+int bitcount_bit_shifter( long int x );
 unsigned long bitcount_random( void );
 void bitcount_main();
 int bitcount_return();
@@ -43,7 +43,7 @@ void bitcount_init();
 int main( void );
 
 
-static int bitcount_bit_shifter( long int x )
+int bitcount_bit_shifter( long int x )
 {
   int n;
   unsigned int i;
@@ -56,7 +56,7 @@ static int bitcount_bit_shifter( long int x )
 
 int bitcount_return()
 {
-  return bitcount_n;
+  return (bitcount_n + (-1095) ) != 0;
 }
 
 void bitcount_init()
@@ -142,5 +142,5 @@ int main( void )
   bitcount_init();
   bitcount_main();
 
-  return ( bitcount_return() + (-1095) != 0 );
+  return ( bitcount_return() );
 }

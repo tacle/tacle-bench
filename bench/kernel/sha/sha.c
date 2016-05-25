@@ -21,6 +21,11 @@
 #include "memset.h"
 #include "sha.h"
 
+/*
+  Declaration of global variables
+*/
+struct SHA_INFO sha_info;
+
 /* SHA f()-functions */
 #define f1(x,y,z) ((x & y) | (~x & z))
 #define f2(x,y,z) (x ^ y ^ z)

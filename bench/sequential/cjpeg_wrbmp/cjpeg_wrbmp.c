@@ -47,7 +47,7 @@ typedef struct {
 typedef cjpeg_wrbmp_bmp_dest_struct *cjpeg_wrbmp_bmp_dest_ptr;
 extern unsigned char cjpeg_wrbmp_colormap[3][256];
 unsigned char cjpeg_wrbmp_output_array[6144];
-static unsigned char *cjpeg_wrbmp_jpeg_stream /*= cjpeg_jpeg6b_wrbmp_output_array*/;
+unsigned char *cjpeg_wrbmp_jpeg_stream /*= cjpeg_jpeg6b_wrbmp_output_array*/;
 
 struct cjpeg_wrbmp_jpeg_decompress_struct
   cjpeg_wrbmp_jpeg_dec_1;
@@ -201,10 +201,7 @@ void cjpeg_wrbmp_main()
 
 int cjpeg_wrbmp_return()
 {
-   int results = 0;
-   results = ( int ) cjpeg_wrbmp_jpeg_stream;
-
-   return results;
+   return (( int ) *(cjpeg_wrbmp_jpeg_stream)  + (-32) ) != 0;
 }
 
 int main( void )
@@ -212,7 +209,7 @@ int main( void )
 	cjpeg_wrbmp_init();
   	cjpeg_wrbmp_main();
 
-    return ( cjpeg_wrbmp_return() + (-4256800) != 0 );
+    return ( cjpeg_wrbmp_return() );
 }
 
 #endif /* BMP_SUPPORTED */
