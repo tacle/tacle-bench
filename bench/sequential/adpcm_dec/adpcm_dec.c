@@ -682,7 +682,7 @@ int adpcm_dec_return()
     check_sum += ( adpcm_dec_result[i] + adpcm_dec_result[i + 1] );
   }
 
-  return check_sum != 2;
+  return check_sum != -2;
 }
 
 /*

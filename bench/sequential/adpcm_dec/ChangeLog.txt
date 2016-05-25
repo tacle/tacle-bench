@@ -27,3 +27,6 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 
  2016-05-23:
  - Check sum added and checked against the expected value
+
+ 2016-05-25:
+ - Corrected expected value
