@@ -41,14 +41,13 @@
 \author[5]{Martin Schoeberl}
 \author[5]{Rasmus Bo S{\o}rensen}
 \author[7]{Peter W{\"a}gemann}
-\affil[1]{Dummy University Computing Laboratory\\
-  Address, Country\\
-  \texttt{open@dummyuni.org}}
+\affil[1]{Hamburg University of Technology, Institute of Embedded Systems, Germany \\
+  \texttt{Heiko.Falk@tuhh.de}}
 \affil[2]{University of Amsterdam, The Netherlands\\
   \texttt{altmeyer@uva.nl}}
 \affil[3]{University of Antwerp, iMinds, Belgium\\
   \texttt{peter.hellinckx@uantwerpen.be}}
-\affil[4]{M{\"a}lardalen, University, School of Innovation, Design, and Engineering, Sweden\\
+\affil[4]{M{\"a}lardalen University, School of Innovation, Design, and Engineering, Sweden\\
   \texttt{bjorn.lisper@mdh.se}}
 \affil[5]{Technical University of Denmark, Department of Applied Mathematics and Computer Science, Denmark\\
   \texttt{\{wopu, masca,rboso\}@dtu.dk}}
@@ -60,7 +59,7 @@
 
 \Copyright{Heiko Falk et al.}%mandatory. OASIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation".
 \keywords{Dummy keywords -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
 % Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -189,23 +188,26 @@ most of the code away. We include most of the benchmarks from the
 MiBench~\cite{MiBench} We include some of the MiBench benchmarks, especially
 those where it was possible to include the input data with the C source.
 
-Debie~\cite{debie}
+DEBIE~\cite{debie} is a software derived from a satellite-mounted detector of micro-meteorids and space debris.
+It was developed by Space Systems Finland Ltd. and was converted by Tidorum Ltd. into a portable benchmark for real-time applications.
+DEBIE is a multi-task application that consists of only 8, and partially very small, different tasks.
+DEBIE is accompanied by a specification of valid input and ouput data and of required activation rates of the individual tasks.
 
-PapaBench~\cite{papabench} has been derived from  Paparazzi\footnote{\url{https://wiki.paparazziuav.org/}}, 
-an open-source hardware and software project for the design of unmaned aerial vehicles.  PapaBench includes 
+PapaBench~\cite{papabench} has been derived from  Paparazzi\footnote{\url{https://wiki.paparazziuav.org/}},
+an open-source hardware and software project for the design of unmaned aerial vehicles.  PapaBench includes
 two software components of this project, that run on separate processors communicating through an SPI link:
-the \textit{fly-by-wire} part controls the flight (engine and flaps control, stabilization, radio-communication 
-with the ground, support for infrared sensors, etc.) while the \textit{autopilot} part controls the GPS and 
+the \textit{fly-by-wire} part controls the flight (engine and flaps control, stabilization, radio-communication
+with the ground, support for infrared sensors, etc.) while the \textit{autopilot} part controls the GPS and
 executes the flight plan (which is decided offline). Both software parts  cumulate 13 tasks that are subject
 to precedence constraints and 6 interrupt service routines.
 
-The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides their own benchmark suite dedicated to the evaluation of 
+The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides their own benchmark suite dedicated to the evaluation of
 the performance of embedded hardware and embedded software.
 The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tables, but also big data and cloud computing.
 To improve comparability between different processors and systems, the consortium provides a sophisticated test-harness which allows to derive certifiable scores.
 The test-harness, being a clear advantage in terms of comparability and certifiability, constitutes a hindrance in terms of portability and usability.
 Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variety of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
-Furthermore, in stark contrast to the aforementioned benchmark suites, and especially to TACLeBench, the EEMBC benchmarks are not published under an open-source license. 
+Furthermore, in stark contrast to the aforementioned benchmark suites, and especially to TACLeBench, the EEMBC benchmarks are not published under an open-source license.
 Instead, the benchmarks are behind a pay-wall, even for purely academic research.
 
 
@@ -233,23 +235,23 @@ called basic blocks. Each basic block contains one path trace of instructions wi
 The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
 \item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
 
-Based on taskset descriptions 
+Based on taskset descriptions
 \end{itemize}
 
 \todo{The following is a verbatim copy from the TACLe website.
 Needs to be updated and put into a nice table, like the following template.}
 
 \begin{center}
-\begin{longtable}{lp{5cm}rr} 
+\begin{longtable}{lp{5cm}rr}
  \caption{TACLeBench benchmarks}  \label{tab:bench} \\
   \toprule Name & Description & Code Size & Origin\\
-   & &  (LoC) & \\ \midrule 
+   & &  (LoC) & \\ \midrule
   \endfirsthead
 
   \multicolumn{4}{c}%
   {{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
   \toprule Name & Description & Code Size & Origin\\
-   & &  (LoC) & \\ \midrule 
+   & &  (LoC) & \\ \midrule
   \endhead
 
   \midrule  \multicolumn{4}{r}{Continued on next page} \\ \bottomrule
@@ -394,28 +396,28 @@ Therefore, there shall always be an evaluation section.}
 
 \subsection{Sanity Checks}
 All code-changes were done manually by different members of the TACLe Cost action.
-Such a collaborative procedure is inherently error-prone. 
+Such a collaborative procedure is inherently error-prone.
 For once, human errors can occur and the original sources were often faulty to start with.
-The distributive work on the benchmarks led to an additional source of errors: 
+The distributive work on the benchmarks led to an additional source of errors:
 Different system configurations can lead to different behaviors, and a benchmark behaving well under system configuration A may be faulty under configuration B.
-To ensure the quality of the benchmarks and to improve portability, we have thus implemented automatic sanity checks. 
+To ensure the quality of the benchmarks and to improve portability, we have thus implemented automatic sanity checks.
 
-The code quality and conformity with the code formatting rules is validated centrally and the latest results can be viewed online\footnote{\url{http://tacle.cs.fau.de/}}. 
-For this sanity check, all benchmarks are compiled using \textit{gcc}, \textit{g$++$} and \textit{clang}, executed and the return values are checked against the expected value. 
+The code quality and conformity with the code formatting rules is validated centrally and the latest results can be viewed online\footnote{\url{http://tacle.cs.fau.de/}}.
+For this sanity check, all benchmarks are compiled using \textit{gcc}, \textit{g$++$} and \textit{clang}, executed and the return values are checked against the expected value.
 Clang's static analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} is used to further reveal programming bugs, such as out-of-bounds errors, and also to validate the compliance of the code with the code-formatting rules.
 
 The portability has been checked via a shell-script \textit{checkbenchmarks.sh} that is now part of the TACLeBench git-repository.
 The script allows to quickly identify incompatibilities of the benchmarks with specific operating systems, compilers and system configurations.
 Even though full coverage of all system configurations can never be achieved, we were able to cover most of the common operating systems and compilers.
 
-% In order to improve the code quality of the TACLeBench suite, we used different 
-% compilers (e.g., clang, gcc) to identify shortcomings in the code of each benchmark in an 
-% automated way. Additionally, we exploited Clang's static 
-% analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} to further reveal 
-% programming bugs in the benchmark suite. We extended this sanity checker with additional 
+% In order to improve the code quality of the TACLeBench suite, we used different
+% compilers (e.g., clang, gcc) to identify shortcomings in the code of each benchmark in an
+% automated way. Additionally, we exploited Clang's static
+% analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} to further reveal
+% programming bugs in the benchmark suite. We extended this sanity checker with additional
 % TACLeBench-specific passes to identify if all benchmark are compliant to the code-formatting rules.
 
-\todo{Comparison compiler warning in TACLeBench v1 with v2, problem: expint was in 1.0, but is no 
+\todo{Comparison compiler warning in TACLeBench v1 with v2, problem: expint was in 1.0, but is no
 longer in 2.0 and PowerWindow was added for 2.0}
 
 Possible Options for the Evaluation:
