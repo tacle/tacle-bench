@@ -24,3 +24,7 @@ Original provenience: SUN Microsystems
  2016-05-23:
  - Added initialization with volatile int
  - Added check_sum and comparison with expected result
+
+2016-05-25
+ - Changed name of struct g723_enc_state to g723_enc_state_t
+ - Changed name of variable state to g723_enc_state

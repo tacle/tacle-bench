@@ -30,7 +30,7 @@
    to variable names in the bit level description of the coding algorithm
    included in this Recommendation.
 */
-struct g723_enc_state {
+struct g723_enc_state_t {
   long yl;  /* Locked or steady state step size multiplier. */
   short yu; /* Unlocked or non-steady state step size multiplier. */
   short dms;  /* Short term energy estimate. */
@@ -62,11 +62,11 @@ struct g723_enc_state {
 */
 
 int g723_enc_abs( int num );
-void g723_enc_init_state( struct g723_enc_state *state_ptr );
-int g723_enc_predictor_zero( struct g723_enc_state *state_ptr );
+void g723_enc_init_state( struct g723_enc_state_t *state_ptr );
+int g723_enc_predictor_zero( struct g723_enc_state_t *state_ptr );
 int g723_enc_fmult( int an, int srn );
-int g723_enc_predictor_pole( struct g723_enc_state *state_ptr );
-int g723_enc_step_size( struct g723_enc_state *state_ptr );
+int g723_enc_predictor_pole( struct g723_enc_state_t *state_ptr );
+int g723_enc_step_size( struct g723_enc_state_t *state_ptr );
 int g723_enc_quantize(
   int   d,  /* Raw difference signal sample */
   int   y,  /* Step size multiplier */
@@ -84,7 +84,7 @@ void g723_enc_update(
   int   dq,   /* quantized prediction difference */
   int   sr,   /* reconstructed signal */
   int   dqsez,    /* difference from 2-pole predictor */
-  struct g723_enc_state *state_ptr ); /* coder state pointer */
+  struct g723_enc_state_t *state_ptr ); /* coder state pointer */
 int g723_enc_quan(
   int   val,
   short   *table,
@@ -98,7 +98,7 @@ int g723_enc_ulaw2linear( unsigned char u_val );
 int g723_enc_g723_24_encoder(
   int sample,
   int in_coding,
-  struct g723_enc_state *state_ptr );
+  struct g723_enc_state_t *state_ptr );
 int g723_enc_pack_output(
   unsigned  char  code,
   int     bits );
@@ -112,7 +112,7 @@ int main( void );
   Declaration of global variables
 */
 
-struct g723_enc_state state;
+struct g723_enc_state_t g723_enc_state;
 
 unsigned int g723_enc_INPUT[256] = {
   51, 17, 31, 53, 95, 17, 70, 22, 49, 12,  8, 39, 28, 37, 99, 54,
@@ -271,7 +271,7 @@ int g723_enc_quan(
 */
 int
 g723_enc_predictor_zero(
-  struct g723_enc_state *state_ptr )
+  struct g723_enc_state_t *state_ptr )
 {
   int   i;
   int   sezi;
@@ -293,7 +293,7 @@ g723_enc_predictor_zero(
 */
 int
 g723_enc_predictor_pole(
-  struct g723_enc_state *state_ptr )
+  struct g723_enc_state_t *state_ptr )
 {
   return ( g723_enc_fmult( state_ptr->a[1] >> 2, state_ptr->sr[1] ) +
            g723_enc_fmult( state_ptr->a[0] >> 2, state_ptr->sr[0] ) );
@@ -307,7 +307,7 @@ g723_enc_predictor_pole(
 */
 int
 g723_enc_step_size(
-  struct g723_enc_state *state_ptr )
+  struct g723_enc_state_t *state_ptr )
 {
   int   y;
   int   dif;
@@ -429,7 +429,7 @@ g723_enc_update(
   int   dq,   /* quantized prediction difference */
   int   sr,   /* reconstructed signal */
   int   dqsez,    /* difference from 2-pole predictor */
-  struct g723_enc_state *state_ptr )  /* coder state pointer */
+  struct g723_enc_state_t *state_ptr )  /* coder state pointer */
 {
   int   cnt;
   short   mag, exp; /* Adaptive predictor, FLOAT A */
@@ -698,7 +698,7 @@ int
 g723_enc_g723_24_encoder(
   int   sl,
   int   in_coding,
-  struct g723_enc_state *state_ptr )
+  struct g723_enc_state_t *state_ptr )
 {
   short   sei, sezi, se, sez; /* ACCUM */
   short   d;      /* SUBTA */
@@ -784,7 +784,7 @@ g723_enc_pack_output(
 */
 void
 g723_enc_init_state(
-  struct g723_enc_state *state_ptr )
+  struct g723_enc_state_t *state_ptr )
 {
   int   cnta;
 
@@ -813,7 +813,7 @@ void g723_enc_init()
 {
   int i;
   volatile int x = 0;
-  g723_enc_init_state( &state );
+  g723_enc_init_state( &g723_enc_state );
 
    _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < 256; i++ ) {
@@ -857,7 +857,7 @@ void _Pragma( "entrypoint" ) g723_enc_main()
   _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < 256; i++ ) {
     *in_buf = g723_enc_INPUT[i];
-    code = g723_enc_g723_24_encoder( sample_short, in_coding, &state );
+    code = g723_enc_g723_24_encoder( sample_short, in_coding, &g723_enc_state );
     resid = g723_enc_pack_output( code, enc_bits );
   }
 
