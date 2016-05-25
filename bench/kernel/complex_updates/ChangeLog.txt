@@ -23,3 +23,5 @@ Original provenience: DSP-Stone
 2016-04-25:
 - Replace usages of macros by their expansions:
   STORAGE_CLASS => register, TYPE => float
+2016-05-25:
+- Apply code formatting with astyle

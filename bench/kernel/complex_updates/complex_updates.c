@@ -37,10 +37,10 @@
   Forward declaration of functions
 */
 
-void complex_updates_pin_down(float *pa, float *pb, float *pc, float *pd);
-void complex_updates_init(void);
-void complex_updates_main(void);
-int main(void);
+void complex_updates_pin_down( float *pa, float *pb, float *pc, float *pd );
+void complex_updates_init( void );
+void complex_updates_main( void );
+int main( void );
 
 
 /*
@@ -48,23 +48,24 @@ int main(void);
 */
 
 float complex_updates_A[2 * N], complex_updates_B[2 * N],
-    complex_updates_C[2 * N], complex_updates_D[2 * N];
+      complex_updates_C[2 * N], complex_updates_D[2 * N];
 
 
 /*
   Initialization- and return-value-related functions
 */
 
-void complex_updates_init(void) {
+void complex_updates_init( void )
+{
   int i;
   volatile float x = 0;
 
-  complex_updates_pin_down(&complex_updates_A[0], &complex_updates_B[0],
-                           &complex_updates_C[0], &complex_updates_D[0]);
+  complex_updates_pin_down( &complex_updates_A[0], &complex_updates_B[0],
+                            &complex_updates_C[0], &complex_updates_D[0] );
 
   /* avoid constant propagation */
   _Pragma( "loopbound min 16 max 16" )
-  for ( i = 0 ; i < N ; i++){
+  for ( i = 0 ; i < N ; i++ ) {
     complex_updates_A[i] += x;
     complex_updates_B[i] += x;
     complex_updates_C[i] += x;
@@ -73,11 +74,12 @@ void complex_updates_init(void) {
 }
 
 
-void complex_updates_pin_down(float *pa, float *pb, float *pc, float *pd) {
+void complex_updates_pin_down( float *pa, float *pb, float *pc, float *pd )
+{
   register int i;
 
-  _Pragma("loopbound min 16 max 16")
-  for (i = 0; i < N; i++) {
+  _Pragma( "loopbound min 16 max 16" )
+  for ( i = 0; i < N; i++ ) {
     *pa++ = 2;
     *pa++ = 1;
     *pb++ = 2;
@@ -90,15 +92,15 @@ void complex_updates_pin_down(float *pa, float *pb, float *pc, float *pd) {
 }
 
 
-int complex_updates_return(void) {
+int complex_updates_return( void )
+{
   float check_sum = 0;
   int i;
 
-  for (i = 0; i < N; i++) {
+  for ( i = 0; i < N; i++ )
     check_sum += complex_updates_D[i];
-  }
 
-  return (check_sum != 144.0f);
+  return ( check_sum != 144.0f );
 }
 
 
@@ -106,7 +108,8 @@ int complex_updates_return(void) {
   Main functions
 */
 
-void _Pragma("entrypoint") complex_updates_main(void) {
+void _Pragma( "entrypoint" ) complex_updates_main( void )
+{
   register float *p_a = &complex_updates_A[0], *p_b = &complex_updates_B[0];
   register float *p_c = &complex_updates_C[0], *p_d = &complex_updates_D[0];
   int i;
@@ -122,7 +125,8 @@ void _Pragma("entrypoint") complex_updates_main(void) {
 
 }
 
-int main(void) {
+int main( void )
+{
   complex_updates_init();
 
   complex_updates_main();
