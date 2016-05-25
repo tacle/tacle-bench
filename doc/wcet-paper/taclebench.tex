@@ -219,7 +219,9 @@ most of the code away. We include most of the benchmarks from the
  or even disallow distributing the source.
 
 
-MiBench~\cite{MiBench} We include some of the MiBench benchmarks, especially
+MiBench~\cite{MiBench} is a collection of benchmarks targeting the embedded
+domain and providing them in open-source.
+We include some of the MiBench benchmarks, especially
 those where it was possible to include the input data with the C source.
 
 DEBIE~\cite{debie} is a software derived from a satellite-mounted detector of micro-meteorids and space debris.
@@ -447,13 +449,12 @@ down the original authors of the benchmark.
 \section{Evaluation}
 \label{sec:eval}
 
-\todo{Computer engineering is a constructive science. We build stuff and we measure.
-Therefore, there shall always be an evaluation section.}
+
 \todo{Properly discuss Figure~\ref{fig:execution-times}}
 \begin{figure}[t]
   \def\resultfile{eval/wcet.csv}
   \input{eval/pasim-eval.tikz}
-  \caption{Execution times in TACLeBench vary from \todo{x} to \todo{y} on the patmos architecture.}
+  \caption{Execution times in TACLeBench vary from \todo{x} to \todo{y} on the Patmos architecture.}
   \label{fig:execution-times}
 \end{figure}
 
@@ -503,10 +504,11 @@ Possible Options for the Evaluation:
 
 \todo{TACLe COST action phrase}
 
-We want to thank \dots for helping in restructuring the benchmarks.
 We want to thank Bendikt Huber for porting the Lift benchmark from Java to C.
-
-\todo{Ack Niclas for contributing DEBIE in open-source.}
+We want to thank Niklas Holsti from Tidorum Ltd for contributing DEBIE in open-source.
+% Order according to contribution count on GitHub: https://github.com/tacle/tacle-bench/graphs/contributors
+% But Simon is not listed there! Maybe we are missing some people?
+We want to thank Yorick De Bock, J{\"o}rg Mische, Simon Wegener, and Haoxuan Li for helping in restructuring the benchmarks.
 
 \appendix
 \section{Source Access and Compiling the Benchmarks}
