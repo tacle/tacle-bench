@@ -30,7 +30,7 @@
     Forward declaration of functions
 */
 
-int minver_minver( int row, int col, double eps );
+int minver_minver( int side, double eps );
 int minver_mmul( int row_a, int col_a, int row_b, int col_b );
 double minver_fabs( double n );
 void minver_init();
@@ -99,24 +99,24 @@ int  minver_mmul( int row_a, int col_a, int row_b, int col_b )
 }
 
 
-int minver_minver( int row, int col, double eps )
+int minver_minver( int side, double eps )
 {
 
   int work[ 500 ], i, j, k, iw;
   int r = 0;
   double w, wmax, pivot, api, w1;
 
-  if ( row < 2 || row > 500 || eps <= 0.0 )
+  if ( side < 2 || side > 500 || eps <= 0.0 )
     return ( 999 );
   w1 = 1.0;
   _Pragma( "loopbound min 3 max 3" )
-  for ( i = 0; i < row; i++ )
+  for ( i = 0; i < side; i++ )
     work[ i ] = i;
   _Pragma( "loopbound min 3 max 3" )
-  for ( k = 0; k < row; k++ ) {
+  for ( k = 0; k < side; k++ ) {
     wmax = 0.0;
     _Pragma( "loopbound min 1 max 3" )
-    for ( i = k; i < row; i++ ) {
+    for ( i = k; i < side; i++ ) {
       w = minver_fabs( minver_a[ i ][ k ] );
       if ( w > wmax ) {
         wmax = w;
@@ -136,22 +136,22 @@ int minver_minver( int row, int col, double eps )
       work[ k ] = work[ r ];
       work[ r ] = iw;
       _Pragma( "loopbound min 3 max 3" )
-      for ( j = 0; j < row; j++ ) {
+      for ( j = 0; j < side; j++ ) {
         w = minver_a[ k ][ j ];
         minver_a[ k ][ j ] = minver_a[ r ][ j ];
         minver_a[ r ][ j ] = w;
       }
     }
     _Pragma( "loopbound min 3 max 3" )
-    for ( i = 0; i < row; i++ )
+    for ( i = 0; i < side; i++ )
       minver_a[ k ][ i ] /= pivot;
     _Pragma( "loopbound min 3 max 3" )
-    for ( i = 0; i < row; i++ ) {
+    for ( i = 0; i < side; i++ ) {
       if ( i != k ) {
         w = minver_a[ i ][ k ];
         if ( w != 0.0 ) {
           _Pragma( "loopbound min 3 max 3" )
-          for ( j = 0; j < row; j++ ) {
+          for ( j = 0; j < side; j++ ) {
             if ( j != k ) minver_a[ i ][ j ] -= w * minver_a[ k ][ j ];
           }
           minver_a[ i ][ k ] = -w / pivot;
@@ -162,7 +162,7 @@ int minver_minver( int row, int col, double eps )
     minver_a[ k ][ k ] = 1.0 / pivot;
   }
   _Pragma( "loopbound min 3 max 3" )
-  for ( i = 0; i < row; ) {
+  for ( i = 0; i < side; ) {
     /*  The following redundant statement is inserted due to limitations of
         WCC's flow fact manager. It is required in order to have the flow
         fact pragma below uniquely attached to the while(1) loop.
@@ -176,7 +176,7 @@ int minver_minver( int row, int col, double eps )
       work[ k ] = work[ i ];
       work[ i ] = iw;
       _Pragma( "loopbound min 3 max 3" )
-      for ( j = 0; j < row; j++ ) {
+      for ( j = 0; j < side; j++ ) {
         w = minver_a [k ][ i ];
         minver_a[ k ][ i ] = minver_a[ k ][ k ];
         minver_a[ k ][ k ] = w;
@@ -240,7 +240,7 @@ void _Pragma( "entrypoint" ) minver_main()
       minver_aa[ i ][ j ] = minver_a[ i ][ j ];
   }
 
-  minver_minver( 3, 3, eps );
+  minver_minver( 3, eps );
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < 3; i++ ) {
     _Pragma( "loopbound min 3 max 3" )

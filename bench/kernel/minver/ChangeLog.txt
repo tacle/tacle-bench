@@ -30,3 +30,5 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 
 2016-05-25
  - Initialized variable r in function minver_minver()
+ - Removed parameter cols of minver_minver() function
+ - Renamed parameter rows of minver_minver() to side
