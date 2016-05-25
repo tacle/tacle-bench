@@ -226,6 +226,7 @@ benchmarks  changed? Legal changes?}
 \subsection{Classification}
 
 \todo{Talk about kernel, medium size, and application benchmarks and their usage.}
+\todo{The \# of lines of code was found using the linux utility \code{slocclount} and is measured in source lines of code (SLoC).}
 \begin{itemize}
 \item Static analysis
 \item Measurement based analysis
@@ -246,7 +247,7 @@ Needs to be updated and put into a nice table, like the following template.}
 \begin{tabular}{lp{6cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
-     &             &     (LoC) & \\ \midrule
+     &             &     (SLoC) & \\ \midrule
 binarysearch & Binary search of 15 integers & 67 & MRTC \\
 bitcount & Couting number of bits in an integer array & 230  & snippest \\
 bitonic &  Bitonic sorting network  & 73 & MiBench \\
@@ -283,7 +284,7 @@ st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 12
 \begin{tabular}{lp{5cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
-   & &  (LoC) & \\ \midrule
+   & &  (SLoC) & \\ \midrule
 adpcm\_dec & ADPCM decoder & 398 & SNU-RT \\
 adpcm\_enc &  ADPCM encoder  & 410  & SNU-RT \\
 ammunition & C compiler arithmetic stress test  & 2448 & DINO \\
@@ -318,7 +319,7 @@ susan &  MR image recognition algorithm & 8782 & MiBench \\
 \begin{tabular}{lp{5cm}rrr}
 \toprule
 Name & Description & \#Tasks &Code Size & Origin\\
-     &             &         &(LoC) & \\ \midrule
+     &             &         &(SLoC) & \\ \midrule
 Debie&  DEBIE-1 instrument observing micro-meteoroids and small space debris &8 &  6615 & Tidorum Ltd \\
 PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \bottomrule
@@ -331,8 +332,8 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \begin{tabular}{lp{5cm}rrr}
 \toprule
 Name & Description & \#Tasks & Code Size & Origin\\
-     &             &         &     (LoC) & \\ \midrule
-lift & A lift controller & 1 & 395 & Benedikt Huber\\
+     &             &         &     (SLoC) & \\ \midrule
+lift & A lift controller & 1 & 395 & Martin Schoeberl\\
 Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
@@ -344,7 +345,7 @@ Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \begin{tabular}{lp{5cm}rp{2.5cm}}
 \toprule
 Name & Description & Code Size & Origin\\
-     &             &  (LoC) & \\ \midrule
+     &             &  (SLoC) & \\ \midrule
 cover &  Artificial code with lots of different control flow paths  & 636  & MRTC \\
 duff & Duff's device  & 67 & MRTC \\
 test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarlandes \\
