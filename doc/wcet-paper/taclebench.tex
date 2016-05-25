@@ -202,22 +202,20 @@ It was collected from several sources in 2005, and has since then been
 used in many WCET research projects as well as for the WCET Tool Challenge 2006~\cite{Gustafsson:ISOLA2006}.
 A subset of the M{\"a}lardalen benchmarks has even been translated to
 Java~\cite{jop:volta:rtas2008}. Most benchmarks are relatively small, except
-two C programs that have been generated from tools. The benchmarks also
-contain all input data. This effectively turns them into single-path programs, which
+two C programs that have been generated from tools.
+The benchmarks also contain all input data. This effectively turns them into single-path programs, which
 makes them less suitable for evaluating tools that can handle multi-path codes. To remedy that,
 some of the benchmarks are equipped with suggested input ranges that override the fixed
 input data in the code. The user is however then responsible to use the proper settings of the tool,
 or to create an appropriate test harness, such that the programs are analyzed with the specified input ranges
-rather than the fixed input data. Another consequence of the fact that the
-input data is fixed, and that some programs do not provide
-any return value, is that good compilers with optimization turned on can optimize
-most of the code away. We include most of the benchmarks from the
- M{\"a}lardalen WCET benchmark suite in TACLeBench.
- However, to prohibit the unwanted compiler optimizations we changed
- the way input data is represented in variables (made them \code{volatile}),
- and made the return of \code{main} dependent on the benchmark calculation.
- Furthermore, we dropped benchmarks where the licensing terms are unknown
- or even disallow distributing the source.
+rather than the fixed input data.
+We include most of the benchmarks from the
+M{\"a}lardalen WCET benchmark suite in TACLeBench.
+We dropped benchmarks where the licensing terms are unknown
+or even disallow distributing the source.
+
+
+
 
 
 MiBench~\cite{MiBench} is a collection of benchmarks targeting the embedded
@@ -278,23 +276,15 @@ E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
 (2) SNU-RT Benchmark Suite, (3) MDH, and (4) TACLeBench. How have
 benchmarks  changed? Legal changes?}
 
+\todo{Rasmus}
+
 \subsection{Classification}
 
-\todo{Talk about kernel, medium size, and application benchmarks and their usage.}
+\todo{Talk about kernel, medium size, and application benchmarks: Rasmus}
 \todo{The \# of lines of code was found using the linux utility \code{slocclount} and is measured in source lines of code (SLoC).}
-\begin{itemize}
-\item Static analysis
-\item Measurement based analysis
-\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
-called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
-The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
-\item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
 
-Based on taskset descriptions
-\end{itemize}
 
-\todo{The following is a verbatim copy from the TACLe website.
-Needs to be updated and put into a nice table, like the following template.}
+
 
 \begin{table}
 \centering
@@ -410,7 +400,19 @@ test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarland
 \end{table}
 
 
+\subsection{Benchmark Usage}
 
+\begin{itemize}
+\item Static analysis
+\item Measurement based analysis
+\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
+called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
+The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
+\item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
+
+Based on taskset descriptions
+
+\end{itemize}
 
 \subsection{Issues with the Original Sources}
 
@@ -424,6 +426,17 @@ test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarland
 \item Some benchmarks, which are available for download in the Internet have a license that
 does not allow open-source distribution. We removed those benchmarks from the original source.
 \end{itemize}
+
+The original benchmarks include all input data or we added input data into the C source.
+However, this effectively turns them into single-path programs.
+This fact could be used by analysis tools to explore only this single path.
+Another consequence of the fact that the
+input data is fixed, and that some programs do not provide
+any return value, is that good compilers with optimization turned on can optimize
+most of the code away.
+However, to prohibit the unwanted compiler optimizations we changed
+the way input data is represented in variables (made them \code{volatile}),
+and made the return of \code{main} dependent on the benchmark calculation.
 
 \subsection{Benchmark Changes}
 
@@ -468,7 +481,9 @@ down the original authors of the benchmark.
 \label{sec:eval}
 
 
-\todo{Properly discuss Figure~\ref{fig:execution-times}}
+\todo{Properly discuss Figure~\ref{fig:execution-times}. Peter? Ref. to Patmos processor/compiler/WCET analysis
+and all: \cite{t-crest:2015}}
+
 \begin{figure}[t]
   \def\resultfile{eval/wcet.csv}
   \input{eval/pasim-eval.tikz}
