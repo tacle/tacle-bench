@@ -27,7 +27,6 @@
   Case Timing Analysis by Sung-Soo Lim
 */
 
-#include <stdio.h>
 
 /*
   Forward declaration of functions
@@ -81,7 +80,7 @@ int insertsort_return()
 	for ( i = 0; i < 10; i++ )
 		returnValue += insertsort_a[i];
 
-    return returnValue - 52;
+    return (returnValue + (-52) ) != 0;
 }
 
 

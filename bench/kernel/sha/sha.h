@@ -46,11 +46,6 @@ struct SHA_INFO {
 };
 
 /*
-  Declaration of global variables
-*/
-struct SHA_INFO sha_info;
-
-/*
   Forward declaration of functions
 */
 void sha_transform( struct SHA_INFO * );

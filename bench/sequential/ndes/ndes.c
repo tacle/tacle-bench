@@ -352,7 +352,7 @@ void ndes_ks( /*ndes_immense key, */int n, ndes_great *kn )
 
 int ndes_return()
 {
-  return ndes_icd.r+ndes_icd.l;
+  return (ndes_icd.r+ndes_icd.l  + (-8390656) ) != 0 ;
 }
 
 void ndes_main()
@@ -367,5 +367,5 @@ int main( void )
   ndes_init();
   ndes_main();
 
-  return ( ndes_return() + (-8390656) != 0 );
+  return ( ndes_return() );
 }
