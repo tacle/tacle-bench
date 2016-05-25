@@ -5,12 +5,14 @@ Original provenience: MDH WCET BENCHMARK SUITE
  - Added TACLeBench header to line 1
  - Removed unused functions
  - Removed unused variables
- - Removed unused struct COMPLEX
- - Renamed functions to start with adpcm_dev_
- - Moved function adpcm_dec_reset from adpcm_dec_main to adpcm_dec_init
- - Created new function main, calling adpcm_dec_init, adpcm_dec_main and
-   returning adpcm_dec_return
- - Changed return type of adpcm_dec_main to void
+ - Declared s a global variable and renamed it to fac_s
+ - Declared n a global variable and renamed it to fac_n
+ - Renamed function fac to fac_fac
+ - Renamed function main to fac_main
+ - Created new function main, calling fac_init, fac_main and
+   returning fac_return
+ - Changed return type of fac_main to void
+ - Move initialization code into new function fac_init
  - Reordered functions in source code: initialization- and
    return-value-related functions first, followed by algorithm core
    functions, followed by main functions
