@@ -27,7 +27,9 @@
 \renewcommand*\ttdefault{txtt}
 
 % Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{TACLeBench -- Title is TBD\footnote{This work was partially supported by COST Action IC1202 Timing Analysis on Code-Level (TACLe).}}
+\title{TACLeBench: A Benchmark Collection to Support  Worst-Case Execution
+Time Research\footnote{This work was partially supported by COST Action
+IC1202 Timing Analysis on Code-Level (TACLe).}}
 %\titlerunning{TACLeBench} %optional, in case that the title is too long; the running title should fit into the top page column
 
 % Heiko first, rest in alphabetical order
@@ -80,12 +82,16 @@
 \maketitle
 
 \begin{abstract}
-\todo{Martin will work on this.}
+Engineering related research, such as research on worst-case execution time,
+uses experimentation to evaluate ideas. For these experiments we need
+example programs. Furthermore, to make the research experimentation
+repeatable those programs shall be made available.
 
-We need benchmarks that fit the WCET and embedded community needs,
-
-
- \end{abstract}
+We collected open-source programs, adapted them to a common coding
+style, and provide the collection in open-source. The benchmark collection
+is called TACLeBench and is available from GitHub in version 2.0
+at the publication date of this paper.
+\end{abstract}
 
 \section{Notes}
 
@@ -104,11 +110,38 @@ We need benchmarks that fit the WCET and embedded community needs,
 
 \todo{Martin will work on this.}
 
-     Good, realistic benchmark suites are essential for the evaluation and comparison of code-level timing analysis techniques. Existing benchmarking suites for CLTA do not cover multi-core software. TACLeBench provides a freely available and comprehensive benchmark suite for timing analysis, featuring complex multi-core benchmarks in the near future. TACLeBench will be continuously extended by novel benchmarks, especially by parallel multi-task/multi-core benchmarks. The overall goal is to establish TACLeBench as the standard benchmarking suite for timing analysis worldwide.
+Good, realistic benchmark suites are essential for the evaluation and comparison
+of worst-case execution time (WCET) analysis, compiler, and computer architecture techniques.
+TACLeBench provides a freely available and comprehensive benchmark suite
+for timing analysis and related research topic.
+%, featuring complex multi-core benchmarks in the near future.
+TACLeBench will be continuously extended by novel benchmarks,
+especially by parallel multi-task/multi-core benchmarks.
+The extension of TACLeBench will be carefully managed with snapshots
+and versioning so that it is clear which code has been used in a research
+experiment.
+The overall goal is to establish TACLeBench as the standard benchmarking
+suite for WCET analysis, WCET oriented compiler and computer
+architecture research worldwide.
 
-    TACLeBench is a collection of currently 102 benchmark programs from several different research groups and tool vendors around the world. These benchmarks are provided as ANSI-C 99 source codes. The source codes are 100\% self-contained; no dependencies to system-specific header files via \code{\#include} directives exist, eventually used functions from math libraries are also provided in the form of C source code. Furthermore, almost all benchmarks are processor-independent and can be compiled and evaluated for any kind of target processor. The only exception is PapaBench which uses architecture-dependent I/O addresses and which currently supports Atmel AVR processors.
+TACLeBench is a collection of currently 56 benchmark programs
+from several different research groups and tool vendors around the world.
+These benchmarks are provided as ANSI-C 99 source codes.
+The source codes are 100\% self-contained; no dependencies to system-specific
+header files via \code{\#include} directives or an operating system exist.
+All input data is part of the C source code.
+Eventually used functions from math libraries are also provided in the form of C source code. Furthermore, almost all benchmarks are processor-independent and can
+be compiled and evaluated for any kind of target processor.
+The only exception is PapaBench which uses architecture-dependent
+I/O addresses and which currently supports Atmel AVR processors.
 
-    Since TACLeBench addresses the needs imposed by timing analysis tools, all benchmarks are completely annotated with flow facts. These flow facts are directly incorporated into the ANSI-C source codes using Pragmas at a high level of abstraction. For example, the following source code snippet states that the shown loop iterates between 50 and 100 times, depending on the data dependency via variable \code{maxIter}:
+Since TACLeBench addresses the needs imposed by timing analysis tools,
+all benchmarks are completely annotated with flow facts.
+These flow facts are directly incorporated into the ANSI-C source codes using
+Pragmas at a high level of abstraction.
+For example, the following source code snippet states that the shown loop
+iterates between 50 and 100 times, depending on the data dependency
+via variable \code{maxIter}:
 
 \begin{verbatim}
       _Pragma( "loopbound min 50 max 100" )
@@ -118,12 +151,13 @@ We need benchmarks that fit the WCET and embedded community needs,
         Array[i] = i * fact * KNOWN_VALUE;
 
 \end{verbatim}
-    You can find a complete description of the used flow fact language in the download section of this website.
 
-    If you would like to share your very own benchmarks with us, feel free to contact Heiko Falk (Heiko (dot) Falk (at) tuhh (dot) de) in order to have your source codes included in TACLeBench.
 
-\todo{A brief introduction what the paper is about. It shall include briefly the
-main contributions and findings. The contributions can be bullet listed.}
+The complete description of the used flow fact language is part of the source
+distribution. If you would like to share your very own benchmarks with us,
+feel free to contact Heiko Falk (or any coauthor of this paper) in order
+to have your source codes included in TACLeBench.
+
 
 This paper... \todo{purpose statement, latest in 4th paragraph}
 
@@ -143,6 +177,10 @@ research groups. We keep this first version tagged with ``V1.0'' in the public
 GitHub repository.\footnote{\url{https://github.com/tacle/tacle-bench}}
 The version described in this paper is version 2.0 and tagged as such in the
 repository.
+The intention is to have the HEAD of the master branch being
+the most recent, versioned snapshot of TACLeBench.
+Future development and additions will be performed on a development
+branch so that HEAD is always a consistent snapshot.
 
 The contributions of this paper are: (1) ... (2) ...
 
@@ -155,9 +193,6 @@ Section~\ref{sec:conclusion} concludes.
 
 \section{Related Work}
 \label{sec:related}
-
-\todo{Show that you know the field. All related work shall be put
-into context or contrast to our current work.}
 
 The M{\"a}lardalen WCET benchmarks is the first collection of programs especially
 intended for benchmarking WCET analysis tools, with a focus on program flow analysis~\cite{wcet:bench:2012}.
@@ -332,7 +367,7 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \toprule
 Name & Description & \#Tasks & Code Size & Origin\\
      &             &         &     (LoC) & \\ \midrule
-lift & A lift controller & 1 & 395 & Benedikt Huber\\
+lift & A lift controller & 1 & 395 & Martin Schoeberl\\
 Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
