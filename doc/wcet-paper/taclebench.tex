@@ -271,7 +271,7 @@ and we include it in TACLeBench.
 
 \subsection{Benchmark Sources}
 The benchmarks included in TACLeBench are sourced from other collections of benchmarks or as single source files publicly available.
-We have specified the origin of each benchmark listed in tables~\ref{tab:bench_kernel}-\ref{tab:bench_test}.
+We have specified the origin of each benchmark listed in Tables~\ref{tab:bench_kernel}-\ref{tab:bench_test}.
 
 \todo{what did we collect. How many indirections in collections have there be?
 E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
@@ -288,7 +288,7 @@ The collection of benchmarks is divided into five classes: Kernel, sequential, a
 
 
 
-\begin{table}
+\begin{table}[t!]
 \centering
 \caption{\label{tab:bench_kernel}TACLeBench kernel benchmarks}  
 \begin{tabular}{lp{6cm}rr}
@@ -327,9 +327,9 @@ st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 12
 \end{table}
 
 The class of kernel benchmarks is a set of synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
-The kernel benchmarks of TACLeBench are listed in table~\ref{tab:bench_kernel}, and the size of the kernel benchmarks are from 36 SLOC to 2049 SLOC.
+The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}, and the size of the kernel benchmarks are from 36 SLOC to 2049 SLOC.
 
-\begin{table}[h]
+\begin{table}
 \centering
 \caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}  
 \begin{tabular}{lp{5cm}rr}
@@ -364,7 +364,7 @@ susan &  MR image recognition algorithm & 8782 & MiBench \\
 \end{table}
 
 The class of sequential benchmarks implement large functions block such as encoders and decoders that are used in many embedded systems.
-The sequential benchmarks of TACLeBench are listed in table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 242 SLOC to 12601 SLOC.
+The sequential benchmarks of TACLeBench are listed in Table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 242 SLOC to 12601 SLOC.
 The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
 
 
@@ -381,7 +381,7 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \end{tabular}
 \end{table}
 
-The class of parallel benchmarks, shown in table~\ref{tab:bench_parallel}, contains two benchmarks, the Debie benchmark and the PapaBench benchmark.
+The class of parallel benchmarks, shown in Table~\ref{tab:bench_parallel}, contains two benchmarks, the Debie benchmark and the PapaBench benchmark.
 These two benchmarks are comparable in size and in the number of tasks.
 
 \begin{table}
@@ -398,8 +398,19 @@ Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 \end{tabular}
 \end{table}
 
-The class of application benchmarks are shown in table~\ref{tab:bench_app}.
+The class of application benchmarks are shown in Table~\ref{tab:bench_app}.
 The application benchmarks are derived from real applications, with simulated input stimuli.
+
+\todo{rewrite as this is a verbatim copy from a published paper.}
+Lift is a lift controller software that is installed in an
+automation factory in Turkey. The hardware is based on a JOP in a
+Cyclone FPGA device and an I/O print that was originally developed
+for the SCADA device TeleAlarm. The controller has just a few
+inputs (command buttons and input sensors for the hight
+measurement) and a simple motor control. The I/O devices are
+simulated in the benchmark environment. Compared to the Kfl
+benchmark, Lift is written in a more object oriented style, but still
+avoids to generate garbage at the mission phase.
 
 \begin{table}
 \centering
@@ -415,7 +426,7 @@ test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarland
 \end{tabular}
 \end{table}
 
-The class of test benchmarks are shown in table~\ref{tab:bench_test}, and contain three artificial test programs of various size that stress test the WCET analysis tools.
+The class of test benchmarks are shown in Table~\ref{tab:bench_test}, and contain three artificial test programs of various size that stress test the WCET analysis tools.
 
 
 \subsection{Benchmark Usage}
