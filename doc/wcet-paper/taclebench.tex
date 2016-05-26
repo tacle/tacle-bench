@@ -139,22 +139,34 @@ Since TACLeBench addresses the needs imposed by timing analysis tools,
 all benchmarks are completely annotated with flow facts.
 These flow facts are directly incorporated into the ANSI-C source codes using
 Pragmas at a high level of abstraction.
-For example, the following source code snippet states that the shown loop
-iterates between 50 and 100 times, depending on the data dependency
-via variable \code{maxIter}:
+TACLeBench distinguishes between so-called flow restrictions, loop bounds and entry points.
+Flow restrictions allow to express the execution count of one statement in relation to the execution count of other statements.
+This annotation methods allows to express any kinds of linear dependencies between statements' execution counts.
+Flow restrictions are expressed in terms of inequations, where each side of an inequation is a weighted sum of execution counts of statements, and where the two sides of an inequation are compared by less-than-equal, equal, or greater-than-equal operators.
+For example, flow restrictions can be used to express precise upper execution bounds for irregularly nested loops (e.g., triangular loops), recursions, multi-entry loops etc.
+Besides flow restrictions, TACLeBench also uses loop bound flow facts which simplify the annotation of regular loops.
+Loop bounds provide an upper and a lower bound for the number of iterations of the annotated loop.
 
-\begin{verbatim}
-      _Pragma( "loopbound min 50 max 100" )
+Finally, TACLeBench uses entry point annotations which denote points in a program's control flow graph where the control flow may start.
+Typically, this is the ``main'' function of a program, but in a (possibly interrupt-driven) multi-task system, there may be multiple entry points in a single set of source files.
+These entry points may even share some common code.
+In order to mark such task entries, each function of a multi-task application where a task begins can be marked as an entry point.
+% For example, the following source code snippet states that the shown loop
+% iterates between 50 and 100 times, depending on the data dependency
+% via variable \code{maxIter}:
+%
+% \begin{verbatim}
+%       _Pragma( "loopbound min 50 max 100" )
+%
+%       for ( i = 1; i <= maxIter; i++ )
+%
+%         Array[i] = i * fact * KNOWN_VALUE;
+%
+% \end{verbatim}
+The complete specification of the used flow fact language can be found in~\cite{flowfacts} which is part of the source distribution.
 
-      for ( i = 1; i <= maxIter; i++ )
 
-        Array[i] = i * fact * KNOWN_VALUE;
-
-\end{verbatim}
-
-
-The complete description of the used flow fact language is part of the source
-distribution. If you would like to share your very own benchmarks with us,
+If you would like to share your very own benchmarks with us,
 feel free to contact Heiko Falk (or any coauthor of this paper) in order
 to have your source codes included in TACLeBench.
 
@@ -290,7 +302,7 @@ The collection of benchmarks is divided into five classes: Kernel, sequential, a
 
 \begin{table}[t!]
 \centering
-\caption{\label{tab:bench_kernel}TACLeBench kernel benchmarks}  
+\caption{\label{tab:bench_kernel}TACLeBench kernel benchmarks}
 \begin{tabular}{lp{6cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
@@ -331,7 +343,7 @@ The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}, 
 
 \begin{table}
 \centering
-\caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}  
+\caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}
 \begin{tabular}{lp{5cm}rr}
 \toprule
 Name & Description & Code Size & Origin\\
@@ -370,7 +382,7 @@ The sequential benchmarks cover graph search, cryptographic algorithms, compress
 
 \begin{table}
 \centering
-\caption{\label{tab:bench_parallel}TACLeBench parallel benchmarks}  
+\caption{\label{tab:bench_parallel}TACLeBench parallel benchmarks}
 \begin{tabular}{lp{5cm}rrr}
 \toprule
 Name & Description & \#Tasks &Code Size & Origin\\
@@ -386,7 +398,7 @@ These two benchmarks are comparable in size and in the number of tasks.
 
 \begin{table}
 \centering
-\caption{\label{tab:bench_app}TACLeBench application benchmarks}  
+\caption{\label{tab:bench_app}TACLeBench application benchmarks}
 \begin{tabular}{lp{5cm}rrr}
 \toprule
 Name & Description & \#Tasks & Code Size & Origin\\
@@ -413,7 +425,7 @@ Lift has been translated to C by Benedikt Huber.
 
 \begin{table}
 \centering
-\caption{\label{tab:bench_test}TACLeBench test benchmarks}  
+\caption{\label{tab:bench_test}TACLeBench test benchmarks}
 \begin{tabular}{lp{5cm}rp{2.5cm}}
 \toprule
 Name & Description & Code Size & Origin\\
