@@ -5,7 +5,7 @@
 
  Name: powerwindow_controlexclusion_private.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 
@@ -20,6 +20,7 @@
 #ifndef powerwindow_RTW_HEADER_controlexclusion_private_h_
 #define powerwindow_RTW_HEADER_controlexclusion_private_h_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
+#include "../powerwindow_HeaderFiles/powerwindow_model_reference_types.h"
 #endif                                 /* RTW_HEADER_controlexclusion_private_h_ */
 
 /*

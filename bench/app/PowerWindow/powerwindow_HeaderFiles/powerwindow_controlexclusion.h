@@ -5,7 +5,7 @@
 
  Name: powerwindow_controlexclusion.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 
@@ -24,51 +24,24 @@
 #ifndef powerwindow_controlexclusion_COMMON_INCLUDES_
 #define powerwindow_controlexclusion_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
+
+#include "../powerwindow_HeaderFiles/powerwindow_rtw_solver.h"
 #endif                                 /* powerwindow_controlexclusion_COMMON_INCLUDES_ */
 
 #include "../powerwindow_HeaderFiles/powerwindow_controlexclusion_types.h"
 
-/* Macros for accessing real-time model data structure */
-#ifndef powerwindow_rtmGetErrorStatus
-#define powerwindow_rtmGetErrorStatus(rtm)        ((rtm)->errorStatus)
-#endif
+/* Shared type includes */
+#include "../powerwindow_HeaderFiles/powerwindow_model_reference_types.h"
 
-#ifndef powerwindow_rtmSetErrorStatus
-# define powerwindow_rtmSetErrorStatus(rtm, val)   ((rtm)->errorStatus = (val))
-#endif
+/* user code (top of header file) */
 
-/* External inputs (root inport signals with auto storage) */
-typedef struct {
-    powerwindow_boolean_T Up_DRV;                    /* '<Root>/Up_DRV' */
-    powerwindow_boolean_T Down_DRV;                  /* '<Root>/Down_DRV' */
-    powerwindow_boolean_T Up_PSG;                    /* '<Root>/Up_PSG' */
-    powerwindow_boolean_T Down_PSG;                  /* '<Root>/Down_PSG' */
-} powerwindow_ExternalInputs_controlexclusion_T;
+/* Model reference registration function */
 
-/* External outputs (root outports fed by signals with auto storage) */
-typedef struct {
-    powerwindow_boolean_T Up;                        /* '<Root>/Up' */
-    powerwindow_boolean_T Down;                      /* '<Root>/Down' */
-} powerwindow_ExternalOutputs_controlexclusion_T;
-
-/* Real-time Model Data Structure */
-struct powerwindow_tag_RTM_controlexclusion_T {
-    const powerwindow_char_T * volatile errorStatus;
-};
-
-/* External inputs (root inport signals with auto storage) */
-extern powerwindow_ExternalInputs_controlexclusion_T powerwindow_controlexclusion_U;
-
-/* External outputs (root outports fed by signals with auto storage) */
-extern powerwindow_ExternalOutputs_controlexclusion_T powerwindow_controlexclusion_Y;
-
-/* Model entry point functions */
 extern void powerwindow_controlexclusion_initialize(void);
 extern void powerwindow_controlexclusion_terminate(void);
-extern void powerwindow_controlexclusion_main(void);
-
-/* Real-time Model object */
-extern powerwindow_RT_MODEL_controlexclusion_T *const powerwindow_controlexclusion_M;
+extern void powerwindow_controlexclusion_main(const powerwindow_boolean_T *rtu_Up_DRV, const powerwindow_boolean_T
+  *rtu_Down_DRV, const powerwindow_boolean_T *rtu_Up_PSG, const powerwindow_boolean_T *rtu_Down_PSG,
+  powerwindow_boolean_T *rty_Up, powerwindow_boolean_T *rty_Down);
 
 /*-
  * The generated code includes comments that allow you to trace directly
@@ -76,21 +49,23 @@ extern powerwindow_RT_MODEL_controlexclusion_T *const powerwindow_controlexclusi
  * is <system>/block_name, where system is the system number (uniquely
  * assigned by Simulink) and block_name is the name of the block.
  *
- * Note that this particular code originates from a subsystem build,
- * and has its own system numbers different from the parent model.
- * Refer to the system hierarchy for this subsystem below, and use the
- * MATLAB hilite_system command to trace the generated code back
- * to the parent model.  For example,
+ * Use the MATLAB hilite_system command to trace the generated code back
+ * to the model.  For example,
  *
- * hilite_system('ControlExclusion/controlexclusion')    - opens subsystem ControlExclusion/controlexclusion
- * hilite_system('ControlExclusion/controlexclusion/Kp') - opens and selects block Kp
+ * hilite_system('<S3>')    - opens system 3
+ * hilite_system('<S3>/Kp') - opens and selects block Kp which resides in S3
  *
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'ControlExclusion'
- * '<S1>'   : 'ControlExclusion/controlexclusion'
+ * '<S1>'   : 'ControlExclusion/Control_Clock_TicToc'
+ * '<S2>'   : 'ControlExclusion/Control_Clock_TicToc/ControlEx_PSG'
+ * '<S3>'   : 'ControlExclusion/Control_Clock_TicToc/Tic'
+ * '<S4>'   : 'powerwindow_controlexclusion_main/Control_Clock_TicToc/Toc'
+ * '<S5>'   : 'ControlExclusion/Control_Clock_TicToc/Tic/Tic_T'
+ * '<S6>'   : 'ControlExclusion/Control_Clock_TicToc/Toc/Toc_T'
  */
-#endif                                 /* powerwindow_RTW_HEADER_controlexclusion_h_ */
+#endif                                 /* RTW_HEADER_ControlExclusion_h_ */
 
 /*
  * File trailer for generated code.

@@ -5,14 +5,13 @@
 
  Name: powerwindow_debounce.c
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: powerwindow_debounce_main is used to powerwindow_debounce_main the push-down button of the power window.
  	 In order to input a manual switch signal into a digital circuit,
  	 debouncing is necessary so that a single press does not appear like multiple presses.
  	 Without debouncing, pressing the button once may cause unpredictable results.
  	 powerwindow_debounce_main.c defines all the functions that will be used in debounce_PSG_Front which is a part of the Power window.
-
 
  Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_debounce.c
 

@@ -3,14 +3,14 @@
  This program is part of the TACLeBench benchmark suite.
  Version V 1.x
 
- Name: powerwindow_powerwindow_control
+ Name: powerwindow_powerwindow_control.c
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
- Function: powerwindow_control is one functionality of the power window benchmark.
- 	 It composes two control modules: logic and sensing. The first one is used to
- 	 control the height of the power window. The second one is for pinch sensing.
- 	 The two control components can run in parallel.
+ Function: powerwindow_control is the main functionality of the power window benchmark.
+ 	 It contains 3 states: System, EndReached and Pinch, which are used to controll the
+ 	 position of the glass, if the window is fully closed and sensing pinch force to realize
+ 	 the powerwindow function.
 
  Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow//powerwindow_powerwindow_control.c
 
@@ -20,598 +20,500 @@
 
 */
 
-#include "powerwindow_HeaderFiles/powerwindow.h"
-#include "powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
 #include "powerwindow_HeaderFiles/powerwindow_powerwindow_control.h"
 #include "powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
 
 /* Named constants for Chart: '<S2>/stateflow control model' */
-#define powerwindow_powerwindow_control_IN_AutoDown             ((powerwindow_uint8_T)1U)
-#define powerwindow_powerwindow_control_IN_AutoUp               ((powerwindow_uint8_T)1U)
-#define powerwindow_powerwindow_control_IN_Down                 ((powerwindow_uint8_T)2U)
-#define powerwindow_powerwindow_control_IN_Down_d               ((powerwindow_uint8_T)1U)
-#define powerwindow_control_IN_EndReached           ((powerwindow_uint8_T)1U)
-#define powerwindow_control_IN_InitDown             ((powerwindow_uint8_T)3U)
-#define powerwindow_control_IN_InitUp               ((powerwindow_uint8_T)2U)
-#define powerwindow_control_IN_NO_ACTIVE_CHILD      ((powerwindow_uint8_T)0U)
-#define powerwindow_control_IN_Neutral              ((powerwindow_uint8_T)2U)
-#define powerwindow_control_IN_Pinch                ((powerwindow_uint8_T)2U)
-#define powerwindow_control_IN_SenseEnd             ((powerwindow_uint8_T)1U)
-#define powerwindow_control_IN_SensePinch           ((powerwindow_uint8_T)2U)
-#define powerwindow_control_IN_Start                ((powerwindow_uint8_T)3U)
-#define powerwindow_control_IN_System               ((powerwindow_uint8_T)3U)
-#define powerwindow_control_IN_Up                   ((powerwindow_uint8_T)3U)
+#define powerwindow_powerwindow__IN_NO_ACTIVE_CHILD ((powerwindow_uint8_T)0U)
+#define powerwindow_powerwindow_contr_IN_EndReached ((powerwindow_uint8_T)1U)
+#define powerwindow_powerwindow_contr_IN_SensePinch ((powerwindow_uint8_T)2U)
+#define powerwindow_powerwindow_control_IN_AutoDown ((powerwindow_uint8_T)1U)
+#define powerwindow_powerwindow_control_IN_AutoUp  ((powerwindow_uint8_T)1U)
+#define powerwindow_powerwindow_control_IN_Down    ((powerwindow_uint8_T)2U)
+#define powerwindow_powerwindow_control_IN_Down_d  ((powerwindow_uint8_T)1U)
+#define powerwindow_powerwindow_control_IN_InitDown ((powerwindow_uint8_T)3U)
+#define powerwindow_powerwindow_control_IN_InitUp  ((powerwindow_uint8_T)2U)
+#define powerwindow_powerwindow_control_IN_Neutral ((powerwindow_uint8_T)2U)
+#define powerwindow_powerwindow_control_IN_Pinch   ((powerwindow_uint8_T)2U)
+#define powerwindow_powerwindow_control_IN_SenseEnd ((powerwindow_uint8_T)1U)
+#define powerwindow_powerwindow_control_IN_Start   ((powerwindow_uint8_T)3U)
+#define powerwindow_powerwindow_control_IN_System  ((powerwindow_uint8_T)3U)
+#define powerwindow_powerwindow_control_IN_Up      ((powerwindow_uint8_T)3U)
 
+/* Forward declaration for local functions */
+void powerwindow_powerwindow_control_Start(powerwindow_rtDW_PowerWindow_control *localDW);
 
-/*
-  Forward declaration of functions
-*/
+void powerwindow_powerwindow_control_Init(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T
+  *rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T *
+  rty_wake, powerwindow_rtDW_PowerWindow_control *localDW);
 
-void powerwindow_powerwindow_control_initialize(void);
-void powerwindow_powerwindow_control_terminate(void);
-void powerwindow_powerwindow_control_main(void);
-static void powerwindow_powerwindow_control_broadcast_ticks(void); /* Forward declaration for local functions */
+void powerwindow_powerwindow_control_Start(powerwindow_rtDW_PowerWindow_control *localDW);
 
-/*
-  Declaration of global variables
-*/
+void powerwindow_powerwindow_control_initialize(const powerwindow_char_T **rt_errorStatus,
+  powerwindow_RT_MODEL_PowerWindow_control *const PowerWindow_control_M,
+  powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW,
+  powerwindow_rtZCE_PowerWindow_control *localZCE);
 
-/* Block signals (auto storage) */
-powerwindow_BlockIO_powerwindow_control powerwindow_powerwindow_control_B;
+void powerwindow_powerwindow_control_main(const powerwindow_boolean_T *rtu_up, const powerwindow_boolean_T *rtu_down,
+  const powerwindow_boolean_T *rtu_endofdetectionrange, const powerwindow_uint8_T *rtu_currentsense,
+  powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *rty_window_down, powerwindow_boolean_T
+  *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T *rty_wake,
+  powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW,
+  powerwindow_rtZCE_PowerWindow_control *localZCE);
 
-/* Block states (auto storage) */
-/* Previous zero-crossings (trigger) states */
-powerwindow_PrevZCSigStates_powerwindow_control powerwindow_powerwindow_control_PrevZCSigState;
-
-/* External inputs (root inport signals with auto storage) */
-powerwindow_ExternalInputs_powerwindow_control powerwindow_powerwindow_control_U;
-
-/* External outputs (root outports fed by signals with auto storage) */
-powerwindow_D_Work_powerwindow_control powerwindow_powerwindow_control_DWork;
-
-powerwindow_ExternalOutputs_powerwindow_control powerwindow_powerwindow_control_Y;
-
-/* Real-time model */
-powerwindow_RT_MODEL_powerwindow_control powerwindow_powerwindow_control_M_;
-powerwindow_RT_MODEL_powerwindow_control *const powerwindow_powerwindow_control_M = &powerwindow_powerwindow_control_M_;
-
-/*
- Initialization- and return-value-related functions
- */
-
-/* Model initialize function */
-void powerwindow_powerwindow_control_initialize(void)
-{
-    /* Registration code */
-
-    /* initialize error status */
-    powerwindow_rtmSetErrorStatus(powerwindow_powerwindow_control_M, (NULL));
-
-    /* block I/O */
-    (void) memset(((void *) &powerwindow_powerwindow_control_B), 0,
-                  sizeof(powerwindow_BlockIO_powerwindow_control));
-
-    /* states (dwork) */
-    (void) memset((void *)&powerwindow_powerwindow_control_DWork, 0,
-                  sizeof(powerwindow_D_Work_powerwindow_control));
-
-    /* external inputs */
-    (void) memset((void *)&powerwindow_powerwindow_control_U, 0,
-                  sizeof(powerwindow_ExternalInputs_powerwindow_control));
-
-    /* external outputs */
-    (void) memset((void *)&powerwindow_powerwindow_control_Y, 0,
-                  sizeof(powerwindow_ExternalOutputs_powerwindow_control));
-
-    /* Start for DiscretePulseGenerator: '<S2>/period of 50ms' */
-    powerwindow_powerwindow_control_DWork.clockTickCounter = 0L;
-    powerwindow_powerwindow_control_PrevZCSigState.stateflowcontrolmodel_Trig_ZCE = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[0] = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[1] = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[2] = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[3] = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[0] = powerwindow_UNINITIALIZED_ZCSIG;
-    powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[1] = powerwindow_UNINITIALIZED_ZCSIG;
-
-    /* InitializeConditions for Chart: '<S2>/stateflow control model' */
-    powerwindow_powerwindow_control_DWork.is_active_Logic = 0U;
-    powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_NO_ACTIVE_CHILD;
-    powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_NO_ACTIVE_CHILD;
-    powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_NO_ACTIVE_CHILD;
-    powerwindow_powerwindow_control_DWork.temporalCounter_i1 = 0U;
-    powerwindow_powerwindow_control_DWork.is_active_Sensing = 0U;
-    powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_NO_ACTIVE_CHILD;
-    powerwindow_powerwindow_control_DWork.temporalCounter_i2 = 0U;
-    powerwindow_powerwindow_control_DWork.is_active_c2_powerwindow_control = 0U;
-    powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_NO_ACTIVE_CHILD;
-
-    /* InitializeConditions for Outport: '<Root>/window_up' incorporates:
-     *  InitializeConditions for Chart: '<S2>/stateflow control model'
-     */
-    powerwindow_powerwindow_control_Y.window_up = false;
-
-    /* InitializeConditions for Outport: '<Root>/window_down' incorporates:
-     *  InitializeConditions for Chart: '<S2>/stateflow control model'
-     */
-    powerwindow_powerwindow_control_Y.window_down = false;
-
-    /* InitializeConditions for Outport: '<Root>/overcurrent' incorporates:
-     *  InitializeConditions for Chart: '<S2>/stateflow control model'
-     */
-    powerwindow_powerwindow_control_Y.overcurrent = false;
-
-    /* InitializeConditions for Outport: '<Root>/pinch' incorporates:
-     *  InitializeConditions for Chart: '<S2>/stateflow control model'
-     */
-    powerwindow_powerwindow_control_Y.pinch = false;
-
-    /* InitializeConditions for Outport: '<Root>/wake' incorporates:
-     *  InitializeConditions for Chart: '<S2>/stateflow control model'
-     */
-    powerwindow_powerwindow_control_Y.wake = false;
-}
-
-/* Model terminate function */
-void powerwindow_powerwindow_control_terminate(void)
-{
-    /* (no terminate code required) */
-}
-
-/*
- Local broadcast ticks functions
- */
+static void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
+  rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T
+  *rty_wake, powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW);
 
 /* Function for Chart: '<S2>/stateflow control model' */
-static void powerwindow_powerwindow_control_broadcast_ticks(void)
+static void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
+  rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T
+  *rty_wake, powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW)
 {
-    /* Event: '<S5>:30' */
-    /* During: powerwindow_control/powerwindow_control/stateflow control model */
-    if (powerwindow_powerwindow_control_DWork.is_active_c2_powerwindow_control == 0U) {
-        /* Entry: powerwindow_control/powerwindow_control/stateflow control model */
-        powerwindow_powerwindow_control_DWork.is_active_c2_powerwindow_control = 1U;
+  /* Event: '<S3>:30' */
+  /* During: PW_PSG/PWExternalClock/stateflow control model */
+  if (localDW->is_active_c2_PowerWindow_contro == 0U) {
+    /* Entry: PW_PSG/PWExternalClock/stateflow control model */
+    localDW->is_active_c2_PowerWindow_contro = 1U;
 
-        /* Entry Internal: powerwindow_control/powerwindow_control/stateflow control model */
-        /* Transition: '<S5>:102' */
-        powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_System;
+    /* Entry Internal: PW_PSG/PWExternalClock/stateflow control model */
+    /* Transition: '<S3>:102' */
+    localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_control_IN_System;
+ 
+    /* Entry Internal 'System': '<S3>:94' */
+    localDW->is_active_Logic = 1U;
 
-        /* Entry Internal 'System': '<S5>:94' */
-        powerwindow_powerwindow_control_DWork.is_active_Logic = 1U;
-
-        /* Entry Internal 'Logic': '<S5>:95' */
-        /* Transition: '<S5>:82' */
-        powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Neutral;
-
-        /* Entry 'Neutral': '<S5>:16' */
-        powerwindow_powerwindow_control_Y.window_up = false;
-        powerwindow_powerwindow_control_Y.window_down = false;
-        powerwindow_powerwindow_control_Y.wake = false;
-        powerwindow_powerwindow_control_DWork.is_active_Sensing = 1U;
-
-        /* Entry Internal 'Sensing': '<S5>:96' */
-        /* Transition: '<S5>:153' */
-        powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_Start;
-        powerwindow_powerwindow_control_DWork.temporalCounter_i2 = 0U;
-
-        /* Entry 'Start': '<S5>:170' */
-        powerwindow_powerwindow_control_Y.overcurrent = false;
-        powerwindow_powerwindow_control_Y.pinch = false;
-    } else {
-        switch (powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control) {
-        case powerwindow_control_IN_EndReached:
-            /* During 'EndReached': '<S5>:97' */
-            if (powerwindow_powerwindow_control_DWork.temporalCounter_i1 >= 10) {
-                /* Transition: '<S5>:101' */
-                powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_System;
-
-                /* Entry Internal 'System': '<S5>:94' */
-                powerwindow_powerwindow_control_DWork.is_active_Logic = 1U;
-
-                /* Entry Internal 'Logic': '<S5>:95' */
-                /* Transition: '<S5>:82' */
-                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Neutral;
-
-                /* Entry 'Neutral': '<S5>:16' */
-                powerwindow_powerwindow_control_Y.window_up = false;
-                powerwindow_powerwindow_control_Y.window_down = false;
-                powerwindow_powerwindow_control_Y.wake = false;
-                powerwindow_powerwindow_control_DWork.is_active_Sensing = 1U;
-
-                /* Entry Internal 'Sensing': '<S5>:96' */
-                /* Transition: '<S5>:153' */
-                powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_Start;
-                powerwindow_powerwindow_control_DWork.temporalCounter_i2 = 0U;
-
-                /* Entry 'Start': '<S5>:170' */
-                powerwindow_powerwindow_control_Y.overcurrent = false;
-                powerwindow_powerwindow_control_Y.pinch = false;
-            }
-            break;
-
-        case powerwindow_control_IN_Pinch:
-            /* During 'Pinch': '<S5>:152' */
-            if (powerwindow_powerwindow_control_DWork.temporalCounter_i1 >= 40) {
-                /* Transition: '<S5>:157' */
-                powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_System;
-
-                /* Entry Internal 'System': '<S5>:94' */
-                powerwindow_powerwindow_control_DWork.is_active_Logic = 1U;
-
-                /* Entry Internal 'Logic': '<S5>:95' */
-                /* Transition: '<S5>:82' */
-                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Neutral;
-
-                /* Entry 'Neutral': '<S5>:16' */
-                powerwindow_powerwindow_control_Y.window_up = false;
-                powerwindow_powerwindow_control_Y.window_down = false;
-                powerwindow_powerwindow_control_Y.wake = false;
-                powerwindow_powerwindow_control_DWork.is_active_Sensing = 1U;
-
-                /* Entry Internal 'Sensing': '<S5>:96' */
-                /* Transition: '<S5>:153' */
-                powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_Start;
-                powerwindow_powerwindow_control_DWork.temporalCounter_i2 = 0U;
-
-                /* Entry 'Start': '<S5>:170' */
-                powerwindow_powerwindow_control_Y.overcurrent = false;
-                powerwindow_powerwindow_control_Y.pinch = false;
-            }
-            break;
-
-        default:
-            /* During 'System': '<S5>:94' */
-            if (powerwindow_powerwindow_control_Y.pinch == 1) {
-                /* Transition: '<S5>:155' */
-                /* Exit Internal 'System': '<S5>:94' */
-                /* Exit Internal 'Sensing': '<S5>:96' */
-                powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_active_Sensing = 0U;
-
-                /* Exit Internal 'Logic': '<S5>:95' */
-                /* Exit Internal 'Down': '<S5>:18' */
-                powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_NO_ACTIVE_CHILD;
-
-                /* Exit Internal 'Up': '<S5>:17' */
-                powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_active_Logic = 0U;
-                powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_Pinch;
-                powerwindow_powerwindow_control_DWork.temporalCounter_i1 = 0U;
-
-                /* Entry 'Pinch': '<S5>:152' */
-                powerwindow_powerwindow_control_Y.window_up = false;
-                powerwindow_powerwindow_control_Y.window_down = true;
-            } else if (powerwindow_powerwindow_control_Y.overcurrent == 1) {
-                /* Transition: '<S5>:100' */
-                /* Exit Internal 'System': '<S5>:94' */
-                /* Exit Internal 'Sensing': '<S5>:96' */
-                powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_active_Sensing = 0U;
-
-                /* Exit Internal 'Logic': '<S5>:95' */
-                /* Exit Internal 'Down': '<S5>:18' */
-                powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_NO_ACTIVE_CHILD;
-
-                /* Exit Internal 'Up': '<S5>:17' */
-                powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                powerwindow_powerwindow_control_DWork.is_active_Logic = 0U;
-                powerwindow_powerwindow_control_DWork.is_c2_powerwindow_control = powerwindow_control_IN_EndReached;
-                powerwindow_powerwindow_control_DWork.temporalCounter_i1 = 0U;
-
-                /* Entry 'EndReached': '<S5>:97' */
-                powerwindow_powerwindow_control_Y.window_up = false;
-                powerwindow_powerwindow_control_Y.window_down = false;
-            } else {
-                /* During 'Logic': '<S5>:95' */
-                switch (powerwindow_powerwindow_control_DWork.is_Logic) {
-                case powerwindow_powerwindow_control_IN_Down_d:
-                    /* During 'Down': '<S5>:18' */
-                    if (powerwindow_powerwindow_control_B.map[1]) {
-                        /* Transition: '<S5>:169' */
-                        /* Exit Internal 'Down': '<S5>:18' */
-                        powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                        powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Up;
-
-                        /* Entry 'Up': '<S5>:17' */
-                        powerwindow_powerwindow_control_Y.window_up = true;
-                        powerwindow_powerwindow_control_Y.window_down = false;
-                        powerwindow_powerwindow_control_Y.wake = true;
-                        powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_Up;
-                    } else {
-                        switch (powerwindow_powerwindow_control_DWork.is_Down) {
-                        case powerwindow_powerwindow_control_IN_AutoDown:
-                            /* During 'AutoDown': '<S5>:111' */
-                            break;
-
-                        case powerwindow_powerwindow_control_IN_Down:
-                            /* During 'Down': '<S5>:110' */
-                            if (powerwindow_powerwindow_control_B.map[0]) {
-                                /* Transition: '<S5>:26' */
-                                powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Neutral;
-
-                                /* Entry 'Neutral': '<S5>:16' */
-                                powerwindow_powerwindow_control_Y.window_up = false;
-                                powerwindow_powerwindow_control_Y.window_down = false;
-                                powerwindow_powerwindow_control_Y.wake = false;
-                            }
-                            break;
-
-                        default:
-                            /* During 'InitDown': '<S5>:109' */
-                            if (powerwindow_powerwindow_control_DWork.temporalCounter_i1 >= 20) {
-                                /* Transition: '<S5>:119' */
-                                if (powerwindow_powerwindow_control_B.map[0]) {
-                                    /* Transition: '<S5>:120' */
-                                    powerwindow_powerwindow_control_DWork.is_Down = powerwindow_powerwindow_control_IN_AutoDown;
-                                } else {
-                                    if (powerwindow_powerwindow_control_B.map[2]) {
-                                        /* Transition: '<S5>:121' */
-                                        powerwindow_powerwindow_control_DWork.is_Down = powerwindow_powerwindow_control_IN_Down;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    break;
-
-                case powerwindow_control_IN_Neutral:
-                    /* During 'Neutral': '<S5>:16' */
-                    if (powerwindow_powerwindow_control_B.map[1]) {
-                        /* Transition: '<S5>:24' */
-                        powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Up;
-
-                        /* Entry 'Up': '<S5>:17' */
-                        powerwindow_powerwindow_control_Y.window_up = true;
-                        powerwindow_powerwindow_control_Y.window_down = false;
-                        powerwindow_powerwindow_control_Y.wake = true;
-                        powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_InitUp;
-                        powerwindow_powerwindow_control_DWork.temporalCounter_i1 = 0U;
-                    } else {
-                        if (powerwindow_powerwindow_control_B.map[2]) {
-                            /* Transition: '<S5>:25' */
-                            powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_powerwindow_control_IN_Down_d;
-
-                            /* Entry 'Down': '<S5>:18' */
-                            powerwindow_powerwindow_control_Y.window_up = false;
-                            powerwindow_powerwindow_control_Y.window_down = true;
-                            powerwindow_powerwindow_control_Y.wake = true;
-                            powerwindow_powerwindow_control_DWork.is_Down = powerwindow_control_IN_InitDown;
-                            powerwindow_powerwindow_control_DWork.temporalCounter_i1 = 0U;
-                        }
-                    }
-                    break;
-
-                default:
-                    /* During 'Up': '<S5>:17' */
-                    if (powerwindow_powerwindow_control_B.map[2]) {
-                        /* Transition: '<S5>:166' */
-                        /* Exit Internal 'Up': '<S5>:17' */
-                        powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                        powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_powerwindow_control_IN_Down_d;
-
-                        /* Entry 'Down': '<S5>:18' */
-                        powerwindow_powerwindow_control_Y.window_up = false;
-                        powerwindow_powerwindow_control_Y.window_down = true;
-                        powerwindow_powerwindow_control_Y.wake = true;
-                        powerwindow_powerwindow_control_DWork.is_Down = powerwindow_powerwindow_control_IN_Down;
-                    } else {
-                        switch (powerwindow_powerwindow_control_DWork.is_Up) {
-                        case powerwindow_powerwindow_control_IN_AutoUp:
-                            /* During 'AutoUp': '<S5>:108' */
-                            break;
-
-                        case powerwindow_control_IN_InitUp:
-                            /* During 'InitUp': '<S5>:106' */
-                            if (powerwindow_powerwindow_control_DWork.temporalCounter_i1 >= 20) {
-                                /* Transition: '<S5>:115' */
-                                if (powerwindow_powerwindow_control_B.map[0]) {
-                                    /* Transition: '<S5>:118' */
-                                    powerwindow_powerwindow_control_DWork.is_Up = powerwindow_powerwindow_control_IN_AutoUp;
-                                } else {
-                                    if (powerwindow_powerwindow_control_B.map[1]) {
-                                        /* Transition: '<S5>:117' */
-                                        powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_Up;
-                                    }
-                                }
-                            }
-                            break;
-
-                        default:
-                            /* During 'Up': '<S5>:107' */
-                            if (powerwindow_powerwindow_control_B.map[0]) {
-                                /* Transition: '<S5>:23' */
-                                powerwindow_powerwindow_control_DWork.is_Up = powerwindow_control_IN_NO_ACTIVE_CHILD;
-                                powerwindow_powerwindow_control_DWork.is_Logic = powerwindow_control_IN_Neutral;
-
-                                /* Entry 'Neutral': '<S5>:16' */
-                                powerwindow_powerwindow_control_Y.window_up = false;
-                                powerwindow_powerwindow_control_Y.window_down = false;
-                                powerwindow_powerwindow_control_Y.wake = false;
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                }
-
-                /* During 'Sensing': '<S5>:96' */
-                switch (powerwindow_powerwindow_control_DWork.is_Sensing) {
-                case powerwindow_control_IN_SenseEnd:
-                    /* During 'SenseEnd': '<S5>:147' */
-                    if ((powerwindow_powerwindow_control_B.LogicalOperator == 0) && (powerwindow_powerwindow_control_Y.window_up == 1)) {
-                        /* Transition: '<S5>:173' */
-                        powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_Start;
-                        powerwindow_powerwindow_control_DWork.temporalCounter_i2 = 0U;
-
-                        /* Entry 'Start': '<S5>:170' */
-                        powerwindow_powerwindow_control_Y.overcurrent = false;
-                        powerwindow_powerwindow_control_Y.pinch = false;
-                    } else {
-                        /* Inport: '<Root>/current sense' */
-                        powerwindow_powerwindow_control_Y.overcurrent = (powerwindow_powerwindow_control_U.currentsense > 184);
-                    }
-                    break;
-
-                case powerwindow_control_IN_SensePinch:
-                    /* During 'SensePinch': '<S5>:148' */
-                    if ((powerwindow_powerwindow_control_B.LogicalOperator == 1) || (powerwindow_powerwindow_control_Y.window_down == 1)) {
-                        /* Transition: '<S5>:150' */
-                        powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_SenseEnd;
-                    } else {
-                        /* Inport: '<Root>/current sense' */
-                        powerwindow_powerwindow_control_Y.pinch = (powerwindow_powerwindow_control_U.currentsense > 92);
-                    }
-                    break;
-
-                default:
-                    /* During 'Start': '<S5>:170' */
-                    if (powerwindow_powerwindow_control_DWork.temporalCounter_i2 >= 6) {
-                        /* Transition: '<S5>:171' */
-                        powerwindow_powerwindow_control_DWork.is_Sensing = powerwindow_control_IN_SensePinch;
-                    }
-                    break;
-                }
-            }
-            break;
-        }
-    }
-}
-
-/*
- Algorithm core functions
- */
-
-/* Model step function */
-void powerwindow_powerwindow_control_main(void)
-{
-    powerwindow_int16_T rtb_periodof50ms;
-
-    /* CombinatorialLogic: '<S2>/map' incorporates:
-     *  DataTypeConversion: '<S2>/control input'
-     *  Inport: '<Root>/down'
-     *  Inport: '<Root>/up'
-     */
-    rtb_periodof50ms = (powerwindow_int16_T)(((powerwindow_uint16_T)(powerwindow_powerwindow_control_U.up != 0) << 1) +
-                                 (powerwindow_powerwindow_control_U.down != 0));
-    powerwindow_powerwindow_control_B.map[0U] = powerwindow_powerwindow_control_ConstP.map_table[(powerwindow_uint16_T)rtb_periodof50ms];
-    powerwindow_powerwindow_control_B.map[1U] = powerwindow_powerwindow_control_ConstP.map_table[rtb_periodof50ms + 4U];
-    powerwindow_powerwindow_control_B.map[2U] = powerwindow_powerwindow_control_ConstP.map_table[rtb_periodof50ms + 8U];
-
-    /* Logic: '<S2>/Logical Operator' incorporates:
-     *  DataTypeConversion: '<S2>/Data Type Conversion1'
-     *  Inport: '<Root>/end of detection range'
-     */
-    powerwindow_powerwindow_control_B.LogicalOperator = !(powerwindow_powerwindow_control_U.endofdetectionrange != 0);
-
-    /* DiscretePulseGenerator: '<S2>/period of 50ms' */
-    rtb_periodof50ms = (powerwindow_powerwindow_control_DWork.clockTickCounter < 5L) &&
-                       (powerwindow_powerwindow_control_DWork.clockTickCounter >= 0L) ? 1 : 0;
-    if (powerwindow_powerwindow_control_DWork.clockTickCounter >= 9L) {
-        powerwindow_powerwindow_control_DWork.clockTickCounter = 0L;
-    } else {
-        powerwindow_powerwindow_control_DWork.clockTickCounter++;
-    }
-
-    /* End of DiscretePulseGenerator: '<S2>/period of 50ms' */
+    /* Entry Internal 'Logic': '<S3>:95' */
+    /* Transition: '<S3>:82' */
+    localDW->is_Logic = powerwindow_powerwindow_control_IN_Neutral;
 
     /* Chart: '<S2>/stateflow control model' incorporates:
-     *  TriggerPort: '<S5>/ticks'
+     *  TriggerPort: '<S3>/ticks'
      */
-    /* DataTypeConversion: '<S2>/Data Type Conversion' */
-    if (((rtb_periodof50ms != 0) !=
-            (powerwindow_powerwindow_control_PrevZCSigState.stateflowcontrolmodel_Trig_ZCE == powerwindow_POS_ZCSIG)) &&
-            (powerwindow_powerwindow_control_PrevZCSigState.stateflowcontrolmodel_Trig_ZCE !=
-             powerwindow_UNINITIALIZED_ZCSIG)) {
-        /* Gateway: powerwindow_control/powerwindow_control/stateflow control model */
-        if (powerwindow_powerwindow_control_DWork.temporalCounter_i1 < 63U) {
-            powerwindow_powerwindow_control_DWork.temporalCounter_i1++;
+    /* Entry 'Neutral': '<S3>:16' */
+    *rty_window_up = false;
+    *rty_window_down = false;
+    *rty_wake = false;
+    localDW->is_active_Sensing = 1U;
+
+    /* Entry Internal 'Sensing': '<S3>:96' */
+    /* Transition: '<S3>:153' */
+    localDW->is_Sensing = powerwindow_powerwindow_control_IN_Start;
+    localDW->temporalCounter_i2 = 0U;
+
+    /* Chart: '<S2>/stateflow control model' incorporates:
+     *  TriggerPort: '<S3>/ticks'
+     */
+    /* Entry 'Start': '<S3>:170' */
+    *rty_overcurrent = false;
+    *rty_pinch = false;
+  } else {
+    switch (localDW->is_c2_PowerWindow_control) {
+     case powerwindow_powerwindow_contr_IN_EndReached:
+      /* During 'EndReached': '<S3>:97' */
+      if (localDW->temporalCounter_i1 >= 10) {
+        /* Transition: '<S3>:101' */
+        localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_control_IN_System;
+
+        /* Entry Internal 'System': '<S3>:94' */
+        localDW->is_active_Logic = 1U;
+
+        /* Entry Internal 'Logic': '<S3>:95' */
+        /* Transition: '<S3>:82' */
+        localDW->is_Logic = powerwindow_powerwindow_control_IN_Neutral;
+
+        /* Chart: '<S2>/stateflow control model' incorporates:
+         *  TriggerPort: '<S3>/ticks'
+         */
+        /* Entry 'Neutral': '<S3>:16' */
+        *rty_window_up = false;
+        *rty_window_down = false;
+        *rty_wake = false;
+        localDW->is_active_Sensing = 1U;
+
+        /* Entry Internal 'Sensing': '<S3>:96' */
+        /* Transition: '<S3>:153' */
+        localDW->is_Sensing = powerwindow_powerwindow_control_IN_Start;
+        localDW->temporalCounter_i2 = 0U;
+
+        /* Chart: '<S2>/stateflow control model' incorporates:
+         *  TriggerPort: '<S3>/ticks'
+         */
+        /* Entry 'Start': '<S3>:170' */
+        *rty_overcurrent = false;
+        *rty_pinch = false;
+      }
+      break;
+
+     case powerwindow_powerwindow_control_IN_Pinch:
+      /* During 'Pinch': '<S3>:152' */
+      if (localDW->temporalCounter_i1 >= 40) {
+        /* Transition: '<S3>:157' */
+        localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_control_IN_System;
+
+        /* Entry Internal 'System': '<S3>:94' */
+        localDW->is_active_Logic = 1U;
+
+        /* Entry Internal 'Logic': '<S3>:95' */
+        /* Transition: '<S3>:82' */
+        localDW->is_Logic = powerwindow_powerwindow_control_IN_Neutral;
+
+        /* Chart: '<S2>/stateflow control model' incorporates:
+         *  TriggerPort: '<S3>/ticks'
+         */
+        /* Entry 'Neutral': '<S3>:16' */
+        *rty_window_up = false;
+        *rty_window_down = false;
+        *rty_wake = false;
+        localDW->is_active_Sensing = 1U;
+
+        /* Entry Internal 'Sensing': '<S3>:96' */
+        /* Transition: '<S3>:153' */
+        localDW->is_Sensing = powerwindow_powerwindow_control_IN_Start;
+        localDW->temporalCounter_i2 = 0U;
+
+        /* Chart: '<S2>/stateflow control model' incorporates:
+         *  TriggerPort: '<S3>/ticks'
+         */
+        /* Entry 'Start': '<S3>:170' */
+        *rty_overcurrent = false;
+        *rty_pinch = false;
+      }
+      break;
+
+     default:
+      /* Chart: '<S2>/stateflow control model' incorporates:
+       *  TriggerPort: '<S3>/ticks'
+       */
+      /* During 'System': '<S3>:94' */
+      if (*rty_pinch == 1) {
+        /* Transition: '<S3>:155' */
+        /* Exit Internal 'System': '<S3>:94' */
+        /* Exit Internal 'Sensing': '<S3>:96' */
+        localDW->is_Sensing = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_active_Sensing = 0U;
+
+        /* Exit Internal 'Logic': '<S3>:95' */
+        /* Exit Internal 'Down': '<S3>:18' */
+        localDW->is_Down = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_Logic = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+
+        /* Exit Internal 'Up': '<S3>:17' */
+        localDW->is_Up = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_active_Logic = 0U;
+        localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_control_IN_Pinch;
+        localDW->temporalCounter_i1 = 0U;
+
+        /* Entry 'Pinch': '<S3>:152' */
+        *rty_window_up = false;
+        *rty_window_down = true;
+      } else if (*rty_overcurrent == 1) {
+        /* Transition: '<S3>:100' */
+        /* Exit Internal 'System': '<S3>:94' */
+        /* Exit Internal 'Sensing': '<S3>:96' */
+        localDW->is_Sensing = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_active_Sensing = 0U;
+
+        /* Exit Internal 'Logic': '<S3>:95' */
+        /* Exit Internal 'Down': '<S3>:18' */
+        localDW->is_Down = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_Logic = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+
+        /* Exit Internal 'Up': '<S3>:17' */
+        localDW->is_Up = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+        localDW->is_active_Logic = 0U;
+        localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_contr_IN_EndReached;
+        localDW->temporalCounter_i1 = 0U;
+
+        /* Entry 'EndReached': '<S3>:97' */
+        *rty_window_up = false;
+        *rty_window_down = false;
+      } else {
+        /* During 'Logic': '<S3>:95' */
+        switch (localDW->is_Logic) {
+         case powerwindow_powerwindow_control_IN_Down_d:
+          /* During 'Down': '<S3>:18' */
+          if (localB->map[1]) {
+            /* Transition: '<S3>:169' */
+            /* Exit Internal 'Down': '<S3>:18' */
+            localDW->is_Down = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+            localDW->is_Logic = powerwindow_powerwindow_control_IN_Up;
+
+            /* Entry 'Up': '<S3>:17' */
+            *rty_window_up = true;
+            *rty_window_down = false;
+            *rty_wake = true;
+            localDW->is_Up = powerwindow_powerwindow_control_IN_Up;
+          } else {
+            switch (localDW->is_Down) {
+             case powerwindow_powerwindow_control_IN_AutoDown:
+              /* During 'AutoDown': '<S3>:111' */
+              break;
+
+             case powerwindow_powerwindow_control_IN_Down:
+              /* During 'Down': '<S3>:110' */
+              if (localB->map[0]) {
+                /* Transition: '<S3>:26' */
+                localDW->is_Down = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+                localDW->is_Logic = powerwindow_powerwindow_control_IN_Neutral;
+
+                /* Entry 'Neutral': '<S3>:16' */
+                *rty_window_up = false;
+                *rty_window_down = false;
+                *rty_wake = false;
+              }
+              break;
+
+             default:
+              /* During 'InitDown': '<S3>:109' */
+              if (localDW->temporalCounter_i1 >= 20) {
+                /* Transition: '<S3>:119' */
+                if (localB->map[0]) {
+                  /* Transition: '<S3>:120' */
+                  localDW->is_Down = powerwindow_powerwindow_control_IN_AutoDown;
+                } else {
+                  if (localB->map[2]) {
+                    /* Transition: '<S3>:121' */
+                    localDW->is_Down = powerwindow_powerwindow_control_IN_Down;
+                  }
+                }
+              }
+              break;
+            }
+          }
+          break;
+
+         case powerwindow_powerwindow_control_IN_Neutral:
+          /* During 'Neutral': '<S3>:16' */
+          if (localB->map[1]) {
+            /* Transition: '<S3>:24' */
+            localDW->is_Logic = powerwindow_powerwindow_control_IN_Up;
+
+            /* Entry 'Up': '<S3>:17' */
+            *rty_window_up = true;
+            *rty_window_down = false;
+            *rty_wake = true;
+            localDW->is_Up = powerwindow_powerwindow_control_IN_InitUp;
+            localDW->temporalCounter_i1 = 0U;
+          } else {
+            if (localB->map[2]) {
+              /* Transition: '<S3>:25' */
+              localDW->is_Logic = powerwindow_powerwindow_control_IN_Down_d;
+
+              /* Entry 'Down': '<S3>:18' */
+              *rty_window_up = false;
+              *rty_window_down = true;
+              *rty_wake = true;
+              localDW->is_Down = powerwindow_powerwindow_control_IN_InitDown;
+              localDW->temporalCounter_i1 = 0U;
+            }
+          }
+          break;
+
+         default:
+          /* During 'Up': '<S3>:17' */
+          if (localB->map[2]) {
+            /* Transition: '<S3>:166' */
+            /* Exit Internal 'Up': '<S3>:17' */
+            localDW->is_Up = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+            localDW->is_Logic = powerwindow_powerwindow_control_IN_Down_d;
+
+            /* Entry 'Down': '<S3>:18' */
+            *rty_window_up = false;
+            *rty_window_down = true;
+            *rty_wake = true;
+            localDW->is_Down = powerwindow_powerwindow_control_IN_Down;
+          } else {
+            switch (localDW->is_Up) {
+             case powerwindow_powerwindow_control_IN_AutoUp:
+              /* During 'AutoUp': '<S3>:108' */
+              break;
+
+             case powerwindow_powerwindow_control_IN_InitUp:
+              /* During 'InitUp': '<S3>:106' */
+              if (localDW->temporalCounter_i1 >= 20) {
+                /* Transition: '<S3>:115' */
+                if (localB->map[0]) {
+                  /* Transition: '<S3>:118' */
+                  localDW->is_Up = powerwindow_powerwindow_control_IN_AutoUp;
+                } else {
+                  if (localB->map[1]) {
+                    /* Transition: '<S3>:117' */
+                    localDW->is_Up = powerwindow_powerwindow_control_IN_Up;
+                  }
+                }
+              }
+              break;
+
+             default:
+              /* During 'Up': '<S3>:107' */
+              if (localB->map[0]) {
+                /* Transition: '<S3>:23' */
+                localDW->is_Up = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+                localDW->is_Logic = powerwindow_powerwindow_control_IN_Neutral;
+
+                /* Entry 'Neutral': '<S3>:16' */
+                *rty_window_up = false;
+                *rty_window_down = false;
+                *rty_wake = false;
+              }
+              break;
+            }
+          }
+          break;
         }
 
-        if (powerwindow_powerwindow_control_DWork.temporalCounter_i2 < 7U) {
-            powerwindow_powerwindow_control_DWork.temporalCounter_i2++;
-        }
+        /* During 'Sensing': '<S3>:96' */
+        switch (localDW->is_Sensing) {
+         case powerwindow_powerwindow_control_IN_SenseEnd:
+          /* During 'SenseEnd': '<S3>:147' */
+          if ((localB->LogicalOperator == 0) && (*rty_window_up == 1)) {
+            /* Transition: '<S3>:173' */
+            localDW->is_Sensing = powerwindow_powerwindow_control_IN_Start;
+            localDW->temporalCounter_i2 = 0U;
 
-        powerwindow_powerwindow_control_broadcast_ticks();
+            /* Entry 'Start': '<S3>:170' */
+            *rty_overcurrent = false;
+            *rty_pinch = false;
+          } else {
+            *rty_overcurrent = (localB->RateTransition1 > 184);
+          }
+          break;
+
+         case powerwindow_powerwindow_contr_IN_SensePinch:
+          /* During 'SensePinch': '<S3>:148' */
+          if ((localB->LogicalOperator == 1) || (*rty_window_down == 1)) {
+            /* Transition: '<S3>:150' */
+            localDW->is_Sensing = powerwindow_powerwindow_control_IN_SenseEnd;
+          } else {
+            *rty_pinch = (localB->RateTransition1 > 92);
+          }
+          break;
+
+         default:
+          /* During 'Start': '<S3>:170' */
+          if (localDW->temporalCounter_i2 >= 6) {
+            /* Transition: '<S3>:171' */
+            localDW->is_Sensing = powerwindow_powerwindow_contr_IN_SensePinch;
+          }
+          break;
+        }
+      }
+      break;
     }
-
-    powerwindow_powerwindow_control_PrevZCSigState.stateflowcontrolmodel_Trig_ZCE = (powerwindow_uint8_T)
-            (rtb_periodof50ms != 0 ? (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* End of DataTypeConversion: '<S2>/Data Type Conversion' */
-
-    /* Outputs for Triggered SubSystem: '<S1>/Tic' incorporates:
-     *  TriggerPort: '<S3>/Trigger'
-     */
-    /* Inport: '<Root>/up' incorporates:
-     *  Inport: '<Root>/current sense'
-     *  Inport: '<Root>/down'
-     *  Inport: '<Root>/end of detection range'
-     */
-    /*  if ((((powerwindow_powerwindow_control_U.up > 0) != (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[0] == powerwindow_POS_ZCSIG))
-           && (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[0] != powerwindow_UNINITIALIZED_ZCSIG)) ||
-          (((powerwindow_powerwindow_control_U.down > 0) != (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[1] ==
-             powerwindow_POS_ZCSIG)) && (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[1] !=
-                             powerwindow_UNINITIALIZED_ZCSIG)) ||
-          (((powerwindow_powerwindow_control_U.endofdetectionrange > 0) !=
-            (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[2] == powerwindow_POS_ZCSIG)) &&
-           (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[2] != powerwindow_UNINITIALIZED_ZCSIG)) ||
-          (((powerwindow_powerwindow_control_U.currentsense > 0) != (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[3] ==
-             powerwindow_POS_ZCSIG)) && (powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[3] !=
-                             powerwindow_UNINITIALIZED_ZCSIG))) {
-    */
-    /* MATLAB Function: '<S3>/Tic_T' */
-    /* MATLAB Function 'powerwindow_control/Tic/Tic_T': '<S6>:1' */
-    /* '<S6>:1:4' */
-    /*    Tic();
-      }
-
-     */
-
-
-
-
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[0] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_U.up > 0 ? (powerwindow_int16_T)
-            powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* Inport: '<Root>/down' */
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[1] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_U.down > 0 ? (powerwindow_int16_T)
-            powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* Inport: '<Root>/end of detection range' */
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[2] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_U.endofdetectionrange
-            > 0 ? (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* Inport: '<Root>/current sense' */
-    powerwindow_powerwindow_control_PrevZCSigState.Tic_Trig_ZCE[3] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_U.currentsense > 0 ?
-            (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* End of Outputs for SubSystem: '<S1>/Tic' */
-
-    /* Outputs for Triggered SubSystem: '<S1>/Toc' incorporates:
-     *  TriggerPort: '<S4>/Trigger'
-     */
-    /*  if ((((powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[0] == powerwindow_POS_ZCSIG) !=
-            powerwindow_powerwindow_control_Y.window_up) && (powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[0] !=
-            powerwindow_UNINITIALIZED_ZCSIG)) || (((powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[1] ==
-             powerwindow_POS_ZCSIG) != powerwindow_powerwindow_control_Y.window_down) &&
-           (powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[1] != powerwindow_UNINITIALIZED_ZCSIG))) {
-    */
-    /* MATLAB Function: '<S4>/Toc_T' */
-    /* MATLAB Function 'powerwindow_control/Toc/Toc_T': '<S7>:1' */
-    /* '<S7>:1:4' */
-    /*   Toc();
-      }
-    */
-    powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[0] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_Y.window_up ?
-            (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-    powerwindow_powerwindow_control_PrevZCSigState.Toc_Trig_ZCE[1] = (powerwindow_uint8_T)(powerwindow_powerwindow_control_Y.window_down ?
-            (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
-
-    /* End of Outputs for SubSystem: '<S1>/Toc' */
+  }
 }
 
+/* Initial conditions for referenced model: 'powerwindow_powerwindow_control' */
+void powerwindow_powerwindow_control_Init(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T
+  *rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T *
+  rty_wake, powerwindow_rtDW_PowerWindow_control *localDW)
+{
+  /* InitializeConditions for Chart: '<S2>/stateflow control model' */
+  localDW->is_active_Logic = 0U;
+  localDW->is_Logic = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+  localDW->is_Down = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+  localDW->is_Up = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+  localDW->temporalCounter_i1 = 0U;
+  localDW->is_active_Sensing = 0U;
+  localDW->is_Sensing = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+  localDW->temporalCounter_i2 = 0U;
+  localDW->is_active_c2_PowerWindow_contro = 0U;
+  localDW->is_c2_PowerWindow_control = powerwindow_powerwindow__IN_NO_ACTIVE_CHILD;
+  *rty_window_up = false;
+  *rty_window_down = false;
+  *rty_overcurrent = false;
+  *rty_pinch = false;
+  *rty_wake = false;
+}
+
+/* Start for referenced model: 'powerwindow_powerwindow_control' */
+void powerwindow_powerwindow_control_Start(powerwindow_rtDW_PowerWindow_control *localDW)
+{
+  /* Start for DiscretePulseGenerator: '<S2>/period of 50ms' */
+  localDW->clockTickCounter = 0L;
+}
+
+/* Output and update for referenced model: 'powerwindow_powerwindow_control' */
+void powerwindow_powerwindow_control_main(const powerwindow_boolean_T *rtu_up, const powerwindow_boolean_T *rtu_down,
+  const powerwindow_boolean_T *rtu_endofdetectionrange, const powerwindow_uint8_T *rtu_currentsense,
+  powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *rty_window_down, powerwindow_boolean_T
+  *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T *rty_wake,
+  powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW,
+  powerwindow_rtZCE_PowerWindow_control *localZCE)
+{
+  powerwindow_int16_T rowIdx;
+  powerwindow_int16_T rtb_periodof50ms;
+
+  /* DiscretePulseGenerator: '<S2>/period of 50ms' */
+  rtb_periodof50ms = (localDW->clockTickCounter < 5L) &&
+    (localDW->clockTickCounter >= 0L) ? 1 : 0;
+  if (localDW->clockTickCounter >= 9L) {
+    localDW->clockTickCounter = 0L;
+  } else {
+    localDW->clockTickCounter++;
+  }
+
+  /* End of DiscretePulseGenerator: '<S2>/period of 50ms' */
+
+  /* Logic: '<S2>/Logical Operator' */
+  localB->LogicalOperator = !*rtu_endofdetectionrange;
+
+  /* RateTransition: '<S2>/Rate Transition1' */
+  localB->RateTransition1 = *rtu_currentsense;
+
+  /* CombinatorialLogic: '<S2>/map' */
+  rowIdx = (powerwindow_int16_T)(((powerwindow_uint16_T)*rtu_up << 1) + *rtu_down);
+  localB->map[0U] = rtCP_map_table[(powerwindow_uint16_T)rowIdx];
+  localB->map[1U] = rtCP_map_table[rowIdx + 4U];
+  localB->map[2U] = rtCP_map_table[rowIdx + 8U];
+
+  /* Chart: '<S2>/stateflow control model' incorporates:
+   *  TriggerPort: '<S3>/ticks'
+   */
+  /* DataTypeConversion: '<S2>/Data Type Conversion' */
+  if (((rtb_periodof50ms != 0) != (localZCE->stateflowcontrolmodel_Trig_ZCE ==
+        powerwindow_POS_ZCSIG)) && (localZCE->stateflowcontrolmodel_Trig_ZCE !=
+                        powerwindow_UNINITIALIZED_ZCSIG)) {
+    /* Gateway: PW_PSG/PWExternalClock/stateflow control model */
+    if (localDW->temporalCounter_i1 < 63U) {
+      localDW->temporalCounter_i1++;
+    }
+
+    if (localDW->temporalCounter_i2 < 7U) {
+      localDW->temporalCounter_i2++;
+    }
+
+    powerwindow_powerwindow_con_broadcast_ticks(rty_window_up, rty_window_down,
+      rty_overcurrent, rty_pinch, rty_wake, localB, localDW);
+  }
+
+  localZCE->stateflowcontrolmodel_Trig_ZCE = (powerwindow_uint8_T)(rtb_periodof50ms != 0 ?
+    (powerwindow_int16_T)powerwindow_POS_ZCSIG : (powerwindow_int16_T)powerwindow_ZERO_ZCSIG);
+
+  /* End of DataTypeConversion: '<S2>/Data Type Conversion' */
+}
+
+/* Model initialize function */
+void powerwindow_powerwindow_control_initialize(const powerwindow_char_T **rt_errorStatus,
+  powerwindow_RT_MODEL_PowerWindow_control *const PowerWindow_control_M,
+  powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW,
+  powerwindow_rtZCE_PowerWindow_control *localZCE)
+{
+  /* Registration code */
+
+  /* initialize error status */
+	powerwindow_powerwindow_control_rtmSetErrorStatusPointer(PowerWindow_control_M, rt_errorStatus);
+
+  /* block I/O */
+  (void) memset(((void *) localB), 0,
+                sizeof(powerwindow_rtB_PowerWindow_control));
+
+  /* states (dwork) */
+  (void) memset((void *)localDW, 0,
+                sizeof(powerwindow_rtDW_PowerWindow_control));
+  localZCE->stateflowcontrolmodel_Trig_ZCE = powerwindow_UNINITIALIZED_ZCSIG;
+}
 
 /*
  * File trailer for generated code.

@@ -5,7 +5,7 @@
 
  Name: powerwindow_powerwindow_control_types.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 
@@ -17,11 +17,12 @@
 
  */
 
+
 #ifndef powerwindow_RTW_HEADER_powerwindow_control_types_h_
 #define powerwindow_RTW_HEADER_powerwindow_control_types_h_
 
 /* Forward declaration for rtModel */
-typedef struct powerwindow_tag_RTM_powerwindow_control powerwindow_RT_MODEL_powerwindow_control;
+typedef struct powerwindow_tag_RTM_PowerWindow_control powerwindow_RT_MODEL_PowerWindow_control;
 
 #endif                                 /* RTW_HEADER_powerwindow_control_types_h_ */
 

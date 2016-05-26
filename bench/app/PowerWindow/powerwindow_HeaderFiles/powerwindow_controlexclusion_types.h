@@ -5,7 +5,7 @@
 
  Name: powerwindow_controlexclusion_types.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 
@@ -21,8 +21,6 @@
 #define powerwindow_RTW_HEADER_controlexclusion_types_h_
 
 /* Forward declaration for rtModel */
-typedef struct powerwindow_tag_RTM_controlexclusion_T powerwindow_RT_MODEL_controlexclusion_T;
-
 #endif                                 /* powerwindow_RTW_HEADER_controlexclusion_types_h_ */
 
 /*

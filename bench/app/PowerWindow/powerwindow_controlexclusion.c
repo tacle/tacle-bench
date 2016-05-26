@@ -5,7 +5,7 @@
 
  Name: powerwindow_controlexclusion
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: powerwindow_controlexclusion is one functionality of the power window benchmark.
  	 It takes the input signal from the driver and the passenger to determine the final control signal.
@@ -29,44 +29,14 @@
 
 void powerwindow_controlexclusion_initialize(void);
 void powerwindow_controlexclusion_terminate(void);
-void powerwindow_controlexclusion_main(void);
-
-/*
-  Declaration of global variables
-*/
-
-/* External inputs (root inport signals with auto storage) */
-powerwindow_ExternalInputs_controlexclusion_T powerwindow_controlexclusion_U;
-
-/* External outputs (root outports fed by signals with auto storage) */
-powerwindow_ExternalOutputs_controlexclusion_T powerwindow_controlexclusion_Y;
-
-/* Real-time model */
-powerwindow_RT_MODEL_controlexclusion_T powerwindow_controlexclusion_M_;
-powerwindow_RT_MODEL_controlexclusion_T *const powerwindow_controlexclusion_M = &powerwindow_controlexclusion_M_;
-
-/*
-  Initialization- and return-value-related functions
-*/
+void powerwindow_controlexclusion_main(const powerwindow_boolean_T *rtu_Up_DRV, const powerwindow_boolean_T *rtu_Down_DRV,
+                      const powerwindow_boolean_T *rtu_Up_PSG, const powerwindow_boolean_T *rtu_Down_PSG,
+                      powerwindow_boolean_T *rty_Up, powerwindow_boolean_T *rty_Down);
 
 /* Model initialize function */
 void powerwindow_controlexclusion_initialize(void)
 {
-
-    /* Registration code */
-
-    /* initialize error status */
-	powerwindow_rtmSetErrorStatus(powerwindow_controlexclusion_M, (NULL));
-
-    /* external inputs */
-    (void) memset((void *)&powerwindow_controlexclusion_U, 0,
-                  sizeof(powerwindow_ExternalInputs_controlexclusion_T));
-
-    /* external outputs */
-    (void) memset((void *)&powerwindow_controlexclusion_Y, 0,
-                  sizeof(powerwindow_ExternalOutputs_controlexclusion_T));
-
-
+  /* (no initialization code required) */
 }
 
 /* Model terminate function */
@@ -75,47 +45,38 @@ void powerwindow_controlexclusion_terminate(void)
     /* (no terminate code required) */
 }
 
+
 /*
  Algorithm core functions
  */
 
-/* Model step function */
-void powerwindow_controlexclusion_main(void)
+/* Output and update for referenced model: 'ControlExclusion' */
+void powerwindow_controlexclusion_main(const powerwindow_boolean_T *rtu_Up_DRV, const powerwindow_boolean_T *rtu_Down_DRV,
+                      const powerwindow_boolean_T *rtu_Up_PSG, const powerwindow_boolean_T *rtu_Down_PSG,
+                      powerwindow_boolean_T *rty_Up, powerwindow_boolean_T *rty_Down)
 {
+  /* Logic: '<S2>/Logical Operator11' incorporates:
+   *  Logic: '<S2>/Logical Operator2'
+   *  Logic: '<S2>/Logical Operator3'
+   *  Logic: '<S2>/Logical Operator5'
+   *  Logic: '<S2>/Logical Operator6'
+   *  Logic: '<S2>/Logical Operator7'
+   */
+  *rty_Up = !(((!*rtu_Up_DRV) && (*rtu_Down_DRV)) || ((*rtu_Down_DRV) &&
+    (!*rtu_Up_PSG) && (*rtu_Down_PSG)));
 
-    /* Outport: '<Root>/Up' incorporates:
-     *  Inport: '<Root>/Down_DRV'
-     *  Inport: '<Root>/Down_PSG'
-     *  Inport: '<Root>/Up_DRV'
-     *  Inport: '<Root>/Up_PSG'
-     *  Logic: '<S1>/Logical Operator11'
-     *  Logic: '<S1>/Logical Operator2'
-     *  Logic: '<S1>/Logical Operator3'
-     *  Logic: '<S1>/Logical Operator5'
-     *  Logic: '<S1>/Logical Operator6'
-     *  Logic: '<S1>/Logical Operator7'
-     */
-    powerwindow_controlexclusion_Y.Up = !(((!powerwindow_controlexclusion_U.Up_DRV) && powerwindow_controlexclusion_U.Down_DRV)
-                              || (powerwindow_controlexclusion_U.Down_DRV && (!powerwindow_controlexclusion_U.Up_PSG) &&
-                                  powerwindow_controlexclusion_U.Down_PSG));
-
-    /* Outport: '<Root>/Down' incorporates:
-     *  Inport: '<Root>/Down_DRV'
-     *  Inport: '<Root>/Down_PSG'
-     *  Inport: '<Root>/Up_DRV'
-     *  Inport: '<Root>/Up_PSG'
-     *  Logic: '<S1>/Logical Operator1'
-     *  Logic: '<S1>/Logical Operator10'
-     *  Logic: '<S1>/Logical Operator12'
-     *  Logic: '<S1>/Logical Operator4'
-     *  Logic: '<S1>/Logical Operator8'
-     *  Logic: '<S1>/Logical Operator9'
-     */
-    powerwindow_controlexclusion_Y.Down = !((powerwindow_controlexclusion_U.Up_DRV && (!powerwindow_controlexclusion_U.Down_DRV))
-                                || (powerwindow_controlexclusion_U.Up_DRV && powerwindow_controlexclusion_U.Up_PSG &&
-                                    (!powerwindow_controlexclusion_U.Down_PSG)));
-
+  /* Logic: '<S2>/Logical Operator12' incorporates:
+   *  Logic: '<S2>/Logical Operator1'
+   *  Logic: '<S2>/Logical Operator10'
+   *  Logic: '<S2>/Logical Operator4'
+   *  Logic: '<S2>/Logical Operator8'
+   *  Logic: '<S2>/Logical Operator9'
+   */
+  *rty_Down = !(((*rtu_Up_DRV) && (!*rtu_Down_DRV)) || ((*rtu_Up_DRV) &&
+    (*rtu_Up_PSG) && (!*rtu_Down_PSG)));
 }
+
+
 
 /*
  * File trailer for generated code.

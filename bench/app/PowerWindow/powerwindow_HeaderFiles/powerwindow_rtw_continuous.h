@@ -5,7 +5,7 @@
 
  Name: powerwindow_rtw_continuous.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 

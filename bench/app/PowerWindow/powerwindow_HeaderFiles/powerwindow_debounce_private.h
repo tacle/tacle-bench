@@ -5,7 +5,7 @@
 
  Name: powerwindow_debounce_private.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 

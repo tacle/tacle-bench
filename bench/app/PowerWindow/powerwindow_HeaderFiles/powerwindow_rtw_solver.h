@@ -5,7 +5,7 @@
 
  Name: powerwindow_rtw_solver.h
 
- Author: University of Antwerp
+ Author: CoSys-Lab, University of Antwerp
 
  Function: headerfile
 
@@ -51,12 +51,10 @@ typedef enum {
 typedef struct _ssSolverInfo_tag {
     void        *rtModelPtr;
 
-    powerwindow_SimTimeStep *simTimeStepPtr;
-    void        *solverData;
+
     const char  *solverName;
     powerwindow_boolean_T   isVariableStepSolver;
     powerwindow_boolean_T   solverNeedsReset;
-    powerwindow_SolverMode  solverMode;
 
     powerwindow_time_T      solverStopTime;
     powerwindow_time_T      *stepSizePtr;
@@ -102,7 +100,6 @@ typedef struct _ssSolverInfo_tag {
     powerwindow_boolean_T   updateJacobianAtReset; /* S-Fcn request (sticky) */
     powerwindow_boolean_T   consistencyChecking;
 
-    powerwindow_ssMatrixType  massMatrixType;
     powerwindow_int_T         massMatrixNzMax;
     powerwindow_int_T*        massMatrixIr;
     powerwindow_int_T*        massMatrixJc;
@@ -110,11 +107,10 @@ typedef struct _ssSolverInfo_tag {
 
     const powerwindow_char_T **errStatusPtr;
 
-    powerwindow_RTWRTModelMethodsInfo *modelMethodsPtr;
     powerwindow_real_T      zcThreshold;
     powerwindow_int_T       zeroCrossAlgorithm;
     powerwindow_int_T       consecutiveZCsError;
-    powerwindow_boolean_T   blkStateChange;
+
     powerwindow_boolean_T   isComputingJacobian;
     powerwindow_slJmBdControl solverJacobianMethodControl;
     powerwindow_int_T       ignoredZcDiagnostic;
