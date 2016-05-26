@@ -536,10 +536,25 @@ down the original authors of the benchmark.
 
 \section{Evaluation}
 \label{sec:eval}
-
-
-\todo{Properly discuss Figure~\ref{fig:execution-times}. Peter? Ref. to Patmos processor/compiler/WCET analysis
-and all: \cite{t-crest:2015}}
+To evaluate the complexity of the benchmarks and their resilience against 
+compiler optimizations, we executed each benchmark inside \texttt{pasim}, a 
+cycle-accurate simulator for the Patmos architecture~\cite{t-crest:2015}. Each 
+benchmark was compiled using \texttt{patmos-clang} with activated compiler 
+optimizations~(i.e., -O2). The results of this evaluation are summarized in 
+Figure~\ref{fig:execution-times}. All execution traces start at the function 
+marked as entry point by a pragma directive in the source code of the benchmark.
+The execution times range from 305\,cycles~(binarysearch) up to 
+1,658,333,567\,cycles~(test3).
+%TODO: we should rename this artificial WCET analysis stress test
+To put this into relation, the benchmark program test3 runs approximately 
+for 21\,seconds on the Patmos platform assuming a CPU Frequency of 80\,Mhz.
+%TODO: can we easily make this calculation?
+% bs.c from M{\"a}lardalen is completely optimized to a 
+% single return statement (in clang, not in patmos-clang).
+% In patmos-clang bs requires only 26 cycles (starting) from main.
+From this evaluation we make the main observation that 
+TACLeBench consists of both short- and long running benchmarks with a huge variety in execution time. 
+No benchmark in the suite is optimized to a single return statement.
 
 \begin{figure}[t]
   \def\resultfile{eval/wcet.csv}
