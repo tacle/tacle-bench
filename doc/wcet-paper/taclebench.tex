@@ -54,14 +54,15 @@ IC1202 Timing Analysis on Code-Level (TACLe).}}
   \texttt{\{wopu, masca,rboso\}@dtu.dk}}
 \affil[6]{University of Toulouse, France\\
   \texttt{rochange@irit.fr}}
-\affil[7]{Friedrich-Alexander University Erlangen-Nürnberg, Germany\\
+\affil[7]{Friedrich-Alexander University Erlangen-N{\"u}rnberg, Germany\\
   \texttt{waegemann@cs.fau.de}}
   \authorrunning{H.~Falk et al.}%mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
 \Copyright{Heiko Falk et al.}%mandatory. OASIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation".
-\keywords{Dummy keywords -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
+\subjclass{C.3 SPECIAL-PURPOSE AND APPLICATION-BASED SYSTEMS, Real-time and embedded systems}
+%\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation".
+\keywords{Benchmarking, WCET analysis, real-time systems}
 % Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,22 +94,8 @@ is called TACLeBench and is available from GitHub in version 2.0
 at the publication date of this paper.
 \end{abstract}
 
-\section{Notes}
-
-\todo{Just internal notes to collect bullet points on ideas.}
-
-\begin{itemize}
-\item On issue with original benchmarks optimized away - we can now check with Patmos easily
-\item Working on getting the license correct - issue with code from unknown source
-\item Useful in general for embedded systems/barebone systems where less libraries are available
-\item Usage of the benchmarks (version, no subsetting, no source change)
-\item How to contribute
-\end{itemize}
-
 \section{Introduction}
 \label{sec:intro}
-
-\todo{Martin will work on this.}
 
 Good, realistic benchmark suites are essential for the evaluation and comparison
 of worst-case execution time (WCET) analysis, compiler, and computer architecture techniques.
@@ -130,7 +117,11 @@ These benchmarks are provided as ANSI-C 99 source codes.
 The source codes are 100\% self-contained; no dependencies to system-specific
 header files via \code{\#include} directives or an operating system exist.
 All input data is part of the C source code.
-Eventually used functions from math libraries are also provided in the form of C source code. Furthermore, almost all benchmarks are processor-independent and can
+Eventually used functions from math libraries are also provided in the form of C source code.
+This makes the TACLEBench collection useful in general embedded/barebone
+systems where no standard library is available.
+
+Furthermore, almost all benchmarks are processor-independent and can
 be compiled and evaluated for any kind of target processor.
 The only exception is PapaBench which uses architecture-dependent
 I/O addresses and which currently supports Atmel AVR processors.
@@ -170,21 +161,9 @@ If you would like to share your very own benchmarks with us,
 feel free to contact Heiko Falk (or any coauthor of this paper) in order
 to have your source codes included in TACLeBench.
 
-
-This paper... \todo{purpose statement, latest in 4th paragraph}
-
-\todo{We are aiming on self-contained benchmarks, that do not need any
-operating system services, including file IO. Therefore,...}
-
-\todo{Talk about the TACLe COST action and the subgroup around the benchmark
-collection. And plans how to further develop and maintain the collection.}
-
-\todo{Talk about usage of the benchmarks: WCET tools, compiler, hardware
-architecture,...}
-
 The first version of TACLeBench (version 1.0, available
 from\footnote{\url{http://www.tacle.eu/index.php/activities/taclebench}}), which was produced
-by Heiko Falk, was a collection of 102 benchmark programs from several different
+by Heiko Falk, was a collection of 102 programs from several different
 research groups. We keep this first version tagged with ``V1.0'' in the public
 GitHub repository.\footnote{\url{https://github.com/tacle/tacle-bench}}
 The version described in this paper is version 2.0 and tagged as such in the
@@ -194,13 +173,11 @@ the most recent, versioned snapshot of TACLeBench.
 Future development and additions will be performed on a development
 branch so that HEAD is always a consistent snapshot.
 
-The contributions of this paper are: (1) ... (2) ...
-
-This paper is organized in N sections: The following section presents related work.
+This paper is organized in 5 sections: The following section presents related work.
 Section~\ref{sec:related} presents related work.
 Section~\ref{sec:collect} presents the benchmark collection, its classification, and the updates
 to make them useful.
-Section~\ref{sec:eval} evaluates the benchmark collection on...
+Section~\ref{sec:eval} evaluates the benchmark collection.
 Section~\ref{sec:conclusion} concludes.
 
 \section{Related Work}
@@ -270,7 +247,7 @@ kernel benchmarks compute a computational kernel; and application
 benchmarks are real-world programs restructured as standalone benchmarks.
 Parallel and streaming benchmarks are intended to explore multicore
 speedup.
-\martin{Maybe we should port some of those to C?}
+%\martin{Maybe we should port some of those to C?}
 Benedikt Huber ported one of the application benchmarks (Lift) to C
 and we include it in TACLeBench.
 
@@ -498,6 +475,8 @@ We removed those benchmarks from the original source.
 \todo{Mmh shall we have this?}
 
 \todo{can we include a paragraph about the taskset generator for schedulability analysis}
+
+\todo{Usage of the benchmarks (version, no subsetting, no source change)}
 
 \begin{itemize}
 \item Use a stable version. At the time of this writing we should have V 2.0
