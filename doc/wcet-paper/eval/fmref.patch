@@ -1,0 +1,28 @@
+diff --git a/bench/sequential/fmref/fmref.c b/bench/sequential/fmref/fmref.c
+index 67a4711..c9ec5cc 100644
+--- a/bench/sequential/fmref/fmref.c
++++ b/bench/sequential/fmref/fmref.c
+@@ -58,20 +58,20 @@ void get_floats(FloatBuffer *fb);
+ void init_lpf_data(LPFData *data, float freq, int taps, int decimation);
+ void run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data);
+ void run_demod(FloatBuffer *fbin, FloatBuffer *fbout);
+-void begin(void);
++void fmref_main(void);
+ void init_equalizer(EqualizerData *data);
+ void run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data);
+ 
+ int main(void)
+ {
+-  begin();
++  fmref_main();
+   return 0;
+ }
+ 
+ FloatBuffer fb1, fb2, fb3, fb4;
+ LPFData lpf_data;
+ 
+-void begin(void)
++void fmref_main(void)
+ {
+   int i;
+   EqualizerData eq_data;

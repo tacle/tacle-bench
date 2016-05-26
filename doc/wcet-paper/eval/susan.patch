@@ -1,0 +1,159 @@
+diff --git a/bench/sequential/susan/susan.c b/bench/sequential/susan/susan.c
+index e4a3df2..35e3319 100644
+--- a/bench/sequential/susan/susan.c
++++ b/bench/sequential/susan/susan.c
+@@ -272,6 +272,73 @@
+ #include "wcclibm.h"
+ #include "wccfile.h"
+ #include "wccmalloc.h"
++// #include "susan_math.h"
++// put the following into susan_math.h
++#define EXP_A 184
++#define EXP_C 16249 
++
++float susan_expf(float y)
++{
++  union
++  {
++    float d;
++    struct
++    {
++#ifdef LITTLE_ENDIAN
++      short j, i;
++#else
++      short i, j;
++#endif
++    } n;
++  } eco;
++  eco.n.i = EXP_A*(y) + (EXP_C);
++  eco.n.j = 0;
++  return eco.d;
++}
++
++float LOG(float y)
++{
++  int * nTemp = (int*)&y;
++  y = (*nTemp) >> 16;
++  return (y - EXP_C) / EXP_A;
++}
++
++float POW(float b, float p)
++{
++  return susan_expf(LOG(b) * p);
++}
++
++float susan_sqrtf(float val)
++{
++  float x = val/10;
++  
++  float dx;
++  
++  float diff;
++  float min_tol = 0.00001f;
++  
++  int i, flag;
++  
++  
++  flag = 0;
++  if (val == 0 ) x = 0;
++  else {
++    for (i=1;i<20;i++)
++    {
++      if (!flag) {
++        dx = (val - (x*x)) / (2.0f * x);
++        x = x + dx;
++        diff = val - (x*x);
++        if (fabs(diff) <= min_tol) flag = 1;
++      }
++      else
++        x =x;
++    }
++  }
++  return (x);
++}
++
++
+ 
+ /* ********** Optional settings */
+ 
+@@ -404,7 +471,7 @@ void setup_brightness_lut( uchar **bp, int thresh, int form )
+     temp=temp*temp;
+     if (form==6)
+       temp=temp*temp*temp;
+-    temp=100.0*expf(-temp);
++    temp=100.0*susan_expf(-temp);
+     *(*bp+k)= (uchar)temp;
+   }
+ }
+@@ -631,7 +698,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
+     for(i=-mask_size; i<=mask_size; i++) {
+       _Pragma( "loopbound min 15 max 15" )
+       for(j=-mask_size; j<=mask_size; j++) {
+-        x = (int) (100.0 * expf( ((float)((i*i)+(j*j))) / temp ));
++        x = (int) (100.0 * susan_expf( ((float)((i*i)+(j*j))) / temp ));
+         *dpt++ = (unsigned char)x;
+       }
+     }
+@@ -1060,7 +1127,7 @@ void susan_edges( uchar *in, char *r, uchar *mid, uchar *bp,
+           c=*(cp-*p++);y+=3*c;
+           c=*(cp-*p);x+=c;y+=3*c;
+ 
+-          z = sqrtf((float)((x*x) + (y*y)));
++          z = susan_sqrtf((float)((x*x) + (y*y)));
+           if (z > (0.9*(float)n)) { /* 0.5 */
+             do_symmetry=0;
+             if (x==0)
+@@ -1223,7 +1290,7 @@ void susan_edges_small( uchar *in, char *r, uchar *mid, uchar *bp,
+           c=*(cp-*p++);y+=c;
+           c=*(cp-*p);x+=c;y+=c;
+ 
+-          z = sqrtf((float)((x*x) + (y*y)));
++          z = susan_sqrtf((float)((x*x) + (y*y)));
+           if (z > (0.4*(float)n)) { /* 0.6 */
+             do_symmetry=0;
+             if (x==0)
+@@ -1907,7 +1974,7 @@ void call_susan( struct wccFILE *inputFile, int mode )
+   put_image(in,x_size,y_size);
+ }
+ 
+-int main( void ) 
++void susan_main(void)
+ {
+   struct wccFILE file;
+   file.data = input;
+@@ -1920,6 +1987,10 @@ int main( void )
+   wccfreeall();
+   call_susan( &file, 2 );
+   wccfreeall();
+-  
++}
++
++int main( void ) 
++{
++  susan_main();
+   return 0;
+ }
+diff --git a/bench/sequential/susan/wccfile.c b/bench/sequential/susan/wccfile.c
+index d6e6581..e0dd530 100644
+--- a/bench/sequential/susan/wccfile.c
++++ b/bench/sequential/susan/wccfile.c
+@@ -1,4 +1,5 @@
+-#define size_t unsigned long
++#include "wccfile.h"
++// #define size_t unsigned long
+ #define EOF -1
+ 
+ size_t wccfread(void* ptr, size_t size, size_t count, struct wccFILE* stream)
+diff --git a/bench/sequential/susan/wcclibm.h b/bench/sequential/susan/wcclibm.h
+index 0e35615..4a92654 100644
+--- a/bench/sequential/susan/wcclibm.h
++++ b/bench/sequential/susan/wcclibm.h
+@@ -1,7 +1,7 @@
+ #ifndef _WCCLIBM
+ #define _WCCLIBM
+ 
+-#define size_t       unsigned long
++// #define size_t       unsigned long
+ #define int32_t      int
+ #define uint32_t     unsigned int
+ #define u_int16_t    unsigned short

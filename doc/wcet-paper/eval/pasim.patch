@@ -1,0 +1,13 @@
+diff --git a/simulator/src/dbgstack.cc b/simulator/src/dbgstack.cc
+index bcb4e35..7a7cffa 100644
+--- a/simulator/src/dbgstack.cc
++++ b/simulator/src/dbgstack.cc
+@@ -99,7 +99,7 @@ namespace patmos
+                 << sim.GPR.get(rsp).get() << "\n";
+ #endif
+       // we are currently further down the shadow stack
+-      return false;
++      // return false;
+     }
+     // Note that at the moment we store the size of the stack cache,
+     // *not* the TOS address.
