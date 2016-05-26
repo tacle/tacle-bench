@@ -401,16 +401,15 @@ Powerwindow & Distributed powerwindow control software & 5 & 1869 & CoSys-Lab \\
 The class of application benchmarks are shown in Table~\ref{tab:bench_app}.
 The application benchmarks are derived from real applications, with simulated input stimuli.
 
-\todo{rewrite as this is a verbatim copy from a published paper.}
-Lift is a lift controller software that is installed in an
-automation factory in Turkey. The hardware is based on a JOP in a
-Cyclone FPGA device and an I/O print that was originally developed
-for the SCADA device TeleAlarm. The controller has just a few
-inputs (command buttons and input sensors for the hight
-measurement) and a simple motor control. The I/O devices are
-simulated in the benchmark environment. Compared to the Kfl
-benchmark, Lift is written in a more object oriented style, but still
-avoids to generate garbage at the mission phase.
+Lift is a lift controller software that has been developed for a
+factory in Turkey. The hardware is based on a Java processor (JOP) in an
+FPGA device and an I/O print that was originally developed
+for the supervisory control and data acquisition device.
+The controller has just a few inputs (command buttons and input
+sensors for the hight measurement) and a simple motor control.
+The I/O devices are simulated in the benchmark environment.
+The Java version of Lift is part of the Java benchmark suit JemBench.
+Lift has been translated to C by Benedikt Huber.
 
 \begin{table}
 \centering
@@ -452,9 +451,7 @@ Based on taskset descriptions
 \item Compiler optimization
 \item byte order
 \item low-level access to device registers
-\item Some benchmarks, which are available for download in the Internet have a license that
-does not allow open-source distribution. We removed those benchmarks from the original source.
-\end{itemize}
+\item \end{itemize}
 
 The original benchmarks include all input data or we added input data into the C source.
 However, this effectively turns them into single-path programs.
@@ -466,6 +463,11 @@ most of the code away.
 However, to prohibit the unwanted compiler optimizations we changed
 the way input data is represented in variables (made them \code{volatile}),
 and made the return of \code{main} dependent on the benchmark calculation.
+
+Some benchmarks, which are part of V 1.0 of TACLeBench and are available
+for download in the Internet, have a license that does not allow open-source distribution.
+We removed those benchmarks from the original source.
+
 
 \subsection{Benchmark Changes}
 
@@ -492,6 +494,11 @@ and made the return of \code{main} dependent on the benchmark calculation.
 \emph{selecting the most representative benchmarks} for your improvement
 \end{itemize}
 
+
+TACLeBench is released in source form. However, to report
+results based on TACLeBench, the benchmarks shall not be changed.
+Furthermore, the version of TACLeBench shall be included in any paper.
+
 \subsection{Licenses}
 
 An issue we encountered with several benchmarks was that the original
@@ -505,6 +512,8 @@ benchmarks were consequently dropped from the TACLeBench benchmark
 suite. All benchmarks in the benchmark suite now contain licensing
 information, such that future developments do not require tracking
 down the original authors of the benchmark.
+
+
 
 \section{Evaluation}
 \label{sec:eval}
