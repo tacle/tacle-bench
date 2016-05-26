@@ -1,3 +1,8 @@
+\documentclass[border=0mm]{standalone}
+\usepackage{pgfplots}
+
+\begin{document}
+\def\resultfile{wcet.csv}
 %
 \makeatletter
 \pgfplotsset{
@@ -24,29 +29,48 @@
   xmin=0,
   xmax=56,
   ymin=1e0,
-  ymax=2e9,
+  ymax=4e10,
   xtick pos=left,
   ytick pos=left,
-  ytick={1e0,1e1,1e2,1e3,1e4,1e5,1e6,1e7,1e8,1e9},
+  ytick={1e0,1e1,1e2,1e3,1e4,1e5,1e6,1e7,1e8,1e9,1e10},
   font=\tiny,
-  width=1.04\textwidth,
+  % width=0.99\textwidth,
+  width=35cm,
   height=0.4\textwidth,
-  bar width=4pt,
-  axis y line*=left,
+  bar width=2pt,
   ylabel={\# Cycles},
   ylabel style={anchor=south, yshift=-20},
   flexible xticklabels from table={\resultfile}{benchmark}{col sep=space},
   xticklabel style={rotate=50,anchor=east,xshift=1},
+  legend style={at={(0.033,0.99)},anchor=north,legend columns=1},
 ]
 %
+\addplot [%
+  draw=black, 
+  fill=gray!5!green!70, %
+  top color=gray!5!green!20, bottom color=gray!5!green!60,
+  ]
+  table [x=position,
+         y=pasim,
+] {\resultfile};
 \addplot [%
   draw=black, 
   fill=gray!5!blue!70, %
   top color=gray!5!blue!20, bottom color=gray!5!blue!60,
   ]
   table [x=position,
-         y=pasim,
+         y=platintrace,
 ] {\resultfile};
+\addplot [%
+  draw=black, 
+  fill=gray!5!red!70, %
+  top color=gray!5!red!20, bottom color=gray!5!red!60,
+  ]
+  table [x=position,
+         y=platinwcet,
+] {\resultfile};
+\legend{pasim,platin (trace), platin (IPET)}
 \end{axis}
 \end{tikzpicture}
 %
+\end{document}
