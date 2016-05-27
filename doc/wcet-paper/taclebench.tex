@@ -269,7 +269,7 @@ and we include it in TACLeBench.
 \label{sec:collect}
 
 
-\subsection{Benchmark Sources}
+\subsection{Benchmark Sources and Classification}
 The benchmarks included in TACLeBench are sourced from single source files publicly available or collections of benchmarks.
 The collections of benchmarks are the SNU-RT benchmark suite, the MiBench embedded benchmark suite, the M{\"a}lardalen Real-Time Research Center (MRTC) WCET benchmarks, the CoSys-Lab of University of Antwerp, the DSPStone from RWTH Aachen, the StreamIt from MIT, the NetBench from UCLA, the MediaBench, and the HEPC challenge benchmark suite.
 We have specified the origin of each benchmark listed in Tables~\ref{tab:bench_kernel}-\ref{tab:bench_test}.
@@ -280,8 +280,7 @@ We have specified the origin of each benchmark listed in Tables~\ref{tab:bench_k
 %benchmarks  changed? Legal changes?}
 %\todo{Rasmus}
 
-\subsection{Classification}
-In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
+%In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
 As a measure of the size and complexity of each benchmark, we present the number of source lines of code (SLOC) of each benchmark.
 Some of the benchmarks have a high SLOC count because they contain an array with the input data.
 The SLOC numbers where found using the Linux utility \code{sloccount}.
@@ -326,7 +325,7 @@ st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 12
 \end{tabular}
 \end{table}
 
-The class of kernel benchmarks is a set of synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
+The kernel benchmarks iare synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
 The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}, and the size of the kernel benchmarks are from 36 SLOC to 2049 SLOC.
 
 \begin{table}
@@ -363,7 +362,7 @@ susan &  MR image recognition algorithm & 8782 & MiBench \\
 \end{tabular}
 \end{table}
 
-The class of sequential benchmarks implement large functions block such as encoders and decoders that are used in many embedded systems.
+The sequential benchmarks implement large functions block such as encoders and decoders that are used in many embedded systems.
 The sequential benchmarks of TACLeBench are listed in Table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 242 SLOC to 12601 SLOC.
 The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
 
@@ -381,7 +380,8 @@ test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarland
 \end{tabular}
 \end{table}
 
-The class of test benchmarks are shown in Table~\ref{tab:bench_test}, and contain three artificial test programs of various size that stress test the WCET analysis tools.
+Three artificial test benchmarks, shown in Table~\ref{tab:bench_test}, are used
+to stress test WCET analysis tools.
 
 \begin{table}
 \centering
@@ -396,7 +396,8 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \end{tabular}
 \end{table}
 
-The class of parallel benchmarks, shown in Table~\ref{tab:bench_parallel}, contains two benchmarks, the Debie benchmark and the PapaBench benchmark.
+TACLeBench contains two parallel benchmarks, shown in Table~\ref{tab:bench_parallel},
+the Debie benchmark and the PapaBench benchmark.
 These two benchmarks are comparable in size and in the number of tasks.
 
 \begin{table}
@@ -413,7 +414,7 @@ PowerWindow & Distributed powerwindow control software & 4 & 2533 & CoSys-Lab \\
 \end{tabular}
 \end{table}
 
-The class of application benchmarks are shown in Table~\ref{tab:bench_app}.
+The capplication benchmarks are shown in Table~\ref{tab:bench_app}.
 The application benchmarks are derived from real applications, with simulated input stimuli.
 
 Lift is a lift controller software that has been developed for a
