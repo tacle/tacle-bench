@@ -61,12 +61,12 @@ void powerwindow_powerwindow_control_main(const powerwindow_boolean_T *rtu_up, c
   powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW,
   powerwindow_rtZCE_PowerWindow_control *localZCE);
 
-static void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
+void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
   rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T
   *rty_wake, powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW);
 
 /* Function for Chart: '<S2>/stateflow control model' */
-static void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
+void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_window_up, powerwindow_boolean_T *
   rty_window_down, powerwindow_boolean_T *rty_overcurrent, powerwindow_boolean_T *rty_pinch, powerwindow_boolean_T
   *rty_wake, powerwindow_rtB_PowerWindow_control *localB, powerwindow_rtDW_PowerWindow_control *localDW)
 {
