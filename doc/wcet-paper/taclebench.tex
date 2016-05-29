@@ -97,7 +97,7 @@ IC1202 Timing Analysis on Code-Level (TACLe).}}
 Engineering related research, such as research on worst-case execution time,
 uses experimentation to evaluate ideas. For these experiments we need
 example programs. Furthermore, to make the research experimentation
-repeatable those programs shall be made available.
+repeatable those programs shall be made publicly available.
 
 We collected open-source programs, adapted them to a common coding
 style, and provide the collection in open-source. The benchmark collection
@@ -124,26 +124,26 @@ architecture research worldwide.
 
 TACLeBench is a collection of currently \benchcount benchmark programs
 from several different research groups and tool vendors around the world.
-These benchmarks are provided as ANSI-C 99 source codes.
+These benchmarks are provided as ISO C99 source codes.
 The source codes are 100\% self-contained; no dependencies to system-specific
 header files via \code{\#include} directives or an operating system exist.
 All input data is part of the C source code.
-Eventually used functions from math libraries are also provided in the form of C source code.
-This makes the TACLEBench collection useful in general embedded/barebone
+Potentially used functions from math libraries are also provided in the form of C source code.
+This makes the TACLeBench collection useful in general embedded/barebone
 systems where no standard library is available.
 
 Furthermore, almost all benchmarks are processor-independent and can
 be compiled and evaluated for any kind of target processor.
 The only exception is PapaBench which uses architecture-dependent
-I/O addresses and which currently supports Atmel AVR processors.
+I/O addresses and currently supports Atmel AVR processors only.
 
 Since TACLeBench addresses the needs imposed by timing analysis tools,
 all benchmarks are completely annotated with flow facts.
-These flow facts are directly incorporated into the ANSI-C source codes using
+These flow facts are directly incorporated into the C source codes using
 Pragmas at a high level of abstraction.
 TACLeBench distinguishes between so-called flow restrictions, loop bounds and entry points.
 Flow restrictions allow to express the execution count of one statement in relation to the execution count of other statements.
-This annotation methods allows to express any kinds of linear dependencies between statements' execution counts.
+This annotation methods allows to express any kinds of linear dependencies between execution counts of statements.
 Flow restrictions are expressed in terms of inequations, where each side of an inequation is a weighted sum of execution counts of statements, and where the two sides of an inequation are compared by less-than-equal, equal, or greater-than-equal operators.
 For example, flow restrictions can be used to express precise upper execution bounds for irregularly nested loops (e.g., triangular loops), recursions, multi-entry loops etc.
 Besides flow restrictions, TACLeBench also uses loop bound flow facts which simplify the annotation of regular loops.
@@ -238,7 +238,7 @@ to precedence constraints and 6 interrupt service routines.
 
 The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides their own benchmark suite dedicated to the evaluation of
 the performance of embedded hardware and embedded software.
-The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tables, but also big data and cloud computing.
+The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tablets, but also big data and cloud computing.
 To improve comparability between different processors and systems, the consortium provides a sophisticated test-harness which allows to derive certifiable scores.
 The test-harness, being a clear advantage in terms of comparability and certifiability, constitutes a hindrance in terms of portability and usability.
 Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variety of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
@@ -325,7 +325,7 @@ st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 12
 \end{tabular}
 \end{table}
 
-The kernel benchmarks iare synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
+The kernel benchmarks are synthetic benchmarks that implement a range of general functionality that can be used by a wide range of applications.
 The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}, and the size of the kernel benchmarks are from 36 SLOC to 2049 SLOC.
 
 \begin{table}
@@ -414,15 +414,14 @@ PowerWindow & Distributed powerwindow control software & 4 & 2533 & CoSys-Lab \\
 \end{tabular}
 \end{table}
 
-The capplication benchmarks are shown in Table~\ref{tab:bench_app}.
-The application benchmarks are derived from real applications, with simulated input stimuli.
+The application benchmarks, derived from real applications and provided with simulated input stimuli, are shown in Table~\ref{tab:bench_app}.
 
 Lift is a lift controller software that has been developed for a
 factory in Turkey. The hardware is based on a Java processor (JOP) in an
 FPGA device and an I/O print that was originally developed
 for the supervisory control and data acquisition device.
 The controller has just a few inputs (command buttons and input
-sensors for the hight measurement) and a simple motor control.
+sensors for the height measurement) and a simple motor control.
 The I/O devices are simulated in the benchmark environment.
 The Java version of Lift is part of the Java benchmark suit JemBench.
 Lift has been translated to C by Benedikt Huber.
@@ -443,21 +442,31 @@ stack allocated data into global data.
 All function and variable names are prepended with the benchmark
 name to give unique names.
 All loops have been annotated with loop bounds.
+Moreover, several bugs have been fixed, and lots of compiler warnings have been eliminated.
+The benchmarks are now ISO C99 compliant.
+Some benchmarks have been renamed. The original name of a benchmark can be found in the comment header of each benchmark.
+The library functions used by some benchmarks have been moved to their own files.
+All source files adhere to a common set of formatting rules that can be found in the git repository (\textit{doc/code\_formatting.txt}).
 
-\todo{What else has been done?}
+%%%\todo{What else has been done?}
 
 Due to this changes, results obtained with the TACLeBench versions
 of the benchmarks are not comparable with the original versions of
 the benchmarks.
 
-\subsection{Benchmark Usage}
+\subsection{Known Uses of TACLeBench}
 
 \martin{Section was intended to talk about how to use the benchmarks, which is
 now in Usage Recommendations. Shall we write about the usage as below?}
 
 \begin{itemize}
 \item Static analysis
-\item Measurement based analysis
+\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation appraoch presented in \cite{Dreyer2015}.
+A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.
+The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
+Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occured that will be fixed in the final collection.
+This makes the results stated there non-comparable.
+Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
 \item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
 called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
 The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
@@ -480,7 +489,7 @@ However, this effectively turns them into single-path programs.
 This fact could be used by analysis tools to explore only this single path.
 Another consequence of the fact that the
 input data is fixed, and that some programs do not provide
-any return value, is that good compilers with optimization turned on can optimize
+any return value, is that good compilers with optimizations turned on can optimize
 most of the code away.
 However, to prohibit the unwanted compiler optimizations we changed
 the way input data is represented in variables (made them \code{volatile}),
@@ -490,14 +499,18 @@ and made the return of \code{main} dependent on the benchmark calculation.
 %for download in the Internet, have a license that does not allow open-source distribution.
 %We removed those benchmarks from the original source.
 
-Furthermore, a few benchmarks are byte order dependent and there is no standard
+Some benchmarks contain target dependent code.
+For example, PapaBench contains hardcoded I/O addresses.
+Furthermore, a few benchmarks (e.g.~rijndael) are byte order dependent and there is no standard
 way in C to detect the byte order of a processor.
+Finally, some benchmarks could be executed only once, either because they rely on global initialization, or because they use \code{malloc} but not \code{free}.
 
-\todo{low-level access to device registers -- which benchmarks are involved?}
+%%%\todo{low-level access to device registers -- which benchmarks are involved?}
 
 
 
 \subsection{Usage Recommendations}
+\label{usage}
 
 \todo{Mmh shall we have this?}
 
@@ -508,13 +521,18 @@ way in C to detect the byte order of a processor.
 TACLeBench is released in source form. However, to report
 results based on TACLeBench, the benchmarks shall not be changed.
 Furthermore, the version of TACLeBench shall be included in any paper.
+State the results for the entry points of the benchmarks.
 
 If possible, use all benchmarks in your evaluation. One issue with subsetting
 a benchmark collection is to \emph{selecting the most representative benchmarks}
 to show an improvement. However, this introduces a bias in the result and
 is considered scientific misconduct. If you really need to subset you have
 two possibilities: (1) use only one class of benchmarks, e.g., the sequential
-benchmarks or (2) use a random selection, possible generated by a program.
+benchmarks or (2) use a random selection, possibly generated by a program.
+
+If some benchmarks have not been used, state the reason for exclusion (e.g. ``the tool/target architecture does not support floating point numbers'').
+If a benchmark needs to be patched to run on a target architecture, publish what changes needed to be done (preferably as a patch).
+
 
 \martin{Do we follow here and have all benchmarks in the evaluation?}
 
@@ -565,7 +583,7 @@ No benchmark in the suite is optimized to a single return statement.
 \end{figure}
 
 \subsection{Sanity Checks}
-All code-changes were done manually by different members of the TACLe Cost action.
+All code-changes were done manually by different members of the TACLe COST action.
 Such a collaborative procedure is inherently error-prone.
 For once, human errors can occur and the original sources were often faulty to start with.
 The distributive work on the benchmarks led to an additional source of errors:
@@ -576,7 +594,7 @@ The code quality and conformity with the code formatting rules is validated cent
 For this sanity check, all benchmarks are compiled using \textit{gcc}, \textit{g$++$} and \textit{clang}, executed and the return values are checked against the expected value.
 Clang's static analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} is used to further reveal programming bugs, such as out-of-bounds errors, and also to validate the compliance of the code with the code-formatting rules.
 
-The portability has been checked via a shell-script \textit{checkbenchmarks.sh} that is now part of the TACLeBench git-repository.
+The portability has been checked via a shell-script \textit{checkBenchmark.sh} that is now part of the TACLeBench git-repository.
 The script allows to quickly identify incompatibilities of the benchmarks with specific operating systems, compilers and system configurations.
 Even though full coverage of all system configurations can never be achieved, we were able to cover most of the common operating systems and compilers.
 
