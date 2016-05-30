@@ -26,8 +26,8 @@
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 
 % remove the comment for the submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 
 % fatter TT font
@@ -556,23 +556,53 @@ for a future journal version.}
 \todo{Refs are missing form some usage.}
 
 \begin{itemize}
-\item Static analysis: \todo{No usage up to now?}
+%\item Static analysis: \todo{No usage up to now?}
 \item Compiler optimizations: The origin of TACLeBench is the collection of free
 programs used for evaluation of the wcc compiler.
-\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation approach presented in \cite{Dreyer2015}.
-A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.
+\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation approach presented
+in~\cite{Dreyer2015}.\footnote{A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.}
 The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
-Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occurred that will be fixed in the final collection.
+Since the evaluation for this approach happened before version 2.0 of TACLeBench,
+some issues occurred that will be fixed in 2.0
 This makes the results stated there non-comparable.
 Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
-\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
-called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
-The  challenge  of  this  two-layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework that facilitates evaluation of the different approaches using different block sizes.
-\item Schedulability analysis using TACLeBench is facilitated by the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analyzed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
+\martin{I am having a hard time understanding the (original) text on hybrid analysis.
+What are the two layers? 
+Anyway I try to rewrite and cutdown. We need to discuss this for the final version.}
+\item Hybrid analysis: The hybrid model splits the code of tasks into basic blocks
+and uses measurements to obtain instruction traces.
+% Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
+The  challenge  of  this  two-layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis and accuracy  within  the  measurements based  layer.
+% In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model.
+The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework that facilitates evaluation of the different approaches using different block sizes.
+\martin{We need a link or paper for the above. I did not find anything just with Google.}
+Furthermore, COBRA-TG (Taskset Generator) uses TACLeBench for schedulability analysis.
+Different scheduling methodologies can be analyzed in a reproducible way using generated
+tasksets based on specific application descriptions.
+%It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
 \item Hardware design: As the TACLeBench collection is self contained, it leads itself
 as an easy to use benchmark collection to evaluate computer architecture design in the
 embedded and real-time domain. We have used version 1.0 for the evaluation of the
 stack cache design optimized for real-time systems~\cite{patmos:stackcache:rts}.
+
+%\begin{itemize}
+%%\item Static analysis: \todo{No usage up to now?}
+%\item Compiler optimizations: The origin of TACLeBench is the collection of free
+%programs used for evaluation of the wcc compiler.
+%\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation approach presented
+%in~\cite{Dreyer2015}.\footnote{A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.}
+%The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
+%Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occurred that will be fixed in the final collection.
+%This makes the results stated there non-comparable.
+%Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
+%\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
+%called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
+%The  challenge  of  this  two-layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework that facilitates evaluation of the different approaches using different block sizes.
+%\item Schedulability analysis using TACLeBench is facilitated by the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analyzed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
+%\item Hardware design: As the TACLeBench collection is self contained, it leads itself
+%as an easy to use benchmark collection to evaluate computer architecture design in the
+%embedded and real-time domain. We have used version 1.0 for the evaluation of the
+%stack cache design optimized for real-time systems~\cite{patmos:stackcache:rts}.
 
 % Based on taskset descriptions
 
@@ -663,7 +693,7 @@ Research in the field of embedded real-time systems needs benchmarks to
 evaluate research ideas. TACLeBench provides an open source collection of
 \benchcount benchmarks. As all benchmarks are self-contained they are easy to
 use in systems that are lacking the standard library or an operating systems.
-
+%
 This paper reports on the TACLeBench version 2.0.
 We intend to grow the collection of programs and coordinate the
 release of benchmark versions.
