@@ -413,14 +413,14 @@ well known.}
 
 The application benchmarks, derived from real applications and provided with simulated input stimuli, are listed in Table~\ref{tab:bench_app}.
 %
-Lift is a lift controller software that has been developed for a
+Lift is a lift controller that has been deployed at a
 factory in Turkey. The hardware is based on a Java processor (JOP).
 % in an
 %FPGA device and an I/O print that was originally developed
 %for the supervisory control and data acquisition device.
 The controller has just a few inputs (command buttons and input
 sensors for the height measurement) and a simple motor control.
-The I/O devices are simulated in the benchmark environment.
+The I/O devices are simulated in the benchmark.
 The Java version of Lift is part of the Java benchmark suit JemBench~\cite{jembench}.
 Benedikt Huber has translated lift to C.
 
@@ -560,7 +560,7 @@ for a future journal version.}
 \begin{itemize}
 %\item Static analysis: \todo{No usage up to now?}
 \item Compiler optimizations: The origin of TACLeBench is the collection of free
-programs used for evaluation of the wcc compiler.
+programs used for evaluation of the wcc compiler~\cite{falk:wcc:wcet06}.
 \item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation approach presented
 in~\cite{Dreyer2015}.\footnote{A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.}
 The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
