@@ -435,62 +435,6 @@ requesting the window to roll up or down.
 In case an object is stuck between the window and the door frame,
 the controller will move the window down to avoid damaging the object.
 
-\subsection{Benchmark Updates}
-
-The benchmarks have been rewritten to clearly split the functions of
-input data initialization, the benchmark itself, and computing a return
-value depending on the output data. Moving the input data generation
-into its own function resulted sometimes in movements from originally
-stack allocated data into global data.
-All function and variable names are prepended with the benchmark
-name to give unique names.
-All loops have been annotated with loop bounds.
-Moreover, several bugs have been fixed, and lots of compiler warnings have been eliminated.
-The benchmarks are now ISO C99 compliant.
-Some benchmarks have been renamed. The original name of a benchmark can be found in the comment header of each benchmark.
-The library functions used by some benchmarks have been moved to their own files.
-All source files adhere to a common set of formatting rules that can be found in the git repository (\textit{doc/code\_formatting.txt}).
-
-%%%\todo{What else has been done?}
-
-Due to this changes, results obtained with the TACLeBench versions
-of the benchmarks are not comparable with the original versions of
-the benchmarks.
-
-\subsection{Known Uses of TACLeBench}
-
-Although TACLeBench is a relative new collection of embedded benchmarks,
-we can already list some usage of the collection in research projects.
-This early adaption of TACLeBench is already a strong indication of
-the need of such a benchmark collection.
-
-\martin{This section might go away, as we have not enough pace.
-However, it is good to collect the information here. We might need it
-for a future journal version.}
-
-\begin{itemize}
-\item Static analysis:
-\item Compiler optimizations: The origin of TACLeBench is the collection of free
-programs used for evaluation of the wcc compiler.
-\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation appraoch presented in \cite{Dreyer2015}.
-A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.
-The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
-Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occured that will be fixed in the final collection.
-This makes the results stated there non-comparable.
-Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
-\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
-called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
-The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
-\item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
-\item Hardware design: As the TACLeBench collection is self contained, it leads itself
-as an easy to use benchmark collection to evaluate computer architecture design in the
-embedded and real-time domain. We have used version 1.0 for the evaluation of the
-stack cache design optimized for real-time systems~\cite{patmos:stackcache:rts}.
-
-% Based on taskset descriptions
-
-\end{itemize}
-
 \subsection{Issues with the Original Sources}
 
 
@@ -514,42 +458,38 @@ and made the return of \code{main} dependent on the benchmark calculation.
 %for download in the Internet, have a license that does not allow open-source distribution.
 %We removed those benchmarks from the original source.
 
+\martin{Mmh, I think we need to fix this. The simplest form is dropping them
+from the list. How many benchmarks depend on byte ordering?}
 Some benchmarks contain target dependent code.
 For example, PapaBench contains hardcoded I/O addresses.
-Furthermore, a few benchmarks (e.g.~rijndael) are byte order dependent and there is no standard
-way in C to detect the byte order of a processor.
-Finally, some benchmarks could be executed only once, either because they rely on global initialization, or because they use \code{malloc} but not \code{free}.
+Furthermore, a few benchmarks (e.g.,~ijndael) are byte order dependent
+and there is no standard way in C to detect the byte order of a processor.
+Finally, some benchmarks can be executed only once, either because
+they rely on global initialization, or because they use \code{malloc} but not \code{free}.
 
 %%%\todo{low-level access to device registers -- which benchmarks are involved?}
 
+\subsection{Benchmark Updates}
 
+The benchmarks have been rewritten to clearly split the functions of
+input data initialization, the benchmark itself, and computing a return
+value depending on the output data. Moving the input data generation
+into its own function resulted sometimes in movements from originally
+stack allocated data into global data.
+All function and variable names are prepended with the benchmark
+name to give unique names.
+All loops have been annotated with loop bounds.
+Moreover, several bugs have been fixed, and lots of compiler warnings have been eliminated.
+The benchmarks are now ISO C99 compliant.
+Some benchmarks have been renamed. The original name of a benchmark can be found in the comment header of each benchmark.
+The library functions used by some benchmarks have been moved to their own files.
+All source files adhere to a common set of formatting rules that can be found in the git repository (\textit{doc/code\_formatting.txt}).
 
-\subsection{Usage Recommendations}
-\label{usage}
+%%%\todo{What else has been done?}
 
-\todo{Mmh shall we have this?}
-
-\todo{can we include a paragraph about the taskset generator for schedulability analysis}
-\martin{This feels a little bit off-topic.}
-
-
-TACLeBench is released in source form. However, to report
-results based on TACLeBench, the benchmarks shall not be changed.
-Furthermore, the version of TACLeBench shall be included in any paper.
-State the results for the entry points of the benchmarks.
-
-If possible, use all benchmarks in your evaluation. One issue with subsetting
-a benchmark collection is to \emph{selecting the most representative benchmarks}
-to show an improvement. However, this introduces a bias in the result and
-is considered scientific misconduct. If you really need to subset you have
-two possibilities: (1) use only one class of benchmarks, e.g., the sequential
-benchmarks or (2) use a random selection, possibly generated by a program.
-
-If some benchmarks have not been used, state the reason for exclusion (e.g. ``the tool/target architecture does not support floating point numbers'').
-If a benchmark needs to be patched to run on a target architecture, publish what changes needed to be done (preferably as a patch).
-
-
-\martin{Do we follow here and have all benchmarks in the evaluation?}
+Due to this changes, results obtained with the TACLeBench versions
+of the benchmarks are not comparable with the original versions of
+the benchmarks.
 
 
 \subsection{Licenses}
@@ -565,6 +505,68 @@ benchmarks were consequently dropped from the TACLeBench benchmark
 suite. All benchmarks in the benchmark suite now contain licensing
 information, such that future developments do not require tracking
 down the original authors of the benchmark.
+
+
+
+
+
+\subsection{Usage Recommendations}
+\label{usage}
+
+TACLeBench is released in source form. However, to report
+results based on TACLeBench, the benchmarks shall not be changed.
+Furthermore, the version of TACLeBench shall be included in any paper.
+State the results for the entry points of the benchmarks.
+
+If possible, use all benchmarks in your evaluation. One issue with subsetting
+a benchmark collection is to \emph{selecting the most representative benchmarks}
+to show an improvement. However, this introduces a bias in the result and
+is considered scientific misconduct. If you really need to subset you have
+two possibilities: (1) use only one class of benchmarks, e.g., the sequential
+benchmarks or (2) use a random selection, possibly generated by a program.
+
+If some benchmarks have not been used, state the reason for exclusion
+(e.g., ``the tool/target architecture does not support floating point numbers'').
+If a benchmark needs to be patched to run on a target architecture,
+publish what changes needed to be done (preferably as a patch).
+
+
+\subsection{Known Uses of TACLeBench}
+
+Although TACLeBench is a relative new collection of embedded benchmarks,
+we can already list some usage of the collection in research projects.
+This early adaption of TACLeBench is already a strong indication of
+the need of such a benchmark collection.
+
+\martin{This section might go away, as we have not enough pace.
+However, it is good to collect the information here. We might need it
+for a future journal version.}
+
+\todo{Refs are missing form some usage.}
+
+\begin{itemize}
+\item Static analysis: \todo{No usage up to now?}
+\item Compiler optimizations: The origin of TACLeBench is the collection of free
+programs used for evaluation of the wcc compiler.
+\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation appraoch presented in \cite{Dreyer2015}.
+A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.
+The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
+Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occured that will be fixed in the final collection.
+This makes the results stated there non-comparable.
+Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
+\item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
+called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
+The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
+\item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
+\item Hardware design: As the TACLeBench collection is self contained, it leads itself
+as an easy to use benchmark collection to evaluate computer architecture design in the
+embedded and real-time domain. We have used version 1.0 for the evaluation of the
+stack cache design optimized for real-time systems~\cite{patmos:stackcache:rts}.
+
+% Based on taskset descriptions
+
+\end{itemize}
+
 
 
 
