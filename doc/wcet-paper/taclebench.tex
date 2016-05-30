@@ -139,7 +139,7 @@ systems where no standard library is available.
 
 Furthermore, almost all benchmarks are processor-independent and can
 be compiled and evaluated for any kind of target processor.
-The only exception is PapaBench which uses architecture-dependent
+The only exception is PapaBench that uses architecture-dependent
 I/O addresses and currently supports Atmel AVR processors only.
 
 Since TACLeBench addresses the needs imposed by timing analysis tools,
@@ -152,10 +152,10 @@ TACLeBench distinguishes between so-called flow restrictions, loop bounds, and e
 %This annotation methods allows to express any kinds of linear dependencies between execution counts of statements.
 %Flow restrictions are expressed in terms of inequations, where each side of an inequation is a weighted sum of execution counts of statements, and where the two sides of an inequation are compared by less-than-equal, equal, or greater-than-equal operators.
 %For example, flow restrictions can be used to express precise upper execution bounds for irregularly nested loops (e.g., triangular loops), recursions, multi-entry loops etc.
-Besides flow restrictions, TACLeBench also uses loop bound flow facts which simplify the annotation of regular loops.
+Besides flow restrictions, TACLeBench also uses loop bound flow facts, which simplify the annotation of regular loops.
 Loop bounds provide an upper and a lower bound for the number of iterations of the annotated loop.
 %
-Finally, TACLeBench uses entry point annotations which denote points in a program's control flow graph where the control flow may start.
+Finally, TACLeBench uses entry point annotations that denote points in a program's control flow graph where the control flow may start.
 Typically, this is the ``main'' function of a program, but in a (possibly interrupt-driven) multi-task system, there may be multiple entry points in a single set of source files.
 These entry points may even share some common code.
 In order to mark such task entries, each function of a multi-task application where a task begins can be marked as an entry point.
@@ -227,7 +227,7 @@ domain and providing them in open-source.
 We include some of the MiBench benchmarks, especially
 those where it was possible to include the input data with the C source.
 
-DEBIE~\cite{debie} is a software derived from a satellite-mounted detector of micro-meteorids and space debris.
+DEBIE~\cite{debie} is a program derived from a satellite-mounted detector of micro-meteorids and space debris.
 It was developed by Space Systems Finland Ltd and was converted by Tidorum Ltd into a portable benchmark for real-time applications.
 DEBIE is a multi-task application that consists of 8, partially small, different tasks.
 DEBIE is accompanied by a specification of valid input and output data and of required activation rates of the individual tasks.
@@ -244,7 +244,7 @@ benchmark suite dedicated to the evaluation of
 the performance of embedded hardware and embedded software.
 The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tablets, but also big data and cloud computing.
 To improve comparability between different systems, the consortium provides a
-test-harness which allows to derive certifiable scores.
+test-harness that allows to derive certifiable scores.
 The test-harness, being a clear advantage in terms of comparability,
 constitutes a hindrance in terms of portability and usability.
 Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variety of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
@@ -291,7 +291,7 @@ We have specified the origin of each benchmark in Tables~\ref{tab:bench_kernel}-
 %In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
 As a measure of the size and complexity of each benchmark, we present the number of source lines of code (SLOC) of each benchmark.
 Some of the benchmarks have a high SLOC count because they contain an array with the input data.
-The SLOC numbers where found using the Linux utility \code{sloccount}.
+We used the Linux utility \code{sloccount} to measure the SLOC.
 The collection of benchmarks is divided into five classes: Kernel, sequential, application, test, and parallel.
 
 \begin{table}[t!]
@@ -435,7 +435,7 @@ The controller has just a few inputs (command buttons and input
 sensors for the height measurement) and a simple motor control.
 The I/O devices are simulated in the benchmark environment.
 The Java version of Lift is part of the Java benchmark suit JemBench.
-Lift has been translated to C by Benedikt Huber.
+Benedikt Huber has translated lift to C.
 
 PowerWindow implements a controller for an electric window in a car.
 Both the driver and the passenger are able to control the window by 
@@ -536,8 +536,10 @@ benchmarks or (2) use a random selection, possibly generated by a program.
 
 If some benchmarks have not been used, state the reason for exclusion
 (e.g., ``the tool/target architecture does not support floating point numbers'').
-If a benchmark needs to be patched to run on a target architecture,
+If a benchmark needs to be patched to run on a some architecture,
 publish what changes needed to be done (preferably as a patch).
+\martin{I would really like to aim for a benchmark collection that does not
+need any changes! Better drop some.}
 
 
 \subsection{Known Uses of TACLeBench}
@@ -557,16 +559,16 @@ for a future journal version.}
 \item Static analysis: \todo{No usage up to now?}
 \item Compiler optimizations: The origin of TACLeBench is the collection of free
 programs used for evaluation of the wcc compiler.
-\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation appraoch presented in \cite{Dreyer2015}.
+\item Measurement-based analysis: TACLeBench has been used to evaluate the continuous measurement-based WCET estimation approach presented in \cite{Dreyer2015}.
 A report of this evaluation has been submitted to the 2016 edition of the WCET workshop.
 The different characteristics of the different benchmarks proved to be very useful to trigger edge cases in the analysis and led to various improvements of the prototype.
-Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occured that will be fixed in the final collection.
+Since the evaluation for this approach happened before version 2.0 of TACLeBench was finalized, some issues occurred that will be fixed in the final collection.
 This makes the results stated there non-comparable.
 Moreover, the best practices mentioned in Section~\ref{usage} have not been strictly followed.
 \item Hybrid analysis: The hybrid model splits the code of a set of tasks into so-
 called basic blocks. Each basic block contains one path trace of instructions with a single set of inputs and a single set of outputs.  The  size  of  a  basic  block  varies  between  the  largest possible trace meeting the constraints of a single set of inputs and outputs over a single memory block, i.e. a unit of memory that is replaced by a cache replacement algorithm, to a single program instruction.
-The  challenge  of  this  two  layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework which facilitates evaluation of the different approaches using different block sizes.
-\item Schedulability analysis using TACLeBench is facilitated by the the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analysed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
+The  challenge  of  this  two-layer  hybrid  approach  is  tackling the computational complexity problems within the static analysis  layer  and  the  accuracy  within  the  measurements based  layer.  In  other  words,  a  proper  balance  needs  to  be found between the two layers of the hybrid model. The TACLeBench is used in the COBRA-HPA (COde Behaviour fRAmework-Hybrid Program Analyser) framework that facilitates evaluation of the different approaches using different block sizes.
+\item Schedulability analysis using TACLeBench is facilitated by the COBRA-TG (Taskset Generator). Different scheduling methodologies can be analyzed in a reproducible way using generated tasksets based on specific application descriptions. It replaces the limited set of universal scheduling benchmarks and the wide variety of non-reproducible benchmark application with a methodology that enables for an unlimited but reproducible set of tasksets.
 \item Hardware design: As the TACLeBench collection is self contained, it leads itself
 as an easy to use benchmark collection to evaluate computer architecture design in the
 embedded and real-time domain. We have used version 1.0 for the evaluation of the
@@ -617,7 +619,7 @@ No benchmark in the suite is optimized to a single return statement.
   \label{fig:execution-times}
 \end{figure}
 
-All code-changes were done manually by different members of the TACLe COST action.
+Different members of the TACLe COST action did all code-changes manually.
 Such a collaborative procedure is inherently error-prone.
 For once, human errors can occur and the original sources were often faulty to start with.
 The distributive work on the benchmarks led to an additional source of errors:
@@ -630,7 +632,7 @@ Clang's static analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} is used 
 
 The portability has been checked via a shell-script \textit{checkBenchmark.sh} that is now part of the TACLeBench repository.
 \martin{I can't see it. Maybe a push was missing?}
-The script allows to quickly identify incompatibilities of the benchmarks with specific operating systems, compilers, and system configurations.
+The script allows to quickly identifying incompatibilities of the benchmarks with specific operating systems, compilers, and system configurations.
 Even though full coverage of all system configurations can never be achieved, we were able to cover most of the common operating systems and compilers.
 
 % In order to improve the code quality of the TACLeBench suite, we used different
@@ -662,8 +664,9 @@ evaluate research ideas. TACLeBench provides an open source collection of
 \benchcount benchmarks. As all benchmarks are self-contained they are easy to
 use in systems that are lacking the standard library or an operating systems.
 
-This paper reports on the TACLeBench version 2.0. We intend to grow the
-collection of programs and release coordinated versions of the benchmarks.
+This paper reports on the TACLeBench version 2.0.
+We intend to grow the collection of programs and coordinate the
+release of benchmark versions.
 We further welcome contributions to the benchmark collection.
 
 
