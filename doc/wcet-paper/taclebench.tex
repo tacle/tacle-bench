@@ -105,7 +105,9 @@ repeatable those programs shall be made publicly available.
 We collected open-source programs, adapted them to a common coding
 style, and provide the collection in open-source. The benchmark collection
 is called TACLeBench and is available from GitHub in version 2.0
-at the publication date of this paper.
+at the publication date of this paper. One of the main features of TACLeBench
+is that all programs are self-contained without any dependency on standard
+libraries or an operating system.
 \end{abstract}
 
 \section{Introduction}
@@ -114,7 +116,7 @@ at the publication date of this paper.
 Good, realistic benchmark suites are essential for the evaluation and comparison
 of worst-case execution time (WCET) analysis, compiler, and computer architecture techniques.
 TACLeBench provides a freely available and comprehensive benchmark suite
-for timing analysis and related research topic.
+for timing analysis and related research topics.
 %, featuring complex multi-core benchmarks in the near future.
 TACLeBench will be continuously extended by novel benchmarks,
 especially by parallel multi-task/multi-core benchmarks.
@@ -132,7 +134,7 @@ The source codes are 100\% self-contained; no dependencies to system-specific
 header files via \code{\#include} directives or an operating system exist.
 All input data is part of the C source code.
 Potentially used functions from math libraries are also provided in the form of C source code.
-This makes the TACLeBench collection useful in general embedded/barebone
+This makes the TACLeBench collection useful for general embedded/barebone
 systems where no standard library is available.
 
 Furthermore, almost all benchmarks are processor-independent and can
@@ -143,15 +145,16 @@ I/O addresses and currently supports Atmel AVR processors only.
 Since TACLeBench addresses the needs imposed by timing analysis tools,
 all benchmarks are completely annotated with flow facts.
 These flow facts are directly incorporated into the C source codes using
-Pragmas at a high level of abstraction.
-TACLeBench distinguishes between so-called flow restrictions, loop bounds and entry points.
-Flow restrictions allow to express the execution count of one statement in relation to the execution count of other statements.
-This annotation methods allows to express any kinds of linear dependencies between execution counts of statements.
-Flow restrictions are expressed in terms of inequations, where each side of an inequation is a weighted sum of execution counts of statements, and where the two sides of an inequation are compared by less-than-equal, equal, or greater-than-equal operators.
-For example, flow restrictions can be used to express precise upper execution bounds for irregularly nested loops (e.g., triangular loops), recursions, multi-entry loops etc.
+Pragmas. % at a high level of abstraction.
+TACLeBench distinguishes between so-called flow restrictions, loop bounds, and entry points.
+% The following details shall go into its own section on a future publication with more space
+%Flow restrictions allow to express the execution count of one statement in relation to the execution count of other statements.
+%This annotation methods allows to express any kinds of linear dependencies between execution counts of statements.
+%Flow restrictions are expressed in terms of inequations, where each side of an inequation is a weighted sum of execution counts of statements, and where the two sides of an inequation are compared by less-than-equal, equal, or greater-than-equal operators.
+%For example, flow restrictions can be used to express precise upper execution bounds for irregularly nested loops (e.g., triangular loops), recursions, multi-entry loops etc.
 Besides flow restrictions, TACLeBench also uses loop bound flow facts which simplify the annotation of regular loops.
 Loop bounds provide an upper and a lower bound for the number of iterations of the annotated loop.
-
+%
 Finally, TACLeBench uses entry point annotations which denote points in a program's control flow graph where the control flow may start.
 Typically, this is the ``main'' function of a program, but in a (possibly interrupt-driven) multi-task system, there may be multiple entry points in a single set of source files.
 These entry points may even share some common code.
@@ -168,10 +171,11 @@ In order to mark such task entries, each function of a multi-task application wh
 %         Array[i] = i * fact * KNOWN_VALUE;
 %
 % \end{verbatim}
-The complete specification of the used flow fact language can be found in~\cite{flowfacts} which is part of the source distribution.
+The complete specification of the used flow fact language can be found in~\cite{flowfacts},
+which is part of the source distribution.
 
 
-If you would like to share your very own benchmarks with us,
+If you would like to share your  benchmarks with us,
 feel free to contact Heiko Falk (or any coauthor of this paper) in order
 to have your source codes included in TACLeBench.
 
@@ -185,7 +189,7 @@ repository.
 The intention is to have the HEAD of the master branch being
 the most recent, versioned snapshot of TACLeBench.
 Future development and additions will be performed on a development
-branch so that HEAD is always a consistent snapshot.
+branch so that HEAD of master is always a consistent snapshot.
 
 This paper is organized in 5 sections: The following section presents related work.
 Section~\ref{sec:related} presents related work.
@@ -199,19 +203,20 @@ Section~\ref{sec:conclusion} concludes.
 
 The M{\"a}lardalen WCET benchmarks (MRTC)~\cite{wcet:bench:2012} is the first collection of programs especially
 intended for benchmarking WCET analysis tools, with a focus on program flow analysis.
-This collection of C programs was an attempt to organize a number of codes, which had up to then been floating around
-in the research community, into a repository with a more systematic treatment of meta-data and easy web access.
+%This collection of C programs was an attempt to organize a number of codes, which had up to then been floating around
+%in the research community, into a repository with a more systematic treatment of meta-data and easy web access.
 It was collected from several sources in 2005, and has since then been
 used in many WCET research projects as well as for the WCET Tool Challenge 2006~\cite{Gustafsson:ISOLA2006}.
 A subset of the M{\"a}lardalen benchmarks has even been translated to
 Java~\cite{jop:volta:rtas2008}. Most benchmarks are relatively small, except
 two C programs that have been generated from tools.
 The benchmarks also contain all input data. This effectively turns them into single-path programs, which
-makes them less suitable for evaluating tools that can handle multi-path codes. To remedy that,
-some of the benchmarks are equipped with suggested input ranges that override the fixed
-input data in the code. The user is however then responsible to use the proper settings of the tool,
-or to create an appropriate test harness, such that the programs are analyzed with the specified input ranges
-rather than the fixed input data.
+makes them less suitable for evaluating tools that can handle multi-path codes.
+%To remedy that,
+%some of the benchmarks are equipped with suggested input ranges that override the fixed
+%input data in the code. The user is however then responsible to use the proper settings of the tool,
+%or to create an appropriate test harness, such that the programs are analyzed with the specified input ranges
+%rather than the fixed input data.
 We include most of the benchmarks from the
 M{\"a}lardalen WCET benchmark suite in TACLeBench.
 We dropped benchmarks where the licensing terms are unknown
@@ -227,25 +232,27 @@ We include some of the MiBench benchmarks, especially
 those where it was possible to include the input data with the C source.
 
 DEBIE~\cite{debie} is a software derived from a satellite-mounted detector of micro-meteorids and space debris.
-It was developed by Space Systems Finland Ltd. and was converted by Tidorum Ltd. into a portable benchmark for real-time applications.
-DEBIE is a multi-task application that consists of only 8, and partially very small, different tasks.
-DEBIE is accompanied by a specification of valid input and ouput data and of required activation rates of the individual tasks.
+It was developed by Space Systems Finland Ltd and was converted by Tidorum Ltd into a portable benchmark for real-time applications.
+DEBIE is a multi-task application that consists of 8, partially small, different tasks.
+DEBIE is accompanied by a specification of valid input and output data and of required activation rates of the individual tasks.
 
-PapaBench~\cite{papabench} has been derived from  Paparazzi\footnote{\url{https://wiki.paparazziuav.org/}},
-an open-source hardware and software project for the design of unmaned aerial vehicles.  PapaBench includes
-two software components of this project, that run on separate processors communicating through an SPI link:
-the \textit{fly-by-wire} part controls the flight (engine and flaps control, stabilization, radio-communication
-with the ground, support for infrared sensors, etc.) while the \textit{autopilot} part controls the GPS and
+PapaBench~\cite{papabench} has been derived from  Paparazzi,\footnote{\url{https://wiki.paparazziuav.org/}}
+a project for unmanned aerial vehicles.  PapaBench includes
+two software components that run on separate processors:
+the \textit{fly-by-wire} part controls the flight while the \textit{autopilot} part controls the GPS and
 executes the flight plan (which is decided offline). Both software parts  cumulate 13 tasks that are subject
 to precedence constraints and 6 interrupt service routines.
 
-The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides their own benchmark suite dedicated to the evaluation of
+The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides a
+benchmark suite dedicated to the evaluation of
 the performance of embedded hardware and embedded software.
 The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tablets, but also big data and cloud computing.
-To improve comparability between different processors and systems, the consortium provides a sophisticated test-harness which allows to derive certifiable scores.
-The test-harness, being a clear advantage in terms of comparability and certifiability, constitutes a hindrance in terms of portability and usability.
+To improve comparability between different systems, the consortium provides a
+test-harness which allows to derive certifiable scores.
+The test-harness, being a clear advantage in terms of comparability,
+constitutes a hindrance in terms of portability and usability.
 Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variety of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
-Furthermore, in stark contrast to the aforementioned benchmark suites, and especially to TACLeBench, the EEMBC benchmarks are not published under an open-source license.
+Furthermore, in stark contrast to TACLeBench, the EEMBC benchmarks are not published under an open-source license.
 Instead, the benchmarks are behind a pay-wall, even for purely academic research.
 
 
