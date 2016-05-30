@@ -106,7 +106,7 @@ We collected open-source programs, adapted them to a common coding
 style, and provide the collection in open-source. The benchmark collection
 is called TACLeBench and is available from GitHub in version 2.0
 at the publication date of this paper. One of the main features of TACLeBench
-is that all programs are self-contained without any dependency on standard
+is that all programs are self-contained without any dependencies on standard
 libraries or an operating system.
 \end{abstract}
 
@@ -269,31 +269,6 @@ Benedikt Huber ported one of the application benchmarks (Lift) to C
 and we include it in TACLeBench.
 
 
-
-
-\section{The Benchmark Collection}
-\label{sec:collect}
-
-\subsection{Benchmark Sources and Classification}
-
-The benchmarks included in TACLeBench are sourced from single sources files and
-collections of benchmarks.
-The collections of benchmarks are the SNU-RT benchmark suite, the MiBench embedded benchmark suite, the M{\"a}lardalen Real-Time Research Center (MRTC) WCET benchmarks,
-the DSPStone from RWTH Aachen, the StreamIt from MIT, the NetBench from UCLA, the MediaBench, and the HEPC challenge benchmark suite.
-We have specified the origin of each benchmark in Tables~\ref{tab:bench_kernel}-\ref{tab:bench_app}.
-
-%\todo{what did we collect. How many indirections in collections have there be?
-%E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
-%(2) SNU-RT Benchmark Suite, (3) MDH, and (4) TACLeBench. How have
-%benchmarks  changed? Legal changes?}
-%\todo{Rasmus}
-
-%In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
-As a measure of the size and complexity of each benchmark, we present the number of source lines of code (SLOC) of each benchmark.
-The SLOC count is without the input data arrays and the initialization code to give a more precise number for the complexity of the benchmark.
-We used the Linux utility \code{sloccount} to measure the SLOC.
-The collection of benchmarks is divided into five classes: Kernel, sequential, application, test, and parallel.
-
 \begin{table}[t!]
 \centering
 \caption{\label{tab:bench_kernel}TACLeBench kernel benchmarks}
@@ -305,12 +280,12 @@ binarysearch & Binary search of 15 integers & 47 & SNU-RT \\
 bitcount & Couting number of bits in an integer array & 164  & Bob Stout \& Auke Reitsma\\
 bitonic &  Bitonic sorting network  & 52 & MiBench \\
 bsort & Bubblesort program & 32 & MRTC \\
-complex\_updates &  Multiply-add with vectors of complex numbers & 18 & DSPStone \\
-countnegative &  Counts non-negative numbers in a matrix  & 35 & MRTC \\
+complex\_updates &  Multiply-add with complex vectors & 18 & DSPStone \\
+countnegative &  Counts signes in a matrix  & 35 & MRTC \\
 crc &  CRC computation on 40 bytes of data  & 66 & SNU-RT \\
 fac &  Factorial function & 21 & MRTC \\
 fft &  1024-point FFT, 13 bits per twiddle  & 78  & DSPStone \\
-filterbank & Filter bank for multirate signal processing  & 75 & StreamIt \\
+filterbank & Filter bank for multirate signals  & 75 & StreamIt \\
 fir2dim &  2-dimensional FIR filter convolution & 75 & DSPStone \\
 iir &  Biquad IIR 4 sections filter & 27 & DSPStone \\
 insertsort & Insertion sort & 35 & SNU-RT \\
@@ -322,17 +297,41 @@ md5 &  Message digest algorithm & 344  & NetBench \\
 minver & Floating point matrix inversion  & 141  & SNU-RT \\
 pm & Pattern match kernel & 484  & HPEC \\
 prime &  Prime number test  & 41 & MRTC \\
-quicksort &  Quick sort of string arrays  & 992 & MiBench \\
+quicksort &  Quick sort of strings and  vectors & 992 & MiBench \\
 recursion &  Artificial recursive code  & 18 & MRTC \\
 select & Select the Nth largest number in a floating point array  & 65 & SNU-RT \\
 sha &  NIST secure hash algorithm & 382  & MiBench \\
-st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 90  & MRTC \\
+st & Statistics calculations & 90  & MRTC \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The kernel benchmarks are synthetic benchmarks implementing small kernel functions.
-The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}; the size of the kernel benchmarks are between 18 SLOC and 992 SLOC.
+\section{The Benchmark Collection}
+\label{sec:collect}
+
+\subsection{Benchmark Sources and Classification}
+
+The benchmarks included in TACLeBench are sourced from single sources and
+benchmarks collections.
+The benchmarks are: SNU-RT benchmark suite, MiBench embedded benchmark suite, M{\"a}lardalen Real-Time Research Center (MRTC) WCET benchmarks,
+DSPStone from RWTH Aachen, StreamIt from MIT, NetBench from UCLA, MediaBench, and the HEPC challenge benchmark suite.
+We have specified the origin of each benchmark in Tables~\ref{tab:bench_kernel}-\ref{tab:bench_app}.
+
+%\todo{what did we collect. How many indirections in collections have there be?
+%E.g., adpcm.c: (1) SOURCE : C Algorithms for Real-Time DSP by P. M. Embree,
+%(2) SNU-RT Benchmark Suite, (3) MDH, and (4) TACLeBench. How have
+%benchmarks  changed? Legal changes?}
+%\todo{Rasmus}
+
+%In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
+As a measure of the size of each benchmark, we present the number of source lines of code (SLOC).
+The SLOC count excludes input data arrays and the initialization code.
+We used the Linux utility \code{sloccount} to measure the SLOC.
+The benchmarks are divided into five classes: Kernel, sequential, application, test, and parallel.
+
+
+
+The kernel benchmarks, listed in Table~\ref{tab:bench_kernel}, are synthetic benchmarks implementing small kernel functions; the size of the kernel benchmarks is in the range of 18 to 992 SLOC.
 %
 \begin{table}
 \centering
@@ -368,9 +367,10 @@ susan &  MR image recognition algorithm & 1491 & MiBench \\
 \end{tabular}
 \end{table}
 %
-The sequential benchmarks implement large functions block,
+The sequential benchmarks, listed in Table~\ref{tab:bench_sequential},
+implement large functions block,
 such as encoders and decoders, that are used in many embedded systems.
-The sequential benchmarks of TACLeBench are listed in Table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 117 SLOC to 2710 SLOC.
+The size of the sequential benchmarks is in the range of 117 to 2710 SLOC.
 The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
 %
 \begin{table}
@@ -387,7 +387,7 @@ test3 &  Artificial WCET analysis stress test & 4235 & Universitaet des Saarland
 \end{tabular}
 \end{table}
 %
-Three artificial test benchmarks, shown in Table~\ref{tab:bench_test}, are used
+Three artificial test benchmarks, listed in Table~\ref{tab:bench_test}, are used
 to stress test WCET analysis tools.
 %
 \begin{table}
@@ -403,9 +403,32 @@ PapaBench &  UAV autopilot and fly-by-wire software & 10 & 6336 & Paparazzi \\
 \end{tabular}
 \end{table}
 %
-TACLeBench contains two parallel benchmarks, shown in Table~\ref{tab:bench_parallel},
-the Debie benchmark and the PapaBench benchmark.
+The two parallel benchmarks, listed in Table~\ref{tab:bench_parallel}, are:
+Debie and PapaBench.
 These two benchmarks are comparable in size and in the number of tasks.
+
+\martin{Can we rename PowerWindow to power\_window, so benchmark names are
+more uniform? We shall not rename PapBench and Debie, as those names are already
+well known.}
+
+The application benchmarks, derived from real applications and provided with simulated input stimuli, are listed in Table~\ref{tab:bench_app}.
+%
+Lift is a lift controller software that has been developed for a
+factory in Turkey. The hardware is based on a Java processor (JOP).
+% in an
+%FPGA device and an I/O print that was originally developed
+%for the supervisory control and data acquisition device.
+The controller has just a few inputs (command buttons and input
+sensors for the height measurement) and a simple motor control.
+The I/O devices are simulated in the benchmark environment.
+The Java version of Lift is part of the Java benchmark suit JemBench~\cite{jembench}.
+Benedikt Huber has translated lift to C.
+
+PowerWindow implements a controller for an electric window in a car.
+Both the driver and the passenger are able to control the window by 
+requesting the window to roll up or down.
+In case an object is stuck between the window and the door frame,
+the controller will move the window down to avoid damaging the object.
 
 \begin{table}
 \centering
@@ -416,32 +439,10 @@ Name & Description & \#Tasks & Code Size & Origin\\
 
      &             &         &     (SLOC) & \\ \midrule
 lift & A lift controller & 1 & 361 & Martin Schoeberl\\
-PowerWindow & Distributed power window control software & 4 & 2533 & CoSys-Lab \\
+PowerWindow & Distributed power window control & 4 & 2533 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\martin{Can we rename PowerWindow to power\_window, so benchmark names are
-more unifor? We shall not rename PapBench and Debie, as those names are already
-well known.}
-
-The application benchmarks, derived from real applications and provided with simulated input stimuli, are shown in Table~\ref{tab:bench_app}.
-%
-Lift is a lift controller software that has been developed for a
-factory in Turkey. The hardware is based on a Java processor (JOP) in an
-FPGA device and an I/O print that was originally developed
-for the supervisory control and data acquisition device.
-The controller has just a few inputs (command buttons and input
-sensors for the height measurement) and a simple motor control.
-The I/O devices are simulated in the benchmark environment.
-The Java version of Lift is part of the Java benchmark suit JemBench.
-Benedikt Huber has translated lift to C.
-
-PowerWindow implements a controller for an electric window in a car.
-Both the driver and the passenger are able to control the window by 
-requesting the window to roll up or down.
-In case an object is stuck between the window and the door frame,
-the controller will move the window down to avoid damaging the object.
 
 \subsection{Issues with the Original Sources}
 
@@ -454,9 +455,9 @@ and the updated one with patmos-clang -O3 and pasim.}
 The original benchmarks include all input data or we added input data into the C source.
 However, this effectively turns them into single-path programs.
 This fact could be used by analysis tools to explore only this single path.
-Another consequence of the fact that the
-input data is fixed, and that some programs do not provide
-any return value, is that good compilers with optimizations turned on can optimize
+Another consequence of the fixed
+input data, and that some programs do not provide
+any return value, is that compilers with optimizations turned on can optimize
 most of the code away.
 However, to prohibit the unwanted compiler optimizations we changed
 the way input data is represented in variables (made them \code{volatile}),
@@ -479,15 +480,15 @@ they rely on global initialization, or because they use \code{malloc} but not \c
 
 \subsection{Benchmark Updates}
 
-The benchmarks have been rewritten to clearly split the functions of
+The benchmarks have been rewritten to split the functions of
 input data initialization, the benchmark itself, and computing a return
 value depending on the output data. Moving the input data generation
 into its own function resulted sometimes in movements from originally
 stack allocated data into global data.
 All function and variable names are prepended with the benchmark
-name to give unique names.
+name to provide unique names.
 All loops have been annotated with loop bounds.
-Moreover, several bugs have been fixed, and lots of compiler warnings have been eliminated.
+Moreover, several bugs have been fixed, and compiler warnings have been eliminated.
 The benchmarks are now ISO C99 compliant.
 Some benchmarks have been renamed. The original name of a benchmark can be found in the comment header of each benchmark.
 The library functions used by some benchmarks have been moved to their own files.
@@ -536,8 +537,9 @@ benchmarks or (2) use a random selection, possibly generated by a program.
 
 If some benchmarks have not been used, state the reason for exclusion
 (e.g., ``the tool/target architecture does not support floating point numbers'').
-If a benchmark needs to be patched to run on a some architecture,
-publish what changes needed to be done (preferably as a patch).
+% Martin does not like allowing benchmarks patching
+%If a benchmark needs to be patched to run on a some architecture,
+%publish what changes needed to be done (preferably as a patch).
 \martin{I would really like to aim for a benchmark collection that does not
 need any changes! Better drop some.}
 
@@ -624,7 +626,7 @@ C compiler with following command:
 \label{sec:eval}
 To evaluate the complexity of the benchmarks and their resilience against 
 compiler optimizations, we executed each benchmark on \texttt{pasim}, a 
-cycle-accurate simulator for the Patmos architecture~\cite{t-crest:2015}. Each 
+cycle-accurate simulator of the Patmos architecture~\cite{t-crest:2015}. Each 
 benchmark was compiled using \texttt{patmos-clang} with activated compiler 
 optimizations~(i.e., -O2). The results of this evaluation are summarized in 
 Figure~\ref{fig:execution-times}. All execution traces start at the function 
@@ -649,19 +651,22 @@ No benchmark in the suite is optimized to a single return statement.
   \label{fig:execution-times}
 \end{figure}
 
-Different members of the TACLe COST action did all code-changes manually.
+Different members of the TACLe COST action changed the code.
 Such a collaborative procedure is inherently error-prone.
-For once, human errors can occur and the original sources were often faulty to start with.
-The distributive work on the benchmarks led to an additional source of errors:
-Different system configurations can lead to different behaviors, and a benchmark behaving well under system configuration A may be faulty under configuration B.
+Human errors can occur and the original sources were often faulty to start with.
+The distributive work on the benchmarks led to an additional source of error detection:
+%Different system configurations can lead to different behaviors, and 
+a benchmark behaving well under system configuration A may be faulty under configuration B.
 To ensure the quality of the benchmarks and to improve portability, we have thus implemented automatic sanity checks.
 
-The code quality and conformity with the code formatting rules is validated centrally and the latest results can be viewed online.\footnote{\url{http://tacle.cs.fau.de/}}
+The code quality
+% and conformity with the code formatting rules
+is validated centrally and the latest results can be viewed online.\footnote{\url{http://tacle.cs.fau.de/}}
 For this sanity check, all benchmarks are compiled using \textit{gcc}, \textit{g$++$} and \textit{clang}, executed and the return values are checked against the expected value.
 Clang's static analyzer\footnote{\url{http://clang-analyzer.llvm.org/}} is used to further reveal programming bugs, such as out-of-bounds errors, and also to validate the compliance of the code with the code-formatting rules.
 
-The portability has been checked via a shell-script \textit{checkBenchmark.sh} that is now part of the TACLeBench repository.
-\martin{I can't see it. Maybe a push was missing?}
+The portability has been checked via a shell-script (\code{checkBenchmark.sh}) that is now part of the TACLeBench repository.
+\martin{Should check again if it executes on a Mac.}
 The script allows to quickly identifying incompatibilities of the benchmarks with specific operating systems, compilers, and system configurations.
 Even though full coverage of all system configurations can never be achieved, we were able to cover most of the common operating systems and compilers.
 
@@ -691,7 +696,7 @@ longer in 2.0 and PowerWindow was added for 2.0}
 
 Research in the field of embedded real-time systems needs benchmarks to
 evaluate research ideas. TACLeBench provides an open source collection of
-\benchcount benchmarks. As all benchmarks are self-contained they are easy to
+\benchcount benchmarks. As all benchmarks are self-contained, they are easy to
 use in systems that are lacking the standard library or an operating systems.
 %
 This paper reports on the TACLeBench version 2.0.
