@@ -290,7 +290,7 @@ We have specified the origin of each benchmark in Tables~\ref{tab:bench_kernel}-
 
 %In this subsection, we provide an overview of the classes of benchmarks that are found in the TACLeBench suite and list the individual benchmarks.
 As a measure of the size and complexity of each benchmark, we present the number of source lines of code (SLOC) of each benchmark.
-Some of the benchmarks have a high SLOC count because they contain an array with the input data.
+The SLOC count is without the input data arrays and the initialization code to give a more precise number for the complexity of the benchmark.
 We used the Linux utility \code{sloccount} to measure the SLOC.
 The collection of benchmarks is divided into five classes: Kernel, sequential, application, test, and parallel.
 
@@ -301,38 +301,38 @@ The collection of benchmarks is divided into five classes: Kernel, sequential, a
 \toprule
 Name & Description & Code Size & Origin\\
      &             &     (SLOC) & \\ \midrule
-binarysearch & Binary search of 15 integers & 67 & SNU-RT \\
-bitcount & Couting number of bits in an integer array & 230  & Bob Stout \& Auke Reitsma\\
-bitonic &  Bitonic sorting network  & 73 & MiBench \\
-bsort & Bubblesort program & 60 & MRTC \\
-complex\_updates &  Multiply-add with vectors of complex numbers & 59 & DSPStone \\
-countnegative &  Counts non-negative numbers in a matrix  & 78 & MRTC \\
-crc &  CRC computation on 40 bytes of data  & 81 & SNU-RT \\
-fac &  Factorial function & 40 & MRTC \\
-fft &  1024-point FFT, 13 bits per twiddle  & 488  & DSPStone \\
-filterbank & Filter bank for multirate signal processing  & 89 & StreamIt \\
-fir2dim &  2-dimensional FIR filter convolution & 119 & DSPStone \\
-iir &  Biquad IIR 4 sections filter & 67 & DSPStone \\
-insertsort & Insertion sort & 70 & SNU-RT \\
-jfdctint & Discrete-cosine transformation on a 8x8 pixel block  & 150  & SNU-RT \\
-lms &  LMS adaptive signal enhancement  & 160  & SNU-RT \\
-ludcmp & LU decomposition & 111 & SNU-RT \\
-matrix1 &  Generic matrix multiplication  & 63 & DSPStone \\
-md5 &  Message digest algorithm & 355  & NetBench \\
-minver & Floating point matrix inversion  & 176  & SNU-RT \\
-pm & Pattern match kernel & 1571  & HPEC \\
-prime &  Prime number test  & 67 & MRTC \\
-quicksort &  Quick sort of string arrays  & 1613 & MiBench \\
-recursion &  Artificial recursive code  & 36 & MRTC \\
-select & Select the Nth largest number in a floating point array  & 102 & SNU-RT \\
-sha &  NIST secure hash algorithm & 2049  & MiBench \\
-st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 127  & MRTC \\
+binarysearch & Binary search of 15 integers & 47 & SNU-RT \\
+bitcount & Couting number of bits in an integer array & 164  & Bob Stout \& Auke Reitsma\\
+bitonic &  Bitonic sorting network  & 52 & MiBench \\
+bsort & Bubblesort program & 32 & MRTC \\
+complex\_updates &  Multiply-add with vectors of complex numbers & 18 & DSPStone \\
+countnegative &  Counts non-negative numbers in a matrix  & 35 & MRTC \\
+crc &  CRC computation on 40 bytes of data  & 66 & SNU-RT \\
+fac &  Factorial function & 21 & MRTC \\
+fft &  1024-point FFT, 13 bits per twiddle  & 78  & DSPStone \\
+filterbank & Filter bank for multirate signal processing  & 75 & StreamIt \\
+fir2dim &  2-dimensional FIR filter convolution & 75 & DSPStone \\
+iir &  Biquad IIR 4 sections filter & 27 & DSPStone \\
+insertsort & Insertion sort & 35 & SNU-RT \\
+jfdctint & Discrete-cosine transformation on a 8x8 pixel block  & 123  & SNU-RT \\
+lms &  LMS adaptive signal enhancement  & 51  & SNU-RT \\
+ludcmp & LU decomposition & 68 & SNU-RT \\
+matrix1 &  Generic matrix multiplication  & 28 & DSPStone \\
+md5 &  Message digest algorithm & 344  & NetBench \\
+minver & Floating point matrix inversion  & 141  & SNU-RT \\
+pm & Pattern match kernel & 484  & HPEC \\
+prime &  Prime number test  & 41 & MRTC \\
+quicksort &  Quick sort of string arrays  & 992 & MiBench \\
+recursion &  Artificial recursive code  & 18 & MRTC \\
+select & Select the Nth largest number in a floating point array  & 65 & SNU-RT \\
+sha &  NIST secure hash algorithm & 382  & MiBench \\
+st & Statistics program (sum, mean, variance, std. deviation, correlation)  & 90  & MRTC \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 The kernel benchmarks are synthetic benchmarks implementing small kernel functions.
-The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}; the size of the kernel benchmarks are between 36 SLOC and 2049 SLOC.
+The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}; the size of the kernel benchmarks are between 18 SLOC and 992 SLOC.
 %
 \begin{table}
 \centering
@@ -341,36 +341,36 @@ The kernel benchmarks of TACLeBench are listed in Table~\ref{tab:bench_kernel}; 
 \toprule
 Name & Description & Code Size & Origin\\
    & &  (SLOC) & \\ \midrule
-adpcm\_dec & ADPCM decoder & 398 & SNU-RT \\
-adpcm\_enc &  ADPCM encoder  & 410  & SNU-RT \\
-ammunition & C compiler arithmetic stress test  & 2448 & Vladimir Makarov \\
-anagram &  Word anagram computation & 2772  & Raymond Chen \\
-audiobeam &  Audio beam former  & 6653  & StreamIt \\
-cjpeg\_transupp &  JPEG image transcoding routines  & 673 & MediaBench \\
-cjpeg\_wrbmp & JPEG image bitmap writing code & 965 & Thomas G. Lane \\
-dijkstra & All pairs shortest path  & 247  & MiBench \\
-epic & Efficient pyramid image coder  & 979  & MediaBench \\
+adpcm\_dec & ADPCM decoder & 293 & SNU-RT \\
+adpcm\_enc &  ADPCM encoder  & 316  & SNU-RT \\
+ammunition & C compiler arithmetic stress test  & 2431 & Vladimir Makarov \\
+anagram &  Word anagram computation & 2710  & Raymond Chen \\
+audiobeam &  Audio beam former  & 833  & StreamIt \\
+cjpeg\_transupp &  JPEG image transcoding routines  & 608 & MediaBench \\
+cjpeg\_wrbmp & JPEG image bitmap writing code & 892 & Thomas G. Lane \\
+dijkstra & All pairs shortest path  & 117  & MiBench \\
+epic & Efficient pyramid image coder  & 451  & MediaBench \\
 fmref &  Software FM radio with equalizer & 680  & StreamIt \\
-g723\_enc &  CCITT G.723 encoder  & 546  & SUN Microsystems \\
-gsm\_dec & GSM provisional standard decoder & 1426 & MediaBench \\
-gsm\_enc & GSM provisional standard encoder & 1951 & MediaBench \\
-h264\_dec &  H.264 block decoding functions & 1053 & MediaBench \\
-huff\_dec &  Huffman decoding with a file source to decompress  & 242  & David Bourgin \\
-huff\_enc & Huffman encoding with a file source to compress  & 386  & David Bourgin \\
-mpeg2 &  MPEG2 motion estimation  & 12601 & MediaBench \\
-ndes & Complex embedded code  & 299  & MRTC \\
+g723\_enc &  CCITT G.723 encoder  & 480  & SUN Microsystems \\
+gsm\_dec & GSM provisional standard decoder & 543 & MediaBench \\
+gsm\_enc & GSM provisional standard encoder & 1491 & MediaBench \\
+h264\_dec &  H.264 block decoding functions & 460 & MediaBench \\
+huff\_dec &  Huffman decoding with a file source to decompress  & 183  & David Bourgin \\
+huff\_enc & Huffman encoding with a file source to compress  & 325  & David Bourgin \\
+mpeg2 &  MPEG2 motion estimation  & 1297 & MediaBench \\
+ndes & Complex embedded code  & 260  & MRTC \\
 petrinet & Petri net simulation & 500  & Friedhelm Stappert \\
-rijndael\_dec & Rijndael AES decryption  & 2922 & MiBench \\
-rijndael\_enc & Rijndael AES encryption  & 2749 & MiBench \\
-statemate &  Statechart simulation of a car window lift control & 1107 & Friedhelm Stappert \\
-susan &  MR image recognition algorithm & 8782 & MiBench \\
+rijndael\_dec & Rijndael AES decryption  & 820 & MiBench \\
+rijndael\_enc & Rijndael AES encryption  & 734 & MiBench \\
+statemate &  Statechart simulation of a car window lift control & 1038 & Friedhelm Stappert \\
+susan &  MR image recognition algorithm & 1491 & MiBench \\
 \bottomrule
 \end{tabular}
 \end{table}
 %
 The sequential benchmarks implement large functions block,
 such as encoders and decoders, that are used in many embedded systems.
-The sequential benchmarks of TACLeBench are listed in Table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 242 SLOC to 12601 SLOC.
+The sequential benchmarks of TACLeBench are listed in Table~\ref{tab:bench_sequential}, and from the SLOC count we see that the sequential benchmarks range from 117 SLOC to 2710 SLOC.
 The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
 %
 \begin{table}
@@ -380,9 +380,9 @@ The sequential benchmarks cover graph search, cryptographic algorithms, compress
 \toprule
 Name & Description & Code Size & Origin\\
      &             &  (SLOC) & \\ \midrule
-cover &  Artificial code with lots of different control flow paths  & 636  & MRTC \\
-duff & Duff's device  & 67 & MRTC \\
-test3 &  Artificial WCET analysis stress test & 4297 & Universitaet des Saarlandes \\
+cover &  Artificial code with lots of different control flow paths  & 620  & MRTC \\
+duff & Duff's device  & 35 & MRTC \\
+test3 &  Artificial WCET analysis stress test & 4235 & Universitaet des Saarlandes \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -415,7 +415,7 @@ These two benchmarks are comparable in size and in the number of tasks.
 Name & Description & \#Tasks & Code Size & Origin\\
 
      &             &         &     (SLOC) & \\ \midrule
-lift & A lift controller & 1 & 395 & Martin Schoeberl\\
+lift & A lift controller & 1 & 361 & Martin Schoeberl\\
 PowerWindow & Distributed power window control software & 4 & 2533 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
