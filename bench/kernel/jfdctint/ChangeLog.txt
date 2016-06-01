@@ -63,3 +63,4 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 
 2016-06-01:
 - Changed all prefixes to lower-case
+- Changed return type of jfdctint_main
