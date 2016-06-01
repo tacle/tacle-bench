@@ -40,7 +40,7 @@ int petrinet_main_iters_dummy_i = 0,
 */
 void petrinet_init( void );
 int petrinet_return( void );
-int petrinet_main( void );
+void petrinet_main( void );
 int main( void );
 
 
@@ -51,9 +51,9 @@ volatile long petrinet_P2_marking_member_0[ 5 ];
 volatile int  petrinet_P3_is_marked = 0;
 volatile long petrinet_P3_marking_member_0[ 6 ];
 
-const long PETRINET_CHECKSUM = 0;
+const long petrinet_CHECKSUM = 0;
 
-int _Pragma ( "entrypoint" ) petrinet_main( void )
+void _Pragma ( "entrypoint" ) petrinet_main( void )
 {
   int dummy_i;
   /*   dummy_i = 17; Takes too much time */
