@@ -61,3 +61,5 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
 - Fixed checksum value
 - Fixed license
 
+2016-06-01:
+- Changed all prefixes to lower-case
