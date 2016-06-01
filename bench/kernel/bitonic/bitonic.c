@@ -36,10 +36,10 @@ int main( void );
 
 int bitonic_numiters = 10;
 int bitonic_a[ 32 ];         // the array to be sorted
-const int BITONIC_ASCENDING = 1;
-const int BITONIC_DESCENDING = 0;
+const int bitonic_ASCENDING = 1;
+const int bitonic_DESCENDING = 0;
 
-const int BITONIC_CHECKSUM = 55;
+const int bitonic_CHECKSUM = 55;
 
 /*
   Initialization- and return-value-related functions
@@ -62,7 +62,7 @@ int bitonic_return( void )
 
   checksum += bitonic_a[ 0 ] + bitonic_a[ 21 ] + bitonic_a[ 31 ];
 
-  return ( ( checksum == BITONIC_CHECKSUM ) ? 0 : -1 );
+  return ( ( checksum == bitonic_CHECKSUM ) ? 0 : -1 );
 }
 
 
@@ -116,8 +116,8 @@ void bitonic_sort( int lo, int cnt, int dir )
   _Pragma( "marker recMerge" )
 
   if ( cnt > 1 ) {
-    bitonic_sort( lo, k, BITONIC_ASCENDING );
-    bitonic_sort( lo + k, k, BITONIC_DESCENDING );
+    bitonic_sort( lo, k, bitonic_ASCENDING );
+    bitonic_sort( lo + k, k, bitonic_DESCENDING );
   }
 
   bitonic_merge( lo, cnt, dir );
@@ -138,7 +138,7 @@ void _Pragma ( "entrypoint" ) bitonic_main( void )
   /** When called with parameters lo = 0, cnt = a.length() and dir =
     ASCENDING, procedure bitonicSort sorts the whole array a. **/
   _Pragma( "marker recSort" )
-  bitonic_sort( 0, 32, BITONIC_ASCENDING );
+  bitonic_sort( 0, 32, bitonic_ASCENDING );
   _Pragma( "flowrestriction 1*bitonicSort <= 63*recSort" )
 
   /** Loop through array, printing out each element **/
