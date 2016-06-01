@@ -21,13 +21,13 @@
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
 \newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
 
-\newcommand{\benchcount}{55 }
+\newcommand{\benchcount}{54 }
 
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 
 % remove the comment for the submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 
 % fatter TT font
@@ -299,7 +299,6 @@ pm & Pattern match kernel & 484  & HPEC \\
 prime &  Prime number test  & 41 & MRTC \\
 quicksort &  Quick sort of strings and  vectors & 992 & MiBench \\
 recursion &  Artificial recursive code  & 18 & MRTC \\
-select & Select the Nth largest number in a floating point array  & 65 & SNU-RT \\
 sha &  NIST secure hash algorithm & 382  & MiBench \\
 st & Statistics calculations & 90  & MRTC \\
 \bottomrule
@@ -647,7 +646,7 @@ No benchmark in the suite is optimized to a single return statement.
 \begin{figure}[t]
   \def\resultfile{eval/wcet.csv}
   \input{eval/pasim-eval.tikz}
-  \caption{Execution times of programs in TACLeBench range from 305 cycles up to more than 1,600,000,000 cycles on the Patmos architecture.}
+  \caption{Execution times of programs in TACLeBench range from 305 cycles up to more than 1,600,000,000 cycles on the Patmos architecture. \martin{select needs to be removed}}
   \label{fig:execution-times}
 \end{figure}
 
