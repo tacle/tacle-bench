@@ -164,7 +164,7 @@ int jfdctint_return()
   int i;
   for ( i = 0; i < 64; ++i )
     checksum += jfdctint_data[ i ];
-  return ( ( checksum == JFDCTINT_CHECKSUM ) ? 0 : -1 );
+  return ( ( checksum == jfdctint_CHECKSUM ) ? 0 : -1 );
 }
 
 
@@ -306,8 +306,6 @@ void jfdctint_jpeg_fdct_islow( void )
 void _Pragma ( "entrypoint" ) jfdctint_main( void )
 {
   jfdctint_jpeg_fdct_islow();
-
-  return 0;
 }
 
 

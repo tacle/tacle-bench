@@ -54,3 +54,7 @@ http://www.mrtc.mdh.se/projects/wcet/wcet_bench/nsichneu/nsichneu.c
 
 2016-06-01:
 - Changed all prefixes to lower-case
+
+2016-06-08:
+- Prefix
+- removed return from petrinet_main

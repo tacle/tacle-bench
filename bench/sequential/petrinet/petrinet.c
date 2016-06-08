@@ -929,7 +929,7 @@ void _Pragma ( "entrypoint" ) petrinet_main( void )
 
   dummy_i = 77;
   // TODO: not a good return value
-  return dummy_i;
+  //return dummy_i;
 }
 
 
@@ -948,7 +948,7 @@ int petrinet_return( void )
   for ( i = 0; i < 6; ++i )
     checksum += petrinet_P3_marking_member_0[i];
 
-  return ( ( checksum == PETRINET_CHECKSUM ) ? 0 : -1 );
+  return ( ( checksum == petrinet_CHECKSUM ) ? 0 : -1 );
 }
 
 
