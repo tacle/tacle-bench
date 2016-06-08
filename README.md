@@ -23,5 +23,5 @@ Getting Involved
 
 You are welcome to contribute and help. To get involved contact:
 
-Heiko for the mailing list (http://www.uni-ulm.de/en/in/es/staff/falk) and
+Heiko for the mailing list (http://www.tuhh.de/es/esd/people/hfalk) and
 Martin for GitHub access (http://www2.imm.dtu.dk/~masca/).
