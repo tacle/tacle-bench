@@ -58,3 +58,6 @@ http://www.mrtc.mdh.se/projects/wcet/wcet_bench/nsichneu/nsichneu.c
 2016-06-08:
 - Prefix
 - removed return from petrinet_main
+
+2016-06-13:
+- introduced function petrinet_init

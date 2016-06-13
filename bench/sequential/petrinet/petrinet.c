@@ -44,11 +44,11 @@ void petrinet_main( void );
 int main( void );
 
 
-volatile int  petrinet_P1_is_marked = 3;
+volatile int  petrinet_P1_is_marked;
 volatile long petrinet_P1_marking_member_0[ 3 ];
-volatile int  petrinet_P2_is_marked = 5;
+volatile int  petrinet_P2_is_marked;
 volatile long petrinet_P2_marking_member_0[ 5 ];
-volatile int  petrinet_P3_is_marked = 0;
+volatile int  petrinet_P3_is_marked;
 volatile long petrinet_P3_marking_member_0[ 6 ];
 
 const long petrinet_CHECKSUM = 0;
@@ -927,9 +927,27 @@ void _Pragma ( "entrypoint" ) petrinet_main( void )
           main_min_dummy_i, main_max_dummy_i );
   #endif
 
-  dummy_i = 77;
+  //dummy_i = 77;
   // TODO: not a good return value
   //return dummy_i;
+}
+
+
+void petrinet_init( void )
+{
+  petrinet_P1_is_marked = 3;
+  petrinet_P2_is_marked = 5;
+  petrinet_P3_is_marked = 0;
+
+  /*
+    Maybe we should also initialise these arrays, as they may be read
+    in the petrinet_main() function before being written.
+  */
+  /*
+  volatile long petrinet_P1_marking_member_0[ 3 ];
+  volatile long petrinet_P2_marking_member_0[ 5 ];
+  volatile long petrinet_P3_marking_member_0[ 6 ];
+  */
 }
 
 
