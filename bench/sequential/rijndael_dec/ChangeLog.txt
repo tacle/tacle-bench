@@ -31,6 +31,9 @@ Source: security section of MiBench
   fwd_mcol, fwd_var, inv_var, si, so, fwd_rnd, inv_rnd, fwd_lrnd,
   inv_lrnd, locals, l_copy, state_in, state_out, round
 
+2016-06-14:
+- Added cast to make C++ compiler happy
+
 File: aestab.h
 Source: security section of MiBench
 

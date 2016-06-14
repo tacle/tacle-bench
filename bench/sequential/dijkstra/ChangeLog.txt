@@ -27,6 +27,9 @@ Original provenience: network section of MiBench
 - Touch input matrix with volatile to rule out optimizations
 - Add entrypoint pragma
 
+2016-06-14:
+- Removed cast to make C++ compiler happy
+
 Files: input.h, input.c
 Original provenience: network section of MiBench
 

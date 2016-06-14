@@ -74,7 +74,7 @@ aes_ret rijndael_enc_set_key( byte in_key[], const word n_bytes,
 
   cx->mode = ( cx->mode & ~0x03 ) | ( ( byte )f & 0x03 );
   cx->Nkey = n_bytes >> 2;
-  cx->Nrnd = Nr( cx->Nkey, nc );
+  cx->Nrnd = Nr( cx->Nkey, ( word )nc );
 
   cx->e_key[0] = word_in( in_key     );
   cx->e_key[1] = word_in( in_key +  4 );

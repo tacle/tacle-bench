@@ -57,6 +57,9 @@ Source: security section of MiBench
 - Remove unused arrays rijndael_enc_s_box, rijndael_enc_inv_s_box,
   rijndael_enc_it_tab, rijndael_enc_il_tab
 
+2016-06-14:
+- Added cast to make C++ compiler happy
+
 Files: glibc_common.h, my_file.h
 Source: security section of MiBench
 

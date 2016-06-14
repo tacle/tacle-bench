@@ -99,7 +99,7 @@ int dijkstra_enqueue( int node, int dist, int prev )
   newItem->node = node;
   newItem->dist = dist;
   newItem->prev = prev;
-  newItem->next = ( void * )0;
+  newItem->next = 0;
 
   if ( !last )
     dijkstra_queueHead = newItem;
