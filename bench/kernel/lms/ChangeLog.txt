@@ -1,0 +1,12 @@
+File: lms.c
+Original provenience: C Algorithms for Real-Time DSP by Paul M. Embree, pp. 159,229-231
+
+2016-06-16:
+- The original source code from Paul M. Embree had several problems:
+    * Source code was copied from a copyrighted book
+    * Input generation used external math functions
+    * Thus execution time of input generation dominated total execution time
+    * Several arrays where uninitalised
+    * Output printed to stdout but was not checked for correctness
+    * lms() used static variables for internal state
+- Completely rewritten and published with ISC license
