@@ -84,9 +84,9 @@ void lms_init( void )
     do {
       // generate two random numbers between -1.0 and +1.0
       seed = seed * 1103515245 + 12345;
-      v1 = ( seed & 0x00007fffffff ) * 0x1p - 30 - 1.0;
+      v1 = ( seed & 0x00007fffffff ) * 0x1p-30 - 1.0;
       seed = seed * 1103515245 + 12345;
-      v2 = ( seed & 0x00007fffffff ) * 0x1p - 30 - 1.0;
+      v2 = ( seed & 0x00007fffffff ) * 0x1p-30 - 1.0;
       r = v1 * v1 + v2 * v2;
     } while ( r > 1.0 ); // radius < 1
 
