@@ -42,7 +42,7 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #define N 201
 #define L 20
-#define SAMPLING        5
+#define SAMPLING 5
 
 
 float lms_input[N + 1], lms_output[N + 1];
@@ -99,14 +99,14 @@ void lms_init( void )
 }
 
 
-float lms( float x,
-           float d,
-           float b[],
-           int l,
-           float mu,
-           float alpha,
-           float history[],
-           float *sigma )
+float lms_calc( float x,
+                float d,
+                float b[],
+                int l,
+                float mu,
+                float alpha,
+                float history[],
+                float *sigma )
 {
   int i;
 
@@ -119,12 +119,14 @@ float lms( float x,
   // calculate filter
   float y = 0.0;
   *sigma = alpha * x * x + ( 1 - alpha ) * ( *sigma );
+
   _Pragma( "loopbound min 21 max 21" )
   for ( i = 0 ; i <= l ; i++ )
     y += b[i] * history[i];
 
   // update coefficients
   float e = mu * ( d - y ) / ( *sigma );
+
   _Pragma( "loopbound min 21 max 21" )
   for ( i = 0 ; i <= l ; i++ )
     b[i] += e * history[i];
@@ -140,6 +142,7 @@ void _Pragma( "entrypoint" ) lms_main( void )
   float history[L + 1];
   float sigma = 2.0;
 
+  _Pragma( "loopbound min 21 max 21" )
   for ( i = 0; i <= L; i++ ) {
     b[i] = 0.0;
     history[i] = 0.0;
@@ -147,10 +150,10 @@ void _Pragma( "entrypoint" ) lms_main( void )
 
   _Pragma( "loopbound min 201 max 201" )
   for ( i = 0 ; i < N ; i++ ) {
-    lms_output[i] = lms( lms_input[i],
-                         lms_input[i + 1],
-                         b, L, 0.02 / ( L + 1 ), 0.01,
-                         history, &sigma );
+    lms_output[i] = lms_calc( lms_input[i],
+                              lms_input[i + 1],
+                              b, L, 0.02 / ( L + 1 ), 0.01,
+                              history, &sigma );
   }
 }
 
@@ -159,6 +162,8 @@ int lms_return( void )
 {
   int i;
   double sum = 0.0;
+
+  _Pragma( "loopbound min 201 max 201" )
   for ( i = 0 ; i < N ; i++ )
     sum += lms_output[i];
   return ( int )( 1000000.0 * ( sum + 4.5052425 ) );
