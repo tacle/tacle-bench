@@ -42,6 +42,9 @@
 
 void powerwindow_Booleaninputarray_initialize(powerwindow_boolean_T*, powerwindow_boolean_T*);
 void powerwindow_Uint8inputarray_initialize(powerwindow_uint8_T*, powerwindow_uint8_T*);
+void powerwindow_init();
+void powerwindow_main();
+int powerwindow_return();
 int main(void);
 
 
@@ -51,29 +54,31 @@ int main(void);
 void powerwindow_init_DRV(int);
 void powerwindow_input_initialize_DRV(void);
 void powerwindow_initialize_DRV(void);
-int powerwindow_return_DRV(void);
+void powerwindow_return_DRV(void);
 void powerwindow_DRV_main(void);
 
 // PSG_Front
 void powerwindow_init_PSG_Front(int);
 void powerwindow_input_initialize_PSG_Front(void);
 void powerwindow_initialize_PSG_Front(void);
-int powerwindow_return_PSG_Front(void);
+void powerwindow_return_PSG_Front(void);
 void powerwindow_PSG_Front_main(void);
 
 // PSG_BackL
 void powerwindow_init_PSG_BackL(int);
 void powerwindow_input_initialize_PSG_BackL(void);
 void powerwindow_initialize_PSG_BackL(void);
-int powerwindow_return_PSG_BackL(void);
+void powerwindow_return_PSG_BackL(void);
 void powerwindow_PSG_BackL_main(void);
 
 // PSG_BackR
 void powerwindow_init_PSG_BackR(int);
 void powerwindow_input_initialize_PSG_BackR(void);
 void powerwindow_initialize_PSG_BackR(void);
-int powerwindow_return_PSG_BackR(void);
+void powerwindow_return_PSG_BackR(void);
 void powerwindow_PSG_BackR_main(void);
+
+
 
 /*
   Declaration of global variables
@@ -132,7 +137,7 @@ int powerwindow_main_inputcyclecounter_PSG_BackR;
 void powerwindow_init_DRV(int i)
 {
 	powerwindow_PW_Control_DRV_U.In1  = powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[i];			/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
-	powerwindow_PW_Control_DRV_U.In3  = powerwindow_controlexclusion_U_Down_DRV_Input_Front[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
+	powerwindow_PW_Control_DRV_U.In3  = powerwindow_powerwindow_control_U_currentsense_Input_DRV[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
 
 	powerwindow_PW_Control_DRV_U.In2  = powerwindow_debounce_Driver_DRV_U_Up_Input_DRV[i];				/* The debounced control signal from the driver. 1 when the button is not pressed, change to 0 to lift the window. */
 	powerwindow_PW_Control_DRV_U.In4  = powerwindow_debounce_Driver_DRV_U_Down_Input_DRV[i];			/* The debounced control signal from the driver. 1 when the button is not pressed, change to 0 to lift the window. */
@@ -341,32 +346,32 @@ void powerwindow_initialize_PSG_BackR(void)
 }
 
 
-int powerwindow_return_DRV(void)
+void powerwindow_return_DRV(void)
 {
     /* Terminate model */
 	powerwindow_PW_Control_DRV_terminate();
-    return 0;
+
 }
 
-int powerwindow_return_PSG_Front(void)
+void powerwindow_return_PSG_Front(void)
 {
     /* Terminate model */
 	powerwindow_PW_Control_PSG_Front_terminate();
-    return 0;
+
 }
 
-int powerwindow_return_PSG_BackL(void)
+void powerwindow_return_PSG_BackL(void)
 {
     /* Terminate model */
 	powerwindow_PW_Control_PSG_BackL_terminate();
-    return 0;
+
 }
 
-int powerwindow_return_PSG_BackR(void)
+void powerwindow_return_PSG_BackR(void)
 {
     /* Terminate model */
 	powerwindow_PW_Control_PSG_BackR_terminate();
-    return 0;
+
 }
 
 /*
@@ -537,8 +542,16 @@ void powerwindow_PSG_BackR_main(void)
 
 }
 
+void powerwindow_init(void)
+{
+	powerwindow_initialize_DRV();
+	powerwindow_initialize_PSG_Front();
+	powerwindow_initialize_PSG_BackL();
+	powerwindow_initialize_PSG_BackR();
 
-int main(void)
+}
+
+void powerwindow_main(void)
 {
     /* Attach powerwindow_main to a timer or interrupt service routine with
      * period 0.005 seconds (the model's base sample time) here.  The
@@ -548,7 +561,7 @@ int main(void)
      */
     //Task 1: Driver side window
 
-    powerwindow_initialize_DRV();
+
     powerwindow_input_initialize_DRV();
 
     while(powerwindow_main_inputcyclecounter_DRV<2201)
@@ -561,7 +574,7 @@ int main(void)
 
     //Task 2: Front passenger side window
 
-    powerwindow_initialize_PSG_Front();
+
     powerwindow_input_initialize_PSG_Front();
 
     while(powerwindow_main_inputcyclecounter_PSG_Front<2201)
@@ -574,7 +587,7 @@ int main(void)
 
     //Task 3: Back left passenger side window
 
-    powerwindow_initialize_PSG_BackL();
+
     powerwindow_input_initialize_PSG_BackL();
 
     while(powerwindow_main_inputcyclecounter_PSG_BackL<2201)
@@ -587,7 +600,7 @@ int main(void)
 
     //Task 4: Back right passenger side window
 
-    powerwindow_initialize_PSG_BackR();
+
     powerwindow_input_initialize_PSG_BackR();
 
     while(powerwindow_main_inputcyclecounter_PSG_BackR<2201)
@@ -599,11 +612,25 @@ int main(void)
     }
 
 
-    return( powerwindow_return_DRV() );
-
-
-
 }
+
+int powerwindow_return(void)
+{
+	powerwindow_return_DRV();
+	powerwindow_return_PSG_Front();
+	powerwindow_return_PSG_BackL();
+	powerwindow_return_DRV_BackR();
+
+	return 0;
+}
+
+
+int main(void){
+ powerwindow_init();
+ powerwindow_main();
+ return powerwindow_return();
+}
+
 
 /*
  * File trailer for generated code.
