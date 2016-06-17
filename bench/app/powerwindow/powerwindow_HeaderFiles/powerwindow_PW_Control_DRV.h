@@ -23,7 +23,6 @@
 #ifndef powerwindow_PW_Control_DRV_COMMON_INCLUDES_
 # define powerwindow_PW_Control_DRV_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
-#include "../powerwindow_HeaderFiles/powerwindow_zero_crossing_types.h"
 #endif                                 /* powerwindow_PW_Control_DRV_COMMON_INCLUDES_ */
 
 #include "../powerwindow_HeaderFiles/powerwindow_PW_Control_DRV_types.h"

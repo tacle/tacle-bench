@@ -21,7 +21,6 @@
 #define powerwindow_RTW_HEADER_powerwindow_PW_Control_DRV_private_h_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
 #include "../powerwindow_HeaderFiles/powerwindow_model_reference_types.h"
-#include "../powerwindow_HeaderFiles/powerwindow_zero_crossing_types.h"
 #endif                                 /* RTW_HEADER_powerwindow_PW_Control_DRV_private_h_ */
 
 /*
