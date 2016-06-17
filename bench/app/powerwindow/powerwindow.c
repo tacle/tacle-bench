@@ -619,7 +619,7 @@ int powerwindow_return(void)
 	powerwindow_return_DRV();
 	powerwindow_return_PSG_Front();
 	powerwindow_return_PSG_BackL();
-	powerwindow_return_DRV_BackR();
+	powerwindow_return_PSG_BackR();
 
 	return 0;
 }
