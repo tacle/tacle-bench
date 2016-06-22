@@ -628,7 +628,7 @@ void anagram_SortCandidates( void )
 }
 
 
-int anagram_main( void )
+void anagram_main( void )
 {
   int i;
 
@@ -646,8 +646,6 @@ int anagram_main( void )
     anagram_FindAnagram( anagram_aqMainMask, anagram_apwCand, 0 );
     _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" )
   }
-
-  return 0;
 }
 
 

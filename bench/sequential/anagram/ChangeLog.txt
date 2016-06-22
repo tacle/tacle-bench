@@ -2,6 +2,10 @@ File: anagram.c
 Original provenience: unknown
 Source: unknown 
 
+2016-06-22:
+- Fixed type signature of function anagram_main to conform to TACLeBench
+  standard, i.e. `void anagram_main (void)`.
+
 2016-05-24:
 - Changed type of global variables anagram_achPhrase and
   anagram_dictionary to `char const *[]`.
