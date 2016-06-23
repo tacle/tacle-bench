@@ -22,7 +22,7 @@
   ymajorgrids,
   xtick=data,
   xmin=0,
-  xmax=56,
+  xmax=55,
   ymin=1e0,
   ymax=2e9,
   xtick pos=left,
