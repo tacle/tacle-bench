@@ -214,7 +214,7 @@ typedef anagram_Letter *anagram_PLetter;
 */
 
 void anagram_init( void );
-int anagram_main( void );
+void anagram_main( void );
 int anagram_return( void );
 int anagram_ch2i( int ch );
 void anagram_AddWords( void );
