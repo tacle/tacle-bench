@@ -25,7 +25,7 @@ position benchmark platinwcet platintrace pasim
 24 fmref -1 -1 21232326
 25 g723\_enc -1 -1 1999379
 26 gsm\_dec -1 -1 3515969
-27 gsm\_encode -1 -1 33293
+27 gsm\_encode -1 -1 6909409
 28 h264\_dec -1 -1 413069
 29 huff\_dec -1 -1 506172
 30 huff\_enc -1 -1 1707651

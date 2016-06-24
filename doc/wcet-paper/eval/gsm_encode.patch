@@ -1,27 +1,26 @@
 diff --git a/bench/sequential/gsm_encode/gsm_encode.c b/bench/sequential/gsm_encode/gsm_encode.c
-index bd67274..3be706e 100644
+index bd67274..dd67412 100644
 --- a/bench/sequential/gsm_encode/gsm_encode.c
 +++ b/bench/sequential/gsm_encode/gsm_encode.c
-@@ -910,7 +910,8 @@ void gsm_encode (gsm s, gsm_signal * source, gsm_byte * c)
- {
-   word	 	LARc[8], Nc[4], Mc[4], bc[4], xmaxc[4], xmc[13*4];
+@@ -1174,7 +1174,7 @@ void Gsm_Coder (
  
--  Gsm_Coder(s, source, LARc, Nc, bc, Mc, xmaxc, xmc);
-+  // the following causes stack corruption:
-+  // Gsm_Coder(s, source, LARc, Nc, bc, Mc, xmaxc, xmc);
+   static word	e [50] = {0};
  
+-  word	so[160];
++  word	so[1024];
  
-   /*	variable	size
-@@ -3143,7 +3144,7 @@ gsm create()
+   Gsm_Preprocess			(S, s, so);
+   Gsm_LPC_Analysis		(S, so, LARc);
+@@ -3143,7 +3143,7 @@ gsm create()
    return r;
  }
  
 -int encode() 
-+int  gsm_encode_main() 
++int gsm_encode_main()
  {
    gsm r;
    unsigned i;
-@@ -3162,7 +3163,7 @@ int encode()
+@@ -3162,7 +3162,7 @@ int encode()
  
  int main( void ) 
  {
