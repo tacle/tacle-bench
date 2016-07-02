@@ -26,8 +26,8 @@
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 
 % remove the comment for the submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 
 % fatter TT font
@@ -332,7 +332,7 @@ The benchmarks are divided into five classes: Kernel, sequential, application, t
 
 The kernel benchmarks, listed in Table~\ref{tab:bench_kernel}, are synthetic benchmarks implementing small kernel functions; the size of the kernel benchmarks is in the range of 18 to 992 SLOC.
 %
-\begin{table}
+\begin{table}[t]
 \centering
 \caption{\label{tab:bench_sequential}TACLeBench sequential benchmarks}
 \begin{tabular}{lL{5.5cm}rR{2.5cm}}
@@ -406,10 +406,6 @@ The two parallel benchmarks, listed in Table~\ref{tab:bench_parallel}, are:
 Debie and PapaBench.
 These two benchmarks are comparable in size and in the number of tasks.
 
-\martin{Can we rename PowerWindow to power\_window, so benchmark names are
-more uniform? We shall not rename PapBench and Debie, as those names are already
-well known.}
-
 The application benchmarks, derived from real applications and provided with simulated input stimuli, are listed in Table~\ref{tab:bench_app}.
 %
 Lift is a lift controller that has been deployed at a
@@ -423,7 +419,7 @@ The I/O devices are simulated in the benchmark.
 The Java version of Lift is part of the Java benchmark suit JemBench~\cite{jembench}.
 Benedikt Huber has translated lift to C.
 
-PowerWindow implements a controller for an electric window in a car.
+powerwindow implements a controller for an electric window in a car.
 Both the driver and the passenger are able to control the window by 
 requesting the window to roll up or down.
 In case an object is stuck between the window and the door frame,
@@ -438,7 +434,7 @@ Name & Description & \#Tasks & Code Size & Origin\\
 
      &             &         &     (SLOC) & \\ \midrule
 lift & A lift controller & 1 & 361 & Martin Schoeberl\\
-PowerWindow & Distributed power window control & 4 & 2533 & CoSys-Lab \\
+powerwindow & Distributed power window control & 4 & 2533 & CoSys-Lab \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -644,7 +640,7 @@ No benchmark in the suite is optimized to a single return statement.
 \begin{figure}[t]
   \def\resultfile{eval/wcet.csv}
   \input{eval/pasim-eval.tikz}
-  \caption{Execution times of programs in TACLeBench range from 305 cycles up to more than 1,600,000,000 cycles on the Patmos architecture. \martin{select needs to be removed}}
+  \caption{Execution times of programs in TACLeBench range from 305 cycles up to more than 1,600,000,000 cycles on the Patmos architecture.}
   \label{fig:execution-times}
 \end{figure}
 
@@ -675,7 +671,7 @@ Even though full coverage of all system configurations can never be achieved, we
 % TACLeBench-specific passes to identify if all benchmark are compliant to the code-formatting rules.
 
 \todo{Comparison compiler warning in TACLeBench v1 with v2, problem: expint was in 1.0, but is no
-longer in 2.0 and PowerWindow was added for 2.0}
+longer in 2.0 and powerwindow was added for 2.0}
 
 %Possible Options for the Evaluation:
 %
