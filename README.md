@@ -18,6 +18,11 @@ Current Status
 the TACLeBench group is currently in the process of cleaning up and unifying
 the benchmarks. A version 2.0 will be available in the relative near future.
 
+Regression Tests
+================
+
+https://www4.cs.fau.de/Research/TACLeBench
+
 Getting Involved
 ================
 
