@@ -153,10 +153,8 @@ extern powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Down_BackR_A
 extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_BackR_Array[997];
 extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_BackR_Array[997];
 
-int powerwindow_main_inputcyclecounter_DRV;
-int powerwindow_main_inputcyclecounter_PSG_Front;
-int powerwindow_main_inputcyclecounter_PSG_BackL;
-int powerwindow_main_inputcyclecounter_PSG_BackR;
+int powerwindow_main_inputcyclecounter;
+
 /*
   Initialization- and return-value-related functions
 */
@@ -306,28 +304,28 @@ void powerwindow_initialize_DRV(void)
 {
     /* Initialize model */
 	powerwindow_PW_Control_DRV_initialize();
-    powerwindow_main_inputcyclecounter_DRV=0;
+
 }
 
 void powerwindow_initialize_PSG_Front(void)
 {
     /* Initialize model */
 	powerwindow_PW_Control_PSG_Front_initialize();
-    powerwindow_main_inputcyclecounter_PSG_Front=0;
+
 }
 
 void powerwindow_initialize_PSG_BackL(void)
 {
     /* Initialize model */
 	powerwindow_PW_Control_PSG_BackL_initialize();
-    powerwindow_main_inputcyclecounter_PSG_BackL=0;
+
 }
 
 void powerwindow_initialize_PSG_BackR(void)
 {
     /* Initialize model */
 	powerwindow_PW_Control_PSG_BackR_initialize();
-    powerwindow_main_inputcyclecounter_PSG_BackR=0;
+
 }
 
 
@@ -533,6 +531,7 @@ void powerwindow_init(void)
 	powerwindow_initialize_PSG_Front();
 	powerwindow_initialize_PSG_BackL();
 	powerwindow_initialize_PSG_BackR();
+	powerwindow_main_inputcyclecounter=0;
 
 }
 
@@ -548,52 +547,39 @@ void powerwindow_main(void)
 
 
     powerwindow_input_initialize_DRV();
+    powerwindow_input_initialize_PSG_Front();
+    powerwindow_input_initialize_PSG_BackL();
+    powerwindow_input_initialize_PSG_BackR();
 
-    while(powerwindow_main_inputcyclecounter_DRV<997)
+    while(powerwindow_main_inputcyclecounter<997)
     {
 
-        powerwindow_init_DRV(powerwindow_main_inputcyclecounter_DRV);
+        powerwindow_init_DRV(powerwindow_main_inputcyclecounter);
         powerwindow_DRV_main();
-        powerwindow_main_inputcyclecounter_DRV++;
-    }
+
 
     //Task 2: Front passenger side window
 
 
-    powerwindow_input_initialize_PSG_Front();
-
-    while(powerwindow_main_inputcyclecounter_PSG_Front<997)
-    {
-
-        powerwindow_init_PSG_Front(powerwindow_main_inputcyclecounter_PSG_Front);
+        powerwindow_init_PSG_Front(powerwindow_main_inputcyclecounter);
         powerwindow_PSG_Front_main();
-        powerwindow_main_inputcyclecounter_PSG_Front++;
-    }
+
 
     //Task 3: Back left passenger side window
 
 
-    powerwindow_input_initialize_PSG_BackL();
-
-    while(powerwindow_main_inputcyclecounter_PSG_BackL<997)
-    {
-
-        powerwindow_init_PSG_BackL(powerwindow_main_inputcyclecounter_PSG_BackL);
+        powerwindow_init_PSG_BackL(powerwindow_main_inputcyclecounter);
         powerwindow_PSG_BackL_main();
-        powerwindow_main_inputcyclecounter_PSG_BackL++;
-    }
+
 
     //Task 4: Back right passenger side window
 
 
-    powerwindow_input_initialize_PSG_BackR();
-
-    while(powerwindow_main_inputcyclecounter_PSG_BackR<997)
-    {
-
-        powerwindow_init_PSG_BackR(powerwindow_main_inputcyclecounter_PSG_BackR);
+        powerwindow_init_PSG_BackR(powerwindow_main_inputcyclecounter);
         powerwindow_PSG_BackR_main();
-        powerwindow_main_inputcyclecounter_PSG_BackR++;
+
+
+        powerwindow_main_inputcyclecounter++;
     }
 
 
