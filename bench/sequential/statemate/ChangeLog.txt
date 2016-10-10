@@ -29,10 +29,10 @@ the header
 - Annotated statemate_main() as the entry point of the analysis
 - Removed seemingly unnecessary empty lines
 - Changed remaining floating number literals, all being used for time related
-  comparisons, to integer literals by multiplying them by 1000 so that the 
-  code is totally floating number free. E.g: 
+  comparisons, to integer literals by multiplying them by 1000 so that the
+  code is totally floating number free. E.g:
   changed 'time - sc_FH_TUERMODUL_CTRL_2375_2 >= 0.5f'
-       to 'time - sc_FH_TUERMODUL_CTRL_2375_2 >= 500' 
+       to 'time - sc_FH_TUERMODUL_CTRL_2375_2 >= 500'
   Info: All time related variables were already converted to 'unsigned long'
 - Applied code formatting according to the following rules
   - Lines shall not be wider than 80 characters; whenever possible, appropriate
@@ -44,7 +44,7 @@ the header
     one whitespace, closing ')' and ']' are preceded by one whitespace
   - In comma- or colon-separated argument lists, one whitespace is put after
     each comma/colon
-  - Names of functions and global variables all start with a benchmark-specific 
+  - Names of functions and global variables all start with a benchmark-specific
   prefix (here: statemate_) followed by lowercase letter
   - For pointer types, one whitespace is put before the '*'
   - Operators within expressions shall be preceded and followed by one
@@ -55,3 +55,6 @@ the header
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+
+  2016-10-10:
+  - added statemate_return() function

@@ -23,7 +23,6 @@
 
 */
 
-
 /*
   Macro definitions
 */
@@ -69,6 +68,7 @@ void statemate_generic_EINKLEMMSCHUTZ_CTRL( void );
 void statemate_generic_BLOCK_ERKENNUNG_CTRL( void );
 void statemate_FH_DU( void );
 void statemate_main( void );
+int statemate_return ( void );
 
 
 /*
@@ -1253,6 +1253,15 @@ void statemate_FH_DU( void )
   Main functions
 */
 
+int statemate_return()
+{
+  unsigned long int checksum = 0;
+  for ( int index=63 ; index>=0 ; index-- ){
+    checksum += (unsigned long) (statemate_bitlist[index] << index);
+  }
+  return(checksum == 18446744073709551614ul);
+}
+
 void _Pragma ( "entrypoint" ) statemate_main( void )
 {
   statemate_FH_DU();
@@ -1264,5 +1273,5 @@ int main ( void )
   statemate_init();
   statemate_main();
 
-  return 0;
+  return statemate_return();
 }
