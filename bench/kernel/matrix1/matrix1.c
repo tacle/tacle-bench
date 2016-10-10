@@ -79,9 +79,9 @@ int main( void );
   Declaration of global variables
 */
 
-int A[X * Y];
-int B[Y * Z];
-int C[X * Z];
+int matrix1_A[X * Y];
+int matrix1_B[Y * Z];
+int matrix1_C[X * Z];
 
 
 /*
@@ -95,21 +95,21 @@ void matrix1_pin_down( int A[], int B[], int C[] )
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Y; i++ )
-    A[i] = x ;
+    matrix1_A[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < Y * Z ; i++ )
-    B[i] = x ;
+    matrix1_B[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Z ; i++ )
-    C[i] = 0 ;
+    matrix1_C[i] = 0 ;
 }
 
 
 void matrix1_init( void )
 {
-  matrix1_pin_down( &A[0], &B[0], &C[0] );
+  matrix1_pin_down( &matrix1_A[0], &matrix1_B[0], &matrix1_C[0] );
 }
 
 /*
@@ -123,7 +123,7 @@ int matrix1_return( void )
 
 	  _Pragma( "loopbound min 100 max 100" )
 	  for ( i = 0; i <= X*Z; i++ )
-		  checksum += C[i];
+		  checksum += matrix1_C[i];
 
 	  return ( checksum ==  1000 ? 0 : -1 );
 }
@@ -135,19 +135,19 @@ int matrix1_return( void )
 
 void _Pragma ( "entrypoint" ) matrix1_main( void )
 {
-  register int *p_a = &A[0];
-  register int *p_b = &B[0];
-  register int *p_c = &C[0];
+  register int *p_a = &matrix1_A[0];
+  register int *p_b = &matrix1_B[0];
+  register int *p_c = &matrix1_C[0];
 
   register int f, i, k;
 
   _Pragma( "loopbound min 10 max 10" )
   for ( k = 0; k < Z; k++ ) {
-    p_a = &A[0];                /* point to the beginning of array A */
+    p_a = &matrix1_A[0];                /* point to the beginning of array A */
 
     _Pragma( "loopbound min 10 max 10" )
     for ( i = 0; i < X; i++ ) {
-      p_b = &B[k * Y];          /* take next column */
+      p_b = &matrix1_B[k * Y];          /* take next column */
 
       *p_c = 0;
       _Pragma( "loopbound min 10 max 10" )
