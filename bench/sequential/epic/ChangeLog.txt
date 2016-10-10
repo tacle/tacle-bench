@@ -30,7 +30,7 @@ the header
     one whitespace, closing ')' and ']' are preceded by one whitespace
   - In comma- or colon-separated argument lists, one whitespace is put after
     each comma/colon
-  - Names of functions and global variables all start with a benchmark-specific 
+  - Names of functions and global variables all start with a benchmark-specific
   prefix (here: statemate_) followed by lowercase letter
   - For pointer types, one whitespace is put before the '*'
   - Operators within expressions shall be preceded and followed by one
@@ -41,3 +41,7 @@ the header
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+
+2016-10-10:
+- removed unused parameter 'char *edges' in epic_internal_filter()
+- included input data definition in epic.c, and removed epic_data.c and epic_data.h
