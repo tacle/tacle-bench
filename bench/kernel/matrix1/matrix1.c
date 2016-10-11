@@ -95,15 +95,15 @@ void matrix1_pin_down( int A[], int B[], int C[] )
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Y; i++ )
-    matrix1_A[i] = x ;
+    A[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < Y * Z ; i++ )
-    matrix1_B[i] = x ;
+    B[i] = x ;
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0 ; i < X * Z ; i++ )
-    matrix1_C[i] = 0 ;
+    C[i] = 0 ;
 }
 
 
