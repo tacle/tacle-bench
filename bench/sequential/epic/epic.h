@@ -64,7 +64,7 @@ void epic_internal_filter( register float *image, register int x_dim,
                            register float *temp, register int x_fdim,
 			   register int y_fdim, int xgrid_start,
 			   int xgrid_step, int ygrid_start, int ygrid_step,
-			   register float *result, char *edges );
+			   register float *result );
 
 void epic_reflect1( float *filt, int x_dim, int y_dim, int x_pos, int y_pos,
                     float *result, int f_or_e );

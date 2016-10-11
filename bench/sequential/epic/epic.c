@@ -586,7 +586,7 @@ void epic_internal_transpose( float *mat, int rows, int cols );
 void epic_internal_filter( float *image, int x_dim, int y_dim, float *filt,
                            float *temp, int x_fdim, int y_fdim,
                            int xgrid_start, int xgrid_step, int ygrid_start,
-                           int ygrid_step, float *result, char *edges );
+                           int ygrid_step, float *result );
 void epic_reflect1( float *filt, int x_dim, int y_dim, int x_pos, int y_pos,
                     float *result, int f_or_e );
 void epic_main( void );
@@ -677,34 +677,31 @@ void epic_build_level( float *image, int level_x_size, int level_y_size,
   /* filter and subsample in the X direction */
   epic_internal_filter ( image, level_x_size, level_y_size,
                          lo_filter, epic_filtertemp, filter_size, 1,
-                         0, 2, 0, 1, epic_lo_imagetemp, "epic_reflect1" );
+                         0, 2, 0, 1, epic_lo_imagetemp );
   epic_internal_filter ( image, level_x_size, level_y_size,
                          hi_filter, epic_filtertemp, filter_size, 1,
-                         1, 2, 0, 1, epic_hi_imagetemp, "epic_reflect1" );
+                         1, 2, 0, 1, epic_hi_imagetemp );
 
   level_x_size /= 2;
   /* now filter and subsample in the Y direction */
   epic_internal_filter ( epic_lo_imagetemp, level_x_size,
                          level_y_size, /* lowpass */
                          lo_filter, epic_filtertemp, 1, filter_size,
-                         0, 1, 0, 2, result_block, "epic_reflect1" );
+                         0, 1, 0, 2, result_block );
   epic_internal_filter ( epic_lo_imagetemp, level_x_size,
                          level_y_size, /* horizontal */
                          hi_filter, epic_filtertemp, 1, filter_size,
-                         0, 1, 1, 2, ( result_block += ( total_size / 4 ) ),
-                         "epic_reflect1" );
+                         0, 1, 1, 2, ( result_block += ( total_size / 4 ) ) );
   epic_internal_filter ( epic_hi_imagetemp, level_x_size,
                          level_y_size, /* vertical */
                          lo_filter, epic_filtertemp, 1, filter_size,
-                         0, 1, 0, 2, ( result_block += ( total_size / 4 ) ),
-                         "epic_reflect1" );
+                         0, 1, 0, 2, ( result_block += ( total_size / 4 ) ) );
   /* transpose the vertical band for more efficient scanning */
   epic_internal_transpose( result_block, level_y_size / 2, level_x_size );
   epic_internal_filter ( epic_hi_imagetemp, level_x_size,
                          level_y_size, /* diagonal */
                          hi_filter, epic_filtertemp, 1, filter_size,
-                         0, 1, 1, 2, ( result_block += ( total_size / 4 ) ),
-                         "epic_reflect1" );
+                         0, 1, 1, 2, ( result_block += ( total_size / 4 ) ) );
 }
 
 
@@ -753,7 +750,7 @@ void epic_internal_transpose( float *mat, int rows, int cols )
 void epic_internal_filter( float *image, int x_dim, int y_dim, float *filt,
                            float *temp, int x_fdim, int y_fdim,
                            int xgrid_start, int xgrid_step, int ygrid_start,
-                           int ygrid_step, float *result, char *edges )
+                           int ygrid_step, float *result )
 {
   //register double sum;
   register float sum;
