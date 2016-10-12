@@ -1256,7 +1256,8 @@ void statemate_FH_DU( void )
 int statemate_return()
 {
   unsigned long int checksum = 0;
-  for ( int index=63 ; index>=0 ; index-- ){
+  int index;
+  for ( index=63 ; index>=0 ; index-- ){
     checksum += (unsigned long) (statemate_bitlist[index] << index);
   }
   return(checksum == 18446744073709551614ul);
