@@ -14,7 +14,7 @@
   Function: Efficient Pyramid Image Coder
 
   Source: MediaBench
-          http://euler.slu.edu/~fritts/mediabench/mb1/index.html
+
 
   Original name: epic
 
@@ -652,11 +652,12 @@ void epic_build_pyr( float *image, int x_size, int y_size, int num_levels,
   y_level = y_size;
 
   _Pragma( "loopbound min 4 max 4" )
-  for ( level = 0;  level < num_levels; ++level )
+  for ( level = 0;  level < num_levels; ++level ){
     epic_build_level( image, x_level, y_level, lo_filter, hi_filter,
                       filter_size, image );
-  x_level /= 2;
-  y_level /= 2;
+    x_level /= 2;
+    y_level /= 2;
+  }
 }
 
 
@@ -759,7 +760,7 @@ void epic_internal_filter( float *image, int x_dim, int y_dim, float *filt,
   register int y_pos, res_pos;
   register int last_ctr_col = x_dim - x_fdim;
   int last_ctr_row = ( y_dim - y_fdim ) * x_dim;
-  int first_row, first_col;
+  int first_row, first_col ;
   int x_fmid = x_fdim / 2;
   int y_fmid = y_fdim / 2;
   int x_stop = x_fdim - x_fmid + 1;
@@ -767,15 +768,16 @@ void epic_internal_filter( float *image, int x_dim, int y_dim, float *filt,
   int ygrid_step_full = ygrid_step * x_dim;
   int prev_res_pos, x_res_dim = ( x_dim - xgrid_start + xgrid_step - 1 ) /
                                 xgrid_step;
-  int rt_edge_res_pos;
+  int rt_edge_res_pos = x_res_dim;
 
   res_pos = 0;
+  first_col = xgrid_start - x_fmid + xgrid_step;
 
   _Pragma( "loopbound min 1 max 4" )
   for ( y_pos = ygrid_start - y_fmid - 1; y_pos < 0; y_pos += ygrid_step ) {
     _Pragma( "loopbound min 1 max 4" )
     for ( x_pos = xgrid_start - x_fmid;   /* top-left corner */
-          x_pos < 1;
+          x_pos < 0;
           x_pos += xgrid_step ) {
       epic_reflect1( filt, x_fdim, y_fdim, x_pos, y_pos, temp, FILTER );
       sum = 0.0f;

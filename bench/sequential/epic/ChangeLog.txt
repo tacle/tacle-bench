@@ -31,7 +31,7 @@ the header
   - In comma- or colon-separated argument lists, one whitespace is put after
     each comma/colon
   - Names of functions and global variables all start with a benchmark-specific
-  prefix (here: statemate_) followed by lowercase letter
+  prefix (here: epic_) followed by lowercase letter
   - For pointer types, one whitespace is put before the '*'
   - Operators within expressions shall be preceded and followed by one
     whitespace
@@ -45,3 +45,9 @@ the header
 2016-10-10:
 - removed unused parameter 'char *edges' in epic_internal_filter()
 - included input data definition in epic.c, and removed epic_data.c and epic_data.h
+
+2016-10-12:
+- added initial value to variable 'rt_edge_res_pos' (in case the first for loop
+at line 775) is not executed)
+- added initial value to variable 'first_col' (in case the first for loop
+at line 775) is not executed)
