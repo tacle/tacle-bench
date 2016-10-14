@@ -21,7 +21,7 @@
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
 \newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
 
-\newcommand{\benchcount}{54 }
+\newcommand{\benchcount}{53 }
 
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 
@@ -106,7 +106,7 @@ repeatable those programs shall be made publicly available.
 
 We collected open-source programs, adapted them to a common coding
 style, and provide the collection in open-source. The benchmark collection
-is called TACLeBench and is available from GitHub in version 2.0
+is called TACLeBench and is available from GitHub in version 1.9
 at the publication date of this paper. One of the main features of TACLeBench
 is that all programs are self-contained without any dependencies on standard
 libraries or an operating system.
@@ -147,7 +147,7 @@ I/O addresses and currently supports Atmel AVR processors only.
 Since TACLeBench addresses the needs imposed by timing analysis tools,
 all benchmarks are completely annotated with flow facts.
 These flow facts are directly incorporated into the C source codes using
-Pragmas. % at a high level of abstraction.
+pragmas. % at a high level of abstraction.
 TACLeBench distinguishes between so-called flow restrictions, loop bounds, and entry points.
 % The following details shall go into its own section on a future publication with more space
 %Flow restrictions allow to express the execution count of one statement in relation to the execution count of other statements.
@@ -186,15 +186,14 @@ from\footnote{\url{http://www.tacle.eu/index.php/activities/taclebench}}), which
 by Heiko Falk, was a collection of 102 programs from several different
 research groups. We keep this first version tagged with ``V1.0'' in the public
 GitHub repository.\footnote{\url{https://github.com/tacle/tacle-bench}}
-The version described in this paper is version 2.0 and tagged as such in the
-repository.
+The version described in this paper is version 1.9 and tagged as such in the
+repository. Version 2.0 will be soon available when the last missing programs have been formatted.
 The intention is to have the HEAD of the master branch being
 the most recent, versioned snapshot of TACLeBench.
 Future development and additions will be performed on a development
 branch so that HEAD of master is always a consistent snapshot.
 
 This paper is organized in 5 sections: The following section presents related work.
-%Section~\ref{sec:related} presents related work.
 Section~\ref{sec:collect} presents the benchmark collection, its classification, and the updates
 to make them useful.
 Section~\ref{sec:eval} evaluates the benchmark collection.
@@ -244,9 +243,9 @@ to precedence constraints and 6 interrupt service routines.
 The Embedded Microprocessor Benchmark Consortium (EEMBC)~\cite{eembc} provides a
 benchmark suite dedicated to the evaluation of
 the performance of embedded hardware and embedded software.
-The benchmarks are divided into subset according to the target domain, e.g., the automotive domain, phones and tablets, but also big data and cloud computing.
+The benchmarks are divided into subsets according to the target domain, e.g., the automotive domain, phones and tablets, but also big data and cloud computing.
 To improve comparability between different systems, the consortium provides a
-test-harness that allows to derive certifiable scores.
+test-harness that allows deriving certifiable scores.
 The test-harness, being a clear advantage in terms of comparability,
 constitutes a hindrance in terms of portability and usability.
 Whereas the TACLeBench has been designed to ease portability and to allow the immediate use of the benchmark with a large variety of tools and platforms, the EEMBC benchmarks are not stand-alone executable without the test-harness.
@@ -284,7 +283,6 @@ bitonic &  Bitonic sorting network  & 52 & MiBench \\
 bsort & Bubblesort program & 32 & MRTC \\
 complex\_updates &  Multiply-add with complex vectors & 18 & DSPStone \\
 countnegative &  Counts signes in a matrix  & 35 & MRTC \\
-crc &  CRC computation on 40 bytes of data  & 66 & SNU-RT \\
 fac &  Factorial function & 21 & MRTC \\
 fft &  1024-point FFT, 13 bits per twiddle  & 78  & DSPStone \\
 filterbank & Filter bank for multirate signals  & 75 & StreamIt \\
@@ -369,8 +367,8 @@ susan &  MR image recognition algorithm & 1491 & MiBench \\
 \end{table}
 %
 The sequential benchmarks, listed in Table~\ref{tab:bench_sequential},
-implement large functions block,
-such as encoders and decoders, that are used in many embedded systems.
+implement large function blocks,
+such as encoders and decoders, which are used in many embedded systems.
 The size of the sequential benchmarks is in the range of 117 to 2710 SLOC.
 The sequential benchmarks cover graph search, cryptographic algorithms, compression algorithms, etc.
 %
@@ -383,7 +381,7 @@ Name & Description & Code Size & Origin\\
      &             &  (SLOC) & \\ \midrule
 cover &  Artificial code with lots of different control flow paths  & 620  & MRTC \\
 duff & Duff's device  & 35 & MRTC \\
-test3 &  Artificial WCET analysis stress test & 4235 & Universitaet des Saarlandes \\
+test3 &  Artificial WCET analysis stress test & 4235 & Universit\"at des Saarlandes \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -424,7 +422,7 @@ Benedikt Huber has translated lift to C.
 powerwindow implements a controller for an electric window in a car.
 Both the driver and the passenger are able to control the window by 
 requesting the window to roll up or down.
-In case an object is stuck between the window and the door frame,
+In case an object is stuck between the window and the doorframe,
 the controller will move the window down to avoid damaging the object.
 
 \begin{table}
@@ -694,7 +692,9 @@ evaluate research ideas. TACLeBench provides an open source collection of
 \benchcount benchmarks. As all benchmarks are self-contained, they are easy to
 use in systems that are lacking the standard library or an operating systems.
 %
-This paper reports on the TACLeBench version 2.0.
+This paper reports on the TACLeBench version 1.9. The major revision
+2.0 will be released when the last missing programs have been adapted
+to the common coding style.
 We intend to grow the collection of programs and coordinate the
 release of benchmark versions.
 We further welcome contributions to the benchmark collection.
