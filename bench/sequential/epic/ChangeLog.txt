@@ -51,3 +51,6 @@ the header
 at line 775) is not executed)
 - added initial value to variable 'first_col' (in case the first for loop
 at line 775) is not executed)
+
+2016-10_14:
+- added epic_return() function

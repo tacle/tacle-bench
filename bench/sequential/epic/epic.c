@@ -1117,11 +1117,19 @@ void _Pragma( "entrypoint" ) epic_main( void )
                   epic_hi_filter, FILTER_SIZE );
 }
 
+int epic_return(){
+  int i;
+  int checksum = 0;
+  for ( i=0 ; i<X_SIZE*Y_SIZE ; i+=Y_SIZE+1 ){
+    checksum += epic_image[i];
+  }
+  return ( checksum == 43968 ? 0 : 1);
+}
 
 int main( void )
 {
   epic_init();
   epic_main();
 
-  return 0;
+  return epic_return();
 }
