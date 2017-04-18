@@ -540,7 +540,7 @@ void huff_enc_create_codes_table( huff_enc_t_tree *tree,
 }
 
 
-void huff_enc_main()
+void _Pragma( "entrypoint" ) huff_enc_main()
 /* Returned parameters: None
    Action: Compresses with Huffman method all bytes read by the function
            'huff_enc_read_byte'

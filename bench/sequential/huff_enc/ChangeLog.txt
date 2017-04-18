@@ -1,6 +1,9 @@
 File: huff_enc.c
 Original provenience: David Bourgin (David.Bourgin@ufrima.imag.fr)
 
+2017-04-18:
+- Annotated huff_enc_main as entry-point for timing analysis
+
 2016-03-24:
 - Replaced dynamic memory allocation by a fixed array with 514 entries
 - Replaced memset() with loops

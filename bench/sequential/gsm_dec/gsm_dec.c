@@ -730,7 +730,7 @@ int gsm_dec_decode( gsm s, gsm_byte *c, gsm_signal *target )
   return 0;
 }
 
-void gsm_dec_main( void )
+void _Pragma( "entrypoint" ) gsm_dec_main( void )
 {
   gsm r;
   unsigned i;

@@ -195,7 +195,7 @@ void sha_stream( struct SHA_INFO *sha_info, struct SHA_MY_FILE *fin )
   sha_final( sha_info );
 }
 
-void sha_main( void )
+void _Pragma( "entrypoint" ) sha_main( void )
 {
   struct SHA_MY_FILE fin;
   fin.data = sha_data;

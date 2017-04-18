@@ -628,7 +628,7 @@ void anagram_SortCandidates( void )
 }
 
 
-void anagram_main( void )
+void _Pragma( "entrypoint" ) anagram_main( void )
 {
   int i;
 

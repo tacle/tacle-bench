@@ -595,7 +595,7 @@ void md5_init( void )
   // no initialisation needed
 }
 
-int md5_main( void )
+int _Pragma( "entrypoint" ) md5_main( void )
 {
   R_RANDOM_STRUCT randomStruct;
   R_RANDOM_STRUCT randomStruct2;

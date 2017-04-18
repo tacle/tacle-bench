@@ -1,6 +1,9 @@
 File: cjpeg_jpeg6b_wrbmp.c
 Original provenience: 
 
+2017-04-18:
+- Annotated cjpeg_wrbmp_main as entry-point for timing analysis
+
 2015-10-14:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1

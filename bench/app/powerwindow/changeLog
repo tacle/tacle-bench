@@ -2,7 +2,8 @@ Adjusted the original files to tacle benchmark requirements
 
 Created the input serials in void powerwindow_input_initialize(void) to cover the real life scenarios 
 
-
+18-04-2017:
+Annotated powerwindow_main as entry-point for timing analysis
 
 23-03-2016:
 Deleted folder powerwindow_SourceFiles moved all the contained c files to PowerWindow folder

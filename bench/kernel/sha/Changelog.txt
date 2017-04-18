@@ -1,6 +1,9 @@
 File: sha.c
 Original provenience: 
 
+2017-04-18:
+- Annotated sha_main as entry-point for timing analysis
+
 2015-03-30:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
