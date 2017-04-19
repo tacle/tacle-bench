@@ -2,6 +2,9 @@ File: gsm_dec.c
 Original provenience: Jutta Degener and Carsten Bormann, 
                       Technische Universitaet Berlin
 
+2017-04-18:
+- Annotated gsm_dec_main as entry-point for timing analysis
+
 2016-03-07:
 - Add generic TACLeBench header
 - Split code into gsm.h, data.h, config.h, private.h, proto.h

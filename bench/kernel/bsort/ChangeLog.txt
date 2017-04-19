@@ -2,6 +2,9 @@ File: bsort.c
 Original provenience: Mälardalen benchmark suite,
 Source: http://www.mrtc.mdh.se/projects/wcet/wcet_bench/bsort100/bsort100.c
 
+2017-04-18:
+- Annotated bsort_main as entry-point for timing analysis.
+
 2016-04-20:
 - Check upon call of bsort_return that bsort_Array is sorted.
 

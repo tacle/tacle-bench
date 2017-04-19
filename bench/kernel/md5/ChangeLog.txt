@@ -2,6 +2,8 @@ File: md5.c
 Original provenience: RSA Data Security, Inc.
 
 Original w O3L 26823249
+2017-04-18:
+- Annotated md5_main as entry-point for timing analysis
 2016-04-26:
 - Added generic TACLeBench header
 2016-04-27:

@@ -1,6 +1,9 @@
 File: recursion.c
 Original provenience: Mälardalen benchmark suite, www.mrtc.....
 
+2017-04-18:
+- Annotated recursion_main as entry-point for timing analysis
+
 2015-10-12:
 - Remove comment on line 1
 - Added generic TACLeBench header to line 1
