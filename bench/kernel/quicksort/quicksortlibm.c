@@ -632,6 +632,7 @@ float x, y[];
     return( 0 );
   }
 
+  y[ 0 ] = y[ 1 ] = x - x; /* dummy initialization */
   return( 0 ); /* doesn't happen for our input */
 }
 
