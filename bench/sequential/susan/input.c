@@ -1,4 +1,4 @@
-char input[7292] = { 80,
+char susan_input[7292] = { 80,
 53,
 10,
 35,

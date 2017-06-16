@@ -273,13 +273,59 @@
 #include "wccfile.h"
 #include "wccmalloc.h"
 
+#define EXP_A 184
+#define EXP_C 16249 
+
+float susan_expf(float y)
+{
+  union
+  {
+    float d;
+    struct
+    {
+#ifdef LITTLE_ENDIAN
+      short j, i;
+#else
+      short i, j;
+#endif
+    } n;
+  } eco;
+  eco.n.i = EXP_A*(y) + (EXP_C);
+  eco.n.j = 0;
+  return eco.d;
+}
+
+float susan_sqrtf(float val)
+{
+  float x = val/10;
+  
+  float dx;
+  
+  float diff;
+  float min_tol = 0.00001f;
+  
+  int i, flag;
+  
+  
+  flag = 0;
+  if (val == 0 ) x = 0;
+  else {
+    for (i=1;i<20;i++)
+    {
+      if (!flag) {
+        dx = (val - (x*x)) / (2.0f * x);
+        x = x + dx;
+        diff = val - (x*x);
+        if (fabs(diff) <= min_tol) flag = 1;
+      }
+    }
+  }
+  return (x);
+}
+
 /* ********** Optional settings */
 
-#ifndef PPC
-typedef int        TOTAL_TYPE; /* this is faster for "int" but should be "float" for large d masks */
-#else
-typedef float      TOTAL_TYPE; /* for my PowerPC accelerator only */
-#endif
+typedef int        TOTAL_TYPE;
 
 #define SEVEN_SUPP           /* size for non-max corner suppression; SEVEN_SUPP or FIVE_SUPP */
 #define MAX_CORNERS   15000  /* max corners per frame */
@@ -289,31 +335,34 @@ typedef float      TOTAL_TYPE; /* for my PowerPC accelerator only */
 typedef  unsigned char uchar;
 typedef  struct {int x,y,info, dx, dy, I;} CORNER_LIST[MAX_CORNERS];
 
-extern char input[7292];
+extern char susan_input[7292];
+struct wccFILE susan_file;
+float susan_dt;
+int susan_bt;
+int susan_principle_conf;
+int susan_thin_post_proc;
+int susan_three_by_three;
+int susan_drawing_mode;
+int susan_susan_quick;
+int susan_max_no_corners;
+int susan_max_no_edges;
 
-void exit_error( char* message )
-{
-  // Provoke crash
-  int i = 0;
-  int j = 1;
-  int k = j / i;
-}
-
-int getint( struct wccFILE *fd )
+int susan_getint( struct wccFILE *fd )
 {
   int c, i;
   char dummy[10000];
 
-  c = wccfgetc(fd);
+  c = susan_wccfgetc(fd);
   _Pragma( "loopbound min 1 max 4" )
   while (1) { /* find next integer */
     if (c=='#')    /* if we're at a comment, read to end of line */
-      wccfgets(dummy,9000,fd);
-    if (c==EOF)
-      exit_error("Image is not binary PGM.");
+      susan_wccfgets(dummy,9000,fd);
+    if (c==EOF) {
+      /* "Image is not binary PGM." */
+    }
     if (c>='0' && c<='9')
       break;   /* found what we were looking for */
-    c = wccfgetc(fd);
+    c = susan_wccfgetc(fd);
   }
 
   /* we're at the start of a number, continue until we hit a non-number */
@@ -321,7 +370,7 @@ int getint( struct wccFILE *fd )
   _Pragma( "loopbound min 2 max 3" )
   while (1) {
     i = (i*10) + (c - '0');
-    c = wccfgetc(fd);
+    c = susan_wccfgetc(fd);
     if (c==EOF) return (i);
     if (c<'0' || c>'9') break;
   }
@@ -330,38 +379,39 @@ int getint( struct wccFILE *fd )
 }
 
 
-void get_image( struct wccFILE *fd, 
+void susan_get_image( struct wccFILE *fd, 
   unsigned char **in, int *x_size, int *y_size )
 {
   char header [100];
-  int  tmp;
   
-  wccfseek( fd, 0, WCCSEEK_SET );
+  susan_wccfseek( fd, 0, WCCSEEK_SET );
 
   /* {{{ read header */
 
-  header[0]=wccfgetc( fd );
-  header[1]=wccfgetc( fd );
-  if(!(header[0]=='P' && header[1]=='5'))
-    exit_error("Image does not have binary PGM header.");
+  header[0]=susan_wccfgetc( fd );
+  header[1]=susan_wccfgetc( fd );
+  if(!(header[0]=='P' && header[1]=='5')) {
+    /* "Image does not have binary PGM header." */
+  }
 
-  *x_size = getint(fd);
-  *y_size = getint(fd);
-  tmp = getint(fd);
+  *x_size = susan_getint(fd);
+  *y_size = susan_getint(fd);
+  // dummy read
+  susan_getint(fd);
 
 /* }}} */
 
-  *in = (uchar *) wccmalloc(*x_size * *y_size);
+  *in = (uchar *) susan_wccmalloc(*x_size * *y_size);
 
-  if (wccfread(*in,1,*x_size * *y_size,fd) == 0)
-    exit_error("Image is wrong size.\n");
+  if (susan_wccfread(*in,1,*x_size * *y_size,fd) == 0) {
+    /* "Image is wrong size.\n" */
+  }
 }
 
 
-void put_image( uchar *in, int x_size, int y_size )
+void susan_put_image( int x_size, int y_size )
 {
   int i;
-  
   _Pragma( "loopbound min 7220 max 7220" )
   for ( i = 0; i < x_size*y_size; i++ ) {
     ;
@@ -369,7 +419,7 @@ void put_image( uchar *in, int x_size, int y_size )
 }
 
 
-void int_to_uchar( char *r, uchar *in, int size )
+void susan_int_to_uchar( char *r, uchar *in, int size )
 {
   int i, max_r=r[0], min_r=r[0];
 
@@ -381,6 +431,15 @@ void int_to_uchar( char *r, uchar *in, int size )
       min_r=r[i];
   }
 
+  if (max_r == min_r) {
+    /* Should not occur in TACLeBench. */
+    _Pragma( "loopbound min 0 max 0" )
+    for (i=0; i<size; i++) {
+      in[i] = (uchar)(0);
+    }
+
+    return;
+  }
   max_r-=min_r;
 
   _Pragma( "loopbound min 0 max 0" )
@@ -390,12 +449,12 @@ void int_to_uchar( char *r, uchar *in, int size )
 }
 
 
-void setup_brightness_lut( uchar **bp, int thresh, int form )
+void susan_setup_brightness_lut( uchar **bp, int thresh, int form )
 {
   int   k;
   float temp;
 
-  *bp=(unsigned char *)wccmalloc(516);
+  *bp=(unsigned char *)susan_wccmalloc(516);
   *bp=*bp+258;
 
   _Pragma( "loopbound min 513 max 513" )
@@ -404,7 +463,7 @@ void setup_brightness_lut( uchar **bp, int thresh, int form )
     temp=temp*temp;
     if (form==6)
       temp=temp*temp*temp;
-    temp=100.0*expf(-temp);
+    temp=100.0*susan_expf(-temp);
     *(*bp+k)= (uchar)temp;
   }
 }
@@ -416,7 +475,7 @@ void susan_principle( uchar *in, char *r, uchar *bp,
   int   i, j, n;
   uchar *p,*cp;
 
-  wccmemset(r,0,x_size * y_size * sizeof(int));
+  susan_wccmemset(r,0,x_size * y_size * sizeof(int));
 
   _Pragma( "loopbound min 0 max 0" )
   for (i=3;i<y_size-3;i++) {
@@ -489,7 +548,7 @@ void susan_principle_small( uchar *in, char *r, uchar *bp,
   int   i, j, n;
   uchar *p,*cp;
 
-  wccmemset(r,0,x_size * y_size * sizeof(int));
+  susan_wccmemset(r,0,x_size * y_size * sizeof(int));
 
   _Pragma( "loopbound min 0 max 0" )
   for (i=1;i<y_size-1;i++) {
@@ -520,7 +579,7 @@ void susan_principle_small( uchar *in, char *r, uchar *bp,
 }
 
 
-uchar median( uchar *in, int i, int j, int x_size )
+uchar susan_median( uchar *in, int i, int j, int x_size )
 {
   int p[8],k,l,tmp;
 
@@ -550,22 +609,22 @@ uchar median( uchar *in, int i, int j, int x_size )
 
 
 /* this enlarges "in" so that borders can be dealt with easily */
-void enlarge( uchar **in, uchar *tmp_image, 
+void susan_enlarge( uchar **in, uchar *tmp_image, 
   int *x_size, int *y_size, int border )
 {
   int   i, j;
 
   _Pragma( "loopbound min 95 max 95" )
   for(i=0; i<*y_size; i++) { /* copy *in into tmp_image */
-    wccmemcpy( tmp_image+(i+border)*(*x_size+2*border)+border, 
+    susan_wccmemcpy( tmp_image+(i+border)*(*x_size+2*border)+border, 
       *in+i* *x_size, *x_size);
   }
 
   _Pragma( "loopbound min 7 max 7" )
   for(i=0; i<border; i++) { /* copy top and bottom rows; invert as many as necessary */
-    wccmemcpy( tmp_image+(border-1-i)*(*x_size+2*border)+border,
+    susan_wccmemcpy( tmp_image+(border-1-i)*(*x_size+2*border)+border,
       *in+i* *x_size,*x_size);
-    wccmemcpy( tmp_image+(*y_size+border+i)*(*x_size+2*border)+border,
+    susan_wccmemcpy( tmp_image+(*y_size+border+i)*(*x_size+2*border)+border,
       *in+(*y_size-i-1)* *x_size,*x_size);
   }
 
@@ -601,19 +660,18 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
   else
     mask_size = 1;
 
-  total=0.1; /* test for total's type */
-  if ( (dt>15) && (total==0) ) {
-    exit_error( "Distance_thresh too big for integer arithmetic." );
+  if ( dt>15 ) {
+    /*  "Distance_thresh too big for integer arithmetic." */
      // Either reduce it to <=15 or recompile with variable "total"
      // as a float: see top "defines" section.
   }
 
   if ( (2*mask_size+1>x_size) || (2*mask_size+1>y_size) ) {
-    exit_error( "Mask size too big for image." );
+    /*  "Mask size too big for image." */
   }
 
-  tmp_image = (uchar *)wccmalloc( (x_size+mask_size*2) * (y_size+mask_size*2) );
-  enlarge(&in,tmp_image,&x_size,&y_size,mask_size);
+  tmp_image = (uchar *)susan_wccmalloc( (x_size+mask_size*2) * (y_size+mask_size*2) );
+  susan_enlarge(&in,tmp_image,&x_size,&y_size,mask_size);
 
   if (three_by_three==0) {
     /* large Gaussian masks */
@@ -623,7 +681,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
   
     increment = x_size - n_max;
   
-    dp     = (unsigned char *)wccmalloc(n_max*n_max);
+    dp     = (unsigned char *)susan_wccmalloc(n_max*n_max);
     dpt    = dp;
     temp   = -(dt*dt);
   
@@ -631,7 +689,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
     for(i=-mask_size; i<=mask_size; i++) {
       _Pragma( "loopbound min 15 max 15" )
       for(j=-mask_size; j<=mask_size; j++) {
-        x = (int) (100.0 * expf( ((float)((i*i)+(j*j))) / temp ));
+        x = (int) (100.0 * susan_expf( ((float)((i*i)+(j*j))) / temp ));
         *dpt++ = (unsigned char)x;
       }
     }
@@ -661,7 +719,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
         }
         tmp = area-10000;
         if (tmp==0)
-          *out++=median(in,i,j,x_size);
+          *out++=susan_median(in,i,j,x_size);
         else
           *out++=((total-(centre*10000))/tmp);
       }
@@ -695,7 +753,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
   
         tmp = area-100;
         if (tmp==0)
-          *out++=median(in,i,j,x_size);
+          *out++=susan_median(in,i,j,x_size);
         else
           *out++=(total-(centre*100))/tmp;
       }
@@ -704,7 +762,7 @@ void susan_smoothing( int three_by_three, uchar *in, float dt,
 }
 
 
-void edge_draw( uchar *in, uchar *mid, 
+void susan_edge_draw( uchar *in, uchar *mid, 
   int x_size, int y_size, int drawing_mode )
 {
   int   i;
@@ -718,7 +776,7 @@ void edge_draw( uchar *in, uchar *mid,
       if (*midp<8) {
         inp = in + (midp - mid) - x_size - 1;
         *inp++=255; *inp++=255; *inp=255; inp+=x_size-2;
-        *inp++=255; *inp++;     *inp=255; inp+=x_size-2;
+        *inp++=255; inp++;     *inp=255; inp+=x_size-2;
         *inp++=255; *inp++=255; *inp=255;
       }
       midp++;
@@ -932,7 +990,7 @@ void susan_edges( uchar *in, char *r, uchar *mid, uchar *bp,
   int   do_symmetry, i, j, m, n, a, b, x, y, w;
   uchar c,*p,*cp;
 
-  wccmemset(r,0,x_size * y_size);
+  susan_wccmemset(r,0,x_size * y_size);
 
   _Pragma( "loopbound min 89 max 89" )
   for (i=3;i<y_size-3;i++) {
@@ -1060,7 +1118,7 @@ void susan_edges( uchar *in, char *r, uchar *mid, uchar *bp,
           c=*(cp-*p++);y+=3*c;
           c=*(cp-*p);x+=c;y+=3*c;
 
-          z = sqrtf((float)((x*x) + (y*y)));
+          z = susan_sqrtf((float)((x*x) + (y*y)));
           if (z > (0.9*(float)n)) { /* 0.5 */
             do_symmetry=0;
             if (x==0)
@@ -1166,7 +1224,7 @@ void susan_edges_small( uchar *in, char *r, uchar *mid, uchar *bp,
   int   do_symmetry, i, j, m, n, a, b, x, y, w;
   uchar c,*p,*cp;
 
-  wccmemset(r,0,x_size * y_size);
+  susan_wccmemset(r,0,x_size * y_size);
 
   _Pragma( "loopbound min 0 max 0" )
   for (i=1;i<y_size-1;i++) {
@@ -1223,7 +1281,7 @@ void susan_edges_small( uchar *in, char *r, uchar *mid, uchar *bp,
           c=*(cp-*p++);y+=c;
           c=*(cp-*p);x+=c;y+=c;
 
-          z = sqrtf((float)((x*x) + (y*y)));
+          z = susan_sqrtf((float)((x*x) + (y*y)));
           if (z > (0.4*(float)n)) { /* 0.6 */
             do_symmetry=0;
             if (x==0)
@@ -1290,7 +1348,7 @@ void susan_edges_small( uchar *in, char *r, uchar *mid, uchar *bp,
 }
 
 
-void corner_draw( uchar *in, CORNER_LIST corner_list, 
+void susan_corner_draw( uchar *in, CORNER_LIST corner_list, 
   int x_size, int drawing_mode)
 {
   uchar *p;
@@ -1322,10 +1380,10 @@ void susan_corners( uchar *in, char *r, uchar *bp,
   uchar c,*p,*cp;
   char  *cgx,*cgy;
 
-  wccmemset(r,0,x_size * y_size);
+  susan_wccmemset(r,0,x_size * y_size);
 
-  cgx=(char *)wccmalloc(x_size*y_size);
-  cgy=(char *)wccmalloc(x_size*y_size);
+  cgx=(char *)susan_wccmalloc(x_size*y_size);
+  cgy=(char *)susan_wccmalloc(x_size*y_size);
 
   _Pragma( "loopbound min 85 max 85" )
   for (i=5;i<y_size-5;i++) {
@@ -1586,7 +1644,7 @@ void susan_corners( uchar *in, char *r, uchar *bp,
           corner_list[n].I=in[i*x_size+j];
           n++;
           if(n==MAX_CORNERS){
-            exit_error( "Too many corners." );
+            /*  "Too many corners." */
           }
         }
       }
@@ -1602,7 +1660,7 @@ void susan_corners_quick( uchar *in, char *r, uchar *bp,
   int   n,x,y,i,j;
   uchar *p,*cp;
 
-  wccmemset(r,0,x_size * y_size);
+  susan_wccmemset(r,0,x_size * y_size);
 
   _Pragma( "loopbound min 0 max 0" )
   for (i=7;i<y_size-7;i++) {
@@ -1803,7 +1861,7 @@ void susan_corners_quick( uchar *in, char *r, uchar *bp,
           corner_list[n].dy=y/15;
           n++;
           if(n==MAX_CORNERS){
-            exit_error( "Too many corners." );
+            /*  "Too many corners." */
           }
         }
       }
@@ -1813,31 +1871,108 @@ void susan_corners_quick( uchar *in, char *r, uchar *bp,
 }
 
 
-void call_susan( struct wccFILE *inputFile, int mode )
+void susan_call_susan( struct wccFILE *inputFile, int mode )
 {
   uchar  *in, *bp, *mid;
-  float  dt=4.0;
-  int    argindex=3,
-         bt=20,
-         principle=0,
-         thin_post_proc=1,
-         three_by_three=0,
-         drawing_mode=0,
-         susan_quick=0,
-         max_no_corners=50,
-         max_no_edges=50,
-         x_size, y_size;
+  int   x_size, y_size;
   char  *r;
   CORNER_LIST corner_list;
 
-  get_image( inputFile, &in, &x_size, &y_size );
+  susan_get_image( inputFile, &in, &x_size, &y_size );
+	
+  if (susan_dt<0) susan_three_by_three=1;
+	if ( (susan_principle_conf==1) && (mode==0) )
+    mode=1;
 
-  // Set up options (originally on command line)
+  switch (mode) {
+    case 0:
+      /* {{{ smoothing */
+
+      susan_setup_brightness_lut(&bp,susan_bt,2);
+      susan_smoothing(susan_three_by_three,in,susan_dt,x_size,y_size,bp);
+      
+      break;
+    case 1:
+      /* {{{ edges */
+
+      r   = (char *) susan_wccmalloc(x_size * y_size);
+      susan_setup_brightness_lut(&bp,susan_bt,6);
+
+      if (susan_principle_conf) {
+        if (susan_three_by_three)
+          susan_principle_small(in,r,bp,susan_max_no_edges,x_size,y_size);
+        else
+          susan_principle(in,r,bp,susan_max_no_edges,x_size,y_size);
+        susan_int_to_uchar(r,in,x_size*y_size);
+      } else {
+        mid = (uchar *)susan_wccmalloc(x_size*y_size);
+        susan_wccmemset(mid,100,x_size * y_size); /* note not set to zero */
+
+        if (susan_three_by_three)
+          susan_edges_small(in,r,mid,bp,susan_max_no_edges,x_size,y_size);
+        else
+          susan_edges(in,r,mid,bp,susan_max_no_edges,x_size,y_size);
+        if(susan_thin_post_proc)
+          susan_thin(r,mid,x_size,y_size);
+        susan_edge_draw(in,mid,x_size,y_size,susan_drawing_mode);
+      }
+
+      break;
+    case 2:
+      /* {{{ corners */
+
+      r   = (char *) susan_wccmalloc(x_size * y_size);
+      susan_setup_brightness_lut(&bp,susan_bt,6);
+
+      if (susan_principle_conf) {
+        susan_principle(in,r,bp,susan_max_no_corners,x_size,y_size);
+        susan_int_to_uchar(r,in,x_size*y_size);
+      } else {
+        if(susan_susan_quick)
+          susan_corners_quick(in,r,bp,susan_max_no_corners,corner_list,x_size,y_size);
+        else
+          susan_corners(in,r,bp,susan_max_no_corners,corner_list,x_size,y_size);
+        susan_corner_draw(in,corner_list,x_size,susan_drawing_mode);
+      }
+
+      break;
+  }
+
+  susan_put_image(x_size,y_size);
+}
+
+void susan_init( void )
+{
+  volatile int a = 0;
+  susan_file.data = susan_input;
+  susan_file.size = 7292;
+  susan_file.size += a;
+  susan_file.cur_pos = 0;
+  susan_file.cur_pos += a;
+
+  susan_dt = 4.0;
+  susan_dt += a;
+  susan_bt = 20;
+  susan_bt += a;
+  susan_principle_conf = 0;
+  susan_principle_conf += a;
+  susan_thin_post_proc = 1;
+  susan_thin_post_proc += a;
+  susan_three_by_three = 0;
+  susan_three_by_three += a;
+  susan_drawing_mode = 0;
+  susan_drawing_mode += a;
+  susan_susan_quick = 0;
+  susan_susan_quick += a;
+  susan_max_no_corners = 50;
+  susan_max_no_corners += a;
+  susan_max_no_edges = 50;
+  susan_max_no_edges += a;
 
   // mode=0; /* Smoothing mode */
   // mode=1; /* Edges mode */
   // mode=2; /* Corners mode */
-  
+
   // principle=1; /* Output initial enhancement image only; corners or edges mode (default is edges mode) */
   // thin_post_proc=0; /* No post-processing on the binary edge map (runs much faster); edges mode */
 	// drawing_mode=1; /* Mark corners/edges with single black points instead of black with white border; corners or edges mode */
@@ -1845,81 +1980,27 @@ void call_susan( struct wccFILE *inputFile, int mode )
 	// susan_quick=1; /* Use faster (and usually stabler) corner mode; edge-like corner suppression not carried out; corners mode */
 	// dt=10.0; /* Distance threshold, smoothing mode, (default=4) */
   // bt=50; /* Brightness threshold, all modes, (default=20) */
-	
-  if (dt<0) three_by_three=1;
-	if ( (principle==1) && (mode==0) )
-    mode=1;
-
-  switch (mode) {
-    case 0:
-      /* {{{ smoothing */
-
-      setup_brightness_lut(&bp,bt,2);
-      susan_smoothing(three_by_three,in,dt,x_size,y_size,bp);
-      
-      break;
-    case 1:
-      /* {{{ edges */
-
-      r   = (char *) wccmalloc(x_size * y_size);
-      setup_brightness_lut(&bp,bt,6);
-
-      if (principle) {
-        if (three_by_three)
-          susan_principle_small(in,r,bp,max_no_edges,x_size,y_size);
-        else
-          susan_principle(in,r,bp,max_no_edges,x_size,y_size);
-        int_to_uchar(r,in,x_size*y_size);
-      } else {
-        mid = (uchar *)wccmalloc(x_size*y_size);
-        wccmemset(mid,100,x_size * y_size); /* note not set to zero */
-
-        if (three_by_three)
-          susan_edges_small(in,r,mid,bp,max_no_edges,x_size,y_size);
-        else
-          susan_edges(in,r,mid,bp,max_no_edges,x_size,y_size);
-        if(thin_post_proc)
-          susan_thin(r,mid,x_size,y_size);
-        edge_draw(in,mid,x_size,y_size,drawing_mode);
-      }
-
-      break;
-    case 2:
-      /* {{{ corners */
-
-      r   = (char *) wccmalloc(x_size * y_size);
-      setup_brightness_lut(&bp,bt,6);
-
-      if (principle) {
-        susan_principle(in,r,bp,max_no_corners,x_size,y_size);
-        int_to_uchar(r,in,x_size*y_size);
-      } else {
-        if(susan_quick)
-          susan_corners_quick(in,r,bp,max_no_corners,corner_list,x_size,y_size);
-        else
-          susan_corners(in,r,bp,max_no_corners,corner_list,x_size,y_size);
-        corner_draw(in,corner_list,x_size,drawing_mode);
-      }
-
-      break;
-  }
-
-  put_image(in,x_size,y_size);
 }
 
-int main( void ) 
+void susan_main( void )
 {
-  struct wccFILE file;
-  file.data = input;
-  file.size = 7292;
-  file.cur_pos = 0;
+  susan_call_susan( &susan_file, 0 );
+  susan_wccfreeall();
+  susan_call_susan( &susan_file, 1 );
+  susan_wccfreeall();
+  susan_call_susan( &susan_file, 2 );
+  susan_wccfreeall();
+}
 
-  call_susan( &file, 0 );
-  wccfreeall();
-  call_susan( &file, 1 );
-  wccfreeall();
-  call_susan( &file, 2 );
-  wccfreeall();
-  
+int susan_return( void )
+{
   return 0;
+}
+
+int main( void )
+{
+  susan_init();
+  susan_main();
+
+  return susan_return();
 }

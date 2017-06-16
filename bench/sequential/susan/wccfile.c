@@ -1,9 +1,9 @@
-#define size_t unsigned long
+#include "wccfile.h"
 #define EOF -1
 
-size_t wccfread(void* ptr, size_t size, size_t count, struct wccFILE* stream)
+size_t susan_wccfread(void* ptr, size_t size, size_t count, struct wccFILE* stream)
 {
-  if ( wccfeof( stream ) ) {
+  if ( susan_wccfeof( stream ) ) {
     return EOF;
   }
   
@@ -19,24 +19,24 @@ size_t wccfread(void* ptr, size_t size, size_t count, struct wccFILE* stream)
   return number_of_chars_to_read;
 }
 
-int wccfgetc(struct wccFILE *stream)
+int susan_wccfgetc(struct wccFILE *stream)
 {
-  if ( wccfeof( stream ) ) {
+  if ( susan_wccfeof( stream ) ) {
     return EOF;
   } else {
     return stream->data[stream->cur_pos++];
   }
 }
 
-char *wccfgets(char *str, int num, struct wccFILE *stream )
+char *susan_wccfgets(char *str, int num, struct wccFILE *stream )
 {
-  if ( !stream || wccfeof( stream ) || !str || num <= 0 ) {
+  if ( !stream || susan_wccfeof( stream ) || !str || num <= 0 ) {
     return 0;
   }
   
   int pos = 0;
   _Pragma( "loopbound min 58 max 58" )
-  while ( pos < num - 1 && !wccfeof( stream ) ) {
+  while ( pos < num - 1 && !susan_wccfeof( stream ) ) {
     str[pos] = stream->data[stream->cur_pos];
     if ( str[pos] == '\n' ) {
       break;
@@ -50,7 +50,7 @@ char *wccfgets(char *str, int num, struct wccFILE *stream )
   return str;
 }
 
-int wccfseek(struct wccFILE* stream, long int offset, enum _Origin_ origin)
+int susan_wccfseek(struct wccFILE* stream, long int offset, enum _Origin_ origin)
 {
   if (origin == WCCSEEK_SET) {
     stream->cur_pos = offset;
@@ -66,14 +66,14 @@ int wccfseek(struct wccFILE* stream, long int offset, enum _Origin_ origin)
 }
 
 
-int wccfgetpos(struct wccFILE* stream, unsigned* position)
+int susan_wccfgetpos(struct wccFILE* stream, unsigned* position)
 {
   *position = stream->cur_pos;
   return 0;
 }
 
 
-int wccfeof(struct wccFILE* stream)
+int susan_wccfeof(struct wccFILE* stream)
 {
   return stream->cur_pos == stream->size ? 1 : 0;
 }

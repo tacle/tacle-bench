@@ -1,0 +1,8 @@
+2017-07-04
+ - Removed self-assignment to avoid clangs self-assign warning.
+ - Introduced susan_initm susan_main and susan_return.
+ - Fix possible division by zero to please tacle-lint.
+ - Removed unused variables.
+ - Added prefix 'susan_'.
+ - Removed exit_on_error function.
+ - Removed PowerPC specific typedef.

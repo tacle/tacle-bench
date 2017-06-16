@@ -3,26 +3,26 @@
 // This must be redefined for each new benchmark
 #define HEAP_SIZE 30000
 
-char simulated_heap[HEAP_SIZE];
-unsigned int freeHeapPos;
+char susan_simulated_heap[HEAP_SIZE];
+unsigned int susan_freeHeapPos;
 
-void* wccmalloc( unsigned int numberOfBytes )
+void* susan_wccmalloc( unsigned int numberOfBytes )
 {
   // Get a 4-byte adress for alignment purposes
-  unsigned int offset = ( (unsigned int)simulated_heap + freeHeapPos ) % 4;
+  unsigned int offset = ( (unsigned long)susan_simulated_heap + susan_freeHeapPos ) % 4;
   if ( offset ) {
-    freeHeapPos += 4 - offset;
+    susan_freeHeapPos += 4 - offset;
   }
-  void* currentPos = (void*)&simulated_heap[freeHeapPos];
-  freeHeapPos += numberOfBytes;
+  void* currentPos = (void*)&susan_simulated_heap[susan_freeHeapPos];
+  susan_freeHeapPos += numberOfBytes;
   return currentPos;
 }
-void wccfreeall( void ) 
+void susan_wccfreeall( void ) 
 {
-  freeHeapPos = 0;
+  susan_freeHeapPos = 0;
 }
 
-void* wccmemcpy(void* dstpp, const void* srcpp, unsigned int len)
+void* susan_wccmemcpy(void* dstpp, const void* srcpp, unsigned int len)
 {
   unsigned long int dstp = (long int) dstpp;
   unsigned long int srcp = (long int) srcpp;
@@ -39,7 +39,7 @@ void* wccmemcpy(void* dstpp, const void* srcpp, unsigned int len)
   return dstpp;
 }
 
-void wccmemset( void *p, int value, unsigned int num )
+void susan_wccmemset( void *p, int value, unsigned int num )
 {
   unsigned long i;
   char *char_ptr = (char*)p;
