@@ -194,8 +194,10 @@ int md5_R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, uns
 void md5_InitRandomStruct ( R_RANDOM_STRUCT *randomStruct );
 int md5_R_GetRandomBytesNeeded ( unsigned int *bytesNeeded, R_RANDOM_STRUCT *randomStruct );
 
-int md5_main(void);
+void md5_main(void);
 void md5_init(void);
+int md5_return(void);
+int md5_bytesNeeded;
 
 int main(void);
 
@@ -550,7 +552,6 @@ int md5_R_RandomUpdate (R_RANDOM_STRUCT *randomStruct, unsigned char *block, uns
   /* Zeroize sensitive information.
    */
   md5_R_memset ((POINTER)digest, 0, sizeof (digest));
-  x = 0;
   
   return (0);
 }
@@ -595,7 +596,12 @@ void md5_init( void )
   // no initialisation needed
 }
 
-int _Pragma( "entrypoint" ) md5_main( void )
+int md5_return( void )
+{
+  return md5_bytesNeeded;
+}
+
+void _Pragma( "entrypoint" ) md5_main( void )
 {
   R_RANDOM_STRUCT randomStruct;
   R_RANDOM_STRUCT randomStruct2;
@@ -610,16 +616,14 @@ int _Pragma( "entrypoint" ) md5_main( void )
       md5_InitRandomStruct (&randomStruct2);
   }
 
-  int ret = randomStruct.bytesNeeded + randomStruct2.bytesNeeded;
-
-  return ret;
+  md5_bytesNeeded = randomStruct.bytesNeeded + randomStruct2.bytesNeeded;
 }
 
 int main( void )
 {
   md5_init();
-  int ret = md5_main();
+  md5_main();
   // printf("%d\n", ret);
-  return ret;
+  return md5_return();
 }
 

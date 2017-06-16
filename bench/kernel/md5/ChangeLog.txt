@@ -12,3 +12,6 @@ Original w O3L 26823249
 2016-05-19
 - Applied Wolfgang's patch to increase context->state to avoid
   wrong indexing in encode that is called for 16 elements.
+
+2017-06-27
+- Introduce md5_return function and update type signature of md5_main.
