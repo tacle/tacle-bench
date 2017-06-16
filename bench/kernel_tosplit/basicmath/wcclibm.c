@@ -18,19 +18,19 @@
    Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
 */
 
-static const float pi =  3.1415925026e+00f,      /* 0x40490fda */
-                   pio2_hi =  1.5707962513e+00f, /* 0x3fc90fda */
-                   pio2_lo =  7.5497894159e-08f, /* 0x33a22168 */
-                   pS0 =  1.6666667163e-01f,     /* 0x3e2aaaab */
-                   pS1 = -3.2556581497e-01f,     /* 0xbea6b090 */
-                   pS2 =  2.0121252537e-01f,     /* 0x3e4e0aa8 */
-                   pS3 = -4.0055535734e-02f,     /* 0xbd241146 */
-                   pS4 =  7.9153501429e-04f,     /* 0x3a4f7f04 */
-                   pS5 =  3.4793309169e-05f,     /* 0x3811ef08 */
-                   qS1 = -2.4033949375e+00f,     /* 0xc019d139 */
-                   qS2 =  2.0209457874e+00f,     /* 0x4001572d */
-                   qS3 = -6.8828397989e-01f,     /* 0xbf303361 */
-                   qS4 =  7.7038154006e-02f;     /* 0x3d9dc62e */
+static const float basicmath_pi =  3.1415925026e+00f,      /* 0x40490fda */
+                   basicmath_pio2_hi =  1.5707962513e+00f, /* 0x3fc90fda */
+                   basicmath_pio2_lo =  7.5497894159e-08f, /* 0x33a22168 */
+                   basicmath_pS0 =  1.6666667163e-01f,     /* 0x3e2aaaab */
+                   basicmath_pS1 = -3.2556581497e-01f,     /* 0xbea6b090 */
+                   basicmath_pS2 =  2.0121252537e-01f,     /* 0x3e4e0aa8 */
+                   basicmath_pS3 = -4.0055535734e-02f,     /* 0xbd241146 */
+                   basicmath_pS4 =  7.9153501429e-04f,     /* 0x3a4f7f04 */
+                   basicmath_pS5 =  3.4793309169e-05f,     /* 0x3811ef08 */
+                   basicmath_qS1 = -2.4033949375e+00f,     /* 0xc019d139 */
+                   basicmath_qS2 =  2.0209457874e+00f,     /* 0x4001572d */
+                   basicmath_qS3 = -6.8828397989e-01f,     /* 0xbf303361 */
+                   basicmath_qS4 =  7.7038154006e-02f;     /* 0x3d9dc62e */
 
 float basicmath___ieee754_acosf( float x )
 {
@@ -40,40 +40,40 @@ float basicmath___ieee754_acosf( float x )
   ix = hx & 0x7fffffff;
   if ( ix == 0x3f800000 ) { /* |x|==1 */
     if ( hx > 0 ) return 0.0f; /* acos(1) = 0  */
-    else return pi + ( float )2.0f * pio2_lo; /* acos(-1)= pi */
+    else return basicmath_pi + ( float )2.0f * basicmath_pio2_lo; /* acos(-1)= pi */
   } else
     if ( ix > 0x3f800000 ) { /* |x| >= 1 */
       return ( x - x ) / ( x - x ); /* acos(|x|>1) is NaN */
     }
   if ( ix < 0x3f000000 ) { /* |x| < 0.5 */
-    if ( ix <= 0x23000000 ) return pio2_hi + pio2_lo; /*if|x|<2**-57*/
+    if ( ix <= 0x23000000 ) return basicmath_pio2_hi + basicmath_pio2_lo; /*if|x|<2**-57*/
     z = x * x;
-    p = z * ( pS0 + z * ( pS1 + z * ( pS2 + z * ( pS3 + z *
-                                      ( pS4 + z * pS5 ) ) ) ) );
-    q = one + z * ( qS1 + z * ( qS2 + z * ( qS3 + z * qS4 ) ) );
+    p = z * ( basicmath_pS0 + z * ( basicmath_pS1 + z * ( basicmath_pS2 + z * ( basicmath_pS3 + z *
+                                      ( basicmath_pS4 + z * basicmath_pS5 ) ) ) ) );
+    q = basicmath_one + z * ( basicmath_qS1 + z * ( basicmath_qS2 + z * ( basicmath_qS3 + z * basicmath_qS4 ) ) );
     r = p / q;
-    return pio2_hi - ( x - ( pio2_lo - x * r ) );
+    return basicmath_pio2_hi - ( x - ( basicmath_pio2_lo - x * r ) );
   } else
     if ( hx < 0 ) { /* x < -0.5 */
-      z = ( one + x ) * ( float )0.5f;
-      p = z * ( pS0 + z * ( pS1 + z * ( pS2 + z * ( pS3 + z *
-                                        ( pS4 + z * pS5 ) ) ) ) );
-      q = one + z * ( qS1 + z * ( qS2 + z * ( qS3 + z * qS4 ) ) );
+      z = ( basicmath_one + x ) * ( float )0.5f;
+      p = z * ( basicmath_pS0 + z * ( basicmath_pS1 + z * ( basicmath_pS2 + z * ( basicmath_pS3 + z *
+                                        ( basicmath_pS4 + z * basicmath_pS5 ) ) ) ) );
+      q = basicmath_one + z * ( basicmath_qS1 + z * ( basicmath_qS2 + z * ( basicmath_qS3 + z * basicmath_qS4 ) ) );
       s = basicmath___ieee754_sqrtf( z );
       r = p / q;
-      w = r * s - pio2_lo;
-      return pi - ( float )2.0f * ( s + w );
+      w = r * s - basicmath_pio2_lo;
+      return basicmath_pi - ( float )2.0f * ( s + w );
     } else {      /* x > 0.5 */
       int32_t idf;
-      z = ( one - x ) * ( float )0.5f;
+      z = ( basicmath_one - x ) * ( float )0.5f;
       s = basicmath___ieee754_sqrtf( z );
       df = s;
       GET_FLOAT_WORD( idf, df );
       SET_FLOAT_WORD( df, idf & 0xfffff000 );
       c  = ( z - df * df ) / ( s + df );
-      p = z * ( pS0 + z * ( pS1 + z * ( pS2 + z * ( pS3 + z *
-                                        ( pS4 + z * pS5 ) ) ) ) );
-      q = one + z * ( qS1 + z * ( qS2 + z * ( qS3 + z * qS4 ) ) );
+      p = z * ( basicmath_pS0 + z * ( basicmath_pS1 + z * ( basicmath_pS2 + z * ( basicmath_pS3 + z *
+                                        ( basicmath_pS4 + z * basicmath_pS5 ) ) ) ) );
+      q = basicmath_one + z * ( basicmath_qS1 + z * ( basicmath_qS2 + z * ( basicmath_qS3 + z * basicmath_qS4 ) ) );
       r = p / q;
       w = r * s + c;
       return ( float )2.0f * ( df + w );
@@ -85,31 +85,31 @@ float basicmath___ieee754_acosf( float x )
    Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
 */
 
-static const float bp[] = {1.0f, 1.5f,},
-                   dp_h[] = { 0.0f, 5.84960938e-01f,}, /* 0x3f15c000 */
-                   dp_l[] = { 0.0f, 1.56322085e-06f,}, /* 0x35d1cfdc */
+static const float basicmath_bp[] = {1.0f, 1.5f,},
+                   basicmath_dp_h[] = { 0.0f, 5.84960938e-01f,}, /* 0x3f15c000 */
+                   basicmath_dp_l[] = { 0.0f, 1.56322085e-06f,}, /* 0x35d1cfdc */
                    /* poly coefs for (3/2)*(log(x)-2s-2/3*s**3 */
-                   L1      =  6.0000002384e-01f, /* 0x3f19999a */
-                   L2      =  4.2857143283e-01f, /* 0x3edb6db7 */
-                   L3      =  3.3333334327e-01f, /* 0x3eaaaaab */
-                   L4      =  2.7272811532e-01f, /* 0x3e8ba305 */
-                   L5      =  2.3066075146e-01f, /* 0x3e6c3255 */
-                   L6      =  2.0697501302e-01f, /* 0x3e53f142 */
-                   P1      =  1.6666667163e-01f, /* 0x3e2aaaab */
-                   P2      = -2.7777778450e-03f, /* 0xbb360b61 */
-                   P3      =  6.6137559770e-05f, /* 0x388ab355 */
-                   P4      = -1.6533901999e-06f, /* 0xb5ddea0e */
-                   P5      =  4.1381369442e-08f, /* 0x3331bb4c */
-                   lg2     =  6.9314718246e-01f, /* 0x3f317218 */
-                   lg2_h   =  6.93145752e-01f,   /* 0x3f317200 */
-                   lg2_l   =  1.42860654e-06f,   /* 0x35bfbe8c */
-                   ovt     =  4.2995665694e-08f, /* -(128-log2(ovfl+.5ulp)) */
-                   cp      =  9.6179670095e-01f, /* 0x3f76384f =2/(3ln2) */
-                   cp_h    =  9.6179199219e-01f, /* 0x3f763800 =head of cp */
-                   cp_l    =  4.7017383622e-06f, /* 0x369dc3a0 =tail of cp_h */
-                   ivln2   =  1.4426950216e+00f, /* 0x3fb8aa3b =1/ln2 */
-                   ivln2_h =  1.4426879883e+00f, /* 0x3fb8aa00 =16b 1/ln2*/
-                   ivln2_l =  7.0526075433e-06f; /* 0x36eca570 =1/ln2 tail*/
+                   basicmath_L1      =  6.0000002384e-01f, /* 0x3f19999a */
+                   basicmath_L2      =  4.2857143283e-01f, /* 0x3edb6db7 */
+                   basicmath_L3      =  3.3333334327e-01f, /* 0x3eaaaaab */
+                   basicmath_L4      =  2.7272811532e-01f, /* 0x3e8ba305 */
+                   basicmath_L5      =  2.3066075146e-01f, /* 0x3e6c3255 */
+                   basicmath_L6      =  2.0697501302e-01f, /* 0x3e53f142 */
+                   basicmath_P1      =  1.6666667163e-01f, /* 0x3e2aaaab */
+                   basicmath_P2      = -2.7777778450e-03f, /* 0xbb360b61 */
+                   basicmath_P3      =  6.6137559770e-05f, /* 0x388ab355 */
+                   basicmath_P4      = -1.6533901999e-06f, /* 0xb5ddea0e */
+                   basicmath_P5      =  4.1381369442e-08f, /* 0x3331bb4c */
+                   basicmath_lg2     =  6.9314718246e-01f, /* 0x3f317218 */
+                   basicmath_lg2_h   =  6.93145752e-01f,   /* 0x3f317200 */
+                   basicmath_lg2_l   =  1.42860654e-06f,   /* 0x35bfbe8c */
+                   basicmath_ovt     =  4.2995665694e-08f, /* -(128-log2(ovfl+.5ulp)) */
+                   basicmath_cp      =  9.6179670095e-01f, /* 0x3f76384f =2/(3ln2) */
+                   basicmath_cp_h    =  9.6179199219e-01f, /* 0x3f763800 =head of cp */
+                   basicmath_cp_l    =  4.7017383622e-06f, /* 0x369dc3a0 =tail of cp_h */
+                   basicmath_ivln2   =  1.4426950216e+00f, /* 0x3fb8aa3b =1/ln2 */
+                   basicmath_ivln2_h =  1.4426879883e+00f, /* 0x3fb8aa00 =16b 1/ln2*/
+                   basicmath_ivln2_l =  7.0526075433e-06f; /* 0x36eca570 =1/ln2 tail*/
 
 float basicmath___ieee754_powf( float x, float y )
 {
@@ -124,11 +124,11 @@ float basicmath___ieee754_powf( float x, float y )
   iy = hy & 0x7fffffff;
 
   /* y==zero: x**0 = 1 */
-  if ( iy == 0 ) return one;
+  if ( iy == 0 ) return basicmath_one;
 
   /* x==+-1 */
-  if ( x == 1.0f ) return one;
-  if ( x == -1.0f && basicmath___isinff( y ) ) return one;
+  if ( x == 1.0f ) return basicmath_one;
+  if ( x == -1.0f && basicmath___isinff( y ) ) return basicmath_one;
 
   /* +-NaN return x+y */
   if ( ix > 0x7f800000 ||
@@ -157,12 +157,12 @@ float basicmath___ieee754_powf( float x, float y )
       return  y - y;  /* inf**+-1 is NaN */
     else
       if ( ix > 0x3f800000 ) /* (|x|>1)**+-inf = inf,0 */
-        return ( hy >= 0 ) ? y : zero;
+        return ( hy >= 0 ) ? y : basicmath_zero;
       else      /* (|x|<1)**-,+inf = inf,0 */
-        return ( hy < 0 ) ? -y : zero;
+        return ( hy < 0 ) ? -y : basicmath_zero;
   }
   if ( iy == 0x3f800000 ) { /* y is  +-1 */
-    if ( hy < 0 ) return one / x;
+    if ( hy < 0 ) return basicmath_one / x;
     else return x;
   }
   if ( hy == 0x40000000 ) return x * x; /* y is  2 */
@@ -175,7 +175,7 @@ float basicmath___ieee754_powf( float x, float y )
   /* special value of x */
   if ( ix == 0x7f800000 || ix == 0 || ix == 0x3f800000 ) {
     z = ax;     /*x is +-0,+-inf,+-1*/
-    if ( hy < 0 ) z = one / z; /* z = (1/|x|) */
+    if ( hy < 0 ) z = basicmath_one / z; /* z = (1/|x|) */
     if ( hx < 0 ) {
       if ( ( ( ix - 0x3f800000 ) | yisint ) == 0 ) {
         z = ( z - z ) / ( z - z ); /* (-1)**non-int is NaN */
@@ -193,15 +193,15 @@ float basicmath___ieee754_powf( float x, float y )
   /* |y| is huge */
   if ( iy > 0x4d000000 ) { /* if |y| > 2**27 */
     /* over/underflow if x is not close to one */
-    if ( ix < 0x3f7ffff8 ) return ( hy < 0 ) ? huge * huge : tiny * tiny;
-    if ( ix > 0x3f800007 ) return ( hy > 0 ) ? huge * huge : tiny * tiny;
+    if ( ix < 0x3f7ffff8 ) return ( hy < 0 ) ? basicmath_huge * basicmath_huge : basicmath_tiny * basicmath_tiny;
+    if ( ix > 0x3f800007 ) return ( hy > 0 ) ? basicmath_huge * basicmath_huge : basicmath_tiny * basicmath_tiny;
     /* now |1-x| is tiny <= 2**-20, suffice to compute
        log(x) by x-x^2/2+x^3/3-x^4/4 */
     t = x - 1;  /* t has 20 trailing zeros */
     w = ( t * t ) * ( ( float )0.5f - t * ( ( float )0.333333333333f - t *
                                             ( float )0.25f ) );
-    u = ivln2_h * t; /* ivln2_h has 16 sig. bits */
-    v = t * ivln2_l - w * ivln2;
+    u = basicmath_ivln2_h * t; /* ivln2_h has 16 sig. bits */
+    v = t * basicmath_ivln2_l - w * basicmath_ivln2;
     t1 = u + v;
     GET_FLOAT_WORD( is, t1 );
     SET_FLOAT_WORD( t1, is & 0xfffff000 );
@@ -211,7 +211,7 @@ float basicmath___ieee754_powf( float x, float y )
     n = 0;
     /* take care subnormal number */
     if ( ix < 0x00800000 ) {
-      ax *= two24;
+      ax *= basicmath_two24;
       n -= 24;
       GET_FLOAT_WORD( ix, ax );
     }
@@ -230,20 +230,20 @@ float basicmath___ieee754_powf( float x, float y )
     SET_FLOAT_WORD( ax, ix );
 
     /* compute s = s_h+s_l = (x-1)/(x+1) or (x-1.5)/(x+1.5) */
-    u = ax - bp[k]; /* bp[0]=1.0, bp[1]=1.5 */
-    v = one / ( ax + bp[k] );
+    u = ax - basicmath_bp[k]; /* bp[0]=1.0, bp[1]=1.5 */
+    v = basicmath_one / ( ax + basicmath_bp[k] );
     s = u * v;
     s_h = s;
     GET_FLOAT_WORD( is, s_h );
     SET_FLOAT_WORD( s_h, is & 0xfffff000 );
     /* t_h=ax+bp[k] High */
     SET_FLOAT_WORD( t_h, ( ( ix >> 1 ) | 0x20000000 ) + 0x0040000 + ( k << 21 ) );
-    t_l = ax - ( t_h - bp[k] );
+    t_l = ax - ( t_h - basicmath_bp[k] );
     s_l = v * ( ( u - s_h * t_h ) - s_h * t_l );
     /* compute log(ax) */
     s2 = s * s;
-    r = s2 * s2 * ( L1 + s2 * ( L2 + s2 * ( L3 + s2 * ( L4 + s2 *
-                                            ( L5 + s2 * L6 ) ) ) ) );
+    r = s2 * s2 * ( basicmath_L1 + s2 * ( basicmath_L2 + s2 * ( basicmath_L3 + s2 * ( basicmath_L4 + s2 *
+                                            ( basicmath_L5 + s2 * basicmath_L6 ) ) ) ) );
     r += s_l * ( s_h + s );
     s2  = s_h * s_h;
     t_h = ( float )3.0f + s2 + r;
@@ -258,19 +258,19 @@ float basicmath___ieee754_powf( float x, float y )
     GET_FLOAT_WORD( is, p_h );
     SET_FLOAT_WORD( p_h, is & 0xfffff000 );
     p_l = v - ( p_h - u );
-    z_h = cp_h * p_h; /* cp_h+cp_l = 2/(3*log2) */
-    z_l = cp_l * p_h + p_l * cp + dp_l[k];
+    z_h = basicmath_cp_h * p_h; /* cp_h+cp_l = 2/(3*log2) */
+    z_l = basicmath_cp_l * p_h + p_l * basicmath_cp + basicmath_dp_l[k];
     /* log2(ax) = (s+..)*2/(3*log2) = n + dp_h + z_h + z_l */
     t = ( float )n;
-    t1 = ( ( ( z_h + z_l ) + dp_h[k] ) + t );
+    t1 = ( ( ( z_h + z_l ) + basicmath_dp_h[k] ) + t );
     GET_FLOAT_WORD( is, t1 );
     SET_FLOAT_WORD( t1, is & 0xfffff000 );
-    t2 = z_l - ( ( ( t1 - t ) - dp_h[k] ) - z_h );
+    t2 = z_l - ( ( ( t1 - t ) - basicmath_dp_h[k] ) - z_h );
   }
 
-  s = one; /* s (sign of result -ve**odd) = -1 else = 1 */
+  s = basicmath_one; /* s (sign of result -ve**odd) = -1 else = 1 */
   if ( ( ( ( ( u_int32_t )hx >> 31 ) - 1 ) | ( yisint - 1 ) ) == 0 )
-    s = -one; /* (-ve)**(odd int) */
+    s = -basicmath_one; /* (-ve)**(odd int) */
 
   /* split up y into y1+y2 and compute (y1+y2)*(t1+t2) */
   GET_FLOAT_WORD( is, y );
@@ -280,16 +280,16 @@ float basicmath___ieee754_powf( float x, float y )
   z = p_l + p_h;
   GET_FLOAT_WORD( j, z );
   if ( j > 0x43000000 )   /* if z > 128 */
-    return s * huge * huge;   /* overflow */
+    return s * basicmath_huge * basicmath_huge;   /* overflow */
   else
     if ( j == 0x43000000 ) { /* if z == 128 */
-      if ( p_l + ovt > z - p_h ) return s * huge * huge; /* overflow */
+      if ( p_l + basicmath_ovt > z - p_h ) return s * basicmath_huge * basicmath_huge; /* overflow */
     } else
       if ( ( j & 0x7fffffff ) > 0x43160000 ) /* z <= -150 */
-        return s * tiny * tiny;   /* underflow */
+        return s * basicmath_tiny * basicmath_tiny;   /* underflow */
       else
         if ( ( u_int32_t ) j == 0xc3160000 ) { /* z == -150 */
-          if ( p_l <= z - p_h ) return s * tiny * tiny; /* underflow */
+          if ( p_l <= z - p_h ) return s * basicmath_tiny * basicmath_tiny; /* underflow */
         }
   /*
      compute 2**(p_h+p_l)
@@ -308,14 +308,14 @@ float basicmath___ieee754_powf( float x, float y )
   t = p_l + p_h;
   GET_FLOAT_WORD( is, t );
   SET_FLOAT_WORD( t, is & 0xfffff000 );
-  u = t * lg2_h;
-  v = ( p_l - ( t - p_h ) ) * lg2 + t * lg2_l;
+  u = t * basicmath_lg2_h;
+  v = ( p_l - ( t - p_h ) ) * basicmath_lg2 + t * basicmath_lg2_l;
   z = u + v;
   w = v - ( z - u );
   t  = z * z;
-  t1  = z - t * ( P1 + t * ( P2 + t * ( P3 + t * ( P4 + t * P5 ) ) ) );
-  r  = ( z * t1 ) / ( t1 - two ) - ( w + z * w );
-  z  = one - ( r - z );
+  t1  = z - t * ( basicmath_P1 + t * ( basicmath_P2 + t * ( basicmath_P3 + t * ( basicmath_P4 + t * basicmath_P5 ) ) ) );
+  r  = ( z * t1 ) / ( t1 - basicmath_two ) - ( w + z * w );
+  z  = basicmath_one - ( r - z );
   GET_FLOAT_WORD( j, z );
   j += ( n << 23 );
   if ( ( j >> 23 ) <= 0 ) z = basicmath___scalbnf( z, n ); /* subnormal output */
@@ -354,13 +354,13 @@ static const int32_t basicmath_npio2_hw[] = {
    pio2_3t:  pi/2 - (pio2_1+pio2_2+pio2_3)
 */
 
-static const float invpio2 =  6.3661980629e-01f, /* 0x3f22f984 */
-                   pio2_1  =  1.5707855225e+00f, /* 0x3fc90f80 */
-                   pio2_1t =  1.0804334124e-05f, /* 0x37354443 */
-                   pio2_2  =  1.0804273188e-05f, /* 0x37354400 */
-                   pio2_2t =  6.0770999344e-11f, /* 0x2e85a308 */
-                   pio2_3  =  6.0770943833e-11f, /* 0x2e85a300 */
-                   pio2_3t =  6.1232342629e-17f; /* 0x248d3132 */
+static const float basicmath_invpio2 =  6.3661980629e-01f, /* 0x3f22f984 */
+                   basicmath_pio2_1  =  1.5707855225e+00f, /* 0x3fc90f80 */
+                   basicmath_pio2_1t =  1.0804334124e-05f, /* 0x37354443 */
+                   basicmath_pio2_2  =  1.0804273188e-05f, /* 0x37354400 */
+                   basicmath_pio2_2t =  6.0770999344e-11f, /* 0x2e85a308 */
+                   basicmath_pio2_3  =  6.0770943833e-11f, /* 0x2e85a300 */
+                   basicmath_pio2_3t =  6.1232342629e-17f; /* 0x248d3132 */
 
 int32_t basicmath___ieee754_rem_pio2f( float x, float *y )
 {
@@ -376,35 +376,35 @@ int32_t basicmath___ieee754_rem_pio2f( float x, float *y )
   }
   if ( ix < 0x4016cbe4 ) { /* |x| < 3pi/4, special case with n=+-1 */
     if ( hx > 0 ) {
-      z = x - pio2_1;
+      z = x - basicmath_pio2_1;
       if ( ( ix & 0xfffffff0 ) != 0x3fc90fd0 ) { /* 24+24 bit pi OK */
-        y[0] = z - pio2_1t;
-        y[1] = ( z - y[0] ) - pio2_1t;
+        y[0] = z - basicmath_pio2_1t;
+        y[1] = ( z - y[0] ) - basicmath_pio2_1t;
       } else {    /* near pi/2, use 24+24+24 bit pi */
-        z -= pio2_2;
-        y[0] = z - pio2_2t;
-        y[1] = ( z - y[0] ) - pio2_2t;
+        z -= basicmath_pio2_2;
+        y[0] = z - basicmath_pio2_2t;
+        y[1] = ( z - y[0] ) - basicmath_pio2_2t;
       }
       return 1;
     } else {  /* negative x */
-      z = x + pio2_1;
+      z = x + basicmath_pio2_1;
       if ( ( ix & 0xfffffff0 ) != 0x3fc90fd0 ) { /* 24+24 bit pi OK */
-        y[0] = z + pio2_1t;
-        y[1] = ( z - y[0] ) + pio2_1t;
+        y[0] = z + basicmath_pio2_1t;
+        y[1] = ( z - y[0] ) + basicmath_pio2_1t;
       } else {    /* near pi/2, use 24+24+24 bit pi */
-        z += pio2_2;
-        y[0] = z + pio2_2t;
-        y[1] = ( z - y[0] ) + pio2_2t;
+        z += basicmath_pio2_2;
+        y[0] = z + basicmath_pio2_2t;
+        y[1] = ( z - y[0] ) + basicmath_pio2_2t;
       }
       return -1;
     }
   }
   if ( ix <= 0x43490f80 ) { /* |x| ~<= 2^7*(pi/2), medium size */
     t  = basicmath___fabsf( x );
-    n  = ( int32_t ) ( t * invpio2 + half );
+    n  = ( int32_t ) ( t * basicmath_invpio2 + basicmath_half );
     fn = ( float )n;
-    r  = t - fn * pio2_1;
-    w  = fn * pio2_1t; /* 1st round good to 40 bit */
+    r  = t - fn * basicmath_pio2_1;
+    w  = fn * basicmath_pio2_1t; /* 1st round good to 40 bit */
     if ( n < 32 && ( int32_t )( ix & 0xffffff00 ) != basicmath_npio2_hw[n - 1] ) {
       y[0] = r - w; /* quick check no cancellation */
     } else {
@@ -415,17 +415,17 @@ int32_t basicmath___ieee754_rem_pio2f( float x, float *y )
       i = j - ( ( high >> 23 ) & 0xff );
       if ( i > 8 ) { /* 2nd iteration needed, good to 57 */
         t  = r;
-        w  = fn * pio2_2;
+        w  = fn * basicmath_pio2_2;
         r  = t - w;
-        w  = fn * pio2_2t - ( ( t - r ) - w );
+        w  = fn * basicmath_pio2_2t - ( ( t - r ) - w );
         y[0] = r - w;
         GET_FLOAT_WORD( high, y[0] );
         i = j - ( ( high >> 23 ) & 0xff );
         if ( i > 25 )  { /* 3rd iteration need, 74 bits acc */
           t  = r; /* will cover all possible cases */
-          w  = fn * pio2_3;
+          w  = fn * basicmath_pio2_3;
           r  = t - w;
-          w  = fn * pio2_3t - ( ( t - r ) - w );
+          w  = fn * basicmath_pio2_3t - ( ( t - r ) - w );
           y[0] = r - w;
         }
       }
@@ -448,6 +448,7 @@ int32_t basicmath___ieee754_rem_pio2f( float x, float *y )
   // This will never happen in basicmath_small, because
   // up to this point we have already returned a value
   // for each of the possible inputs
+  y[0] = y[1] = x - x; /* dummy initialization */
   return 0;
 }
 
@@ -510,10 +511,10 @@ float basicmath___ieee754_sqrtf( float x )
 
   /* use floating add to find out rounding direction */
   if ( ix != 0 ) {
-    z = one - tiny; /* trigger inexact flag */
-    if ( z >= one ) {
-      z = one + tiny;
-      if ( z > one )
+    z = basicmath_one - basicmath_tiny; /* trigger inexact flag */
+    if ( z >= basicmath_one ) {
+      z = basicmath_one + basicmath_tiny;
+      if ( z > basicmath_one )
         q += 2;
       else
         q += ( q & 1 );
@@ -530,12 +531,12 @@ float basicmath___ieee754_sqrtf( float x )
    Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
 */
 
-static const float C1  =  4.1666667908e-02f, /* 0x3d2aaaab */
-                   C2  = -1.3888889225e-03f, /* 0xbab60b61 */
-                   C3  =  2.4801587642e-05f, /* 0x37d00d01 */
-                   C4  = -2.7557314297e-07f, /* 0xb493f27c */
-                   C5  =  2.0875723372e-09f, /* 0x310f74f6 */
-                   C6  = -1.1359647598e-11f; /* 0xad47d74e */
+static const float basicmath_C1  =  4.1666667908e-02f, /* 0x3d2aaaab */
+                   basicmath_C2  = -1.3888889225e-03f, /* 0xbab60b61 */
+                   basicmath_C3  =  2.4801587642e-05f, /* 0x37d00d01 */
+                   basicmath_C4  = -2.7557314297e-07f, /* 0xb493f27c */
+                   basicmath_C5  =  2.0875723372e-09f, /* 0x310f74f6 */
+                   basicmath_C6  = -1.1359647598e-11f; /* 0xad47d74e */
 
 float basicmath___kernel_cosf( float x, float y )
 {
@@ -544,12 +545,12 @@ float basicmath___kernel_cosf( float x, float y )
   GET_FLOAT_WORD( ix, x );
   ix &= 0x7fffffff;     /* ix = |x|'s high word*/
   if ( ix < 0x32000000 ) { /* if x < 2**27 */
-    if ( ( ( int )x ) == 0 ) return one; /* generate inexact */
+    if ( ( ( int )x ) == 0 ) return basicmath_one; /* generate inexact */
   }
   z  = x * x;
-  r  = z * ( C1 + z * ( C2 + z * ( C3 + z * ( C4 + z * ( C5 + z * C6 ) ) ) ) );
+  r  = z * ( basicmath_C1 + z * ( basicmath_C2 + z * ( basicmath_C3 + z * ( basicmath_C4 + z * ( basicmath_C5 + z * basicmath_C6 ) ) ) ) );
   if ( ix < 0x3e99999a )    /* if |x| < 0.3 */
-    return one - ( ( float )0.5f * z - ( z * r - x * y ) );
+    return basicmath_one - ( ( float )0.5f * z - ( z * r - x * y ) );
   else {
     if ( ix > 0x3f480000 )  /* x > 0.78125 */
       qx = ( float )0.28125f;
@@ -557,7 +558,7 @@ float basicmath___kernel_cosf( float x, float y )
       SET_FLOAT_WORD( qx, ix - 0x01000000 ); /* x/4 */
     }
     hz = ( float )0.5f * z - qx;
-    a  = one - qx;
+    a  = basicmath_one - qx;
     return a - ( hz - ( z * r - x * y ) );
   }
 }
@@ -567,12 +568,12 @@ float basicmath___kernel_cosf( float x, float y )
    Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
 */
 
-static const float S1 = -1.6666667163e-01f, /* 0xbe2aaaab */
-                   S2 =  8.3333337680e-03f, /* 0x3c088889 */
-                   S3 = -1.9841270114e-04f, /* 0xb9500d01 */
-                   S4 =  2.7557314297e-06f, /* 0x3638ef1b */
-                   S5 = -2.5050759689e-08f, /* 0xb2d72f34 */
-                   S6 =  1.5896910177e-10f; /* 0x2f2ec9d3 */
+static const float basicmath_S1 = -1.6666667163e-01f, /* 0xbe2aaaab */
+                   basicmath_S2 =  8.3333337680e-03f, /* 0x3c088889 */
+                   basicmath_S3 = -1.9841270114e-04f, /* 0xb9500d01 */
+                   basicmath_S4 =  2.7557314297e-06f, /* 0x3638ef1b */
+                   basicmath_S5 = -2.5050759689e-08f, /* 0xb2d72f34 */
+                   basicmath_S6 =  1.5896910177e-10f; /* 0x2f2ec9d3 */
 
 float basicmath___kernel_sinf( float x, float y, int iy )
 {
@@ -585,9 +586,9 @@ float basicmath___kernel_sinf( float x, float y, int iy )
   }
   z =  x * x;
   v =  z * x;
-  r =  S2 + z * ( S3 + z * ( S4 + z * ( S5 + z * S6 ) ) );
-  if ( iy == 0 ) return x + v * ( S1 + z * r );
-  else      return x - ( ( z * ( half * y - v * r ) - y ) - v * S1 );
+  r =  basicmath_S2 + z * ( basicmath_S3 + z * ( basicmath_S4 + z * ( basicmath_S5 + z * basicmath_S6 ) ) );
+  if ( iy == 0 ) return x + v * ( basicmath_S1 + z * r );
+  else      return x - ( ( z * ( basicmath_half * y - v * r ) - y ) - v * basicmath_S1 );
 }
 
 
@@ -685,8 +686,8 @@ int basicmath___isinff ( float x )
    Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
 */
 
-static const float two25 =  3.355443200e+07f,  /* 0x4c000000 */
-                  twom25 =  2.9802322388e-08f; /* 0x33000000 */
+static const float basicmath_two25 =  3.355443200e+07f,  /* 0x4c000000 */
+                  basicmath_twom25 =  2.9802322388e-08f; /* 0x33000000 */
 
 float basicmath___scalbnf ( float x, int n )
 {
@@ -695,23 +696,23 @@ float basicmath___scalbnf ( float x, int n )
   k = ( ix & 0x7f800000 ) >> 23; /* extract exponent */
   if ( k == 0 ) {   /* 0 or subnormal x */
     if ( ( ix & 0x7fffffff ) == 0 ) return x; /* +-0 */
-    x *= two25;
+    x *= basicmath_two25;
     GET_FLOAT_WORD( ix, x );
     k = ( ( ix & 0x7f800000 ) >> 23 ) - 25;
   }
   if ( k == 0xff ) return x + x; /* NaN or Inf */
   k = k + n;
   if ( n > 50000 || k >  0xfe )
-    return huge * basicmath___copysignf( huge, x ); /* overflow  */
+    return basicmath_huge * basicmath___copysignf( basicmath_huge, x ); /* overflow  */
   if ( n < -50000 )
-    return tiny * basicmath___copysignf( tiny, x ); /*underflow*/
+    return basicmath_tiny * basicmath___copysignf( basicmath_tiny, x ); /*underflow*/
   if ( k > 0 ) {    /* normal result */
     SET_FLOAT_WORD( x, ( ix & 0x807fffff ) | ( k << 23 ) );
     return x;
   }
   if ( k <= -25 )
-    return tiny * basicmath___copysignf( tiny, x ); /*underflow*/
+    return basicmath_tiny * basicmath___copysignf( basicmath_tiny, x ); /*underflow*/
   k += 25;        /* subnormal result */
   SET_FLOAT_WORD( x, ( ix & 0x807fffff ) | ( k << 23 ) );
-  return x * twom25;
+  return x * basicmath_twom25;
 }

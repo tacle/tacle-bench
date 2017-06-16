@@ -5,13 +5,13 @@
 #define u_int32_t    unsigned int
 
 // Often used variables/consts
-static const float one    =  1.0f,
-                   tiny   =  1.0e-30f,
-                   half   =  5.0000000000e-01, /* 0x3f000000 */
-                   huge   =  1.0e30,
-                   two    =  2.0,
-                   two24  =  16777216.0,       /* 0x4b800000 */
-                   zero   =  0.0;
+static const float basicmath_one    =  1.0f,
+                   basicmath_tiny   =  1.0e-30f,
+                   basicmath_half   =  5.0000000000e-01, /* 0x3f000000 */
+                   basicmath_huge   =  1.0e30,
+                   basicmath_two    =  2.0,
+                   basicmath_two24  =  16777216.0,       /* 0x4b800000 */
+                   basicmath_zero   =  0.0;
 
 float   basicmath___copysignf(float x, float y);
 float   basicmath___cosf(float x);

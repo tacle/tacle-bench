@@ -90,10 +90,20 @@ void _Pragma ( "entrypoint" ) basicmath_main( void )
     Y += rad2deg( X );
 }
 
+void basicmath_init( void )
+{
+  // no initialization needed
+}
+
+int basicmath_return( void )
+{
+  // dummy return value
+  return 0;
+}
 
 int main( void )
 {
   basicmath_main();
 
-  return 0;
+  return basicmath_return();
 }

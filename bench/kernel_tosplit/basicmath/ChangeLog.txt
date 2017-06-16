@@ -62,3 +62,8 @@ with 'float's in the benchmark
   - Opening braces '{' denoting the beginning of code for some if-else or loop
     body shall be put at the end of the same line where the keywords "if",
     "else", "for", "while" etc. occur
+
+2017-06-27
+- Introduce basicmath_init and basicmath_return functions.
+- Add prefix basicmath_ to global variables.
+- Introduce dummy initialization in ieee754_rem_pio2f to please linter.
