@@ -45,75 +45,87 @@ typedef struct EqualizerData
 EqualizerData;
 
 // Global vars
-float lpf_coeff[NUM_TAPS];
-float eq_cutoffs[EQUALIZER_BANDS + 1] =
+float fmref_lpf_coeff[NUM_TAPS];
+float fmref_eq_cutoffs[EQUALIZER_BANDS + 1] =
   { 55.000004f, 77.78174f, 110.00001f, 155.56354f, 220.00002f, 311.12695f,
     440.00003f, 622.25415f, 880.00006f, 1244.5078f, 1760.0001f };
-static int numiters = 2;
+static int fmref_numiters = 2;
 
 // Forward declarations
-void fb_compact(FloatBuffer *fb);
-int fb_ensure_writable(FloatBuffer *fb, int amount);
-void get_floats(FloatBuffer *fb);
-void init_lpf_data(LPFData *data, float freq, int taps, int decimation);
-void run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data);
-void run_demod(FloatBuffer *fbin, FloatBuffer *fbout);
-void begin(void);
-void init_equalizer(EqualizerData *data);
-void run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data);
+void fmref_fb_compact(FloatBuffer *fb);
+int fmref_fb_ensure_writable(FloatBuffer *fb, int amount);
+void fmref_get_floats(FloatBuffer *fb);
+void fmref_init_lpf_data(LPFData *data, float freq, int taps, int decimation);
+void fmref_run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data);
+void fmref_run_demod(FloatBuffer *fbin, FloatBuffer *fbout);
+void fmref_init_equalizer(EqualizerData *data);
+void fmref_run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data);
+void fmref_main(void);
 
-int main(void)
+void fmref_init(void)
 {
-  begin();
+  // dummy init function
+}
+
+int fmref_return(void)
+{
+  // dummy return value
   return 0;
 }
 
-FloatBuffer fb1, fb2, fb3, fb4;
-LPFData lpf_data;
+int main(void)
+{
+  fmref_init();
+  fmref_main();
+  return fmref_return();
+}
 
-void begin(void)
+FloatBuffer fmref_fb1, fmref_fb2, fmref_fb3, fmref_fb4;
+LPFData fmref_lpf_data;
+
+void fmref_main(void)
 {
   int i;
   EqualizerData eq_data;
 
-  fb1.rpos = fb1.rlen = 0;
-  fb2.rpos = fb2.rlen = 0;
-  fb3.rpos = fb3.rlen = 0;
-  fb4.rpos = fb4.rlen = 0;
+  fmref_fb1.rpos = fmref_fb1.rlen = 0;
+  fmref_fb2.rpos = fmref_fb2.rlen = 0;
+  fmref_fb3.rpos = fmref_fb3.rlen = 0;
+  fmref_fb4.rpos = fmref_fb4.rlen = 0;
 
-  init_lpf_data(&lpf_data, CUTOFF_FREQUENCY, NUM_TAPS, DECIMATION);
-  init_equalizer(&eq_data);
+  fmref_init_lpf_data(&fmref_lpf_data, CUTOFF_FREQUENCY, NUM_TAPS, DECIMATION);
+  fmref_init_equalizer(&eq_data);
 
   /* Startup: */
-  get_floats(&fb1);
-  /* LPF needs at least NUM_TAPS+1 inputs; get_floats is fine. */
-  run_lpf(&fb1, &fb2, &lpf_data);
+  fmref_get_floats(&fmref_fb1);
+  /* LPF needs at least NUM_TAPS+1 inputs; fmref_get_floats is fine. */
+  fmref_run_lpf(&fmref_fb1, &fmref_fb2, &fmref_lpf_data);
   /* run_demod needs 1 input, OK here. */
   /* run_equalizer needs 51 inputs (same reason as for LPF).  This means
    * running the pipeline up to demod 50 times in advance: */
   _Pragma( "loopbound min 64 max 64" )
   for (i = 0; i < 64; i++) {
-    if (fb1.rlen - fb1.rpos < NUM_TAPS + 1)
-      get_floats(&fb1);
-    run_lpf(&fb1, &fb2, &lpf_data);
-    run_demod(&fb2, &fb3);
+    if (fmref_fb1.rlen - fmref_fb1.rpos < NUM_TAPS + 1)
+      fmref_get_floats(&fmref_fb1);
+    fmref_run_lpf(&fmref_fb1, &fmref_fb2, &fmref_lpf_data);
+    fmref_run_demod(&fmref_fb2, &fmref_fb3);
   }
 
   /* Main loop: */
   _Pragma( "loopbound min 2 max 2" )
-  while (numiters-- > 0) {
+  while (fmref_numiters-- > 0) {
     /* The low-pass filter will need NUM_TAPS+1 items; read them if we
      * need to. */
-    if (fb1.rlen - fb1.rpos < NUM_TAPS + 1)
-      get_floats(&fb1);
-    run_lpf(&fb1, &fb2, &lpf_data);
-    run_demod(&fb2, &fb3);
-    run_equalizer(&fb3, &fb4, &eq_data);
+    if (fmref_fb1.rlen - fmref_fb1.rpos < NUM_TAPS + 1)
+      fmref_get_floats(&fmref_fb1);
+    fmref_run_lpf(&fmref_fb1, &fmref_fb2, &fmref_lpf_data);
+    fmref_run_demod(&fmref_fb2, &fmref_fb3);
+    fmref_run_equalizer(&fmref_fb3, &fmref_fb4, &eq_data);
     
   }
 }
 
-void fb_compact(FloatBuffer *fb)
+void fmref_fb_compact(FloatBuffer *fb)
 {
   
   int i;
@@ -129,14 +141,14 @@ void fb_compact(FloatBuffer *fb)
   fb->rpos = 0;
 }
 
-int fb_ensure_writable(FloatBuffer *fb, int amount)
+int fmref_fb_ensure_writable(FloatBuffer *fb, int amount)
 {
   int available = IN_BUFFER_LEN - fb->rlen;
   if (available >= amount)
     return 1;
 
   /* Nope, not enough room, move current contents back to the beginning. */
-  fb_compact(fb);
+  fmref_fb_compact(fb);
 
   available = IN_BUFFER_LEN - fb->rlen;
   if (available >= amount)
@@ -145,10 +157,10 @@ int fb_ensure_writable(FloatBuffer *fb, int amount)
   return 0;
 }
 
-void get_floats(FloatBuffer *fb)
+void fmref_get_floats(FloatBuffer *fb)
 {
   static int x = 0;
-  fb_compact(fb);
+  fmref_fb_compact(fb);
 
   /* Fill the remaining space in fb with 1.0. */
   _Pragma( "loopbound min 200 max 200" )
@@ -158,7 +170,7 @@ void get_floats(FloatBuffer *fb)
   }
 }
 
-void init_lpf_data(LPFData *data, float freq, int taps, int decimation)
+void fmref_init_lpf_data(LPFData *data, float freq, int taps, int decimation)
 {
   /* Assume that CUTOFF_FREQUENCY is non-zero.  See comments in
    * StreamIt LowPassFilter.java for origin. */
@@ -180,7 +192,7 @@ void init_lpf_data(LPFData *data, float freq, int taps, int decimation)
   }
 }
 
-void run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data)
+void fmref_run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data)
 {
   float sum = 0.0f;
   int i = 0;
@@ -193,22 +205,22 @@ void run_lpf(FloatBuffer *fbin, FloatBuffer *fbout, LPFData *data)
   fbin->rpos += data->decimation + 1;
 
   /* Check that there's room in the output buffer; move data if necessary. */
-  fb_ensure_writable(fbout, 1);
+  fmref_fb_ensure_writable(fbout, 1);
   fbout->buff[fbout->rlen++] = sum;
 }
 
-void run_demod(FloatBuffer *fbin, FloatBuffer *fbout)
+void fmref_run_demod(FloatBuffer *fbin, FloatBuffer *fbout)
 {
   float temp, gain;
   gain = MAX_AMPLITUDE * SAMPLING_RATE / (BANDWIDTH * M_PI);
   temp = fbin->buff[fbin->rpos] * fbin->buff[fbin->rpos + 1];
   temp = gain * atan(temp);
   fbin->rpos++;
-  fb_ensure_writable(fbout, 1);
+  fmref_fb_ensure_writable(fbout, 1);
   fbout->buff[fbout->rlen++] = temp;
 }
 
-void init_equalizer(EqualizerData *data)
+void fmref_init_equalizer(EqualizerData *data)
 {
   int i;
 
@@ -217,7 +229,7 @@ void init_equalizer(EqualizerData *data)
    * together.  Each band-pass filter is LPF(high)-LPF(low). */
   _Pragma( "loopbound min 11 max 11" )
   for (i = 0; i < EQUALIZER_BANDS + 1; i++)
-    init_lpf_data(&data->lpf[i], eq_cutoffs[i], 64, 0);
+    fmref_init_lpf_data(&data->lpf[i], fmref_eq_cutoffs[i], 64, 0);
 
   /* Also initialize member buffers. */
   _Pragma( "loopbound min 11 max 11" )
@@ -232,7 +244,7 @@ void init_equalizer(EqualizerData *data)
   }
 }
 
-void run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data)
+void fmref_run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data)
 {
   int i, rpos;
   float lpf_out[EQUALIZER_BANDS + 1];
@@ -246,7 +258,7 @@ void run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data)
   _Pragma( "loopbound min 11 max 11" )
   for (i = 0; i < EQUALIZER_BANDS + 1; i++) {
     fbin->rpos = rpos;
-    run_lpf(fbin, &data->fb[i], &data->lpf[i]);
+    fmref_run_lpf(fbin, &data->fb[i], &data->lpf[i]);
     lpf_out[i] = data->fb[i].buff[data->fb[i].rpos++];
   }
 
@@ -257,7 +269,7 @@ void run_equalizer(FloatBuffer *fbin, FloatBuffer *fbout, EqualizerData *data)
     sum += (lpf_out[i + 1] - lpf_out[i]) * data->gain[i];
 
   /* Write that result.  */
-  fb_ensure_writable(fbout, 1);
+  fmref_fb_ensure_writable(fbout, 1);
   fbout->buff[fbout->rlen++] = sum;
 }
 

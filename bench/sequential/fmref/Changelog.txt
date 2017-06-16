@@ -1,0 +1,5 @@
+2017-06-27
+- Remove unused variables
+- Introduce fmref_init and fmref_return functions.
+- Add prefix fmref_ to global variables.
+- Introduce dummy initialization in ieee754_rem_pio2f to please linter.
