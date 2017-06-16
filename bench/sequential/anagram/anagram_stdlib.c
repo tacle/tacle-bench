@@ -28,7 +28,7 @@
 #include "anagram_compare.h"
 
 
-static void anagram_swapi( char *ii, char *ij, unsigned long es )
+void anagram_swapi( char *ii, char *ij, unsigned long es )
 {
   char *i, *j, c;
 
@@ -43,7 +43,7 @@ static void anagram_swapi( char *ii, char *ij, unsigned long es )
   } while ( es != 0 );
 }
 
-static char *anagram_pivot( char *a, unsigned long n, unsigned long es )
+char *anagram_pivot( char *a, unsigned long n, unsigned long es )
 {
   unsigned long j;
   char *pi, *pj, *pk;
@@ -69,7 +69,7 @@ static char *anagram_pivot( char *a, unsigned long n, unsigned long es )
   return pj;
 }
 
-static void anagram_qsorts( char *a, unsigned long n, unsigned long es )
+void anagram_qsorts( char *a, unsigned long n, unsigned long es )
 {
   unsigned long j;
   char *pi, *pj, *pn;

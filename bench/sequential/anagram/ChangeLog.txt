@@ -116,3 +116,6 @@ Source: unknown
   astyle --options=doc/example/astylerc.txt
 - Tested conformance to C99 via
   clang -fsyntax-only -Weverything -Wno-unknown-pragmas -Wno-padded -pedantic -std=c99
+
+2017-06-27
+- Remove static declarations.
