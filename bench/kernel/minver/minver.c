@@ -163,11 +163,6 @@ int minver_minver( int side, double eps )
   }
   _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < side; ) {
-    /*  The following redundant statement is inserted due to limitations of
-        WCC's flow fact manager. It is required in order to have the flow
-        fact pragma below uniquely attached to the while(1) loop.
-    */
-    i = i;
     _Pragma( "loopbound min 1 max 3" )
     while ( 1 ) {
       k = work[ i ];

@@ -32,3 +32,7 @@ Original provenience: SNU-RT Benchmark Suite for Worst Case Timing Analysis
  - Initialized variable r in function minver_minver()
  - Removed parameter cols of minver_minver() function
  - Renamed parameter rows of minver_minver() to side
+
+2017-07-04
+ - Removed self-assignment for WCC's flow-fact manager to avoid clangs
+   self-assign warning.
