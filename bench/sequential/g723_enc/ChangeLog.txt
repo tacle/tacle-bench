@@ -28,3 +28,7 @@ Original provenience: SUN Microsystems
 2016-05-25
  - Changed name of struct g723_enc_state to g723_enc_state_t
  - Changed name of variable state to g723_enc_state
+
+2017-07-10
+ - Fixed undefined behaviour introduced by accessing the result of a pointer
+   type cast.

@@ -846,13 +846,13 @@ void _Pragma( "entrypoint" ) g723_enc_main()
   unsigned char   code;
   int     resid;
   int     in_coding;
-  unsigned    *in_buf;
+  short    *in_buf;
   int     enc_bits;
   int i = 0;
 
   enc_bits = 3;
   in_coding = AUDIO_ENCODING_ALAW;
-  in_buf = ( unsigned * )&sample_short;
+  in_buf = &sample_short;
 
   _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < 256; i++ ) {
