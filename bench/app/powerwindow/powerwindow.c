@@ -94,64 +94,64 @@ extern powerwindow_ExternalInputs_PW_Control_PSG_BackR powerwindow_PW_Control_PS
 
 
 
-powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Up_Input_DRV[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Down_Input_DRV[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Up_Input_Front[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Down_Input_Front[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Up_Input_BackL[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Down_Input_BackL[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Up_Input_BackR[997];
-powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Down_Input_BackR[997];
-powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[997];
-powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_DRV[997];
+powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Up_Input_DRV[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Down_Input_DRV[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Up_Input_Front[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Down_Input_Front[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Up_Input_BackL[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Down_Input_BackL[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Up_Input_BackR[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Down_Input_BackR[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[powerwindow_input_length];
+powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_DRV[powerwindow_input_length];
 
 
-extern powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Up_Input_DRV_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Down_Input_DRV_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Up_Input_Front_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Down_Input_Front_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Up_Input_BackL_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Down_Input_BackL_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Up_Input_BackR_Array[997];
-extern powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Down_Input_BackR_Array[997];
-extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_DRV_Array[997];
-extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_DRV_Array[997];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Up_Input_DRV_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_DRV_U_Down_Input_DRV_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Up_Input_Front_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_Front_U_Down_Input_Front_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Up_Input_BackL_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_BackL_U_Down_Input_BackL_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Up_Input_BackR_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_debounce_Driver_BackR_U_Down_Input_BackR_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_DRV_Array[powerwindow_input_length];
+extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_DRV_Array[powerwindow_input_length];
 
-powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_Front[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_Front[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Up_Input_Front[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Down_Input_Front[997];
-powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_Front[997];
-powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_Front[997];
+powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_Front[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_Front[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Up_Input_Front[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Down_Input_Front[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_Front[powerwindow_input_length];
+powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_Front[powerwindow_input_length];
 
-extern powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Up_Front_Array[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-extern powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Down_Front_Array[997];
-extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Front_Array[997];
-extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Front_Array[997];
+extern powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Up_Front_Array[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+extern powerwindow_boolean_T powerwindow_debounce_passenger_Front_U_Down_Front_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Front_Array[powerwindow_input_length];
+extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Front_Array[powerwindow_input_length];
 
-powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_BackL[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_BackL[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Up_Input_BackL[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Down_Input_BackL[997];
-powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackL[997];
-powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_BackL[997];
+powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_BackL[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_BackL[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Up_Input_BackL[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Down_Input_BackL[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackL[powerwindow_input_length];
+powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_BackL[powerwindow_input_length];
 
-extern powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Up_BackL_Array[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-extern powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Down_BackL_Array[997];
-extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_BackL_Array[997];
-extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_BackL_Array[997];
+extern powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Up_BackL_Array[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+extern powerwindow_boolean_T powerwindow_debounce_passenger_BackL_U_Down_BackL_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_BackL_Array[powerwindow_input_length];
+extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_BackL_Array[powerwindow_input_length];
 
-powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_BackR[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_BackR[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Up_Input_BackR[997];
-powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Down_Input_BackR[997];
-powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackR[997];
-powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_BackR[997];
+powerwindow_boolean_T powerwindow_controlexclusion_U_Up_DRV_Input_BackR[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+powerwindow_boolean_T powerwindow_controlexclusion_U_Down_DRV_Input_BackR[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Up_Input_BackR[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Down_Input_BackR[powerwindow_input_length];
+powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackR[powerwindow_input_length];
+powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_Input_BackR[powerwindow_input_length];
 
-extern powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Up_BackR_Array[997]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
-extern powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Down_BackR_Array[997];
-extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_BackR_Array[997];
-extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_BackR_Array[997];
+extern powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Up_BackR_Array[powerwindow_input_length]; 	/* Here applied a push-down button, the signal is high when the button is not pressed. */
+extern powerwindow_boolean_T powerwindow_debounce_passenger_BackR_U_Down_BackR_Array[powerwindow_input_length];
+extern powerwindow_boolean_T powerwindow_powerwindow_control_U_endofdetectionrange_BackR_Array[powerwindow_input_length];
+extern powerwindow_uint8_T powerwindow_powerwindow_control_U_currentsense_BackR_Array[powerwindow_input_length];
 
 int powerwindow_main_inputcyclecounter;
 
@@ -286,8 +286,8 @@ void powerwindow_Booleaninputarray_initialize(powerwindow_boolean_T* arrayA, pow
 {
 
     register int i;
-//    _Pragma( "loopbound min 997 max 997" )
-    for ( i = 0; i < 997; i++ )
+//    _Pragma( "loopbound min powerwindow_input_length max powerwindow_input_length" )
+    for ( i = 0; i < powerwindow_input_length; i++ )
     	arrayA[i] = arrayB[i];
 }
 
@@ -295,8 +295,8 @@ void powerwindow_Uint8inputarray_initialize(powerwindow_uint8_T* arrayA, powerwi
 {
 
     register int i;
-//    _Pragma( "loopbound min 997 max 997" )
-    for ( i = 0; i < 997; i++ )
+//    _Pragma( "loopbound min powerwindow_input_length max powerwindow_input_length" )
+    for ( i = 0; i < powerwindow_input_length; i++ )
     	arrayA[i] = arrayB[i];
 }
 
@@ -551,7 +551,7 @@ void _Pragma( "entrypoint" ) powerwindow_main(void)
     powerwindow_input_initialize_PSG_BackL();
     powerwindow_input_initialize_PSG_BackR();
 
-    while(powerwindow_main_inputcyclecounter<997)
+    while(powerwindow_main_inputcyclecounter<powerwindow_input_length)
     {
 
         powerwindow_init_DRV(powerwindow_main_inputcyclecounter);

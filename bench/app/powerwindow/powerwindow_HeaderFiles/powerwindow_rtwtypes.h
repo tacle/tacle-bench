@@ -155,6 +155,8 @@ typedef struct {
 /* Block D-Work pointer type */
 typedef void * powerwindow_pointer_T;
 
+#define powerwindow_input_length 977
+
 /* Simulink specific types */
 #ifndef powerwindow___ZERO_CROSSING_TYPES__
 #define powerwindow___ZERO_CROSSING_TYPES__
