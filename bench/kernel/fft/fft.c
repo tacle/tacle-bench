@@ -284,13 +284,16 @@ void fft_init( void )
 {
   int i;
   volatile int x = 0;
-  
+
   fft_pin_down( &fft_input_data[0] );
-  
+
   /* avoid constant propagation of input values */
-  for ( i = 0; i < 2*N_FFT; i++) {
+  for ( i = 0; i < 2*(N_FFT-1); i++) {
     fft_input_data[i] += x;
     fft_twidtable[i] += x;
+  }
+  for ( ; i < 2*N_FFT; i++) {
+    fft_input_data[i] += x;
   }
   
 }
@@ -300,11 +303,11 @@ int fft_return(void)
 {
   int check_sum = 0;
   int i = 0;
-  
+
   for(i = 0; i < 2*N_FFT; ++i){
     check_sum += fft_input_data[i];
   }
-  
+
   return check_sum != 3968;
 }
 

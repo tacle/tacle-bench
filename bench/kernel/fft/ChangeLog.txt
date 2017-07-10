@@ -31,3 +31,5 @@ Original provenience: DSP-Stone
 - Reorganize functions into logical segments in main source file
 - Replace usage of macros by their expanded values:
   STORAGE_CLASS => register, TYPE => int
+2017-07-10:
+- Fix loop bounds to avoid buffer overflow.
