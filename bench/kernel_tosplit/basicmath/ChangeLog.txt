@@ -67,3 +67,6 @@ with 'float's in the benchmark
 - Introduce basicmath_init and basicmath_return functions.
 - Add prefix basicmath_ to global variables.
 - Introduce dummy initialization in ieee754_rem_pio2f to please linter.
+
+2017-07-10
+- Fix possible stack buffer overflow caused by sizeof of incorrect type.

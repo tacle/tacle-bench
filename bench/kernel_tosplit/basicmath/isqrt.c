@@ -59,5 +59,5 @@ void basicmath_usqrt( unsigned long x, struct int_sqrt *q )
       a++;
     }
   }
-  basicmath_memcpy( q, &a, sizeof( long ) );
+  basicmath_memcpy( q, &a, sizeof( *q ) );
 }
