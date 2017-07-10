@@ -119,3 +119,7 @@ Source: unknown
 
 2017-06-27
 - Remove static declarations.
+
+2017-07-10:
+- Adjust alignment calculation in anagram_malloc to not add padding on already
+  aligned addresses. This prevents a buffer overflow of anagram_simulated_heap.
