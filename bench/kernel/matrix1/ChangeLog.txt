@@ -58,3 +58,6 @@ Original provenience: DSP-Stone benchmark suite, matrix1_fixed
 
 2016-10-08
 - Added prefix to global matrix names: A -> matrix1_A, etc.
+
+2017-08-03
+- Fixed off-by-one error in loop header
