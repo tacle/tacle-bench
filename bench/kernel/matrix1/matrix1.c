@@ -122,7 +122,7 @@ int matrix1_return( void )
 	int checksum = 0;
 
 	  _Pragma( "loopbound min 100 max 100" )
-	  for ( i = 0; i <= X*Z; i++ )
+	  for ( i = 0; i < X*Z; i++ )
 		  checksum += matrix1_C[i];
 
 	  return ( checksum ==  1000 ? 0 : -1 );
