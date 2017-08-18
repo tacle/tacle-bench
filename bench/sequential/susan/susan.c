@@ -333,7 +333,8 @@ typedef int        TOTAL_TYPE;
 #define  FTOI(a) ( (a) < 0 ? ((int)(a-0.5)) : ((int)(a+0.5)) )
 #define  abs(a)  ( (a) < 0 ? -a : a )
 typedef  unsigned char uchar;
-typedef  struct {int x,y,info, dx, dy, I;} CORNER_LIST[MAX_CORNERS];
+typedef  struct {int x,y,info, dx, dy, I;} corner_rep;
+typedef  corner_rep CORNER_LIST[MAX_CORNERS];
 
 extern char susan_input[7292];
 struct wccFILE susan_file;

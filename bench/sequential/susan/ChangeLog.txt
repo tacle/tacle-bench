@@ -6,3 +6,6 @@
  - Added prefix 'susan_'.
  - Removed exit_on_error function.
  - Removed PowerPC specific typedef.
+
+2017-08-18:
+ - Give explicit name to former anonymous struct to silence g++ warnings.
