@@ -22,7 +22,7 @@
 */
 
 
-volatile char *quicksort_input_string[ 681 ] = {
+const char *quicksort_input_string[ 681 ] = {
   "Kurt", "Vonneguts", "Commencement", "Address", "at", "MIT", "Ladies", "and",
   "gentlemen", "of", "the", "class", "of", "97", "Wear", "sunscreen", "If", "I",
   "could", "offer", "you", "only", "one", "tip", "for", "the", "future",
@@ -100,7 +100,7 @@ volatile char *quicksort_input_string[ 681 ] = {
   "and", "recycling", "it", "for", "more", "than", "its", "worth", "But",
   "trust", "me", "on", "the", "sunscreen" };
 
-volatile unsigned int quicksort_input_vector[ 3000 ] = {
+unsigned int quicksort_input_vector[ 3000 ] = {
   1681692777, 846930886, 1804289383, 424238335, 1957747793, 1714636915,
   596516649, 1649760492, 719885386, 1350490027, 1025202362, 1189641421,
   2044897763, 1102520059, 783368690, 1540383426, 1365180540, 1967513926,

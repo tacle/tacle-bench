@@ -37,3 +37,6 @@ Original provenience: MiBench benchmark suite,
 
 2017-06-27
 - Introduce dummy initialization in ieee754_rem_pio2f to please linter.
+
+2017-08-18
+- Introduce proper constant propagation border to silence g++ warnings.

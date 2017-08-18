@@ -47,11 +47,14 @@ int main( void );
   Declaration of global variables
 */
 
-extern volatile char *quicksort_input_string[ 681 ];
+extern const char *quicksort_input_string[ 681 ];
 char quicksort_strings[ 681 ][ 20 ];
 
-extern volatile unsigned int quicksort_input_vector[ 1000 * 3 ];
+extern unsigned int quicksort_input_vector[ 1000 * 3 ];
 struct quicksort_3DVertexStruct quicksort_vectors[ 1000 ];
+
+volatile int quicksort_const_prop_border_i = 0;
+volatile char quicksort_const_prop_border_c = 0;
 
 
 /*
@@ -64,6 +67,11 @@ void quicksort_init( void )
   unsigned int x, y, z;
   unsigned int read_counter = 0;
 
+  /* constant propagation border */
+  _Pragma( "loopbound min 3000 max 3000" )
+  for ( i = 0; i < 3000; i++ ) {
+    quicksort_input_vector[ i ] += quicksort_const_prop_border_i;
+  }
 
   /* Init arrays */
   _Pragma( "loopbound min 681 max 681" )
@@ -71,6 +79,7 @@ void quicksort_init( void )
     _Pragma( "loopbound min 1 max 20" )
     for ( j = 0; j < 20 - 1; j++ ) {
       quicksort_strings[ i ][ j ] = quicksort_input_string[ i ][ j ];
+      quicksort_strings[ i ][ j ] += quicksort_const_prop_border_c;
 
       if ( quicksort_input_string[ i ][ j ] == '\0' )
         break;
