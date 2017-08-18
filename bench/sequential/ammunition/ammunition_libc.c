@@ -48,7 +48,8 @@ void *ammunition_memset( void *s, int c, size_t n )
 
 int ammunition_memcmp ( const void *mem1, const void *mem2, size_t size )
 {
-  const unsigned char *p1 = mem1, *p2 = mem2;
+  const unsigned char *p1 = (const unsigned char *) mem1,
+                      *p2 = (const unsigned char *) mem2;
   _Pragma( "loopbound min 0 max 4" )
   while ( size-- )
     if ( *p1 != *p2 )

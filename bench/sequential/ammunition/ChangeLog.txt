@@ -61,3 +61,6 @@ Original provenience: DINO programming language
 - Rename variable 'scaled_op1_digit_number' in function 
   'ammunition_divide_unsigned_integer_without_overflow_reaction'
 - Apply code formatting with astyle
+
+2017-08-18:
+- Add explicit casts to silence g++ warnings.
