@@ -43,6 +43,11 @@ Current Status
 the TACLeBench group is currently in the process of cleaning up and unifying
 the benchmarks. A version 2.0 will be available in the relative near future.
 
+The WCET paper is based on the version V1.9. To switch to this version use:
+```
+git checkout V1.9
+```
+
 Regression Tests
 ================
 
