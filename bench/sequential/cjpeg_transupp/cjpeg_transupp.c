@@ -657,11 +657,12 @@ void cjpeg_transupp_do_transverse( j_compress_ptr dstinfo )
                 /* At lower right corner, just transpose, no mirroring */
                 dst_ptr = cjpeg_transupp_output_data5;
                 _Pragma( "loopbound min 8 max 8" )
-                for ( i = 0; i < DCTSIZE; i++ )
+                for ( i = 0; i < DCTSIZE; i++ ) {
                   j = 0;
-                _Pragma( "loopbound min 8 max 8" )
-                for ( ; j < DCTSIZE; j++ )
-                  dst_ptr[ j * DCTSIZE + i ] = src_ptr[ i * DCTSIZE + j ];
+                  _Pragma( "loopbound min 8 max 8" )
+                  for ( ; j < DCTSIZE; j++ )
+                    dst_ptr[ j * DCTSIZE + i ] = src_ptr[ i * DCTSIZE + j ];
+                }
               }
             }
             dst_blk_x += compptr_h_samp_factor;
@@ -708,5 +709,5 @@ int main( void )
   cjpeg_transupp_init();
   cjpeg_transupp_main();
 
-  return ( cjpeg_transupp_return() - 660 != 0 );
+  return ( cjpeg_transupp_return() - 1624 != 0 );
 }
