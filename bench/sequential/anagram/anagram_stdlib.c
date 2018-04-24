@@ -117,7 +117,7 @@ void anagram_qsort( void *va, unsigned long n, unsigned long es )
 {
   _Pragma( "marker call_qsorts" )
   anagram_qsorts( ( char * )va, n, es );
-  _Pragma( "flowrestriction 1*anagram_qsorts <= 17*call_qsorts" )
+  _Pragma( "flowrestriction 1*anagram_qsorts <= 17*call_qsorts" );
 }
 
 

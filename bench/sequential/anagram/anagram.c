@@ -365,11 +365,11 @@ int anagram_ch2i( int ch )
 
 int anagram_CompareFrequency( char *pch1, char *pch2 )
 {
-  return anagram_auGlobalFrequency[ ( ( int ) * pch1 ) ] <
-         anagram_auGlobalFrequency[ ( ( int ) * pch2 ) ]
+  return anagram_auGlobalFrequency[ ( *(int*) pch1 ) ] <
+         anagram_auGlobalFrequency[ ( *(int*) pch2 ) ]
          ? -1 :
-         anagram_auGlobalFrequency[ ( ( int ) * pch1 ) ] ==
-         anagram_auGlobalFrequency[ ( ( int ) * pch2 ) ]
+         anagram_auGlobalFrequency[ ( *(int*) pch1 ) ] ==
+         anagram_auGlobalFrequency[ ( *(int*) pch2 ) ]
          ? 0 : 1;
 }
 
@@ -642,7 +642,7 @@ void _Pragma( "entrypoint" ) anagram_main( void )
     anagram_SortCandidates();
     _Pragma( "marker call_find" )
     anagram_FindAnagram( anagram_aqMainMask, anagram_apwCand, 0 );
-    _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" )
+    _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" );
   }
 }
 
