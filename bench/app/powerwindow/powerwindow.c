@@ -187,9 +187,9 @@ void powerwindow_init_PSG_Front(int i)
 	powerwindow_PW_Control_PSG_Front_U.Up_PSG_Front	= powerwindow_debounce_passenger_Front_U_Up_Input_Front[i];
     powerwindow_PW_Control_PSG_Front_U.Down_PSG_Front = powerwindow_debounce_passenger_Front_U_Down_Input_Front[i];	/* '<Root>/Down'. Here applied a push-down button, the signal is high when the button is not pressed. Change to 0 to lower the window. */
 
-    powerwindow_PW_Control_PSG_Front_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
+    powerwindow_PW_Control_PSG_Front_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_Front[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
 
-    powerwindow_PW_Control_PSG_Front_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_DRV[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
+    powerwindow_PW_Control_PSG_Front_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_Front[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
 
 }
 
@@ -203,9 +203,9 @@ void powerwindow_init_PSG_BackL(int i)
 	powerwindow_PW_Control_PSG_BackL_U.Up_PSG_BackL	= powerwindow_debounce_passenger_BackL_U_Up_Input_BackL[i];
     powerwindow_PW_Control_PSG_BackL_U.Down_PSG_BackL = powerwindow_debounce_passenger_BackL_U_Down_Input_BackL[i];	/* '<Root>/Down'. Here applied a push-down button, the signal is high when the button is not pressed. Change to 0 to lower the window. */
 
-    powerwindow_PW_Control_PSG_BackL_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
+    powerwindow_PW_Control_PSG_BackL_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackL[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
 
-    powerwindow_PW_Control_PSG_BackL_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_DRV[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
+    powerwindow_PW_Control_PSG_BackL_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_BackL[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
 
 }
 
@@ -219,9 +219,9 @@ void powerwindow_init_PSG_BackR(int i)
 	powerwindow_PW_Control_PSG_BackR_U.Up_PSG_BackR	= powerwindow_debounce_passenger_BackR_U_Up_Input_BackR[i];
     powerwindow_PW_Control_PSG_BackR_U.Down_PSG_BackR = powerwindow_debounce_passenger_BackR_U_Down_Input_BackR[i];	/* '<Root>/Down'. Here applied a push-down button, the signal is high when the button is not pressed. Change to 0 to lower the window. */
 
-    powerwindow_PW_Control_PSG_BackR_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_DRV[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
+    powerwindow_PW_Control_PSG_BackR_U.endofdetectionrange = powerwindow_powerwindow_control_U_endofdetectionrange_Input_BackR[i];		/* The when the window reaches the end of the range, the endofdetectionrange changes to 0. */
 
-    powerwindow_PW_Control_PSG_BackR_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_DRV[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
+    powerwindow_PW_Control_PSG_BackR_U.currentsense = powerwindow_powerwindow_control_U_currentsense_Input_BackR[i];		/* When the currentsense is higher than 92 (based on experiments), one object is stuck between the window and the frame. Pinch is set to True.*/
 
 }
 
