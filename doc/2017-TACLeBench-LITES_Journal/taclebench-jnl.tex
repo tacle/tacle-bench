@@ -1,0 +1,309 @@
+%This is a template for producing LITES articles.
+%See lites-manual.pdf for further information.
+
+% \documentclass[a4paper,UKenglish]{lites}
+\documentclass[a4paper,USenglish]{lites}
+  %for A4 paper format use option "a4paper"
+  %for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+ % for section-numbered lemmas etc., use "numberwithinsect"
+ 
+\usepackage{microtype}%if unwanted, comment out or use option "draft"
+\usepackage{xspace}
+\newcommand*{\eg}{e.g.,~}
+\newcommand*{\ie}{i.e.,~}
+% Rotated headers in table
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage{booktabs} % toprule, etc.
+\usepackage{multirow}
+\newcolumntype{R}[2]{%
+  >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
+  l%
+  <{\egroup}%
+}
+\newcommand*\rot{\multicolumn{1}{R{90}{1em}}}% no optional argument here,
+
+\definecolor{darkgreen}{rgb}{0, 0.3, 0}
+\usepackage{needspace}
+
+% checkmark
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\newcommand{\TACLEBENCHDRAFT}{}
+
+\usepackage{taclebench-listings}
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plain}% the recommended bibstyle
+
+% Author macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Characterization of the TACLeBench Suite for WCET Analysis Research%\footnote{This work was partially supported by someone.}
+}
+\titlerunning{Characterization the TACLeBench Suite} %optional, in case that the title is too long; the running title should fit into the top page column
+
+\author[1]{}
+%\author[2]{}
+%\affil[1]{Dummy University Computing Laboratory\\
+%  Address, Country\\
+%  \texttt{open@dummyuni.org}}
+%\affil[2]{Department of Informatics, Dummy College\\
+%  Address, Country\\
+%  \texttt{access@dummycollege.org}}
+%\authorrunning{J.Q. Open and J.R. Access} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+
+\Copyright{John Q. Open and Joan R. Access}%mandatory. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+\subjclass{MANDATORY:  Please refer to \url{www.acm.org/about/class/2012}}% mandatory: Please choose 2012 ACM classifications from http://www.acm.org/about/class/2012 . E.g., cite as "Integrated circuits". 
+\keywords{MANDATORY: Please provide 1--5 keywords as a comma-separated list}% mandatory: Please provide 1-5 keywords
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%EditorialOffice macros (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Volume{XXX}
+\Issue{YYY}
+\DateSubmission{Date of submission}
+\DateAcceptance{Date of acceptance}
+\DatePublished{Date of publishing}
+\SectionAreaEditor{LITES section area editor}
+\DOI{10.4230/LITES.xxx.yyy.p}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+%MANDATORY: Please provide a concise abstract; avoid literature references (and if not avoidable, please provide an explicit reference (no bibtex)); keep math formulas simple.
+
+\begin{minipage}{0.6\textwidth}
+\begin{itemize}
+  \item Characterization
+  \begin{itemize}
+    \item Usage of code metrics
+    \item \mbox{WCET analysis of benchmarks using analyzers (numbers for aiT and Platin)}
+    \item Memory footprint
+  \end{itemize}
+  \item Comparison against EEMBC
+  \item Sanitizing
+  \begin{itemize}
+    \item Flow facts
+    \item Undefined behavior
+  \end{itemize}
+  \item Selection of most-challenging benchmarks
+\end{itemize}
+\end{minipage}
+
+\end{abstract}
+
+\section{Introduction}
+\begin{itemize}
+  \item Paper extends our original paper~\cite{Falk:2016:wcet} \dots
+  \item Contributions
+  \begin{enumerate}
+    \item Sanitizing of behavior \& flow facts
+    \item Characterization of complexity by applying several code metrics
+    \item WCET analysis using two analysis tools and determination of memory footprint
+    \item Comparison against the industry-standard benchmarks for embedded systems (EEMBC)
+    \item Selection of most-challenging benchmarks
+  \end{enumerate}
+\end{itemize}
+
+Just a test by Martin to see if SVN works.
+
+\section{Related Work}
+\begin{itemize}
+  \item EEMBC~\cite{poovey:2009:characterization}
+  \item Problems
+  \begin{itemize}
+    \item Not open source
+    \item Only commercially available
+    \item Limited complexity as we show in Section~\ref{subsec:eembc-comparison}
+  \end{itemize}
+  \item M{\"a}lardalen Benchmarks~\cite{gustafsson:2010:wcet}
+  \begin{itemize}
+    \item Problem: Structure
+  \end{itemize}
+  \item BEEBS~\cite{Pallister2013}
+  \begin{itemize}
+    \item Problem: Standard libraries
+  \end{itemize}
+  \item JemBench~\cite{jembench}
+  \begin{itemize}
+    \item Problem: Is Java, but otherwise in the same context
+  \end{itemize}
+\end{itemize}
+
+\section{Overview of TACLeBench}
+
+\begin{itemize}
+  \item General structure of suite
+  \item Properties
+  \begin{itemize}
+    \item No libraries
+    \item Annotations, flow facts
+    \item Constant-propagation border
+  \end{itemize}
+  \item Summary of benchmarks
+\end{itemize}
+
+\subsection{Structure of Benchmarks}
+
+\subsubsection*{Constant-Propagation Border}
+\begin{itemize}
+  \item Support separation of initialization code and main workload
+\end{itemize}
+
+\subsection{Annotations}
+\subsubsection*{Entry-Point Annotation}
+\begin{itemize}
+  \item Special entry point necessary
+  \item Problem: specification of entry point within optimizing compiler
+\end{itemize}
+
+\section{Sanitizing Benchmarks}
+
+\begin{itemize}
+  \item Why sanitizing?
+  \item Usage of existing code
+  \item Besides peer-review process, automatic checking for undefined behavior
+\end{itemize}
+
+\subsection{Sanitizing Undefined Behavior}
+\begin{itemize}
+  \item Problem with undefined behaviors we discovered when formatting the benchmarks
+  \item Solution: automation with tools
+  \begin{itemize}
+    \item Dynamic: \texttt{valgrind}~\cite{nethercote:2007:acm-sigplan}, \texttt{asan}~\cite{serebryany:2012:atc}
+    \item Static: \texttt{Clang} Static Analyzer~\cite{clang-static-analyzer:website}, \texttt{Astr\'ee}~\cite{cousot:2005:esop}
+    \item Formattings: \texttt{tacle-lint}
+  \end{itemize}
+\end{itemize}
+
+\subsection{Flow-Fact Sanitizing}
+\begin{itemize}
+  \item Annotations respect specific input date compiled into the benchmark
+  \item Gather flow-facts by concrete execution
+  \item Compare automatically determined flow facts with manually provided flow facts
+\end{itemize}
+
+\subsection{Sanitizing Initialization Code}
+\label{subsec:sanity-init-code}
+\begin{itemize}
+  \item Is code really (re)initialized with \lstinline|bench_init()| functions
+\end{itemize}
+
+\section{Characterization of TACLeBench}
+\begin{itemize}
+  \item Code metrics (Section~\ref{subsec:code-metrics})
+  \item Memory consumption (Section~\ref{subsec:memory-consumption})
+  \item WCET analyses (Section~\ref{subsec:wcet-analysis})
+  \item Comparison against EEMBC (Section~\ref{subsec:eembc-comparison})
+\end{itemize}
+
+\subsection{Code Metrics}
+\label{subsec:code-metrics}
+\begin{itemize}
+  \item Problem: how to measure complexity?
+  \item Solution: code metrics
+  \begin{enumerate}
+    \item Detection of inputs~(\ie data-dependent control flows)
+    \item Detection of recursion
+    \item Detection of function-pointer usages
+    \item Detection of floating-point usages
+    \item Longest call chain
+    \item Number of loops including their nesting depths
+    \item Cyclomatic complexity~\cite{mccabe:1976:complexity}~(number of independent paths)
+  \end{enumerate}
+  \item How other authors from the WCET community used metrics to assess complexities~\cite{audsley:2004:assessment}
+\end{itemize}
+
+\subsubsection*{Problem with Single-Path Code}
+
+\begin{itemize}
+  \item Discuss problem with single-path code
+  \item Not challenging for path-analysis research
+\end{itemize}
+
+\subsubsection*{Code Metrics of TACLeBench}
+\begin{itemize}
+  \item Problem with data-flow--independent control flows
+  \item Resilience against compiler optimizations
+\end{itemize}
+
+\subsection{Memory Consumption \& Instruction Distribution}
+\label{subsec:memory-consumption}
+\begin{itemize}
+  \item Why analyzing the memory footprint?
+  \item Use of TACLeBench for cache analysis
+\end{itemize}
+
+
+\subsection{WCET Analyses of TACLeBench}
+\label{subsec:wcet-analysis}
+
+\begin{itemize}
+  \item Setup with ARM Cortex-M4
+  \begin{itemize}
+    \item Trace by measurement on hardware
+    \item Comparison with upper bounds from aiT \& Platin~\cite{puschner:2013:seus} % : reported upper bound
+%     \item Platin: reported upper bound
+  \end{itemize}
+  \item Setup Patmos~\cite{schoeberl:2015:jsa}
+  \begin{itemize}
+    \item Trace using pasim
+    \item Static analysis using Platin
+  \end{itemize}
+\end{itemize}
+
+\subsection{Comparison of TACLeBench \& EEMBC}
+\label{subsec:eembc-comparison}
+
+
+\section{Most-Challenging Benchmarks}
+\begin{itemize}
+  \item Based on the evaluations with aiT and platin
+  \item Based on the code metrics and the resilience against compiler optimizations
+  \item Most challenging
+  \begin{itemize}
+    \item For cache analysis
+    \item For path analysis
+    \item (Longest time to solve ILP, see \lstinline|test3|)
+  \end{itemize}
+  \item List of Top 10 benchmarks and their properties
+\end{itemize}
+
+\section{Usage of TACLeBench}
+\begin{itemize}
+  \item How users shall use TACLeBench
+\end{itemize}
+
+\section{Future Work}
+
+\begin{itemize}
+  \item Application benchmarks
+  \item We need entire real-time systems benchmarks/applications
+  \item How to deal with concurrent threads?
+  \item What are usable APIs?
+\end{itemize}
+
+\section{Conclusion}
+
+\subparagraph*{Acknowledgements}
+
+We want to thank \dots
+
+%\appendix
+%\section{Appendix}
+
+%%
+%% Bibliography
+%%
+\bibliography{bib/taclebench-jnl}
+\end{document}

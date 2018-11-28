@@ -1,0 +1,31 @@
+\usepackage{listings}
+
+\lstdefinelanguage{taclebench}{
+  keywords={const, typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, TASK, ISR,void,volatile,int,for},
+  keywordstyle=\color{blue}\bfseries,
+  keywords=[2]{boolean, string, number, objectid},
+  keywordstyle=[2]\color{green}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{darkgreen}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=taclebench,
+   extendedchars=true,
+   %basicstyle=\small\ttfamily,
+   % displaystyle in \lstinline||
+   basicstyle=%
+     \ttfamily%
+     \lst@ifdisplaystyle\small\fi,
+   showstringspaces=false,
+   showspaces=false,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false
+}
