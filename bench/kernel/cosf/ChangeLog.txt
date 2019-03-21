@@ -1,0 +1,79 @@
+Original provenience: MiBench benchmark suite,
+                      http://wwweb.eecs.umich.edu/mibench
+
+2016-02-09:
+- Added TACLeBench header
+- Renamed benchmark from 'basicmath_small' to 'basicmath'
+- Fixed a typo in code comments: 'soem' -> 'some'
+- Removed unused variable 'n' from the main funcion
+- Added variable 'double Y' to the main function and accumulated the results of
+  'deg2rad(X)' and 'rad2deg(X)' in this variable so that the compiler warning
+  'statement with no effect' is fixed.
+- Removed conditionally compiled main (test) function from isqrt.c
+- Removed conditionally compiled main (test) function from cubic.c
+- Removed commented-out code
+- Removed unused function, variable, macro and type declarations, structs and
+  unions
+- Removed seemingly unnecessary empty lines
+- Renamed memcpy.t to basicmath_libc.c
+- Removed unused files:
+  rad2deg.c
+  sniptype.h
+  sniptype.h
+- Created basicmath_libc.h and put declaration of basicmath_memcpy() in it
+- Reorganized snipmath.h so that the following are in the given order just
+after the header
+  - includes
+  - declarations of functions
+- Reorganized sniptype.h so that the following are in the given order just
+after the header
+  - macro definitions
+  - type definitions
+- Removed duplicated copyright information from wcclibm.c
+- Removed __STDC__ checks from wcclibm.c and used only ANSI style function
+  arguments
+- Removed 'last modified' comments from files
+- Removed mention 'use __kernel_rem_pio2f()' from comments of function 
+  __ieee754_rem_pio2f() since it doesn't really use it.
+- Removed math functions specialization macros from wcclibm.h and updated call
+  sites with explicit nameks of the functions.
+- Removed '#define double float' from wcclibm.h and replaced all 'double's
+with 'float's in the benchmark
+- Added a new main function that calls the old main function
+- Annotated basicmath_main() as the entry point of the analysis
+- Applied code formatting according to the following rules
+  - Lines shall not be wider than 80 characters; whenever possible, appropriate
+    line breaks shall be inserted to keep lines below 80 characters
+  - Indentation is done using whitespaces only, no tabs. Code is indented by
+    two whitespaces
+  - Two empty lines are put between any two functions
+  - In non-empty lists or index expressions, opening '(' and '[' are followed by
+    one whitespace, closing ')' and ']' are preceded by one whitespace
+  - In comma- or colon-separated argument lists, one whitespace is put after
+    each comma/colon
+  - Names of functions and global variables all start with a benchmark-specific 
+  prefix (here: statemate_) followed by lowercase letter
+  - For pointer types, one whitespace is put before the '*'
+  - Operators within expressions shall be preceded and followed by one
+    whitespace
+  - Code of then- and else-parts of if-then-else statements shall be put in
+    separate lines, not in the same lines as the if-condition or the keyword
+    "else"
+  - Opening braces '{' denoting the beginning of code for some if-else or loop
+    body shall be put at the end of the same line where the keywords "if",
+    "else", "for", "while" etc. occur
+
+2017-06-27
+- Introduce basicmath_init and basicmath_return functions.
+- Add prefix basicmath_ to global variables.
+- Introduce dummy initialization in ieee754_rem_pio2f to please linter.
+
+2017-07-10
+- Fix possible stack buffer overflow caused by sizeof of incorrect type.
+
+2019-03-07
+-split basicmath into seperate files
+-Add TACLeBench Header 
+-Add cosf.c as further benchmark
+-put each benchmark into a seperate folder
+-adjust the code formatting to the common TACLeBench code style
