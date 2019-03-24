@@ -31,10 +31,10 @@ typedef unsigned size_t;
 #define LITTLE_ENDIAN
 #define NULL ((void*)0)
 
-extern unsigned char sha_data[32743];
+extern unsigned volatile char sha_data[32743];
 
 struct SHA_MY_FILE {
-  unsigned char *data;
+  unsigned volatile char *data;
   size_t size;
   unsigned cur_pos;
 };
