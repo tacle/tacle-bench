@@ -66,7 +66,7 @@ double lms_sinus( int i )
 {
   int s = i % ( 4 * SAMPLING );
   if ( s >= ( 2 * SAMPLING ) )
-    return -lms_sintab[( s > 3 * SAMPLING ) ? 
+    return -lms_sintab[( s > 3 * SAMPLING ) ?
       ( 4 * SAMPLING - s ) : ( s - 2 * SAMPLING )];
   return lms_sintab[( s > SAMPLING ) ? ( 2 * SAMPLING - s ) : s];
 }
@@ -81,12 +81,13 @@ void lms_init( void )
   _Pragma( "loopbound min 101 max 101" )
   for ( k = 0 ; k < N ; k += 2 ) {
     double v1, v2, r;
+    const double scaleFactor = 0.000000000931322574615478515625;
     do {
       // generate two random numbers between -1.0 and +1.0
       seed = seed * 1103515245 + 12345;
-      v1 = ( seed & 0x00007fffffff ) * 0x1p-30 - 1.0;
+      v1 = ( seed & 0x00007fffffff ) * scaleFactor - 1.0;
       seed = seed * 1103515245 + 12345;
-      v2 = ( seed & 0x00007fffffff ) * 0x1p-30 - 1.0;
+      v2 = ( seed & 0x00007fffffff ) * scaleFactor - 1.0;
       r = v1 * v1 + v2 * v2;
     } while ( r > 1.0 ); // radius < 1
 

@@ -10,3 +10,4 @@ Original provenience: C Algorithms for Real-Time DSP by Paul M. Embree, pp. 159,
     * Output printed to stdout but was not checked for correctness
     * lms() used static variables for internal state
 - Completely rewritten and published with ISC license
+- Replaced double constants using exponent notation by numerical constant.
