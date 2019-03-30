@@ -7,7 +7,7 @@
 
  Author: CoSys-Lab, University of Antwerp
 
- Function: powerwindow implement the powerwindow that can be seen in cars nowadays. 
+ Function: powerwindow implement the powerwindow that can be seen in cars nowadays.
 	The window can be controlled by either driver or passenger. When an object is
 	detected between the window frame and the glass during the raising of the glass,
 	the glass will lower down for some distance. This benchmark contains 4 tasks which includes the
@@ -23,7 +23,7 @@
 
 */
 
-#include "powerwindow_HeaderFiles/powerwindow.h" 
+#include "powerwindow_HeaderFiles/powerwindow.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_Front.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_BackL.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_BackR.h"
@@ -34,7 +34,6 @@
 #include "powerwindow_HeaderFiles/powerwindow_powerwindow_control.h" 	/* PW passenger control Model's header file */
 #include "powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
 #include "powerwindow_HeaderFiles/powerwindow_model_reference_types.h"
-//#include <stdio.h>
 /*
   Forward declaration of functions
 */

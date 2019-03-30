@@ -17,8 +17,9 @@
 
 */
 
-#include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_Front.h"
 
+#include "wcclib.h"
+#include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_Front.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_PSG_Front_private.h"
 
 /*

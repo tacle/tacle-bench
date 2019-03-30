@@ -19,7 +19,6 @@
 
 #ifndef powerwindow_RTW_HEADER_powerwindow_PW_Control_DRV_h_
 #define powerwindow_RTW_HEADER_powerwindow_PW_Control_DRV_h_
-#include <string.h>
 #ifndef powerwindow_PW_Control_DRV_COMMON_INCLUDES_
 # define powerwindow_PW_Control_DRV_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"

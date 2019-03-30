@@ -22,6 +22,7 @@
  */
 
 
+#include "wcclib.h"
 #include "powerwindow_HeaderFiles/powerwindow_debounce.h"
 #include "powerwindow_HeaderFiles/powerwindow_debounce_private.h"
 

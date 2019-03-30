@@ -19,8 +19,6 @@
 
 #ifndef powerwindow_RTW_HEADER_controlexclusion_h_
 #define powerwindow_RTW_HEADER_controlexclusion_h_
-#include <stddef.h>
-#include <string.h>
 #ifndef powerwindow_controlexclusion_COMMON_INCLUDES_
 #define powerwindow_controlexclusion_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"

@@ -16,6 +16,9 @@
  License: GNU General Public License
 
 */
+
+
+#include "wcclib.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_DRV.h"
 #include "powerwindow_HeaderFiles/powerwindow_PW_Control_DRV_private.h"
 

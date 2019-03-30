@@ -19,7 +19,6 @@
 
 #ifndef powerwindow_RTW_HEADER_debounce_h_
 #define powerwindow_RTW_HEADER_debounce_h_
-#include <string.h>
 #ifndef powerwindow_debounce_COMMON_INCLUDES_
 #define powerwindow_debounce_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"

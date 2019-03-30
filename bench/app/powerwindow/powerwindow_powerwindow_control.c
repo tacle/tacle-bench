@@ -20,6 +20,7 @@
 
 */
 
+#include "wcclib.h"
 #include "powerwindow_HeaderFiles/powerwindow_powerwindow_control.h"
 #include "powerwindow_HeaderFiles/powerwindow_powerwindow_control_private.h"
 
@@ -79,7 +80,7 @@ void powerwindow_powerwindow_con_broadcast_ticks(powerwindow_boolean_T *rty_wind
     /* Entry Internal: PW_PSG/PWExternalClock/stateflow control model */
     /* Transition: '<S3>:102' */
     localDW->is_c2_PowerWindow_control = powerwindow_powerwindow_control_IN_System;
- 
+
     /* Entry Internal 'System': '<S3>:94' */
     localDW->is_active_Logic = 1U;
 

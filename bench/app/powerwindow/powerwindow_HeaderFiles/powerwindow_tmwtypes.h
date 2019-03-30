@@ -40,11 +40,6 @@
  *      Define NO_FLOATS to eliminate reference to powerwindow_real_T, etc.
  */
 
-#include <limits.h>
-
-#ifdef __APPLE_CC__
-#include <stdbool.h>
-#endif
 
 #define LOGICAL_IS_A_TYPE
 #define SPARSE_GENERALIZATION
@@ -54,18 +49,6 @@
 # define float  float_not_allowed
 #endif /*NO_FLOATS*/
 
-#ifndef NO_FLOATS
-
-#ifndef __MWERKS__
-# ifdef __STDC__
-#  include <float.h>
-# else
-#  define FLT_MANT_DIG 24
-#  define DBL_MANT_DIG 53
-# endif
-#endif
-
-#endif /*NO_FLOATS*/
 
 /*
  *      The following data types cannot be overridden when building MEX files.
@@ -797,10 +780,6 @@ typedef powerwindow_boolean_T bool;
  */
 #define TMW_NAME_LENGTH_MAX 64
 
-/*
- * Maximum values for indices and dimensions
- */
-#include <stddef.h>
 
 #ifdef MX_COMPAT_32
 typedef int powerwindow_mwSize;

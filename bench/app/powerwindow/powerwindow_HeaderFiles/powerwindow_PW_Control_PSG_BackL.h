@@ -19,8 +19,6 @@
 
 #ifndef powerwindow_RTW_HEADER_PW_Control_PSG_BackL_h_
 #define powerwindow_RTW_HEADER_PW_Control_PSG_BackL_h_
-#include <stddef.h>
-#include <string.h>
 #ifndef powerwindow_PW_Control_PSG_BackL_COMMON_INCLUDES_
 # define powerwindow_PW_Control_PSG_BackL_COMMON_INCLUDES_
 #include "../powerwindow_HeaderFiles/powerwindow_rtwtypes.h"
