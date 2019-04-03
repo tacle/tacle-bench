@@ -88,7 +88,7 @@ int ros_th2_return( void )
   Main functions
 */
 
-void ros_th2_main( void )
+void _Pragma( "entrypoint" ) ros_th2_main( void )
 {
   uint64_t tsimu = 300*200;
   ros_th2_check = ros_th2_run_rosace( tsimu );
