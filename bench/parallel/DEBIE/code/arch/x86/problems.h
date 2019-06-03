@@ -1,9 +1,9 @@
 /*
-problems.h for intel/linux
+  problems.h for intel/linux
 
-Part of the DEBIE-1 benchmark.
+  Part of the DEBIE-1 benchmark.
 
-$Id: problems.h,v 1.1 2008/03/28 08:22:17 niklas Exp $
+  $Id: problems.h,v 1.1 2008/03/28 08:22:17 niklas Exp $
 */
 
 

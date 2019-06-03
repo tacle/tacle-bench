@@ -30,7 +30,7 @@ enum lift_Command {
 };
 
 /* Global variables */
-extern int lift_levelPos[16];
+extern int lift_levelPos[ 16 ];
 extern int lift_one_level;
 extern int lift_cntValid;
 extern int lift_cnt;

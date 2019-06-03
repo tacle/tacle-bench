@@ -27,7 +27,7 @@ int bitcount_bit_count( long x )
   ** twice as fast as the shift/test method.
   */
   if ( x ) {
-    _Pragma( "loopbound min 3 max 8" )
+    _Pragma( "loopbound min 3 max 8" ) 
     do {
       n++;
     } while ( 0 != ( x = x & ( x - 1 ) ) ) ;

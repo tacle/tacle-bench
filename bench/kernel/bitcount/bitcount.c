@@ -56,7 +56,7 @@ int bitcount_bit_shifter( long int x )
 
 int bitcount_return()
 {
-  return (bitcount_n + (-1095) ) != 0;
+  return ( bitcount_n + ( -1095 ) ) != 0;
 }
 
 void bitcount_init()

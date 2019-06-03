@@ -53,7 +53,7 @@ typedef CJPEG_WRBMP_JSAMPARRAY
 *CJPEG_WRBMP_JSAMPIMAGE; /* a 3-D sample array: top index is color */
 
 typedef CJPEG_WRBMP_JCOEF
-CJPEG_WRBMP_JBLOCK[64]; /* one block of coefficients */
+CJPEG_WRBMP_JBLOCK[ 64 ]; /* one block of coefficients */
 typedef CJPEG_WRBMP_JBLOCK CJPEG_WRBMP_FAR
 *CJPEG_WRBMP_JBLOCKROW;  /* pointer to one row of coefficient blocks */
 typedef CJPEG_WRBMP_JBLOCKROW
@@ -76,7 +76,7 @@ typedef struct {
      CAUTION: IJG versions prior to v6a kept this array in zigzag order.
   */
   CJPEG_WRBMP_UINT16
-  quantval[64];  /* quantization step for each coefficient */
+  quantval[ 64 ];  /* quantization step for each coefficient */
   /* This field is used only during compression.  It's initialized FALSE when
      the table is created, and set TRUE when it's been output to the file.
      You could suppress output of a table by setting this to TRUE.
@@ -90,10 +90,10 @@ typedef struct {
 
 typedef struct {
   /* These two fields directly represent the contents of a JPEG DHT marker */
-  CJPEG_WRBMP_UINT8 bits[17];   /* bits[k] = # of symbols with codes of */
-  /* length k bits; bits[0] is unused */
+  CJPEG_WRBMP_UINT8 bits[ 17 ];   /* bits[ k ] = # of symbols with codes of */
+  /* length k bits; bits[ 0 ] is unused */
   CJPEG_WRBMP_UINT8
-  huffval[256];   /* The symbols, in order of incr code length */
+  huffval[ 256 ];   /* The symbols, in order of incr code length */
   /* This field is used only during compression.  It's initialized FALSE when
      the table is created, and set TRUE when it's been output to the file.
      You could suppress output of a table by setting this to TRUE.
@@ -110,7 +110,7 @@ typedef struct {
   /* For compression, they must be supplied by parameter setup; */
   /* for decompression, they are read from the SOF marker. */
   int component_id;   /* identifier for this component (0..255) */
-  int component_index;    /* its index in SOF or cinfo->comp_info[] */
+  int component_index;    /* its index in SOF or cinfo->comp_info[  ] */
   int h_samp_factor;    /* horizontal sampling factor (1..4) */
   int v_samp_factor;    /* vertical sampling factor (1..4) */
   int quant_tbl_no;   /* quantization table selector (0..3) */
@@ -176,7 +176,7 @@ typedef struct {
 
 typedef struct {
   int comps_in_scan;    /* number of components encoded in this scan */
-  int component_index[4]; /* their SOF/comp_info[] indexes */
+  int component_index[ 4 ]; /* their SOF/comp_info[  ] indexes */
   int Ss, Se;     /* progressive JPEG spectral selection parms */
   int Ah, Al;     /* progressive JPEG successive approx. parms */
 } cjpeg_wrbmp_jpeg_scan_info;
@@ -190,7 +190,7 @@ struct cjpeg_wrbmp_jpeg_marker_struct {
   jpeg_saved_marker_ptr next; /* next in list, or NULL */
   CJPEG_WRBMP_UINT8 marker;     /* marker code: JPEG_COM, or JPEG_APP0+n */
   unsigned int original_length; /* # bytes of data in the file */
-  unsigned int data_length; /* # bytes of data saved at data[] */
+  unsigned int data_length; /* # bytes of data saved at data[  ] */
   CJPEG_WRBMP_JOCTET CJPEG_WRBMP_FAR
   *data;     /* the data contained in the marker */
   /* the marker length word is not counted in data_length or original_length */
@@ -289,21 +289,21 @@ struct cjpeg_wrbmp_jpeg_compress_struct {
   jpeg_color_space; /* colorspace of JPEG image */
 
   cjpeg_wrbmp_jpeg_component_info *comp_info;
-  /* comp_info[i] describes component that appears i'th in SOF */
+  /* comp_info[ i ] describes component that appears i'th in SOF */
 
-  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
+  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[ 4 ];
   /* ptrs to coefficient quantization tables, or NULL if not defined */
 
-  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
-  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[ 4 ];
+  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[ 4 ];
   /* ptrs to Huffman coding tables, or NULL if not defined */
 
   CJPEG_WRBMP_UINT8
-  arith_dc_L[16]; /* L values for DC arith-coding tables */
+  arith_dc_L[ 16 ]; /* L values for DC arith-coding tables */
   CJPEG_WRBMP_UINT8
-  arith_dc_U[16]; /* U values for DC arith-coding tables */
+  arith_dc_U[ 16 ]; /* U values for DC arith-coding tables */
   CJPEG_WRBMP_UINT8
-  arith_ac_K[16]; /* Kx values for AC arith-coding tables */
+  arith_ac_K[ 16 ]; /* Kx values for AC arith-coding tables */
 
   int num_scans;    /* # of entries in scan_info array */
   const cjpeg_wrbmp_jpeg_scan_info
@@ -381,16 +381,16 @@ struct cjpeg_wrbmp_jpeg_compress_struct {
      They describe the components and MCUs actually appearing in the scan.
   */
   int comps_in_scan;    /* # of JPEG components in this scan */
-  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[4];
-  /* *cur_comp_info[i] describes component that appears i'th in SOS */
+  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[ 4 ];
+  /* *cur_comp_info[ i ] describes component that appears i'th in SOS */
 
   CJPEG_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
   CJPEG_WRBMP_JDIMENSION
   MCU_rows_in_scan;  /* # of MCU rows in the image */
 
   int blocks_in_MCU;    /* # of DCT blocks per MCU */
-  int MCU_membership[10];
-  /* MCU_membership[i] is index in cur_comp_info of component owning */
+  int MCU_membership[ 10 ];
+  /* MCU_membership[ i ] is index in cur_comp_info of component owning */
   /* i'th block in an MCU */
 
   int Ss, Se, Ah, Al;   /* progressive JPEG parameters for scan */
@@ -508,14 +508,14 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
   int output_scan_number; /* Nominal scan number being displayed */
   CJPEG_WRBMP_JDIMENSION output_iMCU_row; /* Number of iMCU rows read */
 
-  /* Current progression status.  coef_bits[c][i] indicates the precision
+  /* Current progression status.  coef_bits[ c ][ i ] indicates the precision
      with which component c's DCT coefficient i (in zigzag order) is known.
      It is -1 when no data has yet been received, otherwise it is the point
      transform (shift) value for the most recent scan of the coefficient
      (thus, 0 at completion of the progression).
      This pointer is NULL when reading a non-progressive file.
   */
-  int ( *coef_bits )[64]; /* -1 or current Al value for each coef */
+  int ( *coef_bits )[ 64 ]; /* -1 or current Al value for each coef */
 
   /* Internal JPEG parameters --- the application usually need not look at
      these fields.  Note that the decompressor output side may not use
@@ -526,11 +526,11 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
      datastreams when processing abbreviated JPEG datastreams.
   */
 
-  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[4];
+  CJPEG_WRBMP_JQUANT_TBL *quant_tbl_ptrs[ 4 ];
   /* ptrs to coefficient quantization tables, or NULL if not defined */
 
-  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[4];
-  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[4];
+  CJPEG_WRBMP_JHUFF_TBL *dc_huff_tbl_ptrs[ 4 ];
+  CJPEG_WRBMP_JHUFF_TBL *ac_huff_tbl_ptrs[ 4 ];
   /* ptrs to Huffman coding tables, or NULL if not defined */
 
   /* These parameters are never carried across datastreams, since they
@@ -540,7 +540,7 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
   int data_precision;   /* bits of precision in image data */
 
   cjpeg_wrbmp_jpeg_component_info *comp_info;
-  /* comp_info[i] describes component that appears i'th in SOF */
+  /* comp_info[ i ] describes component that appears i'th in SOF */
 
   cjpeg_wrbmp_boolean
   progressive_mode; /* TRUE if SOFn specifies progressive mode */
@@ -548,11 +548,11 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
   arith_code;   /* TRUE=arithmetic coding, FALSE=Huffman */
 
   CJPEG_WRBMP_UINT8
-  arith_dc_L[16]; /* L values for DC arith-coding tables */
+  arith_dc_L[ 16 ]; /* L values for DC arith-coding tables */
   CJPEG_WRBMP_UINT8
-  arith_dc_U[16]; /* U values for DC arith-coding tables */
+  arith_dc_U[ 16 ]; /* U values for DC arith-coding tables */
   CJPEG_WRBMP_UINT8
-  arith_ac_K[16]; /* Kx values for AC arith-coding tables */
+  arith_ac_K[ 16 ]; /* Kx values for AC arith-coding tables */
 
   unsigned int
   restart_interval; /* MCUs per restart interval, or 0 for no restart */
@@ -612,16 +612,16 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
      Note that the decompressor output side must not use these fields.
   */
   int comps_in_scan;    /* # of JPEG components in this scan */
-  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[4];
-  /* *cur_comp_info[i] describes component that appears i'th in SOS */
+  cjpeg_wrbmp_jpeg_component_info *cur_comp_info[ 4 ];
+  /* *cur_comp_info[ i ] describes component that appears i'th in SOS */
 
   CJPEG_WRBMP_JDIMENSION MCUs_per_row;  /* # of MCUs across the image */
   CJPEG_WRBMP_JDIMENSION
   MCU_rows_in_scan;  /* # of MCU rows in the image */
 
   int blocks_in_MCU;    /* # of DCT blocks per MCU */
-  int MCU_membership[10];
-  /* MCU_membership[i] is index in cur_comp_info of component owning */
+  int MCU_membership[ 10 ];
+  /* MCU_membership[ i ] is index in cur_comp_info of component owning */
   /* i'th block in an MCU */
 
   int Ss, Se, Ah, Al;   /* progressive JPEG parameters for scan */
@@ -662,20 +662,20 @@ struct cjpeg_wrbmp_jpeg_decompress_struct {
 struct cjpeg_wrbmp_jpeg_error_mgr {
   /* Error exit handler: does not return to caller */
   CJPEG_WRBMP_JMETHOD( void, error_exit,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
   /* Conditionally emit a trace or warning message */
   CJPEG_WRBMP_JMETHOD( void, emit_message,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int msg_level ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int msg_level ) );
   /* Routine that actually outputs a trace or error message */
   CJPEG_WRBMP_JMETHOD( void, output_message,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
   /* Format a message string for the most recent JPEG error or message */
   CJPEG_WRBMP_JMETHOD( void, format_message,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, char *buffer ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, char *buffer ) );
 #define JMSG_LENGTH_MAX  200  /* recommended size of format_message buffer */
   /* Reset error state variables at start of a new image */
   CJPEG_WRBMP_JMETHOD( void, reset_error_mgr,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   /* The message ID code and any parameters are saved here.
      A message can have one string parameter or up to 8 int parameters.
@@ -684,8 +684,8 @@ struct cjpeg_wrbmp_jpeg_error_mgr {
 #define JMSG_STR_PARM_MAX  80
   /*
     union {
-      int i[8];
-      char s[JMSG_STR_PARM_MAX];
+      int i[ 8 ];
+      char s[ JMSG_STR_PARM_MAX ];
     } msg_parm;
   */
   /* Standard state variables for error facility */
@@ -725,7 +725,7 @@ struct cjpeg_wrbmp_jpeg_error_mgr {
 
 struct cjpeg_wrbmp_jpeg_progress_mgr {
   CJPEG_WRBMP_JMETHOD( void, progress_monitor,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   long pass_counter;    /* work units completed in this pass */
   long pass_limit;    /* total number of work units in this pass */
@@ -743,11 +743,11 @@ struct cjpeg_wrbmp_jpeg_destination_mgr {
   free_in_buffer;  /* # of byte spaces remaining in buffer */
 
   CJPEG_WRBMP_JMETHOD( void, init_destination,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
   CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, empty_output_buffer,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
   CJPEG_WRBMP_JMETHOD( void, term_destination,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo ) );
 };
 
 
@@ -759,15 +759,15 @@ struct cjpeg_wrbmp_jpeg_source_mgr {
   cjpeg_wrbmp_size_t bytes_in_buffer; /* # of bytes remaining in buffer */
 
   CJPEG_WRBMP_JMETHOD( void, init_source,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
   CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, fill_input_buffer,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
   CJPEG_WRBMP_JMETHOD( void, skip_input_data,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo, long num_bytes ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo, long num_bytes ) );
   CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean, resync_to_restart,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo, int desired ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo, int desired ) );
   CJPEG_WRBMP_JMETHOD( void, term_source,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
 };
 
 
@@ -789,51 +789,51 @@ typedef struct jvirt_barray_control *cjpeg_wrbmp_jvirt_barray_ptr;
 struct cjpeg_wrbmp_jpeg_memory_mgr {
   /* Method pointers */
   CJPEG_WRBMP_JMETHOD( void *, alloc_small,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
-                                cjpeg_wrbmp_size_t sizeofobject ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                         cjpeg_wrbmp_size_t sizeofobject ) );
   CJPEG_WRBMP_JMETHOD( void CJPEG_WRBMP_FAR *, alloc_large,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
-                                cjpeg_wrbmp_size_t sizeofobject ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                         cjpeg_wrbmp_size_t sizeofobject ) );
   CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JSAMPARRAY, alloc_sarray,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
-                                CJPEG_WRBMP_JDIMENSION samplesperrow,
-                                CJPEG_WRBMP_JDIMENSION numrows ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                         CJPEG_WRBMP_JDIMENSION samplesperrow,
+                         CJPEG_WRBMP_JDIMENSION numrows ) );
   CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JBLOCKARRAY, alloc_barray,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
-                                CJPEG_WRBMP_JDIMENSION blocksperrow,
-                                CJPEG_WRBMP_JDIMENSION numrows ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id,
+                         CJPEG_WRBMP_JDIMENSION blocksperrow,
+                         CJPEG_WRBMP_JDIMENSION numrows ) );
   CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_jvirt_sarray_ptr,
-                              request_virt_sarray, ( cjpeg_wrbmp_j_common_ptr cinfo,
-                                  int pool_id,
-                                  cjpeg_wrbmp_boolean pre_zero,
-                                  CJPEG_WRBMP_JDIMENSION samplesperrow,
-                                  CJPEG_WRBMP_JDIMENSION numrows,
-                                  CJPEG_WRBMP_JDIMENSION maxaccess ) );
+                       request_virt_sarray, ( cjpeg_wrbmp_j_common_ptr cinfo,
+                           int pool_id,
+                           cjpeg_wrbmp_boolean pre_zero,
+                           CJPEG_WRBMP_JDIMENSION samplesperrow,
+                           CJPEG_WRBMP_JDIMENSION numrows,
+                           CJPEG_WRBMP_JDIMENSION maxaccess ) );
   CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_jvirt_barray_ptr,
-                              request_virt_barray, ( cjpeg_wrbmp_j_common_ptr cinfo,
-                                  int pool_id,
-                                  cjpeg_wrbmp_boolean pre_zero,
-                                  CJPEG_WRBMP_JDIMENSION blocksperrow,
-                                  CJPEG_WRBMP_JDIMENSION numrows,
-                                  CJPEG_WRBMP_JDIMENSION maxaccess ) );
+                       request_virt_barray, ( cjpeg_wrbmp_j_common_ptr cinfo,
+                           int pool_id,
+                           cjpeg_wrbmp_boolean pre_zero,
+                           CJPEG_WRBMP_JDIMENSION blocksperrow,
+                           CJPEG_WRBMP_JDIMENSION numrows,
+                           CJPEG_WRBMP_JDIMENSION maxaccess ) );
   CJPEG_WRBMP_JMETHOD( void, realize_virt_arrays,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
   CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JSAMPARRAY, access_virt_sarray,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo,
-                                cjpeg_wrbmp_jvirt_sarray_ptr ptr,
-                                CJPEG_WRBMP_JDIMENSION start_row,
-                                CJPEG_WRBMP_JDIMENSION num_rows,
-                                cjpeg_wrbmp_boolean writable ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo,
+                         cjpeg_wrbmp_jvirt_sarray_ptr ptr,
+                         CJPEG_WRBMP_JDIMENSION start_row,
+                         CJPEG_WRBMP_JDIMENSION num_rows,
+                         cjpeg_wrbmp_boolean writable ) );
   CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JBLOCKARRAY, access_virt_barray,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo,
-                                cjpeg_wrbmp_jvirt_barray_ptr ptr,
-                                CJPEG_WRBMP_JDIMENSION start_row,
-                                CJPEG_WRBMP_JDIMENSION num_rows,
-                                cjpeg_wrbmp_boolean writable ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo,
+                         cjpeg_wrbmp_jvirt_barray_ptr ptr,
+                         CJPEG_WRBMP_JDIMENSION start_row,
+                         CJPEG_WRBMP_JDIMENSION num_rows,
+                         cjpeg_wrbmp_boolean writable ) );
   CJPEG_WRBMP_JMETHOD( void, free_pool,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo, int pool_id ) );
   CJPEG_WRBMP_JMETHOD( void, self_destruct,
-                              ( cjpeg_wrbmp_j_common_ptr cinfo ) );
+                       ( cjpeg_wrbmp_j_common_ptr cinfo ) );
 
   /* Limit on memory allocation for this JPEG object.  (Note that this is
      merely advisory, not a guaranteed maximum; it only affects the space
@@ -851,8 +851,8 @@ struct cjpeg_wrbmp_jpeg_memory_mgr {
    Need not pass marker code since it is stored in cinfo->unread_marker.
 */
 typedef CJPEG_WRBMP_JMETHOD( cjpeg_wrbmp_boolean,
-                                    jpeg_marker_parser_method,
-                                    ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
+                             jpeg_marker_parser_method,
+                             ( cjpeg_wrbmp_j_decompress_ptr cinfo ) );
 
 /*
    The JPEG library modules define JPEG_INTERNALS before including this file.

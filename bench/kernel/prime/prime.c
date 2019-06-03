@@ -99,8 +99,7 @@ unsigned char prime_prime ( unsigned int n )
   unsigned int i;
   if ( prime_even ( n ) )
     return ( n == 2 );
-  _Pragma( "loopbound min 2 max 16" )
-  
+  _Pragma( "loopbound min 0 max 16" )               
   for ( i = 3; i * i <= n; i += 2 ) {
     if ( prime_divides ( i, n ) ) /* ai: loop here min 0 max 357 end; */
       return 0;

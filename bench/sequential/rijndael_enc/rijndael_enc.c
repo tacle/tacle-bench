@@ -44,10 +44,10 @@
 /*
   Global variable definitions
 */
-unsigned char rijndael_enc_key[32];
+unsigned char rijndael_enc_key[ 32 ];
 int rijndael_enc_key_len;
 
-extern unsigned char rijndael_enc_data[];
+extern unsigned char rijndael_enc_data[  ];
 struct rijndael_enc_FILE rijndael_enc_fin;
 
 int rijndael_enc_checksum = 0;
@@ -73,7 +73,7 @@ void rijndael_enc_init( void )
   rijndael_enc_fin.size ^= x;
   _Pragma( "loopbound min 31369 max 31369" )
   for ( i = 0; i < rijndael_enc_fin.size; i++ )
-    rijndael_enc_fin.data[i] ^= x;
+    rijndael_enc_fin.data[ i ] ^= x;
 
   /* this is a pointer to the hexadecimal key digits  */
   const volatile char *cp =
@@ -98,7 +98,7 @@ void rijndael_enc_init( void )
 
     /* store a key byte for each pair of hexadecimal digits         */
     if ( i++ & 1 )
-      rijndael_enc_key[i / 2 - 1] = by & 0xff;
+      rijndael_enc_key[ i / 2 - 1 ] = by & 0xff;
   }
 
   if ( *cp ) {
@@ -130,30 +130,30 @@ int rijndael_enc_return( void )
 
 void rijndael_enc_fillrand( unsigned char *buf, int len )
 {
-  static unsigned long a[2], mt = 1, count = 4;
-  static char          r[4];
+  static unsigned long a[ 2 ], mt = 1, count = 4;
+  static char          r[ 4 ];
   int                  i;
 
   if ( mt ) {
     mt = 0;
-    a[0] = 0xeaf3;
-    a[1] = 0x35fe;
+    a[ 0 ] = 0xeaf3;
+    a[ 1 ] = 0x35fe;
   }
 
   _Pragma( "loopbound min 1 max 16" )
   for ( i = 0; i < len; ++i ) {
     if ( count == 4 ) {
-      *( unsigned long * )r = RAND( a[0], a[1] );
+      *( unsigned long * )r = RAND( a[ 0 ], a[ 1 ] );
       count = 0;
     }
 
-    buf[i] = r[count++];
+    buf[ i ] = r[ count++ ];
   }
 }
 
 void rijndael_enc_encfile( struct rijndael_enc_FILE *fin, struct aes *ctx )
 {
-  unsigned char   inbuf[16], outbuf[16];
+  unsigned char   inbuf[ 16 ], outbuf[ 16 ];
   long int        flen;
   unsigned long   i = 0, l = 0;
 
@@ -165,25 +165,25 @@ void rijndael_enc_encfile( struct rijndael_enc_FILE *fin, struct aes *ctx )
                          1 );     /* make top 4 bits of a byte random */
   l = 15;                         /* and store the length of the last */
   /* block in the lower 4 bits        */
-  inbuf[0] = ( ( char )flen & 15 ) | ( inbuf[0] & ~15 );
+  inbuf[ 0 ] = ( ( char )flen & 15 ) | ( inbuf[ 0 ] & ~15 );
 
   /* TODO: this is necessarily an input-dependent loop bound */
-  _Pragma( "loopbound min 1961 max 1961" )
+  _Pragma( "loopbound min 1960 max 1960" )
   while ( !rijndael_enc_feof(
             fin ) ) {             /* loop to encrypt the input file   */
-    /* input 1st 16 bytes to buf[1..16] */
-    i = rijndael_enc_fread( inbuf + 16 - l, 1, l, fin ); /* on 1st round byte[0] */
+    /* input 1st 16 bytes to buf[ 1..16 ] */
+    i = rijndael_enc_fread( inbuf + 16 - l, 1, l, fin ); /* on 1st round byte[ 0 ] */
     /* is the length code    */
     if ( i < l ) break;           /* if end of the input file reached */
 
     _Pragma( "loopbound min 16 max 16" )
     for ( i = 0; i < 16; ++i )    /* xor in previous cipher text      */
-      inbuf[i] ^= outbuf[i];
+      inbuf[ i ] ^= outbuf[ i ];
 
     rijndael_enc_encrypt( inbuf, outbuf,
                           ctx );  /* and do the encryption            */
 
-    rijndael_enc_checksum += outbuf[15];
+    rijndael_enc_checksum += outbuf[ 15 ];
 
     /* in all but first round read 16   */
     l = 16;                       /* bytes into the buffer            */
@@ -201,21 +201,21 @@ void rijndael_enc_encfile( struct rijndael_enc_FILE *fin, struct aes *ctx )
   if ( i ) {                          /* if bytes remain to be output */
     _Pragma( "loopbound min 6 max 6" )
     while ( i < 16 )                  /* clear empty buffer positions */
-      inbuf[i++] = 0;
+      inbuf[ i++ ] = 0;
 
     _Pragma( "loopbound min 16 max 16" )
     for ( i = 0; i < 16; ++i )        /* xor in previous cipher text  */
-      inbuf[i] ^= outbuf[i];
+      inbuf[ i ] ^= outbuf[ i ];
 
     rijndael_enc_encrypt( inbuf, outbuf, ctx ); /* encrypt and output it */
 
-    rijndael_enc_checksum += outbuf[15];
+    rijndael_enc_checksum += outbuf[ 15 ];
   }
 }
 
 void _Pragma( "entrypoint" ) rijndael_enc_main( void )
 {
-  struct aes ctx[1];
+  struct aes ctx[ 1 ];
 
   /* encryption in Cipher Block Chaining mode */
   rijndael_enc_set_key( rijndael_enc_key, rijndael_enc_key_len, enc, ctx );

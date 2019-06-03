@@ -133,7 +133,7 @@ void isqrt_usqrt( unsigned long x, struct int_sqrt *q )
 }
 
 
-void isqrt_main( void )
+void _Pragma( "entrypoint" ) isqrt_main( void )
 {
   /* perform some integer square roots */
   _Pragma( "loopbound min 1000 max 1000" )

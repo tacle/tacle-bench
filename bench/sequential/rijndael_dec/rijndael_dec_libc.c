@@ -14,9 +14,9 @@ unsigned long rijndael_dec_fread( void *ptr, unsigned long size,
   unsigned long number_of_chars_to_read =
     stream->size - stream->cur_pos >= size * count ?
     size * count : stream->size - stream->cur_pos;
-  _Pragma( "loopbound min 10 max 16" )
+  _Pragma( "loopbound min 0 max 16" )
   while ( i < stream->cur_pos + number_of_chars_to_read )
-    ( ( unsigned char * )ptr )[i2++] = stream->data[i++];
+    ( ( unsigned char * )ptr )[ i2++ ] = stream->data[ i++ ];
   stream->cur_pos += number_of_chars_to_read;
   return number_of_chars_to_read;
 }
@@ -30,7 +30,7 @@ unsigned long rijndael_dec_fwrite( const void *ptr, unsigned long size,
     size * count : stream->size - stream->cur_pos;
   _Pragma( "loopbound min 0 max 0" )
   while ( i < stream->cur_pos + number_of_chars_to_write )
-    stream->data[i++] = ( ( unsigned char * )ptr )[i2++];
+    stream->data[ i++ ] = ( ( unsigned char * )ptr )[ i2++ ];
   stream->cur_pos += number_of_chars_to_write;
   return number_of_chars_to_write;
 }

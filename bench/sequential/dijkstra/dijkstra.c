@@ -44,12 +44,12 @@ struct _QITEM {
 /*
   Global variable definitions
 */
-struct _NODE dijkstra_rgnNodes[NUM_NODES];
+struct _NODE dijkstra_rgnNodes[ NUM_NODES ];
 
 int dijkstra_queueCount;
 int dijkstra_queueNext;
 struct _QITEM *dijkstra_queueHead;
-struct _QITEM dijkstra_queueItems[QUEUE_SIZE];
+struct _QITEM dijkstra_queueItems[ QUEUE_SIZE ];
 
 int dijkstra_checksum = 0;
 
@@ -72,9 +72,8 @@ void dijkstra_init( void )
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0; i < NUM_NODES; i++ ) {
     _Pragma( "loopbound min 100 max 100" )
-    for ( k = 0; k < NUM_NODES; k++ ) {
-      dijkstra_AdjMatrix[i][k] ^= x;
-    }
+    for ( k = 0; k < NUM_NODES; k++ )
+      dijkstra_AdjMatrix[ i ][ k ] ^= x;
   }
 
   dijkstra_queueCount = 0;
@@ -91,7 +90,7 @@ int dijkstra_return( void )
 
 int dijkstra_enqueue( int node, int dist, int prev )
 {
-  struct _QITEM *newItem = &dijkstra_queueItems[dijkstra_queueNext];
+  struct _QITEM *newItem = &dijkstra_queueItems[ dijkstra_queueNext ];
   struct _QITEM *last = dijkstra_queueHead;
 
   if ( ++dijkstra_queueNext >= QUEUE_SIZE )
@@ -139,14 +138,14 @@ int dijkstra_find( int chStart, int chEnd )
 
   _Pragma( "loopbound min 100 max 100" )
   for ( ch = 0; ch < NUM_NODES; ch++ ) {
-    dijkstra_rgnNodes[ch].dist = NONE;
-    dijkstra_rgnNodes[ch].prev = NONE;
+    dijkstra_rgnNodes[ ch ].dist = NONE;
+    dijkstra_rgnNodes[ ch ].prev = NONE;
   }
 
   if ( chStart == chEnd ) {
   } else {
-    dijkstra_rgnNodes[chStart].dist = 0;
-    dijkstra_rgnNodes[chStart].prev = NONE;
+    dijkstra_rgnNodes[ chStart ].dist = 0;
+    dijkstra_rgnNodes[ chStart ].prev = NONE;
 
     if ( dijkstra_enqueue ( chStart, 0, NONE ) == OUT_OF_MEMORY )
       return OUT_OF_MEMORY;
@@ -157,11 +156,11 @@ int dijkstra_find( int chStart, int chEnd )
       dijkstra_dequeue ( &node, &dist, &prev );
       _Pragma( "loopbound min 100 max 100" )
       for ( i = 0; i < NUM_NODES; i++ ) {
-        if ( ( cost = dijkstra_AdjMatrix[node][i] ) != NONE ) {
-          if ( ( NONE == dijkstra_rgnNodes[i].dist ) ||
-               ( dijkstra_rgnNodes[i].dist > ( cost + dist ) ) ) {
-            dijkstra_rgnNodes[i].dist = dist + cost;
-            dijkstra_rgnNodes[i].prev = node;
+        if ( ( cost = dijkstra_AdjMatrix[ node ][ i ] ) != NONE ) {
+          if ( ( NONE == dijkstra_rgnNodes[ i ].dist ) ||
+               ( dijkstra_rgnNodes[ i ].dist > ( cost + dist ) ) ) {
+            dijkstra_rgnNodes[ i ].dist = dist + cost;
+            dijkstra_rgnNodes[ i ].prev = node;
             if ( dijkstra_enqueue ( i, dist + cost, node ) == OUT_OF_MEMORY )
               return OUT_OF_MEMORY;
           }
@@ -184,7 +183,7 @@ void _Pragma( "entrypoint" ) dijkstra_main( void )
       dijkstra_checksum += OUT_OF_MEMORY;
       return;
     } else
-      dijkstra_checksum += dijkstra_rgnNodes[j].dist;
+      dijkstra_checksum += dijkstra_rgnNodes[ j ].dist;
     dijkstra_queueNext = 0;
   }
 }

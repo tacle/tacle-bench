@@ -18,7 +18,7 @@
   License: See anagram.c
 
 */
-
+int counter2 = 0;
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
@@ -26,7 +26,7 @@
 /* This function is included here because the WCC does not */
 /* support function pointers */
 #include "anagram_compare.h"
-
+int printf(const char * restrict format, ... );
 
 void anagram_swapi( char *ii, char *ij, unsigned long es )
 {
@@ -34,7 +34,7 @@ void anagram_swapi( char *ii, char *ij, unsigned long es )
 
   i = ( char * )ii;
   j = ( char * )ij;
-  _Pragma( "loopbound min 1 max 1" )
+  _Pragma( "loopbound min 4 max 4" )
   do {
     c = *i;
     *i ++ = *j;
@@ -74,8 +74,8 @@ void anagram_qsorts( char *a, unsigned long n, unsigned long es )
   unsigned long j;
   char *pi, *pj, *pn;
   volatile unsigned int flowfactdummy = 0;
-
-  _Pragma( "loopbound min 0 max 6" )
+        counter2++;
+  _Pragma( "loopbound min 0 max 3" )
   while ( n > 1 ) {
     if ( n > 10 )
       pi = anagram_pivot( a, n, es );
@@ -86,16 +86,16 @@ void anagram_qsorts( char *a, unsigned long n, unsigned long es )
     pi = a;
     pn = a + n * es;
     pj = pn;
-    _Pragma( "loopbound min 1 max 11" )
+    _Pragma( "loopbound min 0 max 10" )  
     while ( 1 ) {
       /* wcc note: this assignment expression was added to avoid assignment of
          multiple loop bound annotations to same loop (cf. Ticket #0002323). */
       flowfactdummy ++;
-      _Pragma( "loopbound min 1 max 5" )
+      _Pragma( "loopbound min 1 max 6" )
       do {
         pi += es;
       } while ( pi < pn && anagram_CompareFrequency( pi, a ) < 0 );
-      _Pragma( "loopbound min 1 max 4" )
+      _Pragma( "loopbound min 1 max 7" )
       do {
         pj -= es;
       } while ( pj > a && anagram_CompareFrequency( pj, a ) > 0 );
@@ -105,7 +105,6 @@ void anagram_qsorts( char *a, unsigned long n, unsigned long es )
     }
     anagram_swapi( a, pj, es );
     j = ( unsigned long )( pj - a ) / es;
-
     n = n - j - 1;
     if ( j >= n ) {
       anagram_qsorts( a, j, es );
@@ -122,6 +121,7 @@ void anagram_qsort( void *va, unsigned long n, unsigned long es )
   _Pragma( "marker call_qsorts" )
   anagram_qsorts( ( char * )va, n, es );
   _Pragma( "flowrestriction 1*anagram_qsorts <= 17*call_qsorts" )
+  printf("2: %d\n", counter2);
 }
 
 
@@ -136,7 +136,7 @@ void *anagram_malloc( unsigned int numberOfBytes )
   void *currentPos = ( void * )&anagram_simulated_heap[ anagram_freeHeapPos ];
   /* Get a 4-byte address for alignment purposes */
   //anagram_freeHeapPos += ( ( numberOfBytes + 4 ) & ( unsigned int )0xfffffffc );
-  unsigned int rem = (numberOfBytes & ( unsigned int )0x3 );
+  unsigned int rem = ( numberOfBytes & ( unsigned int )0x3 );
   unsigned int adjustment = rem ? 4 - rem : 0;
   anagram_freeHeapPos += numberOfBytes + adjustment;
   return currentPos;
@@ -146,8 +146,8 @@ void anagram_bzero( char *p, unsigned long len )
 {
   unsigned long i;
 
-  _Pragma( "loopbound min 8 max 416" )
-  for ( i = 0; i < len; ++ i )
-    *p ++ = '\0';
+  _Pragma( "loopbound min 8 max 800" )
+  for ( i = 0; i < len; ++ i ){
+    *p ++ = '\0';}
 }
 

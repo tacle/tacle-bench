@@ -1,25 +1,25 @@
 /*  $Id: link_autopilot.h,v 1.1 2011-01-18 12:42:42 moellmer Exp $
- *
- * (c) 2003 Pascal Brisset, Antoine Drouin
- *
- * This file is part of paparazzi.
- *
- * paparazzi is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * paparazzi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with paparazzi; see the file COPYING.  If not, write to
- * the Free Software Foundation, 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.  
- *
- */
+
+   (c) 2003 Pascal Brisset, Antoine Drouin
+
+   This file is part of paparazzi.
+
+   paparazzi is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   paparazzi is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with paparazzi; see the file COPYING.  If not, write to
+   the Free Software Foundation, 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
 
 #ifndef LINK_AUTOPILOT_H
 #define LINK_AUTOPILOT_H
@@ -31,9 +31,9 @@
 #include "airframe.h"
 
 /*
- * System clock in MHz.
- */
-#define CLOCK		16
+   System clock in MHz.
+*/
+#define CLOCK   16
 
 typedef int16_t pprz_t; // type of commands
 
@@ -42,7 +42,7 @@ typedef int16_t pprz_t; // type of commands
 #define MIN_PPRZ -MAX_PPRZ
 
 struct inter_mcu_msg {
-  int16_t channels[RADIO_CTL_NB];  
+  int16_t channels[ RADIO_CTL_NB ];
   uint8_t ppm_cpt;
   uint8_t status;
   uint8_t nb_err;
@@ -62,8 +62,8 @@ struct inter_mcu_msg {
 
 #define TRESHOLD_MANUAL_PPRZ (MIN_PPRZ / 2)
 
-void test_ppm_task(void);
-void check_mega128_values_task(void);
-void send_data_to_autopilot_task(void);
-void check_failsafe_task(void);
+void test_ppm_task( void );
+void check_mega128_values_task( void );
+void send_data_to_autopilot_task( void );
+void check_failsafe_task( void );
 #endif // LINK_AUTOPILOT_H

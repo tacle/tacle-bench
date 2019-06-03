@@ -27,10 +27,10 @@
   Macro definitions
 */
 
-#define SYS_bit_get(a,b) (a)[(b)]
-#define SYS_bit_clr(a,b) (a)[(b)] = 0
-#define SYS_bit_set(a,b) (a)[(b)] = 1
-#define SYS_bit_cpy(a1,i1,a2,i2) (a1)[(i1)] = (a2)[(i2)]
+#define SYS_bit_get(a,b) (a)[ (b) ]
+#define SYS_bit_clr(a,b) (a)[ (b) ] = 0
+#define SYS_bit_set(a,b) (a)[ (b) ] = 1
+#define SYS_bit_cpy(a1,i1,a2,i2) (a1)[ (i1) ] = (a2)[ (i2) ]
 
 #define active_KINDERSICHERUNG_CTRL_IDX 10
 #define active_KINDERSICHERUNG_CTRL_copy_IDX 11
@@ -75,7 +75,7 @@ int statemate_return ( void );
   Declaration of global variables
 */
 
-static char     statemate_bitlist[64];
+static char     statemate_bitlist[ 64 ];
 unsigned long
 statemate_tm_entered_EINSCHALTSTROM_MESSEN_BLOCK_ERKENNUNG_CTRLch_BLOCK_ERKENNUNG_CTRL__N_copy;
 unsigned long
@@ -1257,10 +1257,10 @@ int statemate_return()
 {
   unsigned long int checksum = 0;
   int index;
-  for ( index=63 ; index>=0 ; index-- ){
-    checksum += (unsigned long) (statemate_bitlist[index] << index);
-  }
-  return(checksum == 18446744073709551614ul);
+  _Pragma( "loopbound min 64 max 64" )
+  for ( index = 63 ; index >= 0 ; index-- )
+    checksum += ( unsigned long ) ( statemate_bitlist[ index ] << index );
+  return ( checksum == 18446744073709551614ul );
 }
 
 void _Pragma ( "entrypoint" ) statemate_main( void )

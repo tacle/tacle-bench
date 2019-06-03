@@ -15,7 +15,7 @@
 #define SPI_SS1_DDR  DDRE
 #define SPI_IT1_PIN  6
 #define SPI_IT1_PORT PORTE
-#define SPI_IT1_DDR  DDRE 
+#define SPI_IT1_DDR  DDRE
 
 #define SPI_SCK_PIN  1
 #define SPI_MOSI_PIN 2
@@ -32,7 +32,7 @@
 extern volatile uint8_t spi_cur_slave;
 extern uint8_t spi_nb_ovrn;
 
-void spi_init( void);
+void spi_init( void );
 
 #define SPI_START(_SPCR_VAL) { \
   uint8_t foo; \

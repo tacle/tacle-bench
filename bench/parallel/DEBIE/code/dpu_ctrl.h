@@ -1,26 +1,26 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Module     :   dpu_ctrl.h
- *
- * Operations and macros for low-level control of the Data Processing
- * Unit, the 80C32 computer on which the DEBIE DPU software runs.
- * This includes accessing data and code memories by address; boot
- * and reset operations; watchdog handling; memory patch and test.
- *
- * Based on the SSF DHI file dpu_ctrl.h, rev 1.23, Fri May 28 14:59:30 1999.
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Module     :   dpu_ctrl.h
+
+   Operations and macros for low-level control of the Data Processing
+   Unit, the 80C32 computer on which the DEBIE DPU software runs.
+   This includes accessing data and code memories by address; boot
+   and reset operations; watchdog handling; memory patch and test.
+
+   Based on the SSF DHI file dpu_ctrl.h, rev 1.23, Fri May 28 14:59:30 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 #ifndef DPU_CTRL_H
 #define DPU_CTRL_H
@@ -34,17 +34,17 @@
 #define MEMORY_NOT_PATCHED 0
 
 #ifndef HIGH
-   #define HIGH 1
+#define HIGH 1
 #endif
 
 #ifndef LOW
-   #define LOW 0
+#define LOW 0
 #endif
 
 #define SELECTED 1
 #define NOT_SELECTED 0
 #define RESET_OK 1
-#define RESET_NOT_OK 0 
+#define RESET_NOT_OK 0
 
 #define ACCEPT_EVENT 1
 #define REJECT_EVENT 0
@@ -88,18 +88,18 @@ typedef unsigned char DEBIE_mode_t;
 
 
 typedef enum {
-   power_up_reset_e = 0, /* Don't change value ! */
-   watchdog_reset_e = 1, /* Don't change value ! */
-   soft_reset_e, 
-   warm_reset_e, 
-   error_e,
-   checksum_reset_e
+  power_up_reset_e = 0, /* Don't change value ! */
+  watchdog_reset_e = 1, /* Don't change value ! */
+  soft_reset_e,
+  warm_reset_e,
+  error_e,
+  checksum_reset_e
 }  reset_class_t;
 
 extern reset_class_t EXTERNAL s_w_reset;
 
 typedef enum  {
-   PROM_e, SRAM_e
+  PROM_e, SRAM_e
 } memory_configuration_t;
 
 
@@ -136,10 +136,10 @@ typedef uskew16_t tm_ushort_t;
 
 
 typedef struct {
-   unsigned char *source;
-   data_address_t destination;
-   uint_least8_t  data_amount;
-   unsigned char  execution_command;
+  unsigned char *source;
+  data_address_t destination;
+  uint_least8_t  data_amount;
+  unsigned char  execution_command;
 } memory_patch_variables_t;
 /* Holds parameters for PatchCode function:                         */
 /*    source             source address of the patch                */
@@ -169,32 +169,32 @@ extern unsigned char EXTERNAL reference_checksum;
 
 /* Function prototypes: */
 
-extern void Init_DPU (reset_class_t reset_class);
+extern void Init_DPU ( reset_class_t reset_class );
 
-extern reset_class_t GetResetClass(void);
+extern reset_class_t GetResetClass( void );
 
-extern void SignalMemoryErrors (void);
+extern void SignalMemoryErrors ( void );
 
-extern void SetMemoryConfiguration (memory_configuration_t memory);
+extern void SetMemoryConfiguration ( memory_configuration_t memory );
 
-extern memory_configuration_t GetMemoryConfiguration(void)
-   COMPACT REENTRANT_FUNC; 
+extern memory_configuration_t GetMemoryConfiguration( void )
+COMPACT REENTRANT_FUNC;
 
-extern void PatchCode(memory_patch_variables_t EXTERNAL *patch_variables);  
+extern void PatchCode( memory_patch_variables_t EXTERNAL *patch_variables );
 
-extern void Reboot(reset_class_t boot_type);
+extern void Reboot( reset_class_t boot_type );
 
 
 /* Assembly-language function prototypes (asmfuncs.a51): */
 
-extern unsigned char TestMemBits (data_address_t address);
+extern unsigned char TestMemBits ( data_address_t address );
 
 extern unsigned char TestMemData (
-                data_address_t start,
-                uint_least8_t  bytes);
+  data_address_t start,
+  uint_least8_t  bytes );
 
 extern unsigned char TestMemSeq (
-                data_address_t start,
-                uint_least8_t  bytes);
+  data_address_t start,
+  uint_least8_t  bytes );
 
 #endif

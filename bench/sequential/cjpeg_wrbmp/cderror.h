@@ -23,7 +23,7 @@
 
   License:  See the accompanying README file
 
- */
+*/
 
 #ifndef CJPEG_WRBMP_JMESSAGE
 #ifndef CDERROR_H
@@ -68,7 +68,7 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JERR_GIF_NOT, "Not a GIF file" )
   CJPEG_WRBMP_JMESSAGE( JTRC_GIF, "%ux%ux%d GIF image" )
   CJPEG_WRBMP_JMESSAGE( JTRC_GIF_BADVERSION,
-                               "Warning: unexpected GIF version number '%c%c%c'" )
+                        "Warning: unexpected GIF version number '%c%c%c'" )
   CJPEG_WRBMP_JMESSAGE( JTRC_GIF_EXTENSION, "Ignoring GIF extension block of type 0x%02x" )
   CJPEG_WRBMP_JMESSAGE( JTRC_GIF_NONSQUARE, "Caution: nonsquare pixels in input" )
   CJPEG_WRBMP_JMESSAGE( JWRN_GIF_BADDATA, "Corrupt data in GIF file" )
@@ -116,13 +116,13 @@ typedef enum {
   #endif
 
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_CMAP_FILE,
-                               "Color map file is invalid or of unsupported format" )
+                        "Color map file is invalid or of unsupported format" )
   CJPEG_WRBMP_JMESSAGE( JERR_TOO_MANY_COLORS,
-                               "Output file format cannot handle %d colormap entries" )
+                        "Output file format cannot handle %d colormap entries" )
   CJPEG_WRBMP_JMESSAGE( JERR_UNGETC_FAILED, "ungetc failed" )
   #ifdef CJPEG_WRBMP_TARGA_SUPPORTED
   CJPEG_WRBMP_JMESSAGE( JERR_UNKNOWN_FORMAT,
-                               "Unrecognized input file format --- perhaps you need -targa" )
+                        "Unrecognized input file format --- perhaps you need -targa" )
   #else
   CJPEG_WRBMP_JMESSAGE( JERR_UNKNOWN_FORMAT, "Unrecognized input file format" )
   #endif

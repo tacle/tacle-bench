@@ -54,7 +54,7 @@ int recursion_fib( int i )
 
 int recursion_return()
 {
-  return (recursion_result  + (-89) ) != 0;
+  return ( recursion_result  + ( -89 ) ) != 0;
 }
 
 void _Pragma( "entrypoint" ) recursion_main( void )

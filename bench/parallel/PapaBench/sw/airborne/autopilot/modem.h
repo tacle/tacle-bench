@@ -1,26 +1,26 @@
 /*
- * Paparazzi mcu0 cmx469 modem functions
- *  
- * Copyright (C) 2003 Pascal Brisset, Antoine Drouin
- *
- * This file is part of paparazzi.
- *
- * paparazzi is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * paparazzi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with paparazzi; see the file COPYING.  If not, write to
- * the Free Software Foundation, 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA. 
- *
- */
+   Paparazzi mcu0 cmx469 modem functions
+
+   Copyright (C) 2003 Pascal Brisset, Antoine Drouin
+
+   This file is part of paparazzi.
+
+   paparazzi is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   paparazzi is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with paparazzi; see the file COPYING.  If not, write to
+   the Free Software Foundation, 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
 
 #ifndef MODEM_H
 #define MODEM_H
@@ -49,7 +49,7 @@ extern uint8_t ck_a, ck_b;
 
 
 #define MODEM_TX_PORT   PORTD
-#define MODEM_TX_DDR	DDRD
+#define MODEM_TX_DDR  DDRD
 #define MODEM_TX_EN     7
 #define MODEM_TX_DATA   6
 
@@ -63,7 +63,7 @@ extern uint8_t ck_a, ck_b;
 #define MODEM_CLK_INT_SIG SIG_INTERRUPT0
 #endif /* CTL_BRD_V1_1 */
 
-#ifdef CTL_BRD_V1_2 
+#ifdef CTL_BRD_V1_2
 #define MODEM_CLK_DDR   DDRD
 #define MODEM_CLK_PORT  PORTD
 #define MODEM_CLK       0

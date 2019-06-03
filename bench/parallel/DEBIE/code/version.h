@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   version.h
- *
- * DEBIE SW version and checksum.
- *
- * Based on the SSF file version.h, rev 1.30, Wed Feb 23 12:17:32 2000.
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   version.h
+
+   DEBIE SW version and checksum.
+
+   Based on the SSF file version.h, rev 1.30, Wed Feb 23 12:17:32 2000.
+
+  - * --------------------------------------------------------------------------
+*/
 
 #ifndef VERSION_H
 #define VERSION_H

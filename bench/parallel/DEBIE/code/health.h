@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   health.h
- *
- * Prototypes etc. for the Health module.
- *
- * Based on the SSF file health.h, revision 1.12, Wed Oct 13 19:50:12 1999.
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   health.h
+
+   Prototypes etc. for the Health module.
+
+   Based on the SSF file health.h, revision 1.12, Wed Oct 13 19:50:12 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 #ifndef HEALTH_H
 #define HEALTH_H
@@ -32,7 +32,7 @@
 
 #define RESULT_OK 1
 #define CONVERSION_ACTIVE 0
-#define HIT_OCCURRED 2 
+#define HIT_OCCURRED 2
 
 #define CONVERSION_STARTED 1
 
@@ -48,7 +48,7 @@
 
 #define VOLTAGE_COUNT   17
 /* Voltage Measurement loop count. */
- 
+
 #define TEMP_COUNT      5
 /* Temperature measurement loop count. Its value must equal or greater than  */
 /* NUM_SU, because its value defines the SU whos temperatures are to be      */
@@ -63,7 +63,7 @@
 
 #define CHECK_SIZE      547
 /* Checksum is counted for code memory 547 bytes per check round. */
- 
+
 #define CODE_MEMORY_END        0x7FFF
 /* The last code memory address to be checked in function */
 /* 'CalculateChecksum'.                                   */
@@ -71,14 +71,14 @@
 /* than 2^16 - 1. Otherwise it will affect a 'for'        */
 /* loop in 'CalculateChecksum' function in a way          */
 /* that makes this loop infinite.                         */
-  
+
 #define MAX_CHECKSUM_COUNT 59
 #define MIN_CHECKSUM_COUNT 0
 /* Limiting values used in function 'CalculateChecksum'. */
 
 typedef enum  {
-   round_0_e, round_1_e, round_2_e, round_3_e, round_4_e,
-   round_5_e, round_6_e, round_7_e, round_8_e, round_9_e
+  round_0_e, round_1_e, round_2_e, round_3_e, round_4_e,
+  round_5_e, round_6_e, round_7_e, round_8_e, round_9_e
 } round_t;
 
 extern uint_least8_t EXTERNAL health_mon_round;
@@ -87,32 +87,32 @@ extern uint_least8_t EXTERNAL voltage_meas_count;
 extern uint_least8_t EXTERNAL checksum_count;
 extern unsigned char EXTERNAL code_checksum;
 
-extern EXTERNAL unsigned char confirm_hit_result;  
+extern EXTERNAL unsigned char confirm_hit_result;
 extern EXTERNAL dpu_time_t internal_time;
 
-extern void SetSoftwareError (unsigned char error)
-   COMPACT_DATA REENTRANT_FUNC;
-extern void ClearSoftwareError (void);
-extern void SetModeStatusError (unsigned char mode_status_error)
-   COMPACT_DATA REENTRANT_FUNC;
-extern void ClearModeStatusError(void);
+extern void SetSoftwareError ( unsigned char error )
+COMPACT_DATA REENTRANT_FUNC;
+extern void ClearSoftwareError ( void );
+extern void SetModeStatusError ( unsigned char mode_status_error )
+COMPACT_DATA REENTRANT_FUNC;
+extern void ClearModeStatusError( void );
 
-extern void SetMode (DEBIE_mode_t mode)
-   COMPACT_DATA REENTRANT_FUNC;
-extern DEBIE_mode_t GetMode(void);
-extern void Clear_SU_Error(void);
-extern void Set_SU_Error(sensor_index_t SU_index, unsigned char SU_error);
-extern void SetErrorStatus(unsigned char error_source);
-extern void ClearErrorStatus(void);
-extern void Clear_RTX_Errors(void);
+extern void SetMode ( DEBIE_mode_t mode )
+COMPACT_DATA REENTRANT_FUNC;
+extern DEBIE_mode_t GetMode( void );
+extern void Clear_SU_Error( void );
+extern void Set_SU_Error( sensor_index_t SU_index, unsigned char SU_error );
+extern void SetErrorStatus( unsigned char error_source );
+extern void ClearErrorStatus( void );
+extern void Clear_RTX_Errors( void );
 
 
-extern void Boot (void);
+extern void Boot ( void );
 
 /* Task functions, for testing: */
 
-extern void InitHealthMonitoring (void);
-extern void HandleHealthMonitoring (void);
+extern void InitHealthMonitoring ( void );
+extern void HandleHealthMonitoring ( void );
 
 #endif
 

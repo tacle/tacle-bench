@@ -19,6 +19,7 @@
   License: GNU Lesser General Public License
 */
 #include "memset.h"
+int printf(const char * restrict format, ... );
 
 void *sha_glibc_memset( void *dstpp, int c, size_t len )
 {
@@ -39,23 +40,23 @@ void *sha_glibc_memset( void *dstpp, int c, size_t len )
       No need to test for LEN == 0 in this alignment loop.  */
     _Pragma( "loopbound min 3 max 3" )
     while ( dstp % OPSIZ != 0 ) {
-      ( ( BYTE * ) dstp )[0] = c;
+      ( ( BYTE * ) dstp )[ 0 ] = c;
       dstp += 1;
       len -= 1;
     }
 
     /* Write 8 `op_t' per iteration until less than 8 `op_t' remain.  */
     xlen = len / ( OPSIZ * 8 );
-    _Pragma( "loopbound min 1 max 1" )
+    _Pragma( "loopbound min 0 max 1" )
     while ( xlen > 0 ) {
-      ( ( op_t * ) dstp )[0] = cccc;
-      ( ( op_t * ) dstp )[1] = cccc;
-      ( ( op_t * ) dstp )[2] = cccc;
-      ( ( op_t * ) dstp )[3] = cccc;
-      ( ( op_t * ) dstp )[4] = cccc;
-      ( ( op_t * ) dstp )[5] = cccc;
-      ( ( op_t * ) dstp )[6] = cccc;
-      ( ( op_t * ) dstp )[7] = cccc;
+      ( ( op_t * ) dstp )[ 0 ] = cccc;
+      ( ( op_t * ) dstp )[ 1 ] = cccc;
+      ( ( op_t * ) dstp )[ 2 ] = cccc;
+      ( ( op_t * ) dstp )[ 3 ] = cccc;
+      ( ( op_t * ) dstp )[ 4 ] = cccc;
+      ( ( op_t * ) dstp )[ 5 ] = cccc;
+      ( ( op_t * ) dstp )[ 6 ] = cccc;
+      ( ( op_t * ) dstp )[ 7 ] = cccc;
       dstp += 8 * OPSIZ;
       xlen -= 1;
     }
@@ -63,9 +64,9 @@ void *sha_glibc_memset( void *dstpp, int c, size_t len )
 
     /* Write 1 `op_t' per iteration until less than OPSIZ bytes remain.  */
     xlen = len / OPSIZ;
-    _Pragma( "loopbound min 1 max 1" )
+    _Pragma( "loopbound min 1 max 2" )      
     while ( xlen > 0 ) {
-      ( ( op_t * ) dstp )[0] = cccc;
+      ( ( op_t * ) dstp )[ 0 ] = cccc;
       dstp += OPSIZ;
       xlen -= 1;
     }
@@ -75,7 +76,7 @@ void *sha_glibc_memset( void *dstpp, int c, size_t len )
   /* Write the last few bytes.  */
   _Pragma( "loopbound min 0 max 0" )
   while ( len > 0 ) {
-    ( ( BYTE * ) dstp )[0] = c;
+    ( ( BYTE * ) dstp )[ 0 ] = c;
     dstp += 1;
     len -= 1;
   }

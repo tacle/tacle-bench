@@ -2,7 +2,7 @@
 /* Please DO NOT EDIT */
 
 #ifndef RADIO_H
-#define RADIO_H 
+#define RADIO_H
 
 #define RADIO_NAME "mc3030"
 
@@ -34,63 +34,63 @@
 #define LastRadioFromPpm() {\
   static uint8_t avg_cpt = 0; /* Counter for averaging */\
    int16_t tmp_radio;\
-  tmp_radio = ppm_pulses[RADIO_THROTTLE] - (CLOCK*1000);\
-  last_radio[RADIO_THROTTLE] = tmp_radio * (MAX_PPRZ / 1 / (float)(CLOCK*(2200-1000)));\
-  if (last_radio[RADIO_THROTTLE] > MAX_PPRZ) last_radio[RADIO_THROTTLE] = MAX_PPRZ;\
- else if (last_radio[RADIO_THROTTLE] < 0) last_radio[RADIO_THROTTLE] = 0; \
+  tmp_radio = ppm_pulses[ RADIO_THROTTLE ] - (CLOCK*1000);\
+  last_radio[ RADIO_THROTTLE ] = tmp_radio * (MAX_PPRZ / 1 / (float)(CLOCK*(2200-1000)));\
+  if (last_radio[ RADIO_THROTTLE ] > MAX_PPRZ) last_radio[ RADIO_THROTTLE ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_THROTTLE ] < 0) last_radio[ RADIO_THROTTLE ] = 0; \
 \
-  tmp_radio = ppm_pulses[RADIO_ROLL] - (CLOCK*1600);\
-  last_radio[RADIO_ROLL] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
-  if (last_radio[RADIO_ROLL] > MAX_PPRZ) last_radio[RADIO_ROLL] = MAX_PPRZ;\
- else if (last_radio[RADIO_ROLL] < MIN_PPRZ) last_radio[RADIO_ROLL] = MIN_PPRZ; \
+  tmp_radio = ppm_pulses[ RADIO_ROLL ] - (CLOCK*1600);\
+  last_radio[ RADIO_ROLL ] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
+  if (last_radio[ RADIO_ROLL ] > MAX_PPRZ) last_radio[ RADIO_ROLL ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_ROLL ] < MIN_PPRZ) last_radio[ RADIO_ROLL ] = MIN_PPRZ; \
 \
-  tmp_radio = ppm_pulses[RADIO_PITCH] - (CLOCK*1600);\
-  last_radio[RADIO_PITCH] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
-  if (last_radio[RADIO_PITCH] > MAX_PPRZ) last_radio[RADIO_PITCH] = MAX_PPRZ;\
- else if (last_radio[RADIO_PITCH] < MIN_PPRZ) last_radio[RADIO_PITCH] = MIN_PPRZ; \
+  tmp_radio = ppm_pulses[ RADIO_PITCH ] - (CLOCK*1600);\
+  last_radio[ RADIO_PITCH ] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
+  if (last_radio[ RADIO_PITCH ] > MAX_PPRZ) last_radio[ RADIO_PITCH ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_PITCH ] < MIN_PPRZ) last_radio[ RADIO_PITCH ] = MIN_PPRZ; \
 \
-  tmp_radio = ppm_pulses[RADIO_YAW] - (CLOCK*1600);\
-  last_radio[RADIO_YAW] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
-  if (last_radio[RADIO_YAW] > MAX_PPRZ) last_radio[RADIO_YAW] = MAX_PPRZ;\
- else if (last_radio[RADIO_YAW] < MIN_PPRZ) last_radio[RADIO_YAW] = MIN_PPRZ; \
+  tmp_radio = ppm_pulses[ RADIO_YAW ] - (CLOCK*1600);\
+  last_radio[ RADIO_YAW ] = tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/1/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/1/(float)(CLOCK*(1000-1600))));\
+  if (last_radio[ RADIO_YAW ] > MAX_PPRZ) last_radio[ RADIO_YAW ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_YAW ] < MIN_PPRZ) last_radio[ RADIO_YAW ] = MIN_PPRZ; \
 \
-  tmp_radio = ppm_pulses[RADIO_MODE] - (CLOCK*1600);\
-  avg_last_radio[RADIO_MODE] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
-  tmp_radio = ppm_pulses[RADIO_GAIN1] - (CLOCK*1600);\
-  avg_last_radio[RADIO_GAIN1] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
-  tmp_radio = ppm_pulses[RADIO_GAIN2] - (CLOCK*1600);\
-  avg_last_radio[RADIO_GAIN2] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
-  tmp_radio = ppm_pulses[RADIO_LLS] - (CLOCK*1600);\
-  avg_last_radio[RADIO_LLS] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
-  tmp_radio = ppm_pulses[RADIO_CALIB] - (CLOCK*1600);\
-  avg_last_radio[RADIO_CALIB] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
+  tmp_radio = ppm_pulses[ RADIO_MODE ] - (CLOCK*1600);\
+  avg_last_radio[ RADIO_MODE ] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
+  tmp_radio = ppm_pulses[ RADIO_GAIN1 ] - (CLOCK*1600);\
+  avg_last_radio[ RADIO_GAIN1 ] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
+  tmp_radio = ppm_pulses[ RADIO_GAIN2 ] - (CLOCK*1600);\
+  avg_last_radio[ RADIO_GAIN2 ] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
+  tmp_radio = ppm_pulses[ RADIO_LLS ] - (CLOCK*1600);\
+  avg_last_radio[ RADIO_LLS ] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
+  tmp_radio = ppm_pulses[ RADIO_CALIB ] - (CLOCK*1600);\
+  avg_last_radio[ RADIO_CALIB ] += tmp_radio * (tmp_radio >=0 ? (MAX_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(2200-1600))) : (MIN_PPRZ/AVERAGING_PERIOD/(float)(CLOCK*(1000-1600))));\
 avg_cpt++;\
   if (avg_cpt == AVERAGING_PERIOD) {\
     avg_cpt = 0;\
-    last_radio[RADIO_MODE] = avg_last_radio[RADIO_MODE];\
-    avg_last_radio[RADIO_MODE] = 0;\
-  if (last_radio[RADIO_MODE] > MAX_PPRZ) last_radio[RADIO_MODE] = MAX_PPRZ;\
- else if (last_radio[RADIO_MODE] < MIN_PPRZ) last_radio[RADIO_MODE] = MIN_PPRZ; \
+    last_radio[ RADIO_MODE ] = avg_last_radio[ RADIO_MODE ];\
+    avg_last_radio[ RADIO_MODE ] = 0;\
+  if (last_radio[ RADIO_MODE ] > MAX_PPRZ) last_radio[ RADIO_MODE ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_MODE ] < MIN_PPRZ) last_radio[ RADIO_MODE ] = MIN_PPRZ; \
 \
-    last_radio[RADIO_GAIN1] = avg_last_radio[RADIO_GAIN1];\
-    avg_last_radio[RADIO_GAIN1] = 0;\
-  if (last_radio[RADIO_GAIN1] > MAX_PPRZ) last_radio[RADIO_GAIN1] = MAX_PPRZ;\
- else if (last_radio[RADIO_GAIN1] < MIN_PPRZ) last_radio[RADIO_GAIN1] = MIN_PPRZ; \
+    last_radio[ RADIO_GAIN1 ] = avg_last_radio[ RADIO_GAIN1 ];\
+    avg_last_radio[ RADIO_GAIN1 ] = 0;\
+  if (last_radio[ RADIO_GAIN1 ] > MAX_PPRZ) last_radio[ RADIO_GAIN1 ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_GAIN1 ] < MIN_PPRZ) last_radio[ RADIO_GAIN1 ] = MIN_PPRZ; \
 \
-    last_radio[RADIO_GAIN2] = avg_last_radio[RADIO_GAIN2];\
-    avg_last_radio[RADIO_GAIN2] = 0;\
-  if (last_radio[RADIO_GAIN2] > MAX_PPRZ) last_radio[RADIO_GAIN2] = MAX_PPRZ;\
- else if (last_radio[RADIO_GAIN2] < MIN_PPRZ) last_radio[RADIO_GAIN2] = MIN_PPRZ; \
+    last_radio[ RADIO_GAIN2 ] = avg_last_radio[ RADIO_GAIN2 ];\
+    avg_last_radio[ RADIO_GAIN2 ] = 0;\
+  if (last_radio[ RADIO_GAIN2 ] > MAX_PPRZ) last_radio[ RADIO_GAIN2 ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_GAIN2 ] < MIN_PPRZ) last_radio[ RADIO_GAIN2 ] = MIN_PPRZ; \
 \
-    last_radio[RADIO_LLS] = avg_last_radio[RADIO_LLS];\
-    avg_last_radio[RADIO_LLS] = 0;\
-  if (last_radio[RADIO_LLS] > MAX_PPRZ) last_radio[RADIO_LLS] = MAX_PPRZ;\
- else if (last_radio[RADIO_LLS] < MIN_PPRZ) last_radio[RADIO_LLS] = MIN_PPRZ; \
+    last_radio[ RADIO_LLS ] = avg_last_radio[ RADIO_LLS ];\
+    avg_last_radio[ RADIO_LLS ] = 0;\
+  if (last_radio[ RADIO_LLS ] > MAX_PPRZ) last_radio[ RADIO_LLS ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_LLS ] < MIN_PPRZ) last_radio[ RADIO_LLS ] = MIN_PPRZ; \
 \
-    last_radio[RADIO_CALIB] = avg_last_radio[RADIO_CALIB];\
-    avg_last_radio[RADIO_CALIB] = 0;\
-  if (last_radio[RADIO_CALIB] > MAX_PPRZ) last_radio[RADIO_CALIB] = MAX_PPRZ;\
- else if (last_radio[RADIO_CALIB] < MIN_PPRZ) last_radio[RADIO_CALIB] = MIN_PPRZ; \
+    last_radio[ RADIO_CALIB ] = avg_last_radio[ RADIO_CALIB ];\
+    avg_last_radio[ RADIO_CALIB ] = 0;\
+  if (last_radio[ RADIO_CALIB ] > MAX_PPRZ) last_radio[ RADIO_CALIB ] = MAX_PPRZ;\
+ else if (last_radio[ RADIO_CALIB ] < MIN_PPRZ) last_radio[ RADIO_CALIB ] = MIN_PPRZ; \
 \
     last_radio_contains_avg_channels = TRUE;\
  }\

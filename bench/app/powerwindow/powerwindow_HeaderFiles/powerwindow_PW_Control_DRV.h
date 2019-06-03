@@ -1,21 +1,21 @@
 /*
 
- This program is part of the TACLeBench benchmark suite.
- Version V 1.x
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
 
- Name: powerwindow_PW_Control_DRV.h
+  Name: powerwindow_PW_Control_DRV.h
 
- Author: CoSys-Lab, University of Antwerp
+  Author: CoSys-Lab, University of Antwerp
 
- Function: headerfile
+  Function: headerfile
 
- Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_PW_Control_DRV.h
+  Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_PW_Control_DRV.h
 
- Changes: a brief summary of major functional changes and formatting)
+  Changes: a brief summary of major functional changes and formatting)
 
- License: GNU General Public License
+  License: GNU General Public License
 
- */
+*/
 
 #ifndef powerwindow_RTW_HEADER_powerwindow_PW_Control_DRV_h_
 #define powerwindow_RTW_HEADER_powerwindow_PW_Control_DRV_h_
@@ -48,14 +48,22 @@
 
 /* Block states (auto storage) for system '<Root>' */
 typedef struct {
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Up_DRV_DWORK1;/* '<S2>/Debounce_Up_DRV' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Down_DRV_DWORK1;/* '<S2>/Debounce_Down_DRV' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Up_PSG_BackL_DWORK1;/* '<S2>/Debounce_Up_PSG_BackL' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Down_PSG_BackL_DWORK1;/* '<S2>/Debounce_Down_PSG_BackL' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Up_PSG_Front_DWORK1;/* '<S2>/Debounce_Up_PSG_Front' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Down_PSG_Front_DWORK1;/* '<S2>/Debounce_Down_PSG_Front' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Up_PSG_BackR_DWORK1;/* '<S2>/Debounce_Up_PSG_BackR' */
-  powerwindow_rtMdlrefDWork_debounce_T Debounce_Down_PSG_BackR_DWORK1;/* '<S2>/Debounce_Down_PSG_BackR' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Up_DRV_DWORK1;/* '<S2>/Debounce_Up_DRV' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Down_DRV_DWORK1;/* '<S2>/Debounce_Down_DRV' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Up_PSG_BackL_DWORK1;/* '<S2>/Debounce_Up_PSG_BackL' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Down_PSG_BackL_DWORK1;/* '<S2>/Debounce_Down_PSG_BackL' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Up_PSG_Front_DWORK1;/* '<S2>/Debounce_Up_PSG_Front' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Down_PSG_Front_DWORK1;/* '<S2>/Debounce_Down_PSG_Front' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Up_PSG_BackR_DWORK1;/* '<S2>/Debounce_Up_PSG_BackR' */
+  powerwindow_rtMdlrefDWork_debounce_T
+  Debounce_Down_PSG_BackR_DWORK1;/* '<S2>/Debounce_Down_PSG_BackR' */
   powerwindow_rtMdlrefDWork_PowerWindow_contr PW_DRV_DWORK1;/* '<S1>/PW_DRV' */
 } powerwindow_D_Work_powerwindow_PW_Control_D;
 
@@ -63,7 +71,7 @@ typedef struct {
 typedef struct {
   powerwindow_boolean_T In1;                       /* '<Root>/In1' */
   powerwindow_boolean_T In2;                       /* '<Root>/In2' */
-  powerwindow_uint8_T 	In3;                         /* '<Root>/In3' */
+  powerwindow_uint8_T   In3;                         /* '<Root>/In3' */
   powerwindow_boolean_T In4;                       /* '<Root>/In4' */
   powerwindow_boolean_T In5;                       /* '<Root>/In5' */
   powerwindow_boolean_T In6;                       /* '<Root>/In6' */
@@ -89,11 +97,12 @@ typedef struct {
 } powerwindow_ExternalOutputs_powerwindow_PW_;
 
 struct powerwindow_tag_RTM_PW_Control_DRV {
-  const powerwindow_char_T * volatile errorStatus;
+  const powerwindow_char_T *volatile errorStatus;
 };
 
 /* Block states (auto storage) */
-extern powerwindow_D_Work_powerwindow_PW_Control_D powerwindow_PW_Control_DR_DWork;
+extern powerwindow_D_Work_powerwindow_PW_Control_D
+powerwindow_PW_Control_DR_DWork;
 
 /* External inputs (root inport signals with auto storage) */
 extern powerwindow_ExternalInputs_powerwindow_PW_C powerwindow_PW_Control_DRV_U;
@@ -102,38 +111,38 @@ extern powerwindow_ExternalInputs_powerwindow_PW_C powerwindow_PW_Control_DRV_U;
 extern powerwindow_ExternalOutputs_powerwindow_PW_ powerwindow_PW_Control_DRV_Y;
 
 /* Model entry point functions */
-extern void powerwindow_PW_Control_DRV_initialize(void);
-extern void powerwindow_PW_Control_DRV_main(void);
-extern void powerwindow_PW_Control_DRV_terminate(void);
+extern void powerwindow_PW_Control_DRV_initialize( void );
+extern void powerwindow_PW_Control_DRV_main( void );
+extern void powerwindow_PW_Control_DRV_terminate( void );
 
 /* Real-time Model object */
 extern powerwindow_RT_MODEL_PW_Control_DRV *const powerwindow_PW_Control_DRV_M;
 
 /*-
- * The generated code includes comments that allow you to trace directly
- * back to the appropriate location in the model.  The basic format
- * is <system>/block_name, where system is the system number (uniquely
- * assigned by Simulink) and block_name is the name of the block.
- *
- * Note that this particular code originates from a subsystem build,
- * and has its own system numbers different from the parent model.
- * Refer to the system hierarchy for this subsystem below, and use the
- * MATLAB hilite_system command to trace the generated code back
- * to the parent model.  For example,
- *
- * hilite_system('PowerWindow/powerwindow_PW_Control_DRV')    - opens subsystem PowerWindow/powerwindow_PW_Control_DRV
- * hilite_system('PowerWindow/powerwindow_PW_Control_DRV/Kp') - opens and selects block Kp
- *
- * Here is the system hierarchy for this model
- *
- * '<Root>' : 'PowerWindow'
- * '<S1>'   : 'PowerWindow/powerwindow_PW_Control_DRV'
- * '<S2>'   : 'PowerWindow/powerwindow_PW_Control_DRV/Debounce_DRV'
- */
+   The generated code includes comments that allow you to trace directly
+   back to the appropriate location in the model.  The basic format
+   is <system>/block_name, where system is the system number (uniquely
+   assigned by Simulink) and block_name is the name of the block.
+
+   Note that this particular code originates from a subsystem build,
+   and has its own system numbers different from the parent model.
+   Refer to the system hierarchy for this subsystem below, and use the
+   MATLAB hilite_system command to trace the generated code back
+   to the parent model.  For example,
+
+   hilite_system('PowerWindow/powerwindow_PW_Control_DRV')    - opens subsystem PowerWindow/powerwindow_PW_Control_DRV
+   hilite_system('PowerWindow/powerwindow_PW_Control_DRV/Kp') - opens and selects block Kp
+
+   Here is the system hierarchy for this model
+
+   '<Root>' : 'PowerWindow'
+   '<S1>'   : 'PowerWindow/powerwindow_PW_Control_DRV'
+   '<S2>'   : 'PowerWindow/powerwindow_PW_Control_DRV/Debounce_DRV'
+*/
 #endif                                 /* RTW_HEADER_powerwindow_PW_Control_DRV_h_ */
 
 /*
- * File trailer for generated code.
- *
- * [EOF]
- */
+   File trailer for generated code.
+
+   [ EOF ]
+*/

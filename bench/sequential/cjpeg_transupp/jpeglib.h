@@ -89,7 +89,7 @@ typedef struct {
 
 
 /*
- Huffman coding tables.
+  Huffman coding tables.
 */
 
 typedef struct {
@@ -114,7 +114,7 @@ typedef struct {
 
 
 /*
- Basic info about one component (color channel).
+  Basic info about one component (color channel).
 */
 
 typedef struct {
@@ -705,7 +705,7 @@ typedef struct jvirt_barray_control *jvirt_barray_ptr;
 struct jpeg_memory_mgr {
   /*
     Method pointers
-    */
+  */
   void *( *alloc_small ) (
     j_common_ptr cinfo, int pool_id, long unsigned int sizeofobject );
 

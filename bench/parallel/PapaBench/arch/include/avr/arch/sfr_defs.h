@@ -4,15 +4,15 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright
+     Redistributions of source code must retain the above copyright
      notice, this list of conditions and the following disclaimer.
 
-   * Redistributions in binary form must reproduce the above copyright
+     Redistributions in binary form must reproduce the above copyright
      notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the
      distribution.
 
-   * Neither the name of the copyright holders nor the names of
+     Neither the name of the copyright holders nor the names of
      contributors may be used to endorse or promote products derived
      from this software without specific prior written permission.
 
@@ -44,12 +44,12 @@
    <tt>_SFR_ASM_COMPAT</tt> define.  Some examples from \c <arch/iom128.h> to
    show how to define such macros:
 
-\code
-#define PORTA _SFR_IO8(0x1b)
-#define TCNT1 _SFR_IO16(0x2c)
-#define PORTF _SFR_MEM8(0x61)
-#define TCNT3 _SFR_MEM16(0x88)
-\endcode
+  \code
+  #define PORTA _SFR_IO8(0x1b)
+  #define TCNT1 _SFR_IO16(0x2c)
+  #define PORTF _SFR_MEM8(0x61)
+  #define TCNT3 _SFR_MEM16(0x88)
+  \endcode
 
    If \c _SFR_ASM_COMPAT is not defined, C programs can use names like
    <tt>PORTA</tt> directly in C expressions (also on the left side of
@@ -67,9 +67,9 @@
    For more backwards compatibility, insert the following at the start of your
    old assembler source file:
 
-\code
-#define __SFR_OFFSET 0
-\endcode
+  \code
+  #define __SFR_OFFSET 0
+  \endcode
 
    This automatically subtracts 0x20 from I/O space addresses, but it's a
    hack, so it is recommended to change your source: wrap such addresses in
@@ -79,18 +79,18 @@
    Real example - this code could be used in a boot loader that is portable
    between devices with \c SPMCR at different addresses.
 
-\verbatim
-<arch/iom163.h>: #define SPMCR _SFR_IO8(0x37)
-<arch/iom128.h>: #define SPMCR _SFR_MEM8(0x68)
-\endverbatim
+  \verbatim
+  <arch/iom163.h>: #define SPMCR _SFR_IO8(0x37)
+  <arch/iom128.h>: #define SPMCR _SFR_MEM8(0x68)
+  \endverbatim
 
-\code
-#if _SFR_IO_REG_P(SPMCR)
-	out	_SFR_IO_ADDR(SPMCR), r24
-#else
-	sts	_SFR_MEM_ADDR(SPMCR), r24
-#endif
-\endcode
+  \code
+  #if _SFR_IO_REG_P(SPMCR)
+  out _SFR_IO_ADDR(SPMCR), r24
+  #else
+  sts _SFR_MEM_ADDR(SPMCR), r24
+  #endif
+  \endcode
 
    You can use the \c in/out/cbi/sbi/sbic/sbis instructions, without the
    <tt>_SFR_IO_REG_P</tt> test, if you know that the register is in the I/O
@@ -105,9 +105,9 @@
    will not work if <tt>__SFR_OFFSET</tt> != 0x20, so use a different macro
    (defined only if <tt>__SFR_OFFSET</tt> == 0x20) for safety:
 
-\code
-	sts	_SFR_ADDR(SPMCR), r24
-\endcode
+  \code
+  sts _SFR_ADDR(SPMCR), r24
+  \endcode
 
    In C programs, all 3 combinations of \c _SFR_ASM_COMPAT and
    <tt>__SFR_OFFSET</tt> are supported - the \c _SFR_ADDR(SPMCR) macro can be
@@ -185,7 +185,7 @@
     \note The bit shift is performed by the compiler which then inserts the
     result into the code. Thus, there is no run-time overhead when using
     _BV(). */
-    
+
 #define _BV(bit) (1 << (bit))
 
 /*@}*/
@@ -208,7 +208,7 @@
 
     \code #include <arch/io.h>\endcode
 
-    Test whether bit \c bit in IO register \c sfr is set. 
+    Test whether bit \c bit in IO register \c sfr is set.
     This will return a 0 if the bit is clear, and non-zero
     if the bit is set. */
 
@@ -219,7 +219,7 @@
 
     \code #include <arch/io.h>\endcode
 
-    Test whether bit \c bit in IO register \c sfr is clear. 
+    Test whether bit \c bit in IO register \c sfr is clear.
     This will return non-zero if the bit is clear, and a 0
     if the bit is set. */
 

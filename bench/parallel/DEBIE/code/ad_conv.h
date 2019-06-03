@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Module     :   ad_conv.h
- * 
- * Macros, functions, types and constants for controlling AD converter.
- *
- * Based on the SSF DHI file ad_conv.h, revision 1.6, Tue Jun 01 12:35:44 1999.
- *
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Module     :   ad_conv.h
+
+   Macros, functions, types and constants for controlling AD converter.
+
+   Based on the SSF DHI file ad_conv.h, revision 1.6, Tue Jun 01 12:35:44 1999.
+
+
+  - * --------------------------------------------------------------------------
+*/
 
 
 #ifndef AD_CONV_H

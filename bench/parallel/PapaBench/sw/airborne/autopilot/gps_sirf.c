@@ -1,32 +1,32 @@
 /*
- * Paparazzi mcu0 $Id: gps_sirf.c,v 1.2 2011-01-25 09:40:36 plazar Exp $
- *  
- * Copyright (C) 2003  Pascal Brisset, Antoine Drouin
- *
- * This file is part of paparazzi.
- *
- * paparazzi is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * paparazzi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with paparazzi; see the file COPYING.  If not, write to
- * the Free Software Foundation, 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA. 
- *
- */
+   Paparazzi mcu0 $Id: gps_sirf.c,v 1.2 2011-01-25 09:40:36 plazar Exp $
+
+   Copyright (C) 2003  Pascal Brisset, Antoine Drouin
+
+   This file is part of paparazzi.
+
+   paparazzi is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   paparazzi is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with paparazzi; see the file COPYING.  If not, write to
+   the Free Software Foundation, 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
 
 #include <inttypes.h>
 #include <arch/io.h>
 #include <arch/signal.h>
 #include <arch/interrupt.h>
-#include <string.h> 
+#include <string.h>
 #include "math_papabench.h"
 
 #include "uart.h"
@@ -43,14 +43,14 @@ bool_t gps_pos_available;
 
 
 #define SIRF_MAX_PAYLOAD 255
-uint8_t  sirf_msg_buf[SIRF_MAX_PAYLOAD];
+uint8_t  sirf_msg_buf[ SIRF_MAX_PAYLOAD ];
 
 #define READ_INT32_AT_OFFSET(offset, dest)  \
 {                                           \
-  dest[0] = sirf_msg_buf[offset+3];    \
-  dest[1] = sirf_msg_buf[offset+2];    \
-  dest[2] = sirf_msg_buf[offset+1];    \
-  dest[3] = sirf_msg_buf[offset];      \
+  dest[ 0 ] = sirf_msg_buf[ offset+3 ];    \
+  dest[ 1 ] = sirf_msg_buf[ offset+2 ];    \
+  dest[ 2 ] = sirf_msg_buf[ offset+1 ];    \
+  dest[ 3 ] = sirf_msg_buf[ offset ];      \
 }                                     \
 /*  ext nav type = 0x62
            offset  len
@@ -63,29 +63,30 @@ uint8_t  sirf_msg_buf[SIRF_MAX_PAYLOAD];
    course  21      4
    mode    25      1
 */
-void parse_gps_msg( void ) {
+void parse_gps_msg( void )
+{
   static int32_t tmp_int32;
-  uint8_t *tmp = (uint8_t*)&tmp_int32;
+  uint8_t *tmp = ( uint8_t * )&tmp_int32;
 
-  READ_INT32_AT_OFFSET(1, tmp);
+  READ_INT32_AT_OFFSET( 1, tmp );
   gps_lat = tmp_int32;
 
-  READ_INT32_AT_OFFSET(5, tmp);
+  READ_INT32_AT_OFFSET( 5, tmp );
   gps_lon = tmp_int32;
-  
-  READ_INT32_AT_OFFSET(9, tmp);
-  gps_falt = (float)tmp_int32 / 1e3;
 
-  READ_INT32_AT_OFFSET(13, tmp); 
-  gps_fspeed = (float)tmp_int32 / 1e3; 
+  READ_INT32_AT_OFFSET( 9, tmp );
+  gps_falt = ( float )tmp_int32 / 1e3;
 
-  READ_INT32_AT_OFFSET(17, tmp);
-  gps_fclimb = (float)tmp_int32 / 1e3;
+  READ_INT32_AT_OFFSET( 13, tmp );
+  gps_fspeed = ( float )tmp_int32 / 1e3;
 
-  READ_INT32_AT_OFFSET(21, tmp);
-  gps_fcourse = (float)tmp_int32 / 1e8;
-  
-  gps_mode = sirf_msg_buf[25];
+  READ_INT32_AT_OFFSET( 17, tmp );
+  gps_fclimb = ( float )tmp_int32 / 1e3;
+
+  READ_INT32_AT_OFFSET( 21, tmp );
+  gps_fcourse = ( float )tmp_int32 / 1e8;
+
+  gps_mode = sirf_msg_buf[ 25 ];
 
   gps_pos_available = TRUE;
 }
@@ -95,13 +96,14 @@ void parse_gps_msg( void ) {
 
 
 
-void gps_init( void ) {
+void gps_init( void )
+{
   /* Enable uart                   */
-#ifdef SIMUL
+  #ifdef SIMUL
   uart0_init();
-#else
+  #else
   uart1_init();
-#endif
+  #endif
 }
 
 #define SIRF_START1 0xA0
@@ -141,180 +143,167 @@ static uint8_t  sirf_type;
 static uint8_t  sirf_msg_idx;
 
 
-static inline void parse_sirf( uint8_t c ) {
-/*#ifdef WITH_SWITCH
-switch (sirf_status) {
-  case UNINIT:
-    if (c == SIRF_START1)
+static inline void parse_sirf( uint8_t c )
+{
+  /*#ifdef WITH_SWITCH
+    switch (sirf_status) {
+    case UNINIT:
+      if (c == SIRF_START1)
+        sirf_status++;
+    #ifdef SIMUL
+      if (c == IR_START)
+        sirf_status = GOT_IR_START;
+    #endif
+      break;
+    case GOT_START1:
+      if (c != SIRF_START2)
+        goto error;
       sirf_status++;
-#ifdef SIMUL
-    if (c == IR_START)
-      sirf_status = GOT_IR_START;
-#endif
-    break;
-  case GOT_START1:
-    if (c != SIRF_START2)
-      goto error;
-    sirf_status++;
-    break;
-  case GOT_START2:
-    sirf_len = (c<<8) & 0xFF00;
-    sirf_status++;
-    break;
-  case GOT_LEN1:
-    sirf_len += (c & 0x00FF);
-    if (sirf_len > SIRF_MAX_PAYLOAD)
-      goto error;
-    sirf_msg_idx = 0;
-    sirf_status++;
-    break;
-  case GOT_LEN2:
-    if (sirf_msg_idx==0) {
-      sirf_type = c;
-    }
-    if (sirf_type == SIRF_TYP_EXT_NAV)
-      sirf_msg_buf[sirf_msg_idx] = c;
-    sirf_msg_idx++;
-    if (sirf_msg_idx >= sirf_len) {
-      sirf_status++; 
-    }
-    break;
-  case GOT_PAYLOAD:
-    sirf_checksum = (c<<8) & 0xFF00;
-    sirf_status++;
-    break;
-  case GOT_CHECKSUM1:
-    sirf_checksum += (c & 0x00FF);
-    // fixme: check correct 
-    sirf_status++;
-    break;
-  case GOT_CHECKSUM2:
-    if (c != SIRF_END1)
-      goto error;
-    sirf_status++; 
-    break;
-  case GOT_END1:
-    if (c != SIRF_END2)
-      goto error;
-
-    if (sirf_type == SIRF_TYP_EXT_NAV)
-      gps_msg_received = TRUE;
-    goto restart;
-    break;
-#ifdef SIMUL
-  case GOT_IR_START:
-    simul_ir_roll = c << 8;
-    sirf_status++;
-    break;
-  case GOT_IR1:
-    simul_ir_roll |= c;
-    sirf_status++;
-    break;
-  case GOT_IR2:
-    simul_ir_pitch = c << 8;
-    sirf_status++;
-    break;
-  case GOT_IR3:
-    simul_ir_pitch |= c;
-    goto restart;
-    break;
-#endif
-  }
-#else*/
-if (sirf_status == UNINIT)
-{
-    if (c == SIRF_START1)
+      break;
+    case GOT_START2:
+      sirf_len = (c<<8) & 0xFF00;
       sirf_status++;
-#ifdef SIMUL
-    if (c == IR_START)
-      sirf_status = GOT_IR_START;
-#endif
-}
-else if (sirf_status == GOT_START1)
-{
-    if (c != SIRF_START2)
-      goto error;
-    sirf_status++;
-}
-else if (sirf_status == GOT_START2)
-{
-    sirf_len = (c<<8) & 0xFF00;
-    sirf_status++;
-}
-else if (sirf_status == GOT_LEN1)
-{
-    sirf_len += (c & 0x00FF);
-    if (sirf_len > SIRF_MAX_PAYLOAD)
-      goto error;
-    sirf_msg_idx = 0;
-    sirf_status++;
-}
-else if (sirf_status == GOT_LEN2)
-{
-    if (sirf_msg_idx==0) {
-      sirf_type = c;
-    }
-    if (sirf_type == SIRF_TYP_EXT_NAV)
-      sirf_msg_buf[sirf_msg_idx] = c;
-    sirf_msg_idx++;
-    if (sirf_msg_idx >= sirf_len) {
-      sirf_status++; 
-    }
-}
-else if (sirf_status == GOT_PAYLOAD)
-{
-    sirf_checksum = (c<<8) & 0xFF00;
-    sirf_status++;
-}
-else if (sirf_status == GOT_CHECKSUM1)
-{
-    sirf_checksum += (c & 0x00FF);
-    /* fixme: check correct */
-    sirf_status++;
-}
-else if (sirf_status == GOT_CHECKSUM2)
-{
-    if (c != SIRF_END1)
-      goto error;
-    sirf_status++; 
-}
-else if (sirf_status == GOT_END1)
-{
-    if (c != SIRF_END2)
-      goto error;
+      break;
+    case GOT_LEN1:
+      sirf_len += (c & 0x00FF);
+      if (sirf_len > SIRF_MAX_PAYLOAD)
+        goto error;
+      sirf_msg_idx = 0;
+      sirf_status++;
+      break;
+    case GOT_LEN2:
+      if (sirf_msg_idx==0) {
+        sirf_type = c;
+      }
+      if (sirf_type == SIRF_TYP_EXT_NAV)
+        sirf_msg_buf[ sirf_msg_idx ] = c;
+      sirf_msg_idx++;
+      if (sirf_msg_idx >= sirf_len) {
+        sirf_status++;
+      }
+      break;
+    case GOT_PAYLOAD:
+      sirf_checksum = (c<<8) & 0xFF00;
+      sirf_status++;
+      break;
+    case GOT_CHECKSUM1:
+      sirf_checksum += (c & 0x00FF);
+      // fixme: check correct
+      sirf_status++;
+      break;
+    case GOT_CHECKSUM2:
+      if (c != SIRF_END1)
+        goto error;
+      sirf_status++;
+      break;
+    case GOT_END1:
+      if (c != SIRF_END2)
+        goto error;
 
-    if (sirf_type == SIRF_TYP_EXT_NAV)
-      gps_msg_received = TRUE;
-    goto restart;
-}
-#ifdef SIMUL
-else if (sirf_status == GOT_IR_START)
-{
-    simul_ir_roll = c << 8;
-    sirf_status++;
-}
-else if (sirf_status == GOT_IR1)
-{
-    simul_ir_roll |= c;
-    sirf_status++;
-}
-else if (sirf_status == GOT_IR2)
-{
-    simul_ir_pitch = c << 8;
-    sirf_status++;
-}
-else if (sirf_status == GOT_IR3)
-{
-    simul_ir_pitch |= c;
-    goto restart;
-}
-#endif
-else {}
+      if (sirf_type == SIRF_TYP_EXT_NAV)
+        gps_msg_received = TRUE;
+      goto restart;
+      break;
+    #ifdef SIMUL
+    case GOT_IR_START:
+      simul_ir_roll = c << 8;
+      sirf_status++;
+      break;
+    case GOT_IR1:
+      simul_ir_roll |= c;
+      sirf_status++;
+      break;
+    case GOT_IR2:
+      simul_ir_pitch = c << 8;
+      sirf_status++;
+      break;
+    case GOT_IR3:
+      simul_ir_pitch |= c;
+      goto restart;
+      break;
+    #endif
+    }
+    #else*/
+  if ( sirf_status == UNINIT ) {
+    if ( c == SIRF_START1 )
+      sirf_status++;
+    #ifdef SIMUL
+    if ( c == IR_START )
+      sirf_status = GOT_IR_START;
+    #endif
+  } else
+    if ( sirf_status == GOT_START1 ) {
+      if ( c != SIRF_START2 )
+        goto error;
+      sirf_status++;
+    } else
+      if ( sirf_status == GOT_START2 ) {
+        sirf_len = ( c << 8 ) & 0xFF00;
+        sirf_status++;
+      } else
+        if ( sirf_status == GOT_LEN1 ) {
+          sirf_len += ( c & 0x00FF );
+          if ( sirf_len > SIRF_MAX_PAYLOAD )
+            goto error;
+          sirf_msg_idx = 0;
+          sirf_status++;
+        } else
+          if ( sirf_status == GOT_LEN2 ) {
+            if ( sirf_msg_idx == 0 )
+              sirf_type = c;
+            if ( sirf_type == SIRF_TYP_EXT_NAV )
+              sirf_msg_buf[ sirf_msg_idx ] = c;
+            sirf_msg_idx++;
+            if ( sirf_msg_idx >= sirf_len )
+              sirf_status++;
+          } else
+            if ( sirf_status == GOT_PAYLOAD ) {
+              sirf_checksum = ( c << 8 ) & 0xFF00;
+              sirf_status++;
+            } else
+              if ( sirf_status == GOT_CHECKSUM1 ) {
+                sirf_checksum += ( c & 0x00FF );
+                /* fixme: check correct */
+                sirf_status++;
+              } else
+                if ( sirf_status == GOT_CHECKSUM2 ) {
+                  if ( c != SIRF_END1 )
+                    goto error;
+                  sirf_status++;
+                } else
+                  if ( sirf_status == GOT_END1 ) {
+                    if ( c != SIRF_END2 )
+                      goto error;
+
+                    if ( sirf_type == SIRF_TYP_EXT_NAV )
+                      gps_msg_received = TRUE;
+                    goto restart;
+                  }
+  #ifdef SIMUL
+                  else
+                    if ( sirf_status == GOT_IR_START ) {
+                      simul_ir_roll = c << 8;
+                      sirf_status++;
+                    } else
+                      if ( sirf_status == GOT_IR1 ) {
+                        simul_ir_roll |= c;
+                        sirf_status++;
+                      } else
+                        if ( sirf_status == GOT_IR2 ) {
+                          simul_ir_pitch = c << 8;
+                          sirf_status++;
+                        } else
+                          if ( sirf_status == GOT_IR3 ) {
+                            simul_ir_pitch |= c;
+                            goto restart;
+                          }
+  #endif
+                          else {}
 //#endif
   return;
- error:  
+error:
   //  modem_putc('r');
- restart:
+restart:
   // modem_putc('\n');
   sirf_status = UNINIT;
   sirf_checksum = 0;
@@ -323,7 +312,7 @@ else {}
 }
 
 #ifdef SIMUL
-ReceiveUart0(parse_sirf);
+ReceiveUart0( parse_sirf );
 #else
-ReceiveUart1(parse_sirf);
+ReceiveUart1( parse_sirf );
 #endif

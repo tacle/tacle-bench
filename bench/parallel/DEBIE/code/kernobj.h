@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   kernobj.h
- *
- * Definitions for the interface to the real-time kernel.
- *
- * Based on the SSF file kernobj.h, revision 1.3, Thu Sep 09 16:01:56 1999.
- *
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   kernobj.h
+
+   Definitions for the interface to the real-time kernel.
+
+   Based on the SSF file kernobj.h, revision 1.3, Thu Sep 09 16:01:56 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 /* Definitions of kernel objects (eg. task and mailbox numbers) */
 

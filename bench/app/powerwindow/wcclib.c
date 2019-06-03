@@ -7,6 +7,6 @@ void *memset( void *s, int c, size_t n )
 
   _Pragma( "loopbound min 1 max 368" )
   while ( n-- )
-    *p++ = (unsigned char) c;
-  return( s );
+    *p++ = ( unsigned char ) c;
+  return ( s );
 }

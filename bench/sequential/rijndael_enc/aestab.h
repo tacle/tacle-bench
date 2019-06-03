@@ -43,7 +43,7 @@
   code is adjusted accordingly
 */
 
-const word rijndael_enc_rcon_tab[29] = {
+const word rijndael_enc_rcon_tab[ 29 ] = {
   w0( 01 ), w0( 02 ), w0( 04 ), w0( 08 ),
   w0( 10 ), w0( 20 ), w0( 40 ), w0( 80 ),
   w0( 1b ), w0( 36 ), w0( 6c ), w0( d8 ),
@@ -148,7 +148,7 @@ const word rijndael_enc_rcon_tab[29] = {
 #undef  r
 #define r   r0
 
-const word rijndael_enc_ft_tab[4][256] = {
+const word rijndael_enc_ft_tab[ 4 ][ 256 ] = {
   {   f_table },
 #undef  r
 #define r   r1
@@ -165,7 +165,7 @@ const word rijndael_enc_ft_tab[4][256] = {
 
 #undef  r
 #define r(p,q,r,s)  w0(q)
-const word rijndael_enc_fl_tab[4][256] = {
+const word rijndael_enc_fl_tab[ 4 ][ 256 ] = {
   {   f_table    },
 #undef  r
 #define r(p,q,r,s)   w1(q)
@@ -247,7 +247,7 @@ const word rijndael_enc_fl_tab[4][256] = {
 #undef r
 #define r   r0
 
-const word rijndael_enc_im_tab[4][256] = {
+const word rijndael_enc_im_tab[ 4 ][ 256 ] = {
   {   m_table },
 #undef  r
 #define r   r1

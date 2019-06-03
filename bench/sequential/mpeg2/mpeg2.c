@@ -11403,7 +11403,7 @@ void mpeg2_init( void )
   /*
     Apply volatile XOR-bitmask to entire input array.
   */
-  p = (unsigned char *) &mpeg2_oldorgframe[ 0 ];
+  p = ( unsigned char * ) &mpeg2_oldorgframe[ 0 ];
   _Pragma( "loopbound min 90112 max 90112" )
   for ( i = 0; i < sizeof( mpeg2_oldorgframe ); ++i, ++p )
     *p ^= bitmask;
@@ -11432,7 +11432,7 @@ int mpeg2_return( void )
     }
   }
 
-  return( checksum );
+  return ( checksum );
 }
 
 
@@ -11515,336 +11515,336 @@ void mpeg2_frame_ME( unsigned char *oldorg, unsigned char *neworg,
     mbi->mb_type = 1;
   else
 
-  if ( mpeg2_pict_type == 2 ) {
-    if ( mpeg2_frame_pred_dct ) {
-      dmc =
-        mpeg2_fullsearch(
-          oldorg, oldref, mb, mpeg2_width, i, j, sxf, syf, 16, mpeg2_width,
-          mpeg2_height, &imin, &jmin );
-      vmc =
-        mpeg2_dist2(
-          oldref + ( imin >> 1 ) + mpeg2_width * ( jmin >> 1 ), mb, mpeg2_width,
-          imin & 1, jmin & 1, 16 );
-      mbi->motion_type = 2;
-    } else {
-      mpeg2_frame_estimate(
-        oldorg, oldref, mb, i, j, sxf, syf, &imin, &jmin, &imint, &jmint,
-        &iminb, &jminb, &dmc, &dmcfield, &tsel, &bsel, imins, jmins );
-
-      if ( mpeg2_M == 1 )
-        mpeg2_dpframe_estimate(
-          oldref, mb, i, j >> 1, imins, jmins, &imindp, &jmindp, &imindmv,
-          &jmindmv, &dmc_dp, &vmc_dp );
-
-      /* select between dual prime, frame and field prediction */
-      if ( ( mpeg2_M == 1 ) && ( dmc_dp < dmc ) && ( dmc_dp < dmcfield ) ) {
-        mbi->motion_type = 3;
-        dmc = dmc_dp;
-        vmc = vmc_dp;
-      } else
-
-      if ( dmc <= dmcfield ) {
+    if ( mpeg2_pict_type == 2 ) {
+      if ( mpeg2_frame_pred_dct ) {
+        dmc =
+          mpeg2_fullsearch(
+            oldorg, oldref, mb, mpeg2_width, i, j, sxf, syf, 16, mpeg2_width,
+            mpeg2_height, &imin, &jmin );
+        vmc =
+          mpeg2_dist2(
+            oldref + ( imin >> 1 ) + mpeg2_width * ( jmin >> 1 ), mb, mpeg2_width,
+            imin & 1, jmin & 1, 16 );
         mbi->motion_type = 2;
-        vmc =
-          mpeg2_dist2(
-            oldref + ( imin >> 1 ) + mpeg2_width * ( jmin >> 1 ), mb,
-            mpeg2_width, imin & 1, jmin & 1, 16 );
       } else {
-        mbi->motion_type = 1;
-        dmc = dmcfield;
-        vmc =
-          mpeg2_dist2(
-            oldref + ( tsel ? mpeg2_width : 0 ) + ( imint >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jmint >> 1 ),
-            mb, mpeg2_width << 1, imint & 1, jmint & 1, 8 );
-        vmc +=
-          mpeg2_dist2(
-            oldref + ( bsel ? mpeg2_width : 0 ) + ( iminb >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jminb >> 1 ),
-            mb + mpeg2_width, mpeg2_width << 1, iminb & 1, jminb & 1, 8 );
-      }
-    }
+        mpeg2_frame_estimate(
+          oldorg, oldref, mb, i, j, sxf, syf, &imin, &jmin, &imint, &jmint,
+          &iminb, &jminb, &dmc, &dmcfield, &tsel, &bsel, imins, jmins );
 
-    /*
-      select between intra or non-intra coding:
+        if ( mpeg2_M == 1 )
+          mpeg2_dpframe_estimate(
+            oldref, mb, i, j >> 1, imins, jmins, &imindp, &jmindp, &imindmv,
+            &jmindmv, &dmc_dp, &vmc_dp );
 
-      selection is based on intra block variance (var) vs.
-      prediction error variance (vmc)
-
-      blocks with small prediction error are always coded non-intra
-      even if variance is smaller (is this reasonable?)
-    */
-    if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
-      mbi->mb_type = 1;
-    else {
-      /*
-        select between MC / No-MC
-
-        use No-MC if var(No-MC) <= 1.25*var(MC)
-        (i.e slightly biased towards No-MC)
-
-        blocks with small prediction error are always coded as No-MC
-        (requires no motion vectors, allows skipping)
-      */
-      v0 =
-        mpeg2_dist2( oldref + i + mpeg2_width * j, mb, mpeg2_width, 0, 0, 16 );
-
-      if ( ( 4 * v0 > 5 * vmc ) && ( v0 >= 9 * 256 ) ) {
-        /* use MC */
-        var = vmc;
-        mbi->mb_type = 8;
-
-        if ( mbi->motion_type == 2 ) {
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imin - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = jmin - ( j << 1 );
+        /* select between dual prime, frame and field prediction */
+        if ( ( mpeg2_M == 1 ) && ( dmc_dp < dmc ) && ( dmc_dp < dmcfield ) ) {
+          mbi->motion_type = 3;
+          dmc = dmc_dp;
+          vmc = vmc_dp;
         } else
 
-        if ( mbi->motion_type == 3 ) {
-          /* these are FRAME vectors */
-          /* same parity vector */
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imindp - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmindp << 1 ) - ( j << 1 );
+          if ( dmc <= dmcfield ) {
+            mbi->motion_type = 2;
+            vmc =
+              mpeg2_dist2(
+                oldref + ( imin >> 1 ) + mpeg2_width * ( jmin >> 1 ), mb,
+                mpeg2_width, imin & 1, jmin & 1, 16 );
+          } else {
+            mbi->motion_type = 1;
+            dmc = dmcfield;
+            vmc =
+              mpeg2_dist2(
+                oldref + ( tsel ? mpeg2_width : 0 ) + ( imint >> 1 )
+                + ( mpeg2_width << 1 ) * ( jmint >> 1 ),
+                mb, mpeg2_width << 1, imint & 1, jmint & 1, 8 );
+            vmc +=
+              mpeg2_dist2(
+                oldref + ( bsel ? mpeg2_width : 0 ) + ( iminb >> 1 )
+                + ( mpeg2_width << 1 ) * ( jminb >> 1 ),
+                mb + mpeg2_width, mpeg2_width << 1, iminb & 1, jminb & 1, 8 );
+          }
+      }
 
-          /* opposite parity vector */
-          mbi->dmvector[ 0 ] = imindmv;
-          mbi->dmvector[ 1 ] = jmindmv;
+      /*
+        select between intra or non-intra coding:
+
+        selection is based on intra block variance (var) vs.
+        prediction error variance (vmc)
+
+        blocks with small prediction error are always coded non-intra
+        even if variance is smaller (is this reasonable?)
+      */
+      if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
+        mbi->mb_type = 1;
+      else {
+        /*
+          select between MC / No-MC
+
+          use No-MC if var(No-MC) <= 1.25*var(MC)
+          (i.e slightly biased towards No-MC)
+
+          blocks with small prediction error are always coded as No-MC
+          (requires no motion vectors, allows skipping)
+        */
+        v0 =
+          mpeg2_dist2( oldref + i + mpeg2_width * j, mb, mpeg2_width, 0, 0, 16 );
+
+        if ( ( 4 * v0 > 5 * vmc ) && ( v0 >= 9 * 256 ) ) {
+          /* use MC */
+          var = vmc;
+          mbi->mb_type = 8;
+
+          if ( mbi->motion_type == 2 ) {
+            mbi->MV[ 0 ][ 0 ][ 0 ] = imin - ( i << 1 );
+            mbi->MV[ 0 ][ 0 ][ 1 ] = jmin - ( j << 1 );
+          } else
+
+            if ( mbi->motion_type == 3 ) {
+              /* these are FRAME vectors */
+              /* same parity vector */
+              mbi->MV[ 0 ][ 0 ][ 0 ] = imindp - ( i << 1 );
+              mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmindp << 1 ) - ( j << 1 );
+
+              /* opposite parity vector */
+              mbi->dmvector[ 0 ] = imindmv;
+              mbi->dmvector[ 1 ] = jmindmv;
+            } else {
+              /* these are FRAME vectors */
+              mbi->MV[ 0 ][ 0 ][ 0 ] = imint - ( i << 1 );
+              mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmint << 1 ) - ( j << 1 );
+              mbi->MV[ 1 ][ 0 ][ 0 ] = iminb - ( i << 1 );
+              mbi->MV[ 1 ][ 0 ][ 1 ] = ( jminb << 1 ) - ( j << 1 );
+              mbi->mv_field_sel[ 0 ][ 0 ] = tsel;
+              mbi->mv_field_sel[ 1 ][ 0 ] = bsel;
+            }
         } else {
-          /* these are FRAME vectors */
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imint - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmint << 1 ) - ( j << 1 );
-          mbi->MV[ 1 ][ 0 ][ 0 ] = iminb - ( i << 1 );
-          mbi->MV[ 1 ][ 0 ][ 1 ] = ( jminb << 1 ) - ( j << 1 );
-          mbi->mv_field_sel[ 0 ][ 0 ] = tsel;
-          mbi->mv_field_sel[ 1 ][ 0 ] = bsel;
+          /* No-MC */
+          var = v0;
+          mbi->mb_type = 0;
+          mbi->motion_type = 2;
+          mbi->MV[ 0 ][ 0 ][ 0 ] = 0;
+          mbi->MV[ 0 ][ 0 ][ 1 ] = 0;
         }
-      } else {
-        /* No-MC */
-        var = v0;
-        mbi->mb_type = 0;
-        mbi->motion_type = 2;
-        mbi->MV[ 0 ][ 0 ][ 0 ] = 0;
-        mbi->MV[ 0 ][ 0 ][ 1 ] = 0;
       }
-    }
-  } else { /* if (mpeg2_pict_type==B_TYPE) */
+    } else { /* if (mpeg2_pict_type==B_TYPE) */
 
-    if ( mpeg2_frame_pred_dct ) {
-      /* forward */
-      dmcf =
-        mpeg2_fullsearch(
-          oldorg, oldref, mb, mpeg2_width, i, j, sxf, syf, 16, mpeg2_width,
-          mpeg2_height, &iminf, &jminf );
-      vmcf =
-        mpeg2_dist2(
-          oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ), mb,
-          mpeg2_width, iminf & 1, jminf & 1, 16 );
+      if ( mpeg2_frame_pred_dct ) {
+        /* forward */
+        dmcf =
+          mpeg2_fullsearch(
+            oldorg, oldref, mb, mpeg2_width, i, j, sxf, syf, 16, mpeg2_width,
+            mpeg2_height, &iminf, &jminf );
+        vmcf =
+          mpeg2_dist2(
+            oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ), mb,
+            mpeg2_width, iminf & 1, jminf & 1, 16 );
 
-      /* backward */
-      dmcr =
-        mpeg2_fullsearch(
-          neworg, newref, mb, mpeg2_width, i, j, sxb, syb, 16, mpeg2_width,
-          mpeg2_height, &iminr, &jminr );
-      vmcr =
-        mpeg2_dist2(
-          newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ), mb,
-          mpeg2_width, iminr & 1, jminr & 1, 16 );
+        /* backward */
+        dmcr =
+          mpeg2_fullsearch(
+            neworg, newref, mb, mpeg2_width, i, j, sxb, syb, 16, mpeg2_width,
+            mpeg2_height, &iminr, &jminr );
+        vmcr =
+          mpeg2_dist2(
+            newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ), mb,
+            mpeg2_width, iminr & 1, jminr & 1, 16 );
 
-      /* interpolated (bidirectional) */
-      vmci =
-        mpeg2_bdist2(
-          oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ),
-          newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ),
-          mb, mpeg2_width, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
-
-      /* decisions */
-
-      /*
-        select between forward/backward/interpolated prediction:
-        use the one with smallest mean sqaured prediction error
-      */
-      if ( ( vmcf <= vmcr ) && ( vmcf <= vmci ) ) {
-        vmc = vmcf;
-        mbi->mb_type = 8;
-      } else
-
-      if ( vmcr <= vmci ) {
-        vmc = vmcr;
-        mbi->mb_type = 4;
-      } else {
-        vmc = vmci;
-        mbi->mb_type = 8 | 4;
-      }
-
-      mbi->motion_type = 2;
-    } else {
-      /* forward prediction */
-      mpeg2_frame_estimate(
-        oldorg, oldref, mb, i, j, sxf, syf, &iminf, &jminf, &imintf, &jmintf,
-        &iminbf, &jminbf, &dmcf, &dmcfieldf, &tself, &bself, imins, jmins );
-
-      /* backward prediction */
-      mpeg2_frame_estimate(
-        neworg, newref, mb, i, j, sxb, syb, &iminr, &jminr, &imintr, &jmintr,
-        &iminbr, &jminbr, &dmcr, &dmcfieldr, &tselr, &bselr, imins, jmins );
-
-      /* calculate interpolated distance */
-      /* frame */
-      dmci =
-        mpeg2_bdist1(
-          oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ),
-          newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ),
-          mb, mpeg2_width, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
-
-      /* top field */
-      dmcfieldi =
-        mpeg2_bdist1(
-          oldref + ( imintf >> 1 ) + ( tself ? mpeg2_width : 0 )
-                 + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
-          newref + ( imintr >> 1 ) + ( tselr ? mpeg2_width : 0 )
-                 + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
-          mb, mpeg2_width << 1, imintf & 1, jmintf & 1, imintr & 1, jmintr & 1,
-          8 );
-
-      /* bottom field */
-      dmcfieldi +=
-        mpeg2_bdist1(
-          oldref + ( iminbf >> 1 ) + ( bself ? mpeg2_width : 0 )
-                 + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
-          newref + ( iminbr >> 1 ) + ( bselr ? mpeg2_width : 0 )
-                 + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
-          mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1, iminbr & 1,
-          jminbr & 1, 8 );
-
-      /*
-        select prediction type of minimum distance from the
-        six candidates (field/frame * forward/backward/interpolated)
-      */
-      if ( ( dmci < dmcfieldi ) && ( dmci < dmcf ) && ( dmci < dmcfieldf ) &&
-           ( dmci < dmcr ) && ( dmci < dmcfieldr ) ) {
-        /* frame, interpolated */
-        mbi->mb_type = 8 | 4;
-        mbi->motion_type = 2;
-        vmc =
+        /* interpolated (bidirectional) */
+        vmci =
           mpeg2_bdist2(
             oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ),
             newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ),
             mb, mpeg2_width, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
-      } else
 
-      if ( ( dmcfieldi < dmcf ) && ( dmcfieldi < dmcfieldf ) &&
-           ( dmcfieldi < dmcr ) && ( dmcfieldi < dmcfieldr ) ) {
-        /* field, interpolated */
-        mbi->mb_type = 8 | 4;
-        mbi->motion_type = 1;
-        vmc =
-          mpeg2_bdist2(
+        /* decisions */
+
+        /*
+          select between forward/backward/interpolated prediction:
+          use the one with smallest mean sqaured prediction error
+        */
+        if ( ( vmcf <= vmcr ) && ( vmcf <= vmci ) ) {
+          vmc = vmcf;
+          mbi->mb_type = 8;
+        } else
+
+          if ( vmcr <= vmci ) {
+            vmc = vmcr;
+            mbi->mb_type = 4;
+          } else {
+            vmc = vmci;
+            mbi->mb_type = 8 | 4;
+          }
+
+        mbi->motion_type = 2;
+      } else {
+        /* forward prediction */
+        mpeg2_frame_estimate(
+          oldorg, oldref, mb, i, j, sxf, syf, &iminf, &jminf, &imintf, &jmintf,
+          &iminbf, &jminbf, &dmcf, &dmcfieldf, &tself, &bself, imins, jmins );
+
+        /* backward prediction */
+        mpeg2_frame_estimate(
+          neworg, newref, mb, i, j, sxb, syb, &iminr, &jminr, &imintr, &jmintr,
+          &iminbr, &jminbr, &dmcr, &dmcfieldr, &tselr, &bselr, imins, jmins );
+
+        /* calculate interpolated distance */
+        /* frame */
+        dmci =
+          mpeg2_bdist1(
+            oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ),
+            newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ),
+            mb, mpeg2_width, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
+
+        /* top field */
+        dmcfieldi =
+          mpeg2_bdist1(
             oldref + ( imintf >> 1 ) + ( tself ? mpeg2_width : 0 )
-                   + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
+            + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
             newref + ( imintr >> 1 ) + ( tselr ? mpeg2_width : 0 )
-                   + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
+            + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
             mb, mpeg2_width << 1, imintf & 1, jmintf & 1, imintr & 1, jmintr & 1,
             8 );
-        vmc +=
-          mpeg2_bdist2(
+
+        /* bottom field */
+        dmcfieldi +=
+          mpeg2_bdist1(
             oldref + ( iminbf >> 1 ) + ( bself ? mpeg2_width : 0 )
-                   + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
+            + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
             newref + ( iminbr >> 1 ) + ( bselr ? mpeg2_width : 0 )
-                   + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
-            mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1,
-            iminbr & 1, jminbr & 1, 8 );
-      } else
+            + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
+            mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1, iminbr & 1,
+            jminbr & 1, 8 );
 
-      if ( ( dmcf < dmcfieldf ) && ( dmcf < dmcr ) && ( dmcf < dmcfieldr ) ) {
-        /* frame, forward */
-        mbi->mb_type = 8;
-        mbi->motion_type = 2;
-        vmc =
-          mpeg2_dist2(
-            oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ), mb,
-            mpeg2_width, iminf & 1, jminf & 1, 16 );
-      } else
+        /*
+          select prediction type of minimum distance from the
+          six candidates (field/frame * forward/backward/interpolated)
+        */
+        if ( ( dmci < dmcfieldi ) && ( dmci < dmcf ) && ( dmci < dmcfieldf ) &&
+             ( dmci < dmcr ) && ( dmci < dmcfieldr ) ) {
+          /* frame, interpolated */
+          mbi->mb_type = 8 | 4;
+          mbi->motion_type = 2;
+          vmc =
+            mpeg2_bdist2(
+              oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ),
+              newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ),
+              mb, mpeg2_width, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
+        } else
 
-      if ( ( dmcfieldf < dmcr ) && ( dmcfieldf < dmcfieldr ) ) {
-        /* field, forward */
-        mbi->mb_type = 8;
-        mbi->motion_type = 1;
-        vmc =
-          mpeg2_dist2(
-            oldref + ( tself ? mpeg2_width : 0 ) + ( imintf >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
-            mb, mpeg2_width << 1, imintf & 1, jmintf & 1, 8 );
-        vmc +=
-          mpeg2_dist2(
-            oldref + ( bself ? mpeg2_width : 0 ) + ( iminbf >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
-            mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1, 8 );
-      } else
+          if ( ( dmcfieldi < dmcf ) && ( dmcfieldi < dmcfieldf ) &&
+               ( dmcfieldi < dmcr ) && ( dmcfieldi < dmcfieldr ) ) {
+            /* field, interpolated */
+            mbi->mb_type = 8 | 4;
+            mbi->motion_type = 1;
+            vmc =
+              mpeg2_bdist2(
+                oldref + ( imintf >> 1 ) + ( tself ? mpeg2_width : 0 )
+                + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
+                newref + ( imintr >> 1 ) + ( tselr ? mpeg2_width : 0 )
+                + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
+                mb, mpeg2_width << 1, imintf & 1, jmintf & 1, imintr & 1, jmintr & 1,
+                8 );
+            vmc +=
+              mpeg2_bdist2(
+                oldref + ( iminbf >> 1 ) + ( bself ? mpeg2_width : 0 )
+                + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
+                newref + ( iminbr >> 1 ) + ( bselr ? mpeg2_width : 0 )
+                + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
+                mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1,
+                iminbr & 1, jminbr & 1, 8 );
+          } else
 
-      if ( dmcr < dmcfieldr ) {
-        /* frame, backward */
-        mbi->mb_type = 4;
-        mbi->motion_type = 2;
-        vmc =
-          mpeg2_dist2(
-            newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ), mb,
-            mpeg2_width, iminr & 1, jminr & 1, 16 );
-      } else {
-        /* field, backward */
-        mbi->mb_type = 4;
-        mbi->motion_type = 1;
-        vmc =
-          mpeg2_dist2(
-            newref + ( tselr ? mpeg2_width : 0 ) + ( imintr >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
-            mb, mpeg2_width << 1, imintr & 1, jmintr & 1, 8 );
-        vmc +=
-          mpeg2_dist2(
-            newref + ( bselr ? mpeg2_width : 0 ) + ( iminbr >> 1 )
-                   + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
-            mb + mpeg2_width, mpeg2_width << 1, iminbr & 1, jminbr & 1, 8 );
+            if ( ( dmcf < dmcfieldf ) && ( dmcf < dmcr ) && ( dmcf < dmcfieldr ) ) {
+              /* frame, forward */
+              mbi->mb_type = 8;
+              mbi->motion_type = 2;
+              vmc =
+                mpeg2_dist2(
+                  oldref + ( iminf >> 1 ) + mpeg2_width * ( jminf >> 1 ), mb,
+                  mpeg2_width, iminf & 1, jminf & 1, 16 );
+            } else
+
+              if ( ( dmcfieldf < dmcr ) && ( dmcfieldf < dmcfieldr ) ) {
+                /* field, forward */
+                mbi->mb_type = 8;
+                mbi->motion_type = 1;
+                vmc =
+                  mpeg2_dist2(
+                    oldref + ( tself ? mpeg2_width : 0 ) + ( imintf >> 1 )
+                    + ( mpeg2_width << 1 ) * ( jmintf >> 1 ),
+                    mb, mpeg2_width << 1, imintf & 1, jmintf & 1, 8 );
+                vmc +=
+                  mpeg2_dist2(
+                    oldref + ( bself ? mpeg2_width : 0 ) + ( iminbf >> 1 )
+                    + ( mpeg2_width << 1 ) * ( jminbf >> 1 ),
+                    mb + mpeg2_width, mpeg2_width << 1, iminbf & 1, jminbf & 1, 8 );
+              } else
+
+                if ( dmcr < dmcfieldr ) {
+                  /* frame, backward */
+                  mbi->mb_type = 4;
+                  mbi->motion_type = 2;
+                  vmc =
+                    mpeg2_dist2(
+                      newref + ( iminr >> 1 ) + mpeg2_width * ( jminr >> 1 ), mb,
+                      mpeg2_width, iminr & 1, jminr & 1, 16 );
+                } else {
+                  /* field, backward */
+                  mbi->mb_type = 4;
+                  mbi->motion_type = 1;
+                  vmc =
+                    mpeg2_dist2(
+                      newref + ( tselr ? mpeg2_width : 0 ) + ( imintr >> 1 )
+                      + ( mpeg2_width << 1 ) * ( jmintr >> 1 ),
+                      mb, mpeg2_width << 1, imintr & 1, jmintr & 1, 8 );
+                  vmc +=
+                    mpeg2_dist2(
+                      newref + ( bselr ? mpeg2_width : 0 ) + ( iminbr >> 1 )
+                      + ( mpeg2_width << 1 ) * ( jminbr >> 1 ),
+                      mb + mpeg2_width, mpeg2_width << 1, iminbr & 1, jminbr & 1, 8 );
+                }
+      }
+
+      /*
+        select between intra or non-intra coding:
+
+        selection is based on intra block variance (var) vs.
+        prediction error variance (vmc)
+
+        blocks with small prediction error are always coded non-intra
+        even if variance is smaller (is this reasonable?)
+      */
+      if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
+        mbi->mb_type = 1;
+      else {
+        var = vmc;
+
+        if ( mbi->motion_type == 2 ) {
+          /* forward */
+          mbi->MV[ 0 ][ 0 ][ 0 ] = iminf - ( i << 1 );
+          mbi->MV[ 0 ][ 0 ][ 1 ] = jminf - ( j << 1 );
+          /* backward */
+          mbi->MV[ 0 ][ 1 ][ 0 ] = iminr - ( i << 1 );
+          mbi->MV[ 0 ][ 1 ][ 1 ] = jminr - ( j << 1 );
+        } else {
+          /* these are FRAME vectors */
+          /* forward */
+          mbi->MV[ 0 ][ 0 ][ 0 ] = imintf - ( i << 1 );
+          mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmintf << 1 ) - ( j << 1 );
+          mbi->MV[ 1 ][ 0 ][ 0 ] = iminbf - ( i << 1 );
+          mbi->MV[ 1 ][ 0 ][ 1 ] = ( jminbf << 1 ) - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 0 ] = tself;
+          mbi->mv_field_sel[ 1 ][ 0 ] = bself;
+          /* backward */
+          mbi->MV[ 0 ][ 1 ][ 0 ] = imintr - ( i << 1 );
+          mbi->MV[ 0 ][ 1 ][ 1 ] = ( jmintr << 1 ) - ( j << 1 );
+          mbi->MV[ 1 ][ 1 ][ 0 ] = iminbr - ( i << 1 );
+          mbi->MV[ 1 ][ 1 ][ 1 ] = ( jminbr << 1 ) - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 1 ] = tselr;
+          mbi->mv_field_sel[ 1 ][ 1 ] = bselr;
+        }
       }
     }
-
-    /*
-      select between intra or non-intra coding:
-
-      selection is based on intra block variance (var) vs.
-      prediction error variance (vmc)
-
-      blocks with small prediction error are always coded non-intra
-      even if variance is smaller (is this reasonable?)
-    */
-    if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
-      mbi->mb_type = 1;
-    else {
-      var = vmc;
-
-      if ( mbi->motion_type == 2 ) {
-        /* forward */
-        mbi->MV[ 0 ][ 0 ][ 0 ] = iminf - ( i << 1 );
-        mbi->MV[ 0 ][ 0 ][ 1 ] = jminf - ( j << 1 );
-        /* backward */
-        mbi->MV[ 0 ][ 1 ][ 0 ] = iminr - ( i << 1 );
-        mbi->MV[ 0 ][ 1 ][ 1 ] = jminr - ( j << 1 );
-      } else {
-        /* these are FRAME vectors */
-        /* forward */
-        mbi->MV[ 0 ][ 0 ][ 0 ] = imintf - ( i << 1 );
-        mbi->MV[ 0 ][ 0 ][ 1 ] = ( jmintf << 1 ) - ( j << 1 );
-        mbi->MV[ 1 ][ 0 ][ 0 ] = iminbf - ( i << 1 );
-        mbi->MV[ 1 ][ 0 ][ 1 ] = ( jminbf << 1 ) - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 0 ] = tself;
-        mbi->mv_field_sel[ 1 ][ 0 ] = bself;
-        /* backward */
-        mbi->MV[ 0 ][ 1 ][ 0 ] = imintr - ( i << 1 );
-        mbi->MV[ 0 ][ 1 ][ 1 ] = ( jmintr << 1 ) - ( j << 1 );
-        mbi->MV[ 1 ][ 1 ][ 0 ] = iminbr - ( i << 1 );
-        mbi->MV[ 1 ][ 1 ][ 1 ] = ( jminbr << 1 ) - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 1 ] = tselr;
-        mbi->mv_field_sel[ 1 ][ 1 ] = bselr;
-      }
-    }
-  }
 
   mbi->var = var;
 }
@@ -11908,294 +11908,294 @@ void mpeg2_field_ME( unsigned char *oldorg, unsigned char *neworg,
     mbi->mb_type = 1;
   else
 
-  if ( mpeg2_pict_type == 2 ) {
-    toporg = oldorg;
-    topref = oldref;
-    botorg = oldorg + mpeg2_width;
-    botref = oldref + mpeg2_width;
+    if ( mpeg2_pict_type == 2 ) {
+      toporg = oldorg;
+      topref = oldref;
+      botorg = oldorg + mpeg2_width;
+      botref = oldref + mpeg2_width;
 
-    if ( secondfield ) {
-      /* opposite parity field is in same frame */
-      if ( mpeg2_pict_struct == 1 ) {
-        /* current is top field */
-        botorg = cur + mpeg2_width;
-        botref = curref + mpeg2_width;
-      } else {
-        /* current is bottom field */
-        toporg = cur;
-        topref = curref;
-      }
-    }
-
-    mpeg2_field_estimate(
-      toporg, topref, botorg, botref, mb, i, j, sxf, syf, ipflag, &imin, &jmin,
-      &imin8u, &jmin8u, &imin8l, &jmin8l, &dmcfield, &dmc8, &sel, &sel8u,
-      &sel8l, &imins, &jmins, &ds );
-
-    if ( ( mpeg2_M == 1 ) && !ipflag )
-      /* generic condition which permits Dual Prime */
-      mpeg2_dpfield_estimate(
-        topref, botref, mb, i, j, imins, jmins, &imindmv, &jmindmv, &dmc_dp,
-        &vmc_dp );
-
-    /* select between dual prime, field and 16x8 prediction */
-    if ( ( mpeg2_M == 1 ) && !ipflag && ( dmc_dp < dmc8 ) &&
-         ( dmc_dp < dmcfield ) ) {
-      /* Dual Prime prediction */
-      mbi->motion_type = 3;
-      vmc = vmc_dp;     /* we already calculated L2 error for Dual */
-
-    } else
-
-    if ( dmc8 < dmcfield ) {
-      /* 16x8 prediction */
-      mbi->motion_type = 2;
-      /* upper half block */
-      vmc =
-        mpeg2_dist2(
-          ( sel8u ? botref : topref ) + ( imin8u >> 1 ) + w2 * ( jmin8u >> 1 ),
-          mb, w2, imin8u & 1, jmin8u & 1, 8 );
-      /* lower half block */
-      vmc +=
-        mpeg2_dist2(
-          ( sel8l ? botref : topref ) + ( imin8l >> 1 ) + w2 * ( jmin8l >> 1 ),
-          mb + 8 * w2, w2, imin8l & 1, jmin8l & 1, 8 );
-    } else {
-      /* field prediction */
-      mbi->motion_type = 1;
-      vmc =
-        mpeg2_dist2(
-          ( sel ? botref : topref ) + ( imin >> 1 ) + w2 * ( jmin >> 1 ),
-          mb, w2, imin & 1, jmin & 1, 16 );
-    }
-
-    /* select between intra and non-intra coding */
-    if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
-      mbi->mb_type = 1;
-    else {
-      /*
-        zero MV field prediction from same parity ref. field
-        (not allowed if ipflag is set)
-      */
-      if ( !ipflag )
-        v0 =
-          mpeg2_dist2(
-            ( ( mpeg2_pict_struct == 2 ) ? botref : topref ) + i + w2 * j, mb,
-            w2, 0, 0, 16 );
-
-      if ( ipflag || ( ( 4 * v0 > 5 * vmc ) && ( v0 >= 9 * 256 ) ) ) {
-        var = vmc;
-        mbi->mb_type = 8;
-
-        if ( mbi->motion_type == 1 ) {
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imin - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = jmin - ( j << 1 );
-          mbi->mv_field_sel[ 0 ][ 0 ] = sel;
-        } else
-
-        if ( mbi->motion_type == 3 ) {
-          /* same parity vector */
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imins - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = jmins - ( j << 1 );
-
-          /* opposite parity vector */
-          mbi->dmvector[ 0 ] = imindmv;
-          mbi->dmvector[ 1 ] = jmindmv;
+      if ( secondfield ) {
+        /* opposite parity field is in same frame */
+        if ( mpeg2_pict_struct == 1 ) {
+          /* current is top field */
+          botorg = cur + mpeg2_width;
+          botref = curref + mpeg2_width;
         } else {
-          mbi->MV[ 0 ][ 0 ][ 0 ] = imin8u - ( i << 1 );
-          mbi->MV[ 0 ][ 0 ][ 1 ] = jmin8u - ( j << 1 );
-          mbi->MV[ 1 ][ 0 ][ 0 ] = imin8l - ( i << 1 );
-          mbi->MV[ 1 ][ 0 ][ 1 ] = jmin8l - ( ( j + 8 ) << 1 );
-          mbi->mv_field_sel[ 0 ][ 0 ] = sel8u;
-          mbi->mv_field_sel[ 1 ][ 0 ] = sel8l;
+          /* current is bottom field */
+          toporg = cur;
+          topref = curref;
         }
-      } else {
-        /* No MC */
-        var = v0;
-        mbi->mb_type = 0;
-        mbi->motion_type = 1;
-        mbi->MV[ 0 ][ 0 ][ 0 ] = 0;
-        mbi->MV[ 0 ][ 0 ][ 1 ] = 0;
-        mbi->mv_field_sel[ 0 ][ 0 ] = ( mpeg2_pict_struct == 2 );
       }
-    }
-  } else { /* if (mpeg2_pict_type==B_TYPE) */
-    /* forward prediction */
-    mpeg2_field_estimate(
-      oldorg, oldref, oldorg + mpeg2_width, oldref + mpeg2_width, mb, i, j, sxf,
-      syf, 0, &iminf, &jminf, &imin8uf, &jmin8uf, &imin8lf, &jmin8lf,
-      &dmcfieldf, &dmc8f, &self, &sel8uf, &sel8lf, &imins, &jmins, &ds );
 
-    /* backward prediction */
-    mpeg2_field_estimate(
-      neworg, newref, neworg + mpeg2_width, newref + mpeg2_width, mb, i, j, sxb,
-      syb, 0, &iminr, &jminr, &imin8ur, &jmin8ur, &imin8lr, &jmin8lr,
-      &dmcfieldr, &dmc8r, &selr, &sel8ur, &sel8lr, &imins, &jmins, &ds );
+      mpeg2_field_estimate(
+        toporg, topref, botorg, botref, mb, i, j, sxf, syf, ipflag, &imin, &jmin,
+        &imin8u, &jmin8u, &imin8l, &jmin8l, &dmcfield, &dmc8, &sel, &sel8u,
+        &sel8l, &imins, &jmins, &ds );
 
-    /* calculate distances for bidirectional prediction */
-    /* field */
-    dmcfieldi =
-      mpeg2_bdist1(
-        oldref + ( self ? mpeg2_width : 0 ) + ( iminf >> 1 )
-               + w2 * ( jminf >> 1 ),
-        newref + ( selr ? mpeg2_width : 0 ) + ( iminr >> 1 )
-               + w2 * ( jminr >> 1 ),
-        mb, w2, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
+      if ( ( mpeg2_M == 1 ) && !ipflag )
+        /* generic condition which permits Dual Prime */
+        mpeg2_dpfield_estimate(
+          topref, botref, mb, i, j, imins, jmins, &imindmv, &jmindmv, &dmc_dp,
+          &vmc_dp );
 
-    /* 16x8 upper half block */
-    dmc8i =
-      mpeg2_bdist1(
-        oldref + ( sel8uf ? mpeg2_width : 0 ) + ( imin8uf >> 1 )
-               + w2 * ( jmin8uf >> 1 ),
-        newref + ( sel8ur ? mpeg2_width : 0 ) + ( imin8ur >> 1 )
-               + w2 * ( jmin8ur >> 1 ),
-        mb, w2, imin8uf & 1, jmin8uf & 1, imin8ur & 1, jmin8ur & 1, 8 );
+      /* select between dual prime, field and 16x8 prediction */
+      if ( ( mpeg2_M == 1 ) && !ipflag && ( dmc_dp < dmc8 ) &&
+           ( dmc_dp < dmcfield ) ) {
+        /* Dual Prime prediction */
+        mbi->motion_type = 3;
+        vmc = vmc_dp;     /* we already calculated L2 error for Dual */
 
-    /* 16x8 lower half block */
-    dmc8i +=
-      mpeg2_bdist1(
-        oldref + ( sel8lf ? mpeg2_width : 0 ) + ( imin8lf >> 1 )
-               + w2 * ( jmin8lf >> 1 ),
-        newref + ( sel8lr ? mpeg2_width : 0 ) + ( imin8lr >> 1 )
-               + w2 * ( jmin8lr >> 1 ),
-        mb + 8 * w2, w2, imin8lf & 1, jmin8lf & 1, imin8lr & 1, jmin8lr & 1,
-        8 );
+      } else
 
-    /* select prediction type of minimum distance */
-    if ( ( dmcfieldi < dmc8i ) && ( dmcfieldi < dmcfieldf ) &&
-         ( dmcfieldi < dmc8f ) && ( dmcfieldi < dmcfieldr ) &&
-         ( dmcfieldi < dmc8r ) ) {
-      /* field, interpolated */
-      mbi->mb_type = 8 | 5;
-      mbi->motion_type = 1;
-      vmc =
-        mpeg2_bdist2(
+        if ( dmc8 < dmcfield ) {
+          /* 16x8 prediction */
+          mbi->motion_type = 2;
+          /* upper half block */
+          vmc =
+            mpeg2_dist2(
+              ( sel8u ? botref : topref ) + ( imin8u >> 1 ) + w2 * ( jmin8u >> 1 ),
+              mb, w2, imin8u & 1, jmin8u & 1, 8 );
+          /* lower half block */
+          vmc +=
+            mpeg2_dist2(
+              ( sel8l ? botref : topref ) + ( imin8l >> 1 ) + w2 * ( jmin8l >> 1 ),
+              mb + 8 * w2, w2, imin8l & 1, jmin8l & 1, 8 );
+        } else {
+          /* field prediction */
+          mbi->motion_type = 1;
+          vmc =
+            mpeg2_dist2(
+              ( sel ? botref : topref ) + ( imin >> 1 ) + w2 * ( jmin >> 1 ),
+              mb, w2, imin & 1, jmin & 1, 16 );
+        }
+
+      /* select between intra and non-intra coding */
+      if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
+        mbi->mb_type = 1;
+      else {
+        /*
+          zero MV field prediction from same parity ref. field
+          (not allowed if ipflag is set)
+        */
+        if ( !ipflag )
+          v0 =
+            mpeg2_dist2(
+              ( ( mpeg2_pict_struct == 2 ) ? botref : topref ) + i + w2 * j, mb,
+              w2, 0, 0, 16 );
+
+        if ( ipflag || ( ( 4 * v0 > 5 * vmc ) && ( v0 >= 9 * 256 ) ) ) {
+          var = vmc;
+          mbi->mb_type = 8;
+
+          if ( mbi->motion_type == 1 ) {
+            mbi->MV[ 0 ][ 0 ][ 0 ] = imin - ( i << 1 );
+            mbi->MV[ 0 ][ 0 ][ 1 ] = jmin - ( j << 1 );
+            mbi->mv_field_sel[ 0 ][ 0 ] = sel;
+          } else
+
+            if ( mbi->motion_type == 3 ) {
+              /* same parity vector */
+              mbi->MV[ 0 ][ 0 ][ 0 ] = imins - ( i << 1 );
+              mbi->MV[ 0 ][ 0 ][ 1 ] = jmins - ( j << 1 );
+
+              /* opposite parity vector */
+              mbi->dmvector[ 0 ] = imindmv;
+              mbi->dmvector[ 1 ] = jmindmv;
+            } else {
+              mbi->MV[ 0 ][ 0 ][ 0 ] = imin8u - ( i << 1 );
+              mbi->MV[ 0 ][ 0 ][ 1 ] = jmin8u - ( j << 1 );
+              mbi->MV[ 1 ][ 0 ][ 0 ] = imin8l - ( i << 1 );
+              mbi->MV[ 1 ][ 0 ][ 1 ] = jmin8l - ( ( j + 8 ) << 1 );
+              mbi->mv_field_sel[ 0 ][ 0 ] = sel8u;
+              mbi->mv_field_sel[ 1 ][ 0 ] = sel8l;
+            }
+        } else {
+          /* No MC */
+          var = v0;
+          mbi->mb_type = 0;
+          mbi->motion_type = 1;
+          mbi->MV[ 0 ][ 0 ][ 0 ] = 0;
+          mbi->MV[ 0 ][ 0 ][ 1 ] = 0;
+          mbi->mv_field_sel[ 0 ][ 0 ] = ( mpeg2_pict_struct == 2 );
+        }
+      }
+    } else { /* if (mpeg2_pict_type==B_TYPE) */
+      /* forward prediction */
+      mpeg2_field_estimate(
+        oldorg, oldref, oldorg + mpeg2_width, oldref + mpeg2_width, mb, i, j, sxf,
+        syf, 0, &iminf, &jminf, &imin8uf, &jmin8uf, &imin8lf, &jmin8lf,
+        &dmcfieldf, &dmc8f, &self, &sel8uf, &sel8lf, &imins, &jmins, &ds );
+
+      /* backward prediction */
+      mpeg2_field_estimate(
+        neworg, newref, neworg + mpeg2_width, newref + mpeg2_width, mb, i, j, sxb,
+        syb, 0, &iminr, &jminr, &imin8ur, &jmin8ur, &imin8lr, &jmin8lr,
+        &dmcfieldr, &dmc8r, &selr, &sel8ur, &sel8lr, &imins, &jmins, &ds );
+
+      /* calculate distances for bidirectional prediction */
+      /* field */
+      dmcfieldi =
+        mpeg2_bdist1(
           oldref + ( self ? mpeg2_width : 0 ) + ( iminf >> 1 )
-                 + w2 * ( jminf >> 1 ),
+          + w2 * ( jminf >> 1 ),
           newref + ( selr ? mpeg2_width : 0 ) + ( iminr >> 1 )
-                 + w2 * ( jminr >> 1 ),
+          + w2 * ( jminr >> 1 ),
           mb, w2, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
-    } else
 
-    if ( ( dmc8i < dmcfieldf ) && ( dmc8i < dmc8f ) && ( dmc8i < dmcfieldr ) &&
-         ( dmc8i < dmc8r ) ) {
-      /* 16x8, interpolated */
-      mbi->mb_type = 8 | 4;
-      mbi->motion_type = 2;
-
-      /* upper half block */
-      vmc =
-        mpeg2_bdist2(
+      /* 16x8 upper half block */
+      dmc8i =
+        mpeg2_bdist1(
           oldref + ( sel8uf ? mpeg2_width : 0 ) + ( imin8uf >> 1 )
-                 + w2 * ( jmin8uf >> 1 ),
+          + w2 * ( jmin8uf >> 1 ),
           newref + ( sel8ur ? mpeg2_width : 0 ) + ( imin8ur >> 1 )
-                 + w2 * ( jmin8ur >> 1 ),
+          + w2 * ( jmin8ur >> 1 ),
           mb, w2, imin8uf & 1, jmin8uf & 1, imin8ur & 1, jmin8ur & 1, 8 );
 
-      /* lower half block */
-      vmc +=
-        mpeg2_bdist2(
+      /* 16x8 lower half block */
+      dmc8i +=
+        mpeg2_bdist1(
           oldref + ( sel8lf ? mpeg2_width : 0 ) + ( imin8lf >> 1 )
-                 + w2 * ( jmin8lf >> 1 ),
+          + w2 * ( jmin8lf >> 1 ),
           newref + ( sel8lr ? mpeg2_width : 0 ) + ( imin8lr >> 1 )
-                 + w2 * ( jmin8lr >> 1 ),
+          + w2 * ( jmin8lr >> 1 ),
           mb + 8 * w2, w2, imin8lf & 1, jmin8lf & 1, imin8lr & 1, jmin8lr & 1,
           8 );
-    } else
 
-    if ( ( dmcfieldf < dmc8f ) && ( dmcfieldf < dmcfieldr ) &&
-         ( dmcfieldf < dmc8r ) ) {
-      /* field, forward */
-      mbi->mb_type = 8;
-      mbi->motion_type = 1;
-      vmc =
-        mpeg2_dist2(
-          oldref + ( self ? mpeg2_width : 0 ) + ( iminf >> 1 )
-                 + w2 * ( jminf >> 1 ),
-          mb, w2, iminf & 1, jminf & 1, 16 );
-    } else
+      /* select prediction type of minimum distance */
+      if ( ( dmcfieldi < dmc8i ) && ( dmcfieldi < dmcfieldf ) &&
+           ( dmcfieldi < dmc8f ) && ( dmcfieldi < dmcfieldr ) &&
+           ( dmcfieldi < dmc8r ) ) {
+        /* field, interpolated */
+        mbi->mb_type = 8 | 5;
+        mbi->motion_type = 1;
+        vmc =
+          mpeg2_bdist2(
+            oldref + ( self ? mpeg2_width : 0 ) + ( iminf >> 1 )
+            + w2 * ( jminf >> 1 ),
+            newref + ( selr ? mpeg2_width : 0 ) + ( iminr >> 1 )
+            + w2 * ( jminr >> 1 ),
+            mb, w2, iminf & 1, jminf & 1, iminr & 1, jminr & 1, 16 );
+      } else
 
-    if ( ( dmc8f < dmcfieldr ) && ( dmc8f < dmc8r ) ) {
-      /* 16x8, forward */
-      mbi->mb_type = 8;
-      mbi->motion_type = 2;
+        if ( ( dmc8i < dmcfieldf ) && ( dmc8i < dmc8f ) && ( dmc8i < dmcfieldr ) &&
+             ( dmc8i < dmc8r ) ) {
+          /* 16x8, interpolated */
+          mbi->mb_type = 8 | 4;
+          mbi->motion_type = 2;
 
-      /* upper half block */
-      vmc =
-        mpeg2_dist2(
-          oldref + ( sel8uf ? mpeg2_width : 0 ) + ( imin8uf >> 1 )
-                 + w2 * ( jmin8uf >> 1 ), mb, w2, imin8uf & 1, jmin8uf & 1, 8 );
+          /* upper half block */
+          vmc =
+            mpeg2_bdist2(
+              oldref + ( sel8uf ? mpeg2_width : 0 ) + ( imin8uf >> 1 )
+              + w2 * ( jmin8uf >> 1 ),
+              newref + ( sel8ur ? mpeg2_width : 0 ) + ( imin8ur >> 1 )
+              + w2 * ( jmin8ur >> 1 ),
+              mb, w2, imin8uf & 1, jmin8uf & 1, imin8ur & 1, jmin8ur & 1, 8 );
 
-      /* lower half block */
-      vmc +=
-        mpeg2_dist2(
-          oldref + ( sel8lf ? mpeg2_width : 0 ) + ( imin8lf >> 1 )
-                 + w2 * ( jmin8lf >> 1 ),
-          mb + 8 * w2, w2, imin8lf & 1, jmin8lf & 1, 8 );
-    } else
+          /* lower half block */
+          vmc +=
+            mpeg2_bdist2(
+              oldref + ( sel8lf ? mpeg2_width : 0 ) + ( imin8lf >> 1 )
+              + w2 * ( jmin8lf >> 1 ),
+              newref + ( sel8lr ? mpeg2_width : 0 ) + ( imin8lr >> 1 )
+              + w2 * ( jmin8lr >> 1 ),
+              mb + 8 * w2, w2, imin8lf & 1, jmin8lf & 1, imin8lr & 1, jmin8lr & 1,
+              8 );
+        } else
 
-    if ( dmcfieldr < dmc8r ) {
-      /* field, backward */
-      mbi->mb_type = 4;
-      mbi->motion_type = 1;
-      vmc =
-        mpeg2_dist2(
-          newref + ( selr ? mpeg2_width : 0 ) + ( iminr >> 1 )
-                 + w2 * ( jminr >> 1 ),
-          mb, w2, iminr & 1, jminr & 1, 16 );
-    } else {
-      /* 16x8, backward */
-      mbi->mb_type = 4;
-      mbi->motion_type = 2;
+          if ( ( dmcfieldf < dmc8f ) && ( dmcfieldf < dmcfieldr ) &&
+               ( dmcfieldf < dmc8r ) ) {
+            /* field, forward */
+            mbi->mb_type = 8;
+            mbi->motion_type = 1;
+            vmc =
+              mpeg2_dist2(
+                oldref + ( self ? mpeg2_width : 0 ) + ( iminf >> 1 )
+                + w2 * ( jminf >> 1 ),
+                mb, w2, iminf & 1, jminf & 1, 16 );
+          } else
 
-      /* upper half block */
-      vmc =
-        mpeg2_dist2(
-          newref + ( sel8ur ? mpeg2_width : 0 ) + ( imin8ur >> 1 )
-                 + w2 * ( jmin8ur >> 1 ),
-          mb, w2, imin8ur & 1, jmin8ur & 1, 8 );
+            if ( ( dmc8f < dmcfieldr ) && ( dmc8f < dmc8r ) ) {
+              /* 16x8, forward */
+              mbi->mb_type = 8;
+              mbi->motion_type = 2;
 
-      /* lower half block */
-      vmc +=
-        mpeg2_dist2(
-          newref + ( sel8lr ? mpeg2_width : 0 ) + ( imin8lr >> 1 )
-                 + w2 * ( jmin8lr >> 1 ),
-          mb + 8 * w2, w2, imin8lr & 1, jmin8lr & 1, 8 );
-    }
+              /* upper half block */
+              vmc =
+                mpeg2_dist2(
+                  oldref + ( sel8uf ? mpeg2_width : 0 ) + ( imin8uf >> 1 )
+                  + w2 * ( jmin8uf >> 1 ), mb, w2, imin8uf & 1, jmin8uf & 1, 8 );
 
-    /* select between intra and non-intra coding */
-    if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
-      mbi->mb_type = 1;
-    else {
-      var = vmc;
+              /* lower half block */
+              vmc +=
+                mpeg2_dist2(
+                  oldref + ( sel8lf ? mpeg2_width : 0 ) + ( imin8lf >> 1 )
+                  + w2 * ( jmin8lf >> 1 ),
+                  mb + 8 * w2, w2, imin8lf & 1, jmin8lf & 1, 8 );
+            } else
 
-      if ( mbi->motion_type == 1 ) {
-        /* forward */
-        mbi->MV[ 0 ][ 0 ][ 0 ] = iminf - ( i << 1 );
-        mbi->MV[ 0 ][ 0 ][ 1 ] = jminf - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 0 ] = self;
-        /* backward */
-        mbi->MV[ 0 ][ 1 ][ 0 ] = iminr - ( i << 1 );
-        mbi->MV[ 0 ][ 1 ][ 1 ] = jminr - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 1 ] = selr;
-      } else { /* MC_16X8 */
-        /* forward */
-        mbi->MV[ 0 ][ 0 ][ 0 ] = imin8uf - ( i << 1 );
-        mbi->MV[ 0 ][ 0 ][ 1 ] = jmin8uf - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 0 ] = sel8uf;
-        mbi->MV[ 1 ][ 0 ][ 0 ] = imin8lf - ( i << 1 );
-        mbi->MV[ 1 ][ 0 ][ 1 ] = jmin8lf - ( ( j + 8 ) << 1 );
-        mbi->mv_field_sel[ 1 ][ 0 ] = sel8lf;
-        /* backward */
-        mbi->MV[ 0 ][ 1 ][ 0 ] = imin8ur - ( i << 1 );
-        mbi->MV[ 0 ][ 1 ][ 1 ] = jmin8ur - ( j << 1 );
-        mbi->mv_field_sel[ 0 ][ 1 ] = sel8ur;
-        mbi->MV[ 1 ][ 1 ][ 0 ] = imin8lr - ( i << 1 );
-        mbi->MV[ 1 ][ 1 ][ 1 ] = jmin8lr - ( ( j + 8 ) << 1 );
-        mbi->mv_field_sel[ 1 ][ 1 ] = sel8lr;
+              if ( dmcfieldr < dmc8r ) {
+                /* field, backward */
+                mbi->mb_type = 4;
+                mbi->motion_type = 1;
+                vmc =
+                  mpeg2_dist2(
+                    newref + ( selr ? mpeg2_width : 0 ) + ( iminr >> 1 )
+                    + w2 * ( jminr >> 1 ),
+                    mb, w2, iminr & 1, jminr & 1, 16 );
+              } else {
+                /* 16x8, backward */
+                mbi->mb_type = 4;
+                mbi->motion_type = 2;
+
+                /* upper half block */
+                vmc =
+                  mpeg2_dist2(
+                    newref + ( sel8ur ? mpeg2_width : 0 ) + ( imin8ur >> 1 )
+                    + w2 * ( jmin8ur >> 1 ),
+                    mb, w2, imin8ur & 1, jmin8ur & 1, 8 );
+
+                /* lower half block */
+                vmc +=
+                  mpeg2_dist2(
+                    newref + ( sel8lr ? mpeg2_width : 0 ) + ( imin8lr >> 1 )
+                    + w2 * ( jmin8lr >> 1 ),
+                    mb + 8 * w2, w2, imin8lr & 1, jmin8lr & 1, 8 );
+              }
+
+      /* select between intra and non-intra coding */
+      if ( ( vmc > var ) && ( vmc >= 9 * 256 ) )
+        mbi->mb_type = 1;
+      else {
+        var = vmc;
+
+        if ( mbi->motion_type == 1 ) {
+          /* forward */
+          mbi->MV[ 0 ][ 0 ][ 0 ] = iminf - ( i << 1 );
+          mbi->MV[ 0 ][ 0 ][ 1 ] = jminf - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 0 ] = self;
+          /* backward */
+          mbi->MV[ 0 ][ 1 ][ 0 ] = iminr - ( i << 1 );
+          mbi->MV[ 0 ][ 1 ][ 1 ] = jminr - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 1 ] = selr;
+        } else { /* MC_16X8 */
+          /* forward */
+          mbi->MV[ 0 ][ 0 ][ 0 ] = imin8uf - ( i << 1 );
+          mbi->MV[ 0 ][ 0 ][ 1 ] = jmin8uf - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 0 ] = sel8uf;
+          mbi->MV[ 1 ][ 0 ][ 0 ] = imin8lf - ( i << 1 );
+          mbi->MV[ 1 ][ 0 ][ 1 ] = jmin8lf - ( ( j + 8 ) << 1 );
+          mbi->mv_field_sel[ 1 ][ 0 ] = sel8lf;
+          /* backward */
+          mbi->MV[ 0 ][ 1 ][ 0 ] = imin8ur - ( i << 1 );
+          mbi->MV[ 0 ][ 1 ][ 1 ] = jmin8ur - ( j << 1 );
+          mbi->mv_field_sel[ 0 ][ 1 ] = sel8ur;
+          mbi->MV[ 1 ][ 1 ][ 0 ] = imin8lr - ( i << 1 );
+          mbi->MV[ 1 ][ 1 ][ 1 ] = jmin8lr - ( ( j + 8 ) << 1 );
+          mbi->mv_field_sel[ 1 ][ 1 ] = sel8lr;
+        }
       }
     }
-  }
 
   mbi->var = var;
 }
@@ -12539,7 +12539,7 @@ void mpeg2_dpframe_estimate( unsigned char *ref, unsigned char *mb, int i,
                 mpeg2_bdist2(
                   ref + ( is >> 1 ) + ( mpeg2_width << 1 ) * ( js >> 1 ),
                   ref + mpeg2_width + ( it >> 1 )
-                      + ( mpeg2_width << 1 ) * ( jt >> 1 ),
+                  + ( mpeg2_width << 1 ) * ( jt >> 1 ),
                   mb,             /* current mb location */
                   mpeg2_width << 1,     /* adjacent line distance */
                   is & 1, js & 1, it & 1, jt & 1, /* half-pel flags */
@@ -12547,7 +12547,7 @@ void mpeg2_dpframe_estimate( unsigned char *ref, unsigned char *mb, int i,
               local_dist +=
                 mpeg2_bdist2(
                   ref + mpeg2_width + ( is >> 1 )
-                      + ( mpeg2_width << 1 ) * ( js >> 1 ),
+                  + ( mpeg2_width << 1 ) * ( js >> 1 ),
                   ref + ( ib >> 1 ) + ( mpeg2_width << 1 ) * ( jb >> 1 ),
                   mb + mpeg2_width,     /* current mb location */
                   mpeg2_width << 1,     /* adjacent line distance */
@@ -12578,12 +12578,12 @@ void mpeg2_dpframe_estimate( unsigned char *ref, unsigned char *mb, int i,
     mpeg2_bdist1(
       ref + ( imins >> 1 ) + ( mpeg2_width << 1 ) * ( jmins >> 1 ),
       ref + mpeg2_width + ( imint >> 1 )
-          + ( mpeg2_width << 1 ) * ( jmint >> 1 ),
+      + ( mpeg2_width << 1 ) * ( jmint >> 1 ),
       mb, mpeg2_width << 1, imins & 1, jmins & 1, imint & 1, jmint & 1, 8 );
   local_dist +=
     mpeg2_bdist1(
       ref + mpeg2_width + ( imins >> 1 )
-          + ( mpeg2_width << 1 ) * ( jmins >> 1 ),
+      + ( mpeg2_width << 1 ) * ( jmins >> 1 ),
       ref + ( iminb >> 1 ) + ( mpeg2_width << 1 ) * ( jminb >> 1 ),
       mb + mpeg2_width, mpeg2_width << 1, imins & 1, jmins & 1, iminb & 1,
       jminb & 1, 8 );
@@ -12764,14 +12764,14 @@ int mpeg2_fullsearch( unsigned char *org, unsigned char *ref,
         i++;
       else
 
-      if ( k < 4 * l )
-        j++;
-      else
+        if ( k < 4 * l )
+          j++;
+        else
 
-      if ( k < 6 * l )
-        i--;
-      else
-        j--;
+          if ( k < 6 * l )
+            i--;
+          else
+            j--;
     }
   }
 
@@ -12804,7 +12804,7 @@ int mpeg2_fullsearch( unsigned char *org, unsigned char *ref,
   *iminp = imin;
   *jminp = jmin;
 
-  return( dmin );
+  return ( dmin );
 }
 
 
@@ -12830,7 +12830,7 @@ int mpeg2_dist1( unsigned char *blk1, unsigned char *blk2, int lx, int hx,
   p2 = blk2;
 
   if ( !hx && !hy ) {
-    _Pragma( "loopbound min 1 max 16" )
+    _Pragma( "loopbound min 0 max 16" )
     for ( j = 0; j < h; j++ ) {
       if ( ( v = p1[ 0 ] - p2[ 0 ] ) < 0 )
         v = -v;
@@ -12904,63 +12904,63 @@ int mpeg2_dist1( unsigned char *blk1, unsigned char *blk2, int lx, int hx,
     }
   } else
 
-  if ( hx && !hy ) {
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v = ( ( unsigned int )( p1[ i ] + p1[ i + 1 ] + 1 ) >> 1 ) - p2[ i ];
-        if ( v >= 0 )
-          s += v;
-        else
-          s -= v;
+    if ( hx && !hy ) {
+      _Pragma( "loopbound min 8 max 16" )
+      for ( j = 0; j < h; j++ ) {
+        i = 0;
+        _Pragma( "loopbound min 16 max 16" )
+        for ( ; i < 16; i++ ) {
+          v = ( ( unsigned int )( p1[ i ] + p1[ i + 1 ] + 1 ) >> 1 ) - p2[ i ];
+          if ( v >= 0 )
+            s += v;
+          else
+            s -= v;
+        }
+        p1 += lx;
+        p2 += lx;
       }
-      p1 += lx;
-      p2 += lx;
-    }
-  } else
+    } else
 
-  if ( !hx && hy ) {
-    p1a = p1 + lx;
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v = ( ( unsigned int )( p1[ i ] + p1a[ i ] + 1 ) >> 1 ) - p2[ i ];
-        if ( v >= 0 )
-          s += v;
-        else
-          s -= v;
+      if ( !hx && hy ) {
+        p1a = p1 + lx;
+        _Pragma( "loopbound min 8 max 16" )
+        for ( j = 0; j < h; j++ ) {
+          i = 0;
+          _Pragma( "loopbound min 16 max 16" )
+          for ( ; i < 16; i++ ) {
+            v = ( ( unsigned int )( p1[ i ] + p1a[ i ] + 1 ) >> 1 ) - p2[ i ];
+            if ( v >= 0 )
+              s += v;
+            else
+              s -= v;
+          }
+          p1 = p1a;
+          p1a += lx;
+          p2 += lx;
+        }
+      } else { /* if (hx && hy) */
+        p1a = p1 + lx;
+        _Pragma( "loopbound min 8 max 16" )
+        for ( j = 0; j < h; j++ ) {
+          i = 0;
+          _Pragma( "loopbound min 16 max 16" )
+          for ( ; i < 16; i++ ) {
+            v =
+              ( ( unsigned int )
+                ( p1[ i ] + p1[ i + 1 ] + p1a[ i ] + p1a[ i + 1 ] + 2 ) >> 2 ) -
+              p2[ i ];
+            if ( v >= 0 )
+              s += v;
+            else
+              s -= v;
+          }
+          p1 = p1a;
+          p1a += lx;
+          p2 += lx;
+        }
       }
-      p1 = p1a;
-      p1a += lx;
-      p2 += lx;
-    }
-  } else { /* if (hx && hy) */
-    p1a = p1 + lx;
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v =
-          ( ( unsigned int )
-            ( p1[ i ] + p1[ i + 1 ] + p1a[ i ] + p1a[ i + 1 ] + 2 ) >> 2 ) -
-          p2[ i ];
-        if ( v >= 0 )
-          s += v;
-        else
-          s -= v;
-      }
-      p1 = p1a;
-      p1a += lx;
-      p2 += lx;
-    }
-  }
 
-  return( s );
+  return ( s );
 }
 
 
@@ -12998,54 +12998,54 @@ int mpeg2_dist2( unsigned char *blk1, unsigned char *blk2, int lx, int hx,
     }
   } else
 
-  if ( hx && !hy ) {
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v = ( ( unsigned int )( p1[ i ] + p1[ i + 1 ] + 1 ) >> 1 ) - p2[ i ];
-        s += v * v;
+    if ( hx && !hy ) {
+      _Pragma( "loopbound min 8 max 16" )
+      for ( j = 0; j < h; j++ ) {
+        i = 0;
+        _Pragma( "loopbound min 16 max 16" )
+        for ( ; i < 16; i++ ) {
+          v = ( ( unsigned int )( p1[ i ] + p1[ i + 1 ] + 1 ) >> 1 ) - p2[ i ];
+          s += v * v;
+        }
+        p1 += lx;
+        p2 += lx;
       }
-      p1 += lx;
-      p2 += lx;
-    }
-  } else
+    } else
 
-  if ( !hx && hy ) {
-    p1a = p1 + lx;
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v = ( ( unsigned int )( p1[ i ] + p1a[ i ] + 1 ) >> 1 ) - p2[ i ];
-        s += v * v;
+      if ( !hx && hy ) {
+        p1a = p1 + lx;
+        _Pragma( "loopbound min 8 max 16" )
+        for ( j = 0; j < h; j++ ) {
+          i = 0;
+          _Pragma( "loopbound min 16 max 16" )
+          for ( ; i < 16; i++ ) {
+            v = ( ( unsigned int )( p1[ i ] + p1a[ i ] + 1 ) >> 1 ) - p2[ i ];
+            s += v * v;
+          }
+          p1 = p1a;
+          p1a += lx;
+          p2 += lx;
+        }
+      } else { /* if (hx && hy) */
+        p1a = p1 + lx;
+        _Pragma( "loopbound min 8 max 16" )
+        for ( j = 0; j < h; j++ ) {
+          i = 0;
+          _Pragma( "loopbound min 16 max 16" )
+          for ( ; i < 16; i++ ) {
+            v =
+              ( ( unsigned int )
+                ( p1[ i ] + p1[ i + 1 ] + p1a[ i ] + p1a[ i + 1 ] + 2 ) >> 2 ) -
+              p2[ i ];
+            s += v * v;
+          }
+          p1 = p1a;
+          p1a += lx;
+          p2 += lx;
+        }
       }
-      p1 = p1a;
-      p1a += lx;
-      p2 += lx;
-    }
-  } else { /* if (hx && hy) */
-    p1a = p1 + lx;
-    _Pragma( "loopbound min 8 max 16" )
-    for ( j = 0; j < h; j++ ) {
-      i = 0;
-      _Pragma( "loopbound min 16 max 16" )
-      for ( ; i < 16; i++ ) {
-        v =
-          ( ( unsigned int )
-            ( p1[ i ] + p1[ i + 1 ] + p1a[ i ] + p1a[ i + 1 ] + 2 ) >> 2 ) -
-          p2[ i ];
-        s += v * v;
-      }
-      p1 = p1a;
-      p1a += lx;
-      p2 += lx;
-    }
-  }
 
-  return( s );
+  return ( s );
 }
 
 
@@ -13103,7 +13103,7 @@ int mpeg2_bdist1( unsigned char *pf, unsigned char *pb, unsigned char *p2,
     pbc += lx - 16;
   }
 
-  return( s );
+  return ( s );
 }
 
 
@@ -13158,7 +13158,7 @@ int mpeg2_bdist2( unsigned char *pf, unsigned char *pb, unsigned char *p2,
     pbc += lx - 16;
   }
 
-  return( s );
+  return ( s );
 }
 
 
@@ -13187,7 +13187,7 @@ int mpeg2_variance( unsigned char *p, int lx )
     p += lx - 16;
   }
 
-  return( s2 - ( s * s ) / 256 );
+  return ( s2 - ( s * s ) / 256 );
 }
 
 
@@ -13208,5 +13208,5 @@ int main( void )
   mpeg2_init();
   mpeg2_main();
 
-  return( mpeg2_return() - (-116) != 0 );
+  return ( mpeg2_return() - ( -116 ) != 0 );
 }

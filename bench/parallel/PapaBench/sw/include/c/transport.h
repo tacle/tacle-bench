@@ -24,7 +24,7 @@ enum TransportError {
 struct TransportMsg {
   GTimeVal date;
   guint len;
-  guchar* data;
+  guchar *data;
 };
 
 struct TransportStatus {
@@ -37,8 +37,8 @@ struct TransportStatus {
 };
 
 struct Transport {
-  void(*err_callback)(gpointer callback_data, GError *error);
-  void(*msg_callback)(gpointer callback_data, struct TransportMsg* msg);
+  void( *err_callback )( gpointer callback_data, GError *error );
+  void( *msg_callback )( gpointer callback_data, struct TransportMsg *msg );
   gpointer callback_data;
   GQuark quark;
   gchar stx;
@@ -46,28 +46,30 @@ struct Transport {
   gboolean fixed_size;
   gboolean two_bytes_checksum;
   guint nb_msg_type;
-  guint* size_msg;
+  guint *size_msg;
   guint max_msg_size;
   struct TransportStatus status;
   gulong nb_msg_last_status;
   gulong nb_byte_last_status;
-  guchar buf[TRANSPORT_BUF_LEN];
+  guchar buf[ TRANSPORT_BUF_LEN ];
   guint buf_len;
   GTimeVal start_date, last_status_date;
-  
+
 };
 
-struct Transport* transport_new(gboolean fixed_size, gboolean two_bytes_checksum, guint nb_msg, guint* size_msg, guint max_msg_size,
-				guchar stx, guchar etx,
-				void(*err_callback)(gpointer callback_data, GError *error), 
-				void(*msg_callback)(gpointer callback_data, struct TransportMsg* msg),
-				gpointer callback_data);
+struct Transport *transport_new( gboolean fixed_size,
+                                 gboolean two_bytes_checksum, guint nb_msg, guint *size_msg, guint max_msg_size,
+                                 guchar stx, guchar etx,
+                                 void( *err_callback )( gpointer callback_data, GError *error ),
+                                 void( *msg_callback )( gpointer callback_data, struct TransportMsg *msg ),
+                                 gpointer callback_data );
 
-struct TransportStatus* transport_get_status(struct Transport* this);
+struct TransportStatus *transport_get_status( struct Transport *this );
 
-void transport_feed_data(struct Transport* this, const guchar* buf, guint len);
+void transport_feed_data( struct Transport *this, const guchar *buf,
+                          guint len );
 
-void transport_free(struct Transport* this);
+void transport_free( struct Transport *this );
 
 
 #endif /* TRANSPORT_H */

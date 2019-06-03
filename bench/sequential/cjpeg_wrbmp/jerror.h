@@ -19,7 +19,7 @@
   Changes: no major functional changes
 
   License:  See the accompanying README file
-  */
+*/
 
 /*
    To define the enum list of message codes, include this file without
@@ -48,7 +48,7 @@ typedef enum {
 
   /* For maintenance convenience, list is alphabetical by message code name */
   CJPEG_WRBMP_JMESSAGE( JERR_ARITH_NOTIMPL,
-                               "Sorry, there are legal restrictions on arithmetic coding" )
+                        "Sorry, there are legal restrictions on arithmetic coding" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_ALIGN_TYPE, "ALIGN_TYPE is wrong, please fix" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_ALLOC_CHUNK, "MAX_ALLOC_CHUNK is wrong, please fix" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_BUFFER_MODE, "Bogus buffer control mode" )
@@ -60,19 +60,19 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_J_COLORSPACE, "Bogus JPEG colorspace" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_LENGTH, "Bogus marker length" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_LIB_VERSION,
-                               "Wrong JPEG library version: library is %d, caller expects %d" )
+                        "Wrong JPEG library version: library is %d, caller expects %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_MCU_SIZE, "Sampling factors too large for interleaved scan" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_POOL_ID, "Invalid memory pool code %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_PRECISION, "Unsupported JPEG data precision %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_PROGRESSION,
-                               "Invalid progressive parameters Ss=%d Se=%d Ah=%d Al=%d" )
+                        "Invalid progressive parameters Ss=%d Se=%d Ah=%d Al=%d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_PROG_SCRIPT,
-                               "Invalid progressive parameters at scan script entry %d" )
+                        "Invalid progressive parameters at scan script entry %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_SAMPLING, "Bogus sampling factors" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_SCAN_SCRIPT, "Invalid scan script at entry %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_STATE, "Improper call to JPEG library in state %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_STRUCT_SIZE,
-                               "JPEG parameter struct mismatch: library thinks size is %u, caller expects %u" )
+                        "JPEG parameter struct mismatch: library thinks size is %u, caller expects %u" )
   CJPEG_WRBMP_JMESSAGE( JERR_BAD_VIRTUAL_ACCESS, "Bogus virtual array access" )
   CJPEG_WRBMP_JMESSAGE( JERR_BUFFER_SIZE, "Buffer passed to JPEG library is too small" )
   CJPEG_WRBMP_JMESSAGE( JERR_CANT_SUSPEND, "Suspension not allowed here" )
@@ -96,7 +96,7 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JERR_INPUT_EMPTY, "Empty input file" )
   CJPEG_WRBMP_JMESSAGE( JERR_INPUT_EOF, "Premature end of input file" )
   CJPEG_WRBMP_JMESSAGE( JERR_MISMATCHED_QUANT_TABLE,
-                               "Cannot transcode due to multiple use of quantization table %d" )
+                        "Cannot transcode due to multiple use of quantization table %d" )
   CJPEG_WRBMP_JMESSAGE( JERR_MISSING_DATA, "Scan script does not transmit all data" )
   CJPEG_WRBMP_JMESSAGE( JERR_MODE_CHANGE, "Invalid color quantization mode change" )
   CJPEG_WRBMP_JMESSAGE( JERR_NOTIMPL, "Not implemented yet" )
@@ -108,7 +108,7 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JERR_NO_SOI, "Not a JPEG file: starts with 0x%02x 0x%02x" )
   CJPEG_WRBMP_JMESSAGE( JERR_OUT_OF_MEMORY, "Insufficient memory (case %d)" )
   CJPEG_WRBMP_JMESSAGE( JERR_QUANT_COMPONENTS,
-                               "Cannot quantize more than %d color components" )
+                        "Cannot quantize more than %d color components" )
   CJPEG_WRBMP_JMESSAGE( JERR_QUANT_FEW_COLORS, "Cannot quantize to fewer than %d colors" )
   CJPEG_WRBMP_JMESSAGE( JERR_QUANT_MANY_COLORS, "Cannot quantize to more than %d colors" )
   CJPEG_WRBMP_JMESSAGE( JERR_SOF_DUPLICATE, "Invalid JPEG file structure: two SOF markers" )
@@ -120,7 +120,7 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JERR_TFILE_READ, "Read failed on temporary file" )
   CJPEG_WRBMP_JMESSAGE( JERR_TFILE_SEEK, "Seek failed on temporary file" )
   CJPEG_WRBMP_JMESSAGE( JERR_TFILE_WRITE,
-                               "Write failed on temporary file --- out of disk space?" )
+                        "Write failed on temporary file --- out of disk space?" )
   CJPEG_WRBMP_JMESSAGE( JERR_TOO_LITTLE_DATA, "Application transferred too few scanlines" )
   CJPEG_WRBMP_JMESSAGE( JERR_UNKNOWN_MARKER, "Unsupported marker type 0x%02x" )
   CJPEG_WRBMP_JMESSAGE( JERR_VIRTUAL_BUG, "Virtual array controller messed up" )
@@ -130,9 +130,9 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JMSG_COPYRIGHT, JCOPYRIGHT )
   CJPEG_WRBMP_JMESSAGE( JMSG_VERSION, JVERSION )
   CJPEG_WRBMP_JMESSAGE( JTRC_16BIT_TABLES,
-                               "Caution: quantization tables are too coarse for baseline JPEG" )
+                        "Caution: quantization tables are too coarse for baseline JPEG" )
   CJPEG_WRBMP_JMESSAGE( JTRC_ADOBE,
-                               "Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d" )
+                        "Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_APP0, "Unknown APP0 marker (not JFIF), length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_APP14, "Unknown APP14 marker (not Adobe), length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_DAC, "Define Arithmetic Table 0x%02x: 0x%02x" )
@@ -145,9 +145,9 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JTRC_HUFFBITS, "        %3d %3d %3d %3d %3d %3d %3d %3d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_JFIF, "JFIF APP0 marker: version %d.%02d, density %dx%d  %d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_JFIF_BADTHUMBNAILSIZE,
-                               "Warning: thumbnail image size does not match data length %u" )
+                        "Warning: thumbnail image size does not match data length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_JFIF_EXTENSION,
-                               "JFIF extension marker: type 0x%02x, length %u" )
+                        "JFIF extension marker: type 0x%02x, length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_JFIF_THUMBNAIL, "    with %d x %d thumbnail image" )
   CJPEG_WRBMP_JMESSAGE( JTRC_MISC_MARKER, "Miscellaneous marker 0x%02x, length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_PARMLESS_MARKER, "Unexpected marker 0x%02x" )
@@ -158,7 +158,7 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JTRC_RECOVERY_ACTION, "At marker 0x%02x, recovery action %d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_RST, "RST%d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_SMOOTH_NOTIMPL,
-                               "Smoothing not supported with nonstandard sampling ratios" )
+                        "Smoothing not supported with nonstandard sampling ratios" )
   CJPEG_WRBMP_JMESSAGE( JTRC_SOF, "Start Of Frame 0x%02x: width=%u, height=%u, components=%d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_SOF_COMPONENT, "    Component %d: %dhx%dv q=%d" )
   CJPEG_WRBMP_JMESSAGE( JTRC_SOI, "Start of Image" )
@@ -168,26 +168,26 @@ typedef enum {
   CJPEG_WRBMP_JMESSAGE( JTRC_TFILE_CLOSE, "Closed temporary file %s" )
   CJPEG_WRBMP_JMESSAGE( JTRC_TFILE_OPEN, "Opened temporary file %s" )
   CJPEG_WRBMP_JMESSAGE( JTRC_THUMB_JPEG,
-                               "JFIF extension marker: JPEG-compressed thumbnail image, length %u" )
+                        "JFIF extension marker: JPEG-compressed thumbnail image, length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_THUMB_PALETTE,
-                               "JFIF extension marker: palette thumbnail image, length %u" )
+                        "JFIF extension marker: palette thumbnail image, length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_THUMB_RGB,
-                               "JFIF extension marker: RGB thumbnail image, length %u" )
+                        "JFIF extension marker: RGB thumbnail image, length %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_UNKNOWN_IDS,
-                               "Unrecognized component IDs %d %d %d, assuming YCbCr" )
+                        "Unrecognized component IDs %d %d %d, assuming YCbCr" )
   CJPEG_WRBMP_JMESSAGE( JTRC_XMS_CLOSE, "Freed XMS handle %u" )
   CJPEG_WRBMP_JMESSAGE( JTRC_XMS_OPEN, "Obtained XMS handle %u" )
   CJPEG_WRBMP_JMESSAGE( JWRN_ADOBE_XFORM, "Unknown Adobe color transform code %d" )
   CJPEG_WRBMP_JMESSAGE( JWRN_BOGUS_PROGRESSION,
-                               "Inconsistent progression sequence for component %d coefficient %d" )
+                        "Inconsistent progression sequence for component %d coefficient %d" )
   CJPEG_WRBMP_JMESSAGE( JWRN_EXTRANEOUS_DATA,
-                               "Corrupt JPEG data: %u extraneous bytes before marker 0x%02x" )
+                        "Corrupt JPEG data: %u extraneous bytes before marker 0x%02x" )
   CJPEG_WRBMP_JMESSAGE( JWRN_HIT_MARKER, "Corrupt JPEG data: premature end of data segment" )
   CJPEG_WRBMP_JMESSAGE( JWRN_HUFF_BAD_CODE, "Corrupt JPEG data: bad Huffman code" )
   CJPEG_WRBMP_JMESSAGE( JWRN_JFIF_MAJOR, "Warning: unknown JFIF revision number %d.%02d" )
   CJPEG_WRBMP_JMESSAGE( JWRN_JPEG_EOF, "Premature end of JPEG file" )
   CJPEG_WRBMP_JMESSAGE( JWRN_MUST_RESYNC,
-                               "Corrupt JPEG data: found marker 0x%02x instead of RST%d" )
+                        "Corrupt JPEG data: found marker 0x%02x instead of RST%d" )
   CJPEG_WRBMP_JMESSAGE( JWRN_NOT_SEQUENTIAL, "Invalid SOS parameters for sequential JPEG" )
   CJPEG_WRBMP_JMESSAGE( JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines" )
 

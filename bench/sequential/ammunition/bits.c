@@ -115,12 +115,12 @@ ammunition_bit_string_copy ( void *to, int to_bit_displacement,
   to_bit_displacement %= CHAR_BIT;
   current_from_byte += from_bit_displacement / CHAR_BIT;
   from_bit_displacement %= CHAR_BIT;
-  _Pragma( "loopbound min 1 max 8" )
+  _Pragma( "loopbound min 0 max 7" )
   while ( 1 ) {
     byte = ( ( ( *current_from_byte << from_bit_displacement ) & UCHAR_MAX )
              | ( from_bit_displacement != 0
                  && bit_length > ( CHAR_BIT - from_bit_displacement )
-                 ? current_from_byte [1] >> ( CHAR_BIT - from_bit_displacement )
+                 ? current_from_byte [ 1 ] >> ( CHAR_BIT - from_bit_displacement )
                  : 0 ) );
     if ( bit_length <= CHAR_BIT )
       break;
@@ -131,8 +131,8 @@ ammunition_bit_string_copy ( void *to, int to_bit_displacement,
           & ( UCHAR_MAX << ( CHAR_BIT - to_bit_displacement ) ) )
         | ( byte >> to_bit_displacement );
     if ( to_bit_displacement != 0 )
-      current_to_byte [1]
-        = ( current_to_byte [1] & ( UCHAR_MAX >> to_bit_displacement ) )
+      current_to_byte [ 1 ]
+        = ( current_to_byte [ 1 ] & ( UCHAR_MAX >> to_bit_displacement ) )
           | ( byte << ( CHAR_BIT - to_bit_displacement ) );
     bit_length -= CHAR_BIT;
     current_from_byte++;
@@ -146,8 +146,8 @@ ammunition_bit_string_copy ( void *to, int to_bit_displacement,
     = ( *current_to_byte & mask ) | ( ( byte >> to_bit_displacement ) & ~mask );
   bit_length -= CHAR_BIT - to_bit_displacement;
   if ( bit_length > 0 )
-    current_to_byte [1]
-      = ( current_to_byte [1] & ( UCHAR_MAX >> bit_length ) )
+    current_to_byte [ 1 ]
+      = ( current_to_byte [ 1 ] & ( UCHAR_MAX >> bit_length ) )
         | ( ( byte << ( CHAR_BIT - to_bit_displacement ) )
             & ( UCHAR_MAX << ( CHAR_BIT - bit_length ) ) );
 }
@@ -176,15 +176,15 @@ void ammunition_reverse_bit_string_copy ( void *to, int to_bit_displacement,
   from_bit_displacement += bit_length - 1;
   current_from_byte += from_bit_displacement / CHAR_BIT; /* last byte */
   from_bit_displacement %= CHAR_BIT; /* last bit */
-  _Pragma( "loopbound min 1 max 8" )
+  _Pragma( "loopbound min 0 max 7" )
   while ( 1 ) {
     /* Shift is correct when to_bit_displacement == 0 because its
        value is less than word bit size. */
     byte = ( ( *current_from_byte >> ( CHAR_BIT - 1 - from_bit_displacement ) )
              | ( ( from_bit_displacement != CHAR_BIT - 1
                    && bit_length > from_bit_displacement + 1
-                   ? current_from_byte [ -1 ] << ( from_bit_displacement + 1 ) 
-                     : 0 )
+                   ? current_from_byte [  -1  ] << ( from_bit_displacement + 1 )
+                   : 0 )
                  & UCHAR_MAX ) );
     if ( bit_length <= CHAR_BIT )
       break;
@@ -194,8 +194,8 @@ void ammunition_reverse_bit_string_copy ( void *to, int to_bit_displacement,
       = ( *current_to_byte & ( UCHAR_MAX >> ( to_bit_displacement + 1 ) ) )
         | ( byte << ( CHAR_BIT - 1 - to_bit_displacement ) );
     if ( to_bit_displacement != CHAR_BIT - 1 )
-      current_to_byte [-1]
-        = ( current_to_byte [-1]
+      current_to_byte [ -1 ]
+        = ( current_to_byte [ -1 ]
             & ( UCHAR_MAX << ( CHAR_BIT - 1 - to_bit_displacement ) ) )
           | ( byte >> ( to_bit_displacement + 1 ) );
     bit_length -= CHAR_BIT;
@@ -212,8 +212,8 @@ void ammunition_reverse_bit_string_copy ( void *to, int to_bit_displacement,
       | ( ( byte << ( CHAR_BIT - 1 - to_bit_displacement ) ) & ~mask );
   bit_length -= to_bit_displacement + 1;
   if ( bit_length > 0 )
-    current_to_byte [-1]
-      = ( current_to_byte [-1] & ( UCHAR_MAX << bit_length ) )
+    current_to_byte [ -1 ]
+      = ( current_to_byte [ -1 ] & ( UCHAR_MAX << bit_length ) )
         | ( byte >> ( to_bit_displacement + 1 )
             & ( UCHAR_MAX >> ( CHAR_BIT - bit_length ) ) );
 }
@@ -275,19 +275,19 @@ ammunition_bit_string_comparison ( const void *str1, int bit_displacement1,
   bit_displacement1 %= CHAR_BIT;
   current_byte2 += bit_displacement2 / CHAR_BIT;
   bit_displacement2 %= CHAR_BIT;
-  _Pragma( "loopbound min 1 max 284" )
+  _Pragma( "loopbound min 0 max 7" )
   while ( 1 ) {
     byte1 = ( ( ( *current_byte1 << bit_displacement1 ) & UCHAR_MAX )
               | ( bit_displacement1 != 0
                   /* Shift is correct when to_bit_displacement == 0
                      because its value is less than word bit size. */
                   && bit_length > CHAR_BIT - bit_displacement1
-                  ? current_byte1 [1] >> ( CHAR_BIT - bit_displacement1 )
+                  ? current_byte1 [ 1 ] >> ( CHAR_BIT - bit_displacement1 )
                   : 0 ) );
     byte2 = ( ( ( *current_byte2 << bit_displacement2 ) & UCHAR_MAX )
               | ( bit_displacement2 != 0
                   && bit_length > CHAR_BIT - bit_displacement2
-                  ? current_byte2 [1] >> ( CHAR_BIT - bit_displacement2 )
+                  ? current_byte2 [ 1 ] >> ( CHAR_BIT - bit_displacement2 )
                   : 0 ) );
     if ( bit_length <= CHAR_BIT )
       break;

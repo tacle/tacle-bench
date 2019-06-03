@@ -23,13 +23,13 @@
 /*
   Forward declaration of functions
 */
-
+int printf(const char * restrict format, ... );
 int fac_fac( int n );
 void fac_init();
 int fac_return();
 void fac_main();
 int main( void );
-
+int counter1 = 0;
 /*
   Declaration of global variables
 */
@@ -64,6 +64,7 @@ int fac_return()
 
 int fac_fac ( int n )
 {
+    counter1++;
   if ( n == 0 )
     return 1;
   else
@@ -86,6 +87,7 @@ void _Pragma( "entrypoint" ) fac_main ()
     fac_s += fac_fac ( i );
     _Pragma( "flowrestriction 1*fac_fac <= 6*recursivecall" )
   }
+  printf("%d\n", counter1);
 }
 
 

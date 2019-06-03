@@ -4,15 +4,15 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright
+     Redistributions of source code must retain the above copyright
      notice, this list of conditions and the following disclaimer.
 
-   * Redistributions in binary form must reproduce the above copyright
+     Redistributions in binary form must reproduce the above copyright
      notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the
      distribution.
 
-   * Neither the name of the copyright holders nor the names of
+     Neither the name of the copyright holders nor the names of
      contributors may be used to endorse or promote products derived
      from this software without specific prior written permission.
 
@@ -86,20 +86,20 @@
 #include <arch/sfr_defs.h>
 
 /*
- * Registers common to all AVR devices.
- */
+   Registers common to all AVR devices.
+*/
 
 #if __AVR_ARCH__ != 1
 /*
- * AVR architecture 1 has no RAM, thus no stack pointer.
- *
- * All other archs do have a stack pointer.  Some devices have only
- * less than 256 bytes of possible RAM locations (128 Bytes of SRAM
- * and no option for external RAM), thus SPH is officially "reserved"
- * for them.  We catch this case below after including the
- * device-specific ioXXXX.h file, by examining XRAMEND, and
- * #undef-ining SP and SPH in that case.
- */
+   AVR architecture 1 has no RAM, thus no stack pointer.
+
+   All other archs do have a stack pointer.  Some devices have only
+   less than 256 bytes of possible RAM locations (128 Bytes of SRAM
+   and no option for external RAM), thus SPH is officially "reserved"
+   for them.  We catch this case below after including the
+   device-specific ioXXXX.h file, by examining XRAMEND, and
+   #undef-ining SP and SPH in that case.
+*/
 /* Stack Pointer */
 #define SP        _SFR_IO16(0x3D)
 #define SPL       _SFR_IO8(0x3D)
@@ -131,22 +131,22 @@
 #define    ZH           r31
 
 /*
- * Only few devices come without EEPROM.  In order to assemble the
- * EEPROM library components without defining a specific device, we
- * keep the EEPROM-related definitions here, and catch the devices
- * without EEPROM (E2END == 0) below.  Obviously, the EEPROM library
- * functions will not work for them. ;-)
- */
+   Only few devices come without EEPROM.  In order to assemble the
+   EEPROM library components without defining a specific device, we
+   keep the EEPROM-related definitions here, and catch the devices
+   without EEPROM (E2END == 0) below.  Obviously, the EEPROM library
+   functions will not work for them. ;-)
+*/
 /* EEPROM Control Register */
-#define EECR	_SFR_IO8(0x1C)
+#define EECR  _SFR_IO8(0x1C)
 
 /* EEPROM Data Register */
-#define EEDR	_SFR_IO8(0x1D)
+#define EEDR  _SFR_IO8(0x1D)
 
 /* EEPROM Address Register */
-#define EEAR	_SFR_IO16(0x1E)
-#define EEARL	_SFR_IO8(0x1E)
-#define EEARH	_SFR_IO8(0x1F)
+#define EEAR  _SFR_IO16(0x1E)
+#define EEARL _SFR_IO8(0x1E)
+#define EEARH _SFR_IO8(0x1F)
 
 /* EEPROM Control Register */
 #define    EERIE        3
@@ -274,7 +274,7 @@
 #if E2END < 0x100 && !defined(__COMPILING_AVR_LIBC__)
 # undef EEAR
 # if E2END > 0
-#   define EEAR	_SFR_IO8(0x1E)
+#   define EEAR _SFR_IO8(0x1E)
 # endif
 # undef EEARH
 #endif

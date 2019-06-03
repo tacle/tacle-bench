@@ -80,28 +80,28 @@ float fft_exp2f( float x );
 float fft_modff( float x, float *intpart );
 int fft_convert( float value );
 void fft_bit_reduct( register int *int_pointer );
-void fft_pin_down( int input_data[] );
+void fft_pin_down( int input_data[  ] );
 void fft_init( void );
 void fft_main( void );
-int fft_return(void);
-int main(void);
+int fft_return( void );
+int main( void );
 
 /*
   Forward declaration of global variables
 */
 
-int fft_input_data[2 * N_FFT];
+int fft_input_data[ 2 * N_FFT ];
 
 /* precalculated twiddle factors
    for an integer 1024 point FFT
-   in format 1.13 => table twidtable[2*(N_FFT-1)] ; */
-extern int fft_twidtable[2046];
+   in format 1.13 => table twidtable[ 2*(N_FFT-1) ] ; */
+extern int fft_twidtable[ 2046 ];
 
 /* 1024 real values as input data in float format */
-extern float fft_input[1024];
+extern float fft_input[ 1024 ];
 
 /* will hold the transformed data */
-int fft_inputfract[N_FFT];
+int fft_inputfract[ N_FFT ];
 
 
 /*
@@ -137,7 +137,7 @@ void fft_bit_reduct( register int *int_pointer )
   }
 
   {
-    register int *data_pointer = &fft_twidtable[0] ;
+    register int *data_pointer = &fft_twidtable[ 0 ] ;
     register int *p, *q ;
     register int tmpi, fr = 0, level, k, l ;
 
@@ -145,7 +145,7 @@ void fft_bit_reduct( register int *int_pointer )
     while ( n > max ) {
       level = max << 1;
 
-      _Pragma( "loopbound min 1 max 512" )
+      _Pragma( "loopbound min 1 max 512" ) 
       for ( m = 1; m < max; m += 2 ) {
         l = *( data_pointer + fr );
         k = *( data_pointer + fr + 1 ) ;
@@ -207,7 +207,7 @@ float fft_exp2f( float x )
   _Pragma( "loopbound min 13 max 13" )
   for ( i = 1; i < x; ++i )
     ret *= 2.0f;
-  
+
   return ret;
 }
 
@@ -248,29 +248,29 @@ int fft_convert( float value )
 }
 
 
-void fft_float2fract(void)
+void fft_float2fract( void )
 {
   float f ;
   int   j, i ;
 
   _Pragma( "loopbound min 1024 max 1024" )
   for ( j = 0 ; j < N_FFT ; j++ ) {
-    f = fft_input[j];
+    f = fft_input[ j ];
     i = fft_convert( f );
-    fft_inputfract[j] = i;
+    fft_inputfract[ j ] = i;
   }
 }
 
 
-void fft_pin_down( int input_data[] )
+void fft_pin_down( int input_data[  ] )
 {
   /* conversion from input to a 1.13 format */
   fft_float2fract() ;
 
   int *pd, *ps, f;
 
-  pd = &input_data[0];
-  ps = &fft_inputfract[0];
+  pd = &input_data[ 0 ];
+  ps = &fft_inputfract[ 0 ];
 
   _Pragma( "loopbound min 1024 max 1024" )
   for ( f = 0; f < N_FFT; f++ ) {
@@ -285,28 +285,29 @@ void fft_init( void )
   int i;
   volatile int x = 0;
 
-  fft_pin_down( &fft_input_data[0] );
+  fft_pin_down( &fft_input_data[ 0 ] );
 
   /* avoid constant propagation of input values */
-  for ( i = 0; i < 2*(N_FFT-1); i++) {
-    fft_input_data[i] += x;
-    fft_twidtable[i] += x;
+  _Pragma( "loopbound min 2046 max 2046" ) 
+  for ( i = 0; i < 2 * ( N_FFT - 1 ); i++ ) {
+    fft_input_data[ i ] += x;
+    fft_twidtable[ i ] += x;
   }
-  for ( ; i < 2*N_FFT; i++) {
-    fft_input_data[i] += x;
-  }
-  
+  _Pragma( "loopbound min 2 max 2" )
+  for ( ; i < 2 * N_FFT; i++ )
+    fft_input_data[ i ] += x;
+
 }
 
 
-int fft_return(void)
+int fft_return( void )
 {
   int check_sum = 0;
   int i = 0;
 
-  for(i = 0; i < 2*N_FFT; ++i){
-    check_sum += fft_input_data[i];
-  }
+  _Pragma( "loopbound min 2048 max 2048" )
+  for ( i = 0; i < 2 * N_FFT; ++i )
+    check_sum += fft_input_data[ i ];
 
   return check_sum != 3968;
 }
@@ -318,14 +319,14 @@ int fft_return(void)
 
 void _Pragma( "entrypoint" ) fft_main( void )
 {
-  fft_bit_reduct( &fft_input_data[0] );
+  fft_bit_reduct( &fft_input_data[ 0 ] );
 }
 
 
 int main( void )
 {
   fft_init();
-  
+
   fft_main();
 
   return fft_return();

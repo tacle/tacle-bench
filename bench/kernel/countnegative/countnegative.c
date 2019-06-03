@@ -27,7 +27,7 @@
 /*
   Type definition for the matrix
 */
-typedef int matrix [MAXSIZE][MAXSIZE];
+typedef int matrix [ MAXSIZE ][ MAXSIZE ];
 
 /*
   Forward declaration of functions
@@ -77,7 +77,7 @@ void countnegative_initialize( matrix Array )
   for ( OuterIndex = 0; OuterIndex < MAXSIZE; OuterIndex++ )
     _Pragma( "loopbound min 20 max 20" )
     for ( InnerIndex = 0; InnerIndex < MAXSIZE; InnerIndex++ )
-      Array[OuterIndex][InnerIndex] =  countnegative_randomInteger();
+      Array[ OuterIndex ][ InnerIndex ] =  countnegative_randomInteger();
 }
 
 void countnegative_init( void )
@@ -109,11 +109,11 @@ void countnegative_sum( matrix Array )
   for ( Outer = 0; Outer < MAXSIZE; Outer++ )
     _Pragma( "loopbound min 20 max 20" )
     for ( Inner = 0; Inner < MAXSIZE; Inner++ )
-      if ( Array[Outer][Inner] >= 0 ) {
-        Ptotal += Array[Outer][Inner];
+      if ( Array[ Outer ][ Inner ] >= 0 ) {
+        Ptotal += Array[ Outer ][ Inner ];
         Pcnt++;
       } else {
-        Ntotal += Array[Outer][Inner];
+        Ntotal += Array[ Outer ][ Inner ];
         Ncnt++;
       }
 

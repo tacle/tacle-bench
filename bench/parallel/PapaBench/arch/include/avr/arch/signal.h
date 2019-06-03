@@ -4,15 +4,15 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright
+     Redistributions of source code must retain the above copyright
      notice, this list of conditions and the following disclaimer.
 
-   * Redistributions in binary form must reproduce the above copyright
+     Redistributions in binary form must reproduce the above copyright
      notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the
      distribution.
 
-   * Neither the name of the copyright holders nor the names of
+     Neither the name of the copyright holders nor the names of
      contributors may be used to endorse or promote products derived
      from this software without specific prior written permission.
 
@@ -46,16 +46,16 @@
     initially disabled.  */
 
 #ifdef __cplusplus
-#define SIGNAL(signame)					\
-extern "C" void signame(void);				\
-void signame (void) __attribute__ ((signal));		\
+#define SIGNAL(signame)         \
+extern "C" void signame(void);        \
+void signame (void) __attribute__ ((signal));   \
 void signame (void)
 #else
-#define SIGNAL(signame)					\
+#define SIGNAL(signame)         \
 void signame (void)
 #endif
 
-/** \def INTERRUPT(signame) 
+/** \def INTERRUPT(signame)
     \ingroup avr_interrupts
 
     \code#include <arch/signal.h>\endcode
@@ -64,17 +64,17 @@ void signame (void)
     initially enabled. This allows interrupt handlers to be interrupted. */
 
 #ifdef __cplusplus
-#define INTERRUPT(signame)				\
-extern "C" void signame(void);				\
-void signame (void) __attribute__ ((interrupt));	\
+#define INTERRUPT(signame)        \
+extern "C" void signame(void);        \
+void signame (void) __attribute__ ((interrupt));  \
 void signame (void)
 #else
-#define INTERRUPT(signame)				\
-void signame (void) __attribute__ ((interrupt));	\
+#define INTERRUPT(signame)        \
+void signame (void) __attribute__ ((interrupt));  \
 void signame (void)
 #endif
 
-/** \def EMPTY_INTERRUPT(signame) 
+/** \def EMPTY_INTERRUPT(signame)
     \ingroup avr_interrupts
 
     \code#include <arch/signal.h>\endcode

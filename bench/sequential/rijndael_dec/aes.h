@@ -41,10 +41,10 @@
   C subroutine calls:
 
   aes_ret set_blk(const word block_length, aes *cx)  (variable block size)
-  aes_ret set_key(const byte key[], const word key_length,
+  aes_ret set_key(const byte key[  ], const word key_length,
                   const enum aes_key direction, aes *cx)
-  aes_ret encrypt(const byte input_blk[], byte output_blk[], const aes *cx)
-  aes_ret decrypt(const byte input_blk[], byte output_blk[], const aes *cx)
+  aes_ret encrypt(const byte input_blk[  ], byte output_blk[  ], const aes *cx)
+  aes_ret decrypt(const byte input_blk[  ], byte output_blk[  ], const aes *cx)
 
   IMPORTANT NOTE: If you are using this C interface and your compiler does
   not set the memory used for objects to zero before use, you will need to
@@ -152,14 +152,14 @@ enum aes_key    {   enc  =  1,  /* set if encryption is needed */
 struct aes {
   word    Nkey;               /* the number of words in the key input block */
   word    Nrnd;               /* the number of cipher rounds                */
-  word    e_key[KS_LENGTH];   /* the encryption key schedule                */
-  word    d_key[KS_LENGTH];   /* the decryption key schedule                */
+  word    e_key[ KS_LENGTH ];   /* the encryption key schedule                */
+  word    d_key[ KS_LENGTH ];   /* the decryption key schedule                */
   byte    mode;               /* encrypt, decrypt or both                   */
 };
 
-aes_ret rijndael_dec_set_key( byte key[], const word n_bytes,
+aes_ret rijndael_dec_set_key( byte key[  ], const word n_bytes,
                               const enum aes_key f, struct aes *cx );
-aes_ret rijndael_dec_decrypt( const byte in_blk[], byte out_blk[],
+aes_ret rijndael_dec_decrypt( const byte in_blk[  ], byte out_blk[  ],
                               const struct aes *cx );
 
 #endif

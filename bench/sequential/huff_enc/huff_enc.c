@@ -19,28 +19,28 @@
 
   License:
 
-The source code files (codrl1.c, dcodrl1.c, codrle2.c, dcodrle2.c, codrle3.c,
-dcodrle3.c, codrle4.c, dcodrle4.c, codhuff.c, dcodhuff.c) are copyrighted.
-They have been uploaded on ftp in turing.imag.fr (129.88.31.7):/pub/compression
-on 22/5/94 and have been modified on 22/9/94.
-(c) David Bourgin - 1994
-The source codes I provide have no buggs (!) but being that I make them
-available for free I have some notes to make. They can change at any time
-without notice. I assume no responsability or liability for any errors or
-inaccurracies, make no warranty of any kind (express, implied or statutory)
-with respect to this publication and expressly disclaim any and all warranties
-of merchantability, fitness for particular purposes. Of course, if you have
-some problems to use the information presented here, I will try to help you if
-I can.
+  The source code files (codrl1.c, dcodrl1.c, codrle2.c, dcodrle2.c, codrle3.c,
+  dcodrle3.c, codrle4.c, dcodrle4.c, codhuff.c, dcodhuff.c) are copyrighted.
+  They have been uploaded on ftp in turing.imag.fr (129.88.31.7):/pub/compression
+  on 22/5/94 and have been modified on 22/9/94.
+  (c) David Bourgin - 1994
+  The source codes I provide have no buggs (!) but being that I make them
+  available for free I have some notes to make. They can change at any time
+  without notice. I assume no responsability or liability for any errors or
+  inaccurracies, make no warranty of any kind (express, implied or statutory)
+  with respect to this publication and expressly disclaim any and all warranties
+  of merchantability, fitness for particular purposes. Of course, if you have
+  some problems to use the information presented here, I will try to help you if
+  I can.
 
-If you include the source codes in your application, here are the conditions:
-- You have to put my name in the header of your source file (not in the
-excutable program if you don't want) (this item is a must)
-- I would like to see your resulting application, if possible (this item is not
-a must, because some applications must remain secret)
-- Whenever you gain money with your application, I would like to receive a very
-little part in order to be encouraged to update my source codes and to develop
-new schemes (this item is not a must)
+  If you include the source codes in your application, here are the conditions:
+  - You have to put my name in the header of your source file (not in the
+  excutable program if you don't want) (this item is a must)
+  - I would like to see your resulting application, if possible (this item is not
+  a must, because some applications must remain secret)
+  - Whenever you gain money with your application, I would like to receive a very
+  little part in order to be encouraged to update my source codes and to develop
+  new schemes (this item is not a must)
 
 */
 
@@ -48,7 +48,8 @@ new schemes (this item is not a must)
 /*
   Declaration of types
 */
-
+int printf(const char * restrict format, ... );
+int counter1 = 0;
 typedef struct huff_enc_s_tree {
   unsigned int byte; /* A byte has to be coded as an unsigned integer to
                         allow a node to have a value over 255 */
@@ -58,7 +59,7 @@ typedef struct huff_enc_s_tree {
 } huff_enc_t_tree;
 
 typedef struct {
-  unsigned char bits[32];
+  unsigned char bits[ 32 ];
   unsigned int bits_nb;
 } huff_enc_t_bin_val;
 
@@ -75,16 +76,16 @@ int huff_enc_read_byte();
 void huff_enc_write_byte( char ch );
 void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val );
 void huff_enc_fill_encoding( void );
-void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] );
+void huff_enc_write_header( huff_enc_t_bin_val codes_table[ 257 ] );
 int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 );
 void huff_enc_swapi( char *ii, char *ij, unsigned long es );
 char *huff_enc_pivot( char *a, unsigned long n, unsigned long es );
 void huff_enc_qsort( char *a, unsigned long n, unsigned long es );
-huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] );
+huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[ 514 ] );
 void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
-    huff_enc_t_bin_val codes_table[257], huff_enc_t_bin_val *code_val );
+                                  huff_enc_t_bin_val codes_table[ 257 ], huff_enc_t_bin_val *code_val );
 void huff_enc_create_codes_table( huff_enc_t_tree *tree,
-    huff_enc_t_bin_val codes_table[257] );
+                                  huff_enc_t_bin_val codes_table[ 257 ] );
 void huff_enc_main();
 int main( void );
 
@@ -95,7 +96,7 @@ int main( void );
 
 static int huff_enc_input_pos;
 static int huff_enc_output_pos;
-static unsigned char huff_enc_output[1024];
+static unsigned char huff_enc_output[ 1024 ];
 static unsigned char huff_enc_byte_nb_to_write = 0;
 static unsigned char huff_enc_val_to_write = 0;
 
@@ -116,7 +117,7 @@ static const char *huff_enc_plaintext =
   "in the text you are reading, you'll fast understand the compression ratio...";
 
 #define huff_enc_encoded_len 419
-static unsigned char huff_enc_encoded[huff_enc_encoded_len] = {
+static unsigned char huff_enc_encoded[ huff_enc_encoded_len ] = {
   128, 0, 0, 0, 80, 133, 32, 32, 128, 100, 4, 32, 63, 239, 255, 240,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   4, 7, 167, 21, 129, 232, 69, 120, 132, 217, 20, 162, 19, 164, 39, 133,
@@ -157,9 +158,9 @@ void huff_enc_init( void )
 int huff_enc_return( void )
 {
   int i;
-  _Pragma( "loopbound min 1 max 419" )
+  _Pragma( "loopbound min 419 max 419" )
   for ( i = 0; i < huff_enc_encoded_len; i++ ) {
-    if ( huff_enc_encoded[i] != huff_enc_output[i] ) return i + 1;
+    if ( huff_enc_encoded[ i ] != huff_enc_output[ i ] ) return i + 1;
   }
   return 0;
 }
@@ -183,13 +184,13 @@ int huff_enc_end_of_data()
 
 int huff_enc_read_byte()
 {
-  return huff_enc_plaintext[huff_enc_input_pos++];
+  return huff_enc_plaintext[ huff_enc_input_pos++ ];
 }
 
 
 void huff_enc_write_byte( char ch )
 {
-  huff_enc_output[huff_enc_output_pos++] = ch;
+  huff_enc_output[ huff_enc_output_pos++ ] = ch;
 }
 
 
@@ -203,12 +204,13 @@ void huff_enc_write_bin_val( huff_enc_t_bin_val bin_val )
   unsigned char bin_pos = ( bin_val.bits_nb - 1 ) & 7;
   unsigned int pos_byte = ( bin_val.bits_nb - 1 ) >> 3;
 
-  for ( bit_indice = 1;
+  _Pragma( "loopbound min 1 max 9" )
+  for ( bit_indice = 1;                                                     
         bit_indice <= bin_val.bits_nb;
         bit_indice++ ) {
     /* Watch for the current bit to write */
     huff_enc_val_to_write = ( huff_enc_val_to_write << 1 ) |
-                            ( ( bin_val.bits[pos_byte] >> bin_pos ) & 1 );
+                            ( ( bin_val.bits[ pos_byte ] >> bin_pos ) & 1 );
     /* Move to the next bit to write */
     if ( !bin_pos ) {
       pos_byte--;
@@ -237,7 +239,7 @@ void huff_enc_fill_encoding( void )
 }
 
 
-void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
+void huff_enc_write_header( huff_enc_t_bin_val codes_table[ 257 ] )
 /* Returned parameters: None
    Action: Writes the header in the stream of codes
    Errors: An input/output error could disturb the running of the program
@@ -253,8 +255,9 @@ void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
   bin_val_to_0.bits_nb = 1;
   *bin_val_to_1.bits = 1;
   bin_val_to_1.bits_nb = 1;
+  _Pragma( "loopbound min 256 max 256" )
   for ( i = 0, j = 0; j <= 255; j++ )
-    if ( codes_table[j].bits_nb ) i++;
+    if ( codes_table[ j ].bits_nb ) i++;
   /* From there, i contains the number of bytes of the several
      non 0 occurrences to encode.
      First part of the header: Specifies the bytes that appear
@@ -266,23 +269,26 @@ void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
     *bin_val.bits = ( unsigned char )( i - 1 );
     huff_enc_write_bin_val( bin_val );
     bin_val.bits_nb = 8;
+    _Pragma( "loopbound min 256 max 256" )
     for ( j = 0; j <= 255; j++ )
-      if ( codes_table[j].bits_nb ) {
+      if ( codes_table[ j ].bits_nb ) {
         *bin_val.bits = ( unsigned char )j;
         huff_enc_write_bin_val( bin_val );
       }
   } else {
     /* Encoding of the appeared bytes with a block of bits */
     huff_enc_write_bin_val( bin_val_to_1 );
+    _Pragma( "loopbound min 256 max 256" )
     for ( j = 0; j <= 255; j++ )
-      if ( codes_table[j].bits_nb )
+      if ( codes_table[ j ].bits_nb )
         huff_enc_write_bin_val( bin_val_to_1 );
       else huff_enc_write_bin_val( bin_val_to_0 );
   };
   /* Second part of the header: Specifies the encoding of the bytes
      (fictive or not) that appear in the source of encoding */
+  _Pragma( "loopbound min 257 max 257" )
   for ( i = 0; i <= 256; i++ )
-    if ( ( j = codes_table[i].bits_nb ) != 0 ) {
+    if ( ( j = codes_table[ i ].bits_nb ) != 0 ) {
       if ( j < 33 ) {
         huff_enc_write_bin_val( bin_val_to_0 );
         bin_val.bits_nb = 5;
@@ -292,7 +298,7 @@ void huff_enc_write_header( huff_enc_t_bin_val codes_table[257] )
       }
       *bin_val.bits = ( unsigned char )( j - 1 );
       huff_enc_write_bin_val( bin_val );
-      huff_enc_write_bin_val( codes_table[i] );
+      huff_enc_write_bin_val( codes_table[ i ] );
     }
 }
 
@@ -305,8 +311,8 @@ int huff_enc_weighhuff_enc_t_tree_comp( const void *t1, const void *t2 )
    Errors: None
 */
 {
-  huff_enc_t_tree *const *tree1 = ( huff_enc_t_tree *const * ) t1;
-  huff_enc_t_tree *const *tree2 = ( huff_enc_t_tree *const * ) t2;
+  huff_enc_t_tree *const *tree1 = ( huff_enc_t_tree * const * ) t1;
+  huff_enc_t_tree *const *tree2 = ( huff_enc_t_tree * const * ) t2;
   return ( ( *tree2 )->weight ^ ( *tree1 )->weight )
          ? ( ( ( *tree2 )->weight < ( *tree1 )->weight ) ? -1 : 1 ) : 0;
 }
@@ -318,7 +324,7 @@ void huff_enc_swapi( char *ii, char *ij, unsigned long es )
 
   i = ( char * )ii;
   j = ( char * )ij;
-  _Pragma( "loopbound min 4 max 4" )
+  _Pragma( "loopbound min 8 max 8" )
   do {
     c = *i;
     *i++ = *j;
@@ -355,28 +361,29 @@ char *huff_enc_pivot( char *a, unsigned long n, unsigned long es )
 }
 
 
-void huff_enc_qsort( char *a, unsigned long n, unsigned long es )
+void huff_enc_qsort( char *a, unsigned long n, unsigned long es )       //wird insgesamt 648 ausgeführt (rekursion)
 {
   unsigned long j;
   char *pi, *pj, *pn;
   unsigned int flowfactdummy = 0;
-
-  _Pragma( "loopbound min 0 max 8" )
+  counter1++;
+  printf("%d\n", counter1);
+  _Pragma( "loopbound min 0 max 7" )
   while ( n > 1 ) {
-    if ( n > 10 ) {
+    if ( n > 10 )
       pi = huff_enc_pivot( a, n, es );
-    } else {
+
+    else
       pi = a + ( n >> 1 ) * es;
-    }
 
     huff_enc_swapi( a, pi, es );
     pi = a;
     pn = a + n * es;
     pj = pn;
-    _Pragma( "loopbound min 1 max 110" )
+    _Pragma( "loopbound min 0 max 109" )
     while ( 1 ) {
       /* wcc note: this assignment expression was added to avoid assignment of
-       * multiple loop bound annotations to same loop (cf. Ticket #0002323). */
+         multiple loop bound annotations to same loop (cf. Ticket #0002323). */
       flowfactdummy++;
       _Pragma( "loopbound min 1 max 19" )
       do {
@@ -405,7 +412,7 @@ void huff_enc_qsort( char *a, unsigned long n, unsigned long es )
 }
 
 
-huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
+huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[ 514 ] )
 /* Returned parameters: Returns a tree of encoding
    Action: Generates an Huffman encoding tree based on the data from
            the stream to compress
@@ -414,47 +421,51 @@ huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
 {
   unsigned int i;
   unsigned int heap_top = 0;
-  huff_enc_t_tree *occurrences_table[257];
+  huff_enc_t_tree *occurrences_table[ 257 ];
   huff_enc_t_tree *ptr_fictive_tree;
 
   /* Sets up the occurrences number of all bytes to 0 */
+  _Pragma( "loopbound min 257 max 257" )
   for ( i = 0; i <= 256; i++ ) {
-    occurrences_table[i] = &heap[heap_top++];
-    occurrences_table[i]->byte = i;
-    occurrences_table[i]->weight = 0;
-    occurrences_table[i]->left_ptr = 0;
-    occurrences_table[i]->right_ptr = 0;
+    occurrences_table[ i ] = &heap[ heap_top++ ];
+    occurrences_table[ i ]->byte = i;
+    occurrences_table[ i ]->weight = 0;
+    occurrences_table[ i ]->left_ptr = 0;
+    occurrences_table[ i ]->right_ptr = 0;
   }
   /* Valids the occurrences of 'occurrences_table' with regard to the data to
      compress */
   if ( !huff_enc_end_of_data() ) {
+    _Pragma( "loopbound min 600 max 600" )
     while ( !huff_enc_end_of_data() ) {
       i = huff_enc_read_byte();
-      occurrences_table[i]->weight++;
+      occurrences_table[ i ]->weight++;
     }
-    occurrences_table[256]->weight = 1;
+    occurrences_table[ 256 ]->weight = 1;
 
     /* Sorts the occurrences table depending on the weight of each character */
     huff_enc_qsort( ( char * )occurrences_table, 257, sizeof( huff_enc_t_tree * ) );
 
-    for ( i = 256; ( i != 0 ) && ( !occurrences_table[i]->weight ); i-- )
-      ;
+    _Pragma( "loopbound min 218 max 218" )
+    for ( i = 256; ( i != 0 ) && ( !occurrences_table[ i ]->weight ); i-- )
+      ; 
     i++;
     /* From there, 'i' gives the number of different bytes with a 0 occurrence
        in the stream to compress */
+    _Pragma( "loopbound min 38 max 38" )
     while ( i > 0 ) {
       /* Looks up (i+1)/2 times the occurrence table to link the nodes in an
          unique tree */
-      ptr_fictive_tree = &heap[heap_top++];
+      ptr_fictive_tree = &heap[ heap_top++ ];
       ptr_fictive_tree->byte = 257;
-      ptr_fictive_tree->weight = occurrences_table[--i]->weight;
-      ptr_fictive_tree->left_ptr = occurrences_table[i];
+      ptr_fictive_tree->weight = occurrences_table[ --i ]->weight;
+      ptr_fictive_tree->left_ptr = occurrences_table[ i ];
       if ( i ) {
         i--;
-        ptr_fictive_tree->weight += occurrences_table[i]->weight;
-        ptr_fictive_tree->right_ptr = occurrences_table[i];
+        ptr_fictive_tree->weight += occurrences_table[ i ]->weight;
+        ptr_fictive_tree->right_ptr = occurrences_table[ i ];
       } else ptr_fictive_tree->right_ptr = 0;
-      occurrences_table[i] = ptr_fictive_tree;
+      occurrences_table[ i ] = ptr_fictive_tree;
 
       //qsort( ( char * )occurrences_table, i + 1, sizeof( *huff_enc_t_tree ),
       //huff_enc_weighhuff_enc_t_tree_comp );
@@ -470,8 +481,8 @@ huff_enc_t_tree *huff_enc_build_tree_encoding( huff_enc_t_tree heap[514] )
 
 
 void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
-    huff_enc_t_bin_val codes_table[257],
-    huff_enc_t_bin_val *code_val )
+                                  huff_enc_t_bin_val codes_table[ 257 ],
+                                  huff_enc_t_bin_val *code_val )
 /* Returned parameters: The data of 'codes_table' can have been modified
    Action: Stores the encoding tree as a binary encoding table to speed up the
           access. 'val_code' gives the encoding for the current node of the tree
@@ -486,9 +497,10 @@ void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
       /* The sub-trees on left begin with an bit set to 1 */
     {
       tmp_code_val = *code_val;
+      _Pragma( "loopbound min 31 max 31" )
       for ( i = 31; i > 0; i-- )
-        code_val->bits[i] = ( code_val->bits[i] << 1 ) |
-                            ( code_val->bits[i - 1] >> 7 );
+        code_val->bits[ i ] = ( code_val->bits[ i ] << 1 ) |
+                            ( code_val->bits[ i - 1 ] >> 7 );
       *code_val->bits = ( *code_val->bits << 1 ) | 1;
       code_val->bits_nb++;
       huff_enc_encode_codes_table( tree->left_ptr, codes_table, code_val );
@@ -498,20 +510,21 @@ void huff_enc_encode_codes_table( huff_enc_t_tree *tree,
       /* The sub-trees on right begin with an bit set to 0 */
     {
       tmp_code_val = *code_val;
+      _Pragma( "loopbound min 31 max 31" )
       for ( i = 31; i > 0; i-- )
-        code_val->bits[i] = ( code_val->bits[i] << 1 ) |
-                            ( code_val->bits[i - 1] >> 7 );
+        code_val->bits[ i ] = ( code_val->bits[ i ] << 1 ) |
+                            ( code_val->bits[ i - 1 ] >> 7 );
       *code_val->bits <<= 1;
       code_val->bits_nb++;
       huff_enc_encode_codes_table( tree->right_ptr, codes_table, code_val );
       *code_val = tmp_code_val;
     };
-  } else codes_table[tree->byte] = *code_val;
+  } else codes_table[ tree->byte ] = *code_val;
 }
 
 
 void huff_enc_create_codes_table( huff_enc_t_tree *tree,
-    huff_enc_t_bin_val codes_table[257] )
+                                  huff_enc_t_bin_val codes_table[ 257 ] )
 /* Returned parameters: The data in 'codes_table' will be modified
    Action: Stores the encoding tree as a binary encoding table to speed up
            the access by calling encode_codes_table
@@ -522,17 +535,15 @@ void huff_enc_create_codes_table( huff_enc_t_tree *tree,
   huff_enc_t_bin_val code_val;
 
   _Pragma( "loopbound min 32 max 32" )
-  for ( i = 0; i < 32; i++ ) {
-    code_val.bits[i] = 0;
-  }
+  for ( i = 0; i < 32; i++ )
+    code_val.bits[ i ] = 0;
   code_val.bits_nb = 0;
   _Pragma( "loopbound min 257 max 257" )
   for ( j = 0; j < 257; j++ ) {
     _Pragma( "loopbound min 32 max 32" )
-    for ( i = 0; i < 32; i++ ) {
-      codes_table[j].bits[i] = 0;
-    }
-    codes_table[j].bits_nb = 0;
+    for ( i = 0; i < 32; i++ )
+      codes_table[ j ].bits[ i ] = 0;
+    codes_table[ j ].bits_nb = 0;
   }
   _Pragma( "marker call_encode" )
   _Pragma( "flowrestriction 1*huff_enc_encode_codes_table <= 77*call_encode" )
@@ -548,8 +559,8 @@ void _Pragma( "entrypoint" ) huff_enc_main()
 */
 {
   huff_enc_t_tree *tree;
-  huff_enc_t_tree heap[514];
-  huff_enc_t_bin_val encoding_table[257];
+  huff_enc_t_tree heap[ 514 ];
+  huff_enc_t_bin_val encoding_table[ 257 ];
   unsigned char byte_read;
 
   if ( !huff_enc_end_of_data() ) {
@@ -561,11 +572,12 @@ void _Pragma( "entrypoint" ) huff_enc_main()
     huff_enc_write_header( encoding_table );
     /* Writes the defintion of the encoding */
     huff_enc_beginning_of_data();  /* Real compression of the data */
+    _Pragma( "loopbound min 600 max 600" )
     while ( !huff_enc_end_of_data() ) {
       byte_read = huff_enc_read_byte();
-      huff_enc_write_bin_val( encoding_table[byte_read] );
+      huff_enc_write_bin_val( encoding_table[ byte_read ] );
     }
-    huff_enc_write_bin_val( encoding_table[256] );
+    huff_enc_write_bin_val( encoding_table[ 256 ] );
     /* Code of the end of encoding */
     huff_enc_fill_encoding();
     /* Fills the last byte before closing file, if any */

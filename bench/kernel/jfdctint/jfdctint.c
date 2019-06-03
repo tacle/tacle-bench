@@ -162,6 +162,7 @@ int jfdctint_return()
 {
   int checksum = 0;
   int i;
+  _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < 64; ++i )
     checksum += jfdctint_data[ i ];
   return ( ( checksum == jfdctint_CHECKSUM ) ? 0 : -1 );
@@ -177,7 +178,7 @@ void jfdctint_jpeg_fdct_islow( void )
   int tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
   int tmp10, tmp11, tmp12, tmp13;
   int z1, z2, z3, z4, z5;
-  int * dataptr;
+  int *dataptr;
   int ctr;
 
   /* Pass 1: process rows. */
@@ -207,9 +208,9 @@ void jfdctint_jpeg_fdct_islow( void )
 
     z1 = ( tmp12 + tmp13 ) * FIX_0_541196100;
     dataptr[ 2 ] = ( int ) DESCALE( z1 + tmp13 * FIX_0_765366865,
-				    CONST_BITS - PASS1_BITS );
+                                    CONST_BITS - PASS1_BITS );
     dataptr[ 6 ] = ( int ) DESCALE( z1 + tmp12 * ( - FIX_1_847759065 ),
-				    CONST_BITS - PASS1_BITS );
+                                    CONST_BITS - PASS1_BITS );
 
     z1 = tmp4 + tmp7;
     z2 = tmp5 + tmp6;
@@ -259,16 +260,16 @@ void jfdctint_jpeg_fdct_islow( void )
 
     z1 = ( tmp12 + tmp13 ) * FIX_0_541196100;
     dataptr[ DCTSIZE * 2 ] = ( int ) DESCALE( z1 + tmp13 * FIX_0_765366865,
-					      CONST_BITS + PASS1_BITS );
+                             CONST_BITS + PASS1_BITS );
     dataptr[ DCTSIZE * 6 ] = ( int ) DESCALE( z1
-					      + tmp12 * ( - FIX_1_847759065 ),
-					      CONST_BITS + PASS1_BITS );
+                             + tmp12 * ( - FIX_1_847759065 ),
+                             CONST_BITS + PASS1_BITS );
 
     z1 = tmp4 + tmp7;
     z2 = tmp5 + tmp6;
     z3 = tmp4 + tmp6;
     z4 = tmp5 + tmp7;
-    z5 = ( z3 + z4) * FIX_1_175875602; /* sqrt(2) * c3 */
+    z5 = ( z3 + z4 ) * FIX_1_175875602; /* sqrt(2) * c3 */
 
     tmp4 = tmp4 * FIX_0_298631336; /* sqrt(2) * (-c1+c3+c5-c7) */
     tmp5 = tmp5 * FIX_2_053119869; /* sqrt(2) * ( c1+c3-c5+c7) */

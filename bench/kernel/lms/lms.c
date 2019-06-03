@@ -24,19 +24,19 @@
 */
 
 /*
-Copyright (c) 2016 Jörg Mische
+  Copyright (c) 2016 Jörg Mische
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
-OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+  OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 
@@ -45,14 +45,14 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define SAMPLING 5
 
 
-float lms_input[N + 1], lms_output[N + 1];
+float lms_input[ N + 1 ], lms_output[ N + 1 ];
 
 
 /* The following table can be calculated by
    for (i=0; i<=SAMPLING; i++)
-     lms_sintab[k] = sqrt(2.0) * sin(PI * i / (2*SAMPLING));
+     lms_sintab[ k ] = sqrt(2.0) * sin(PI * i / (2*SAMPLING));
 */
-double lms_sintab[SAMPLING + 1] = {
+double lms_sintab[ SAMPLING + 1 ] = {
   0.00000000000000000,
   0.43701603620715901,
   0.83125389555938600,
@@ -66,9 +66,9 @@ double lms_sinus( int i )
 {
   int s = i % ( 4 * SAMPLING );
   if ( s >= ( 2 * SAMPLING ) )
-    return -lms_sintab[( s > 3 * SAMPLING ) ?
-      ( 4 * SAMPLING - s ) : ( s - 2 * SAMPLING )];
-  return lms_sintab[( s > SAMPLING ) ? ( 2 * SAMPLING - s ) : s];
+    return -lms_sintab[ ( s > 3 * SAMPLING ) ?
+                                            ( 4 * SAMPLING - s ) : ( s - 2 * SAMPLING ) ];
+  return lms_sintab[ ( s > SAMPLING ) ? ( 2 * SAMPLING - s ) : s ];
 }
 
 
@@ -77,7 +77,7 @@ void lms_init( void )
   unsigned long seed = 1;
   int k;
 
-  lms_input[0] = 0.0;
+  lms_input[ 0 ] = 0.0;
   _Pragma( "loopbound min 101 max 101" )
   for ( k = 0 ; k < N ; k += 2 ) {
     double v1, v2, r;
@@ -89,12 +89,13 @@ void lms_init( void )
       seed = seed * 1103515245 + 12345;
       v2 = ( seed & 0x00007fffffff ) * scaleFactor - 1.0;
       r = v1 * v1 + v2 * v2;
-    } while ( r > 1.0 ); // radius < 1
+    } while ( r > 1.0 );
+    // radius < 1
 
     // remap v1 and v2 to two Gaussian numbers
     double noise = 1 / r; // approximation of sqrt(0.96) * sqrt(-log(r)/r);
-    lms_input[k + 1] = lms_sinus( k )   + noise * v2;
-    lms_input[k + 2] = lms_sinus( k + 1 ) + noise * v1;
+    lms_input[ k + 1 ] = lms_sinus( k )   + noise * v2;
+    lms_input[ k + 2 ] = lms_sinus( k + 1 ) + noise * v1;
   }
 
 }
@@ -102,11 +103,11 @@ void lms_init( void )
 
 float lms_calc( float x,
                 float d,
-                float b[],
+                float b[  ],
                 int l,
                 float mu,
                 float alpha,
-                float history[],
+                float history[  ],
                 float *sigma )
 {
   int i;
@@ -114,8 +115,8 @@ float lms_calc( float x,
   // shift history
   _Pragma( "loopbound min 20 max 20" )
   for ( i = l ; i >= 1 ; i-- )
-    history[i] = history[i - 1];
-  history[0] = x;
+    history[ i ] = history[ i - 1 ];
+  history[ 0 ] = x;
 
   // calculate filter
   float y = 0.0;
@@ -123,14 +124,14 @@ float lms_calc( float x,
 
   _Pragma( "loopbound min 21 max 21" )
   for ( i = 0 ; i <= l ; i++ )
-    y += b[i] * history[i];
+    y += b[ i ] * history[ i ];
 
   // update coefficients
   float e = mu * ( d - y ) / ( *sigma );
 
   _Pragma( "loopbound min 21 max 21" )
   for ( i = 0 ; i <= l ; i++ )
-    b[i] += e * history[i];
+    b[ i ] += e * history[ i ];
 
   return y;
 }
@@ -139,20 +140,20 @@ float lms_calc( float x,
 void _Pragma( "entrypoint" ) lms_main( void )
 {
   int i;
-  float b[L + 1];
-  float history[L + 1];
+  float b[ L + 1 ];
+  float history[ L + 1 ];
   float sigma = 2.0;
 
   _Pragma( "loopbound min 21 max 21" )
   for ( i = 0; i <= L; i++ ) {
-    b[i] = 0.0;
-    history[i] = 0.0;
+    b[ i ] = 0.0;
+    history[ i ] = 0.0;
   }
 
   _Pragma( "loopbound min 201 max 201" )
   for ( i = 0 ; i < N ; i++ ) {
-    lms_output[i] = lms_calc( lms_input[i],
-                              lms_input[i + 1],
+    lms_output[ i ] = lms_calc( lms_input[ i ],
+                              lms_input[ i + 1 ],
                               b, L, 0.02 / ( L + 1 ), 0.01,
                               history, &sigma );
   }
@@ -166,7 +167,7 @@ int lms_return( void )
 
   _Pragma( "loopbound min 201 max 201" )
   for ( i = 0 ; i < N ; i++ )
-    sum += lms_output[i];
+    sum += lms_output[ i ];
   return ( int )( 1000000.0 * ( sum + 4.5052425 ) );
   // correct value: -4.505242517625447362661361694336
 }

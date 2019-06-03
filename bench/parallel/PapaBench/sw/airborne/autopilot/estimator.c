@@ -1,26 +1,26 @@
 /*
- * Paparazzi autopilot $Id: estimator.c,v 1.2 2011-01-21 11:52:44 moellmer Exp $
- *  
- * Copyright (C) 2004  Pascal Brisset, Antoine Drouin
- *
- * This file is part of paparazzi.
- *
- * paparazzi is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * paparazzi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with paparazzi; see the file COPYING.  If not, write to
- * the Free Software Foundation, 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA. 
- *
- */
+   Paparazzi autopilot $Id: estimator.c,v 1.2 2011-01-21 11:52:44 moellmer Exp $
+
+   Copyright (C) 2004  Pascal Brisset, Antoine Drouin
+
+   This file is part of paparazzi.
+
+   paparazzi is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   paparazzi is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with paparazzi; see the file COPYING.  If not, write to
+   the Free Software Foundation, 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
 
 #include <inttypes.h>
 #include <math.h>
@@ -53,9 +53,9 @@ float estimator_psi_dot;
 float estimator_theta_dot;
 
 /* flight time in seconds */
-uint16_t estimator_flight_time; 
+uint16_t estimator_flight_time;
 /* flight time in seconds */
-float estimator_t; 
+float estimator_t;
 
 /* horizontal speed in module and dir */
 float estimator_hspeed_mod;
@@ -93,15 +93,16 @@ float estimator_rad_of_ir, estimator_ir, estimator_rad;
 
 inline void estimator_update_lls( void );
 
-void estimator_init( void ) {
+void estimator_init( void )
+{
 
-  EstimatorSetPos (0., 0., 0.);
+  EstimatorSetPos ( 0., 0., 0. );
 
-  EstimatorSetAtt (0., 0., 0);
+  EstimatorSetAtt ( 0., 0., 0 );
 
-  EstimatorSetSpeedPol ( 0., 0., 0.);
+  EstimatorSetSpeedPol ( 0., 0., 0. );
 
-  EstimatorSetRotSpeed (0., 0., 0.);
+  EstimatorSetRotSpeed ( 0., 0., 0. );
 
   estimator_flight_time = 0;
 
@@ -110,9 +111,11 @@ void estimator_init( void ) {
 
 #define EstimatorIrGainIsCorrect() (TRUE)
 
-void estimator_update_state_infrared( void ) {
-  float rad_of_ir = (ir_estim_mode == IR_ESTIM_MODE_ON && EstimatorIrGainIsCorrect()) ? 
-    estimator_rad_of_ir : ir_rad_of_ir;
+void estimator_update_state_infrared( void )
+{
+  float rad_of_ir = ( ir_estim_mode == IR_ESTIM_MODE_ON &&
+                      EstimatorIrGainIsCorrect() ) ?
+                    estimator_rad_of_ir : ir_rad_of_ir;
   estimator_phi  = rad_of_ir * ir_roll;
 
   estimator_theta = rad_of_ir * ir_pitch;
@@ -124,7 +127,8 @@ void estimator_update_state_infrared( void ) {
 #define g 9.81
 
 
-void estimator_update_ir_estim( void ) {
+void estimator_update_ir_estim( void )
+{
   static float last_hspeed_dir;
   static float last_t;
   static bool_t initialized = FALSE;
@@ -132,45 +136,46 @@ void estimator_update_ir_estim( void ) {
   float absphi;
   float init_ir2;
 
-  if (initialized) 
-  {
+  if ( initialized ) {
     float dt = gps_ftow - last_t;
-    if (dt > 0.1) { // Against division by zero
-      float phi = (estimator_hspeed_dir - last_hspeed_dir); 
+    if ( dt > 0.1 ) { // Against division by zero
+      float phi = ( estimator_hspeed_dir - last_hspeed_dir );
       //NORM_RAD_ANGLE(phi);
-      _Pragma("loopbounds min 0 max 1")
-      while (phi > M_PI) phi -= 2 * M_PI; 
-      _Pragma("loopbounds min 0 max 1")
-      while (phi < -M_PI) phi += 2 * M_PI;
-      phi = phi/dt*NOMINAL_AIRSPEED/g; /* tan linearized */
+      _Pragma( "loopbounds min 0 max 1" )
+      while ( phi > M_PI ) phi -= 2 * M_PI;
+      _Pragma( "loopbounds min 0 max 1" )
+      while ( phi < -M_PI ) phi += 2 * M_PI;
+      phi = phi / dt * NOMINAL_AIRSPEED / g; /* tan linearized */
       //NORM_RAD_ANGLE(phi);
-      _Pragma("loopbounds min 0 max 1")
-      while (phi > M_PI) phi -= 2 * M_PI; 
-      _Pragma("loopbounds min 0 max 1")
-      while (phi < -M_PI) phi += 2 * M_PI;
-      estimator_ir = (float)ir_roll;
+      _Pragma( "loopbounds min 0 max 1" )
+      while ( phi > M_PI ) phi -= 2 * M_PI;
+      _Pragma( "loopbounds min 0 max 1" )
+      while ( phi < -M_PI ) phi += 2 * M_PI;
+      estimator_ir = ( float )ir_roll;
       estimator_rad = phi;
-      absphi = fabs(phi);
-      if (absphi < 1.0 && absphi > 0.05 && (- ir_contrast/2 < ir_roll && ir_roll < ir_contrast/2)) {
-	sum_xy = estimator_rad * estimator_ir + RHO * sum_xy;
-	sum_xx = estimator_ir * estimator_ir + RHO * sum_xx;
-#if defined IR_RAD_OF_IR_MIN_VALUE & defined IR_RAD_OF_IR_MAX_VALUE
-	float result = sum_xy / sum_xx;
-	if (result < IR_RAD_OF_IR_MIN_VALUE)
-	  estimator_rad_of_ir = IR_RAD_OF_IR_MIN_VALUE;
-	else if (result > IR_RAD_OF_IR_MAX_VALUE)
-	  estimator_rad_of_ir = IR_RAD_OF_IR_MAX_VALUE;
-	else
-	  estimator_rad_of_ir = result;
-#else
-	  estimator_rad_of_ir = sum_xy / sum_xx;
-#endif
+      absphi = fabs( phi );
+      if ( absphi < 1.0 && absphi > 0.05 && ( - ir_contrast / 2 < ir_roll &&
+                                              ir_roll < ir_contrast / 2 ) ) {
+        sum_xy = estimator_rad * estimator_ir + RHO * sum_xy;
+        sum_xx = estimator_ir * estimator_ir + RHO * sum_xx;
+        #if defined IR_RAD_OF_IR_MIN_VALUE & defined IR_RAD_OF_IR_MAX_VALUE
+        float result = sum_xy / sum_xx;
+        if ( result < IR_RAD_OF_IR_MIN_VALUE )
+          estimator_rad_of_ir = IR_RAD_OF_IR_MIN_VALUE;
+        else
+          if ( result > IR_RAD_OF_IR_MAX_VALUE )
+            estimator_rad_of_ir = IR_RAD_OF_IR_MAX_VALUE;
+          else
+            estimator_rad_of_ir = result;
+        #else
+        estimator_rad_of_ir = sum_xy / sum_xx;
+        #endif
       }
-    } 
+    }
   } else {
     initialized = TRUE;
     init_ir2 = ir_contrast;
-    init_ir2 = init_ir2*init_ir2;
+    init_ir2 = init_ir2 * init_ir2;
     sum_xy = INIT_WEIGHT * estimator_rad_of_ir * init_ir2;
     sum_xx = INIT_WEIGHT * init_ir2;
   }
@@ -180,16 +185,18 @@ void estimator_update_ir_estim( void ) {
 }
 
 
-void estimator_update_state_gps( void ) {
-  if (GPS_FIX_VALID(gps_mode)) {
-    EstimatorSetPos(gps_east, gps_north, gps_falt);
-    EstimatorSetSpeedPol(gps_fspeed, gps_fcourse, gps_fclimb);
-    
-    if (estimator_flight_time)
+void estimator_update_state_gps( void )
+{
+  if ( GPS_FIX_VALID( gps_mode ) ) {
+    EstimatorSetPos( gps_east, gps_north, gps_falt );
+    EstimatorSetSpeedPol( gps_fspeed, gps_fcourse, gps_fclimb );
+
+    if ( estimator_flight_time )
       estimator_update_ir_estim();
   }
 }
 
-void estimator_propagate_state( void ) {
-  
+void estimator_propagate_state( void )
+{
+
 }

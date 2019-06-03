@@ -73,7 +73,7 @@ int deg2rad_return( void )
   Main functions
 */
 
-void deg2rad_main( void )
+void _Pragma( "entrypoint" ) deg2rad_main( void )
 {
   /* convert some rads to degrees */
   _Pragma( "loopbound min 361 max 361" )

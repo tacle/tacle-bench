@@ -41,9 +41,9 @@
 #define AD_BO     (1<<1)
 #define AD_FSYNC  (1<<0)
 
-#define Ad7714_Disable_It() { cbi(EIMSK, INT6); } 
+#define Ad7714_Disable_It() { cbi(EIMSK, INT6); }
 
-#define Ad7714_Enable_It() { sbi(EIMSK, INT6); } 
+#define Ad7714_Enable_It() { sbi(EIMSK, INT6); }
 
 #define Ad7714_Ready() (bit_is_clear(EIFR, INTF6))
 

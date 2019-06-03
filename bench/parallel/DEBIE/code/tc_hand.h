@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   tc_hand.h
- *
- * Prototypes etc. for the Telecommand Handler module, TC_Hand.
- *
- * Based on the SSF file tc_hand.h, rev 1.11, Mon Mar 22 11:39:54 1999.
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   tc_hand.h
+
+   Prototypes etc. for the Telecommand Handler module, TC_Hand.
+
+   Based on the SSF file tc_hand.h, rev 1.11, Mon Mar 22 11:39:54 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 
 #ifndef TC_HAND_H
@@ -31,7 +31,7 @@
 /* NOTE that all codes are not yet defined, because */
 /* all telecommands are not implemented in the      */
 /* Prototype SW.                                    */
-                       
+
 #define UNUSED_TC_ADDRESS                      0x00
 
 #define START_ACQUISITION                      0x01
@@ -102,28 +102,28 @@
 #define SET_SU_1_PIEZO_2_CLASS_LEVEL           0x27
 #define SET_SU_2_PIEZO_2_CLASS_LEVEL           0x37
 #define SET_SU_3_PIEZO_2_CLASS_LEVEL           0x47
-#define SET_SU_4_PIEZO_2_CLASS_LEVEL           0x57 
+#define SET_SU_4_PIEZO_2_CLASS_LEVEL           0x57
 
 #define SET_SU_1_PLASMA_1E_1I_MAX_TIME         0x29
 #define SET_SU_2_PLASMA_1E_1I_MAX_TIME         0x39
 #define SET_SU_3_PLASMA_1E_1I_MAX_TIME         0x49
 #define SET_SU_4_PLASMA_1E_1I_MAX_TIME         0x59
- 
+
 #define SET_SU_1_PLASMA_1E_PZT_MIN_TIME        0x2A
 #define SET_SU_2_PLASMA_1E_PZT_MIN_TIME        0x3A
 #define SET_SU_3_PLASMA_1E_PZT_MIN_TIME        0x4A
 #define SET_SU_4_PLASMA_1E_PZT_MIN_TIME        0x5A
- 
+
 #define SET_SU_1_PLASMA_1E_PZT_MAX_TIME        0x2B
 #define SET_SU_2_PLASMA_1E_PZT_MAX_TIME        0x3B
 #define SET_SU_3_PLASMA_1E_PZT_MAX_TIME        0x4B
 #define SET_SU_4_PLASMA_1E_PZT_MAX_TIME        0x5B
- 
+
 #define SET_SU_1_PLASMA_1I_PZT_MIN_TIME        0x2C
 #define SET_SU_2_PLASMA_1I_PZT_MIN_TIME        0x3C
 #define SET_SU_3_PLASMA_1I_PZT_MIN_TIME        0x4C
 #define SET_SU_4_PLASMA_1I_PZT_MIN_TIME        0x5C
- 
+
 #define SET_SU_1_PLASMA_1I_PZT_MAX_TIME        0x2D
 #define SET_SU_2_PLASMA_1I_PZT_MAX_TIME        0x3D
 #define SET_SU_3_PLASMA_1I_PZT_MAX_TIME        0x4D
@@ -148,29 +148,29 @@
 /* State of Telecommand Execution task */
 
 typedef enum {
-   TC_handling_e, 
-   read_memory_e,
-   memory_dump_e, 
-   write_memory_e,
-   memory_patch_e, 
-   register_TM_e, 
-   SC_TM_e
-   } TC_state_t;
+  TC_handling_e,
+  read_memory_e,
+  memory_dump_e,
+  write_memory_e,
+  memory_patch_e,
+  register_TM_e,
+  SC_TM_e
+} TC_state_t;
 
 extern EXTERNAL TC_state_t TC_state;
 
 /*pointer to a task*/
-extern void (* EXTERNAL TC_task)(void);
+extern void ( * EXTERNAL TC_task )( void );
 
 /* Functions prototype */
-extern void Set_TC_Error(void);
+extern void Set_TC_Error( void );
 
 /* Task functions, for testing: */
 
-extern void TC_InterruptService (void)
-   INTERRUPT(TC_ISR_SOURCE) USED_REG_BANK(2);
-extern void InitTelecommandTask (void);
-extern void HandleTelecommand (void);
+extern void TC_InterruptService ( void )
+INTERRUPT( TC_ISR_SOURCE ) USED_REG_BANK( 2 );
+extern void InitTelecommandTask ( void );
+extern void HandleTelecommand ( void );
 
 #endif
-          
+

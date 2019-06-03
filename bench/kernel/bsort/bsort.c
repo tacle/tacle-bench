@@ -71,6 +71,7 @@ int bsort_return( void )
   int Sorted = 1;
   int Index;
 
+  _Pragma( "loopbound min 99 max 99" )
   for ( Index = 0; Index < bsort_SIZE - 1; Index ++ )
     Sorted = Sorted && ( bsort_Array[ Index ] < bsort_Array[ Index + 1 ] );
 
@@ -92,7 +93,7 @@ int bsort_BubbleSort( int Array[] )
   _Pragma( "loopbound min 99 max 99" )
   for ( i = 0; i < bsort_SIZE - 1; i ++ ) {
     Sorted = 1;
-    _Pragma( "loopbound min 2 max 99" )
+    _Pragma( "loopbound min 3 max 99" )
     for ( Index = 0; Index < bsort_SIZE - 1; Index ++ ) {
       if ( Index > bsort_SIZE - i )
         break;

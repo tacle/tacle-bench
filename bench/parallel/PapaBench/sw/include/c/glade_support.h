@@ -1,24 +1,24 @@
-/* 
+/*
    glade_support.h
    Copyright (C) 2003 Antoine Drouin
 
- This file is part of paparazzi.
+  This file is part of paparazzi.
 
- paparazzi is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2, or (at your option)
- any later version.
+  paparazzi is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
 
- paparazzi is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  paparazzi is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with paparazzi; see the file COPYING.  If not, write to
- the Free Software Foundation, 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA.  
-*/ 
+  You should have received a copy of the GNU General Public License
+  along with paparazzi; see the file COPYING.  If not, write to
+  the Free Software Foundation, 59 Temple Place - Suite 330,
+  Boston, MA 02111-1307, USA.
+*/
 
 /*
 
@@ -40,7 +40,7 @@
     gtk_label_set_text(label, str->str);                            \
   }                                                                 \
   else                                                              \
-    g_message("##### unknown label [%s]", label_name);		    \
+    g_message("##### unknown label [ %s ]", label_name);        \
   g_string_free(str, TRUE);                                         \
 }                                                                   \
 
@@ -54,12 +54,12 @@
     gtk_label_set_text(label, str->str);                            \
   }                                                                 \
   else                                                              \
-    g_message("##### unknown label [%s]", label_name);		    \
+    g_message("##### unknown label [ %s ]", label_name);        \
   g_string_free(str, TRUE);                                         \
   for (state = GTK_STATE_NORMAL; state <= GTK_STATE_INSENSITIVE; state++) \
-    gtk_widget_modify_fg(GTK_WIDGET(label), state, (test)?&my_red_color:&gtk_widget_get_default_style()->fg[state]);             \
+    gtk_widget_modify_fg(GTK_WIDGET(label), state, (test)?&my_red_color:&gtk_widget_get_default_style()->fg[ state ]);             \
 }                                                                   \
- 
+
 
 
 

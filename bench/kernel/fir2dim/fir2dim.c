@@ -38,15 +38,15 @@ int main( void );
 /*
   Declaration of global variables
 */
-static float  fir2dim_coefficients[3 * 3] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-static float  fir2dim_image[4 * 4] = {
+static float  fir2dim_coefficients[ 3 * 3 ] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+static float  fir2dim_image[ 4 * 4 ] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
-static float  fir2dim_array[6 * 6]  = {
+static float  fir2dim_array[ 6 * 6 ]  = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
-static float  fir2dim_output[4 * 4] = {
+static float  fir2dim_output[ 4 * 4 ] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 int fir2dim_result;
@@ -65,22 +65,22 @@ void fir2dim_init()
   /*
     Apply volatile XOR-bitmask to entire input array.
   */
-  p = ( unsigned char * ) &fir2dim_coefficients[ 0 ];
+  p = ( unsigned char * ) &fir2dim_coefficients[  0  ];
   _Pragma( "loopbound min 36 max 36" )
   for ( i = 0; i < sizeof( fir2dim_coefficients ); ++i, ++p )
     *p ^= bitmask;
 
-  p = ( unsigned char * ) &fir2dim_image[ 0 ];
+  p = ( unsigned char * ) &fir2dim_image[  0  ];
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < sizeof( fir2dim_image ); ++i, ++p )
     *p ^= bitmask;
 
-  p = ( unsigned char * ) &fir2dim_array[ 0 ];
+  p = ( unsigned char * ) &fir2dim_array[  0  ];
   _Pragma( "loopbound min 144 max 144" )
   for ( i = 0; i < sizeof( fir2dim_array ); ++i, ++p )
     *p ^= bitmask;
 
-  p = ( unsigned char * ) &fir2dim_output[ 0 ];
+  p = ( unsigned char * ) &fir2dim_output[  0  ];
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < sizeof( fir2dim_output ); ++i, ++p )
     *p ^= bitmask;
@@ -97,7 +97,8 @@ int fir2dim_return()
   Helper functions
 */
 
-void fir2dim_pin_down( float *pimage, float *parray, float *pcoeff, float *poutput )
+void fir2dim_pin_down( float *pimage, float *parray, float *pcoeff,
+                       float *poutput )
 {
   register float    i, f;
 
@@ -143,23 +144,23 @@ void fir2dim_pin_down( float *pimage, float *parray, float *pcoeff, float *poutp
 
 void _Pragma( "entrypoint" ) fir2dim_main()
 {
-  register float *parray  = &fir2dim_array[0], *parray2, *parray3 ;
-  register float *pcoeff  = &fir2dim_coefficients[0] ;
-  register float *poutput = &fir2dim_output[0]       ;
+  register float *parray  = &fir2dim_array[ 0 ], *parray2, *parray3 ;
+  register float *pcoeff  = &fir2dim_coefficients[ 0 ] ;
+  register float *poutput = &fir2dim_output[ 0 ]       ;
   int k, f, i;
 
-  fir2dim_pin_down( &fir2dim_image[0], &fir2dim_array[0],
-            &fir2dim_coefficients[0], &fir2dim_output[0] );
+  fir2dim_pin_down( &fir2dim_image[ 0 ], &fir2dim_array[ 0 ],
+                    &fir2dim_coefficients[ 0 ], &fir2dim_output[ 0 ] );
 
-  poutput = &fir2dim_output[0]       ;
+  poutput = &fir2dim_output[ 0 ]       ;
 
   _Pragma( "loopbound min 4 max 4" )
   for ( k = 0 ; k < 4 ; k++ ) {
 
     _Pragma( "loopbound min 4 max 4" )
     for ( f = 0 ; f < 4 ; f++ ) {
-      pcoeff = &fir2dim_coefficients[0] ;
-      parray = &fir2dim_array[k * 6 + f] ;
+      pcoeff = &fir2dim_coefficients[ 0 ] ;
+      parray = &fir2dim_array[ k * 6 + f ] ;
       parray2 = parray + 6 ;
       parray3 = parray + 6 + 6 ;
 
@@ -181,10 +182,10 @@ void _Pragma( "entrypoint" ) fir2dim_main()
     }
   }
 
-  fir2dim_result = fir2dim_output[0] + fir2dim_output[5] + fir2dim_array[9];
+  fir2dim_result = fir2dim_output[ 0 ] + fir2dim_output[ 5 ] + fir2dim_array[ 9 ];
 
-  fir2dim_pin_down( &fir2dim_image[0], &fir2dim_array[0],
-            &fir2dim_coefficients[0], &fir2dim_output[0] );
+  fir2dim_pin_down( &fir2dim_image[ 0 ], &fir2dim_array[ 0 ],
+                    &fir2dim_coefficients[ 0 ], &fir2dim_output[ 0 ] );
 }
 
 

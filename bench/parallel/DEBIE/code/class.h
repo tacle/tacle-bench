@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   class.h
- *
- * Prototypes etc. for the event-classification module Class.
- *
- * Based on the SSF file class.h, rev 1.6, Fri Jun 04 14:47:38 1999.
- *
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   class.h
+
+   Prototypes etc. for the event-classification module Class.
+
+   Based on the SSF file class.h, rev 1.6, Fri Jun 04 14:47:38 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 
 #ifndef CLASS_H
@@ -60,13 +60,13 @@
 /* Classification index mask values for delays inside the */
 /* time windows.                                          */
 
-extern void InitClassification(void);
+extern void InitClassification( void );
 /* Inits classification thresholds and coefficients. */
 
-extern void ClassifyEvent(event_record_t EXTERNAL *new_event);
+extern void ClassifyEvent( event_record_t EXTERNAL *new_event );
 /* Classifies event and calculates the quality number. */
 
-extern void Init_SU_Settings (SU_settings_t EXTERNAL *set);
+extern void Init_SU_Settings ( SU_settings_t EXTERNAL *set );
 /* Sets the default values for classification parameters. */
 
 #endif

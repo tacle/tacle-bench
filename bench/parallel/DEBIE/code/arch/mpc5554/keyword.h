@@ -1,27 +1,27 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DNI (DEBIE Null Interface)
- *    Module     :   keyword.h
- *
- * Macro definitions for Keil specific keywords to be used
- * in portable parts of the DEBIE DPU software.
- *
- * This version adapted to the GNU C compiler for the MPC5554.
- *
- * Based on the SSF DHI file keyword.h, revision 1.9, Tue Mar 09 12:37:20 1999.
- *
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DNI (DEBIE Null Interface)
+      Module     :   keyword.h
+
+   Macro definitions for Keil specific keywords to be used
+   in portable parts of the DEBIE DPU software.
+
+   This version adapted to the GNU C compiler for the MPC5554.
+
+   Based on the SSF DHI file keyword.h, revision 1.9, Tue Mar 09 12:37:20 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 
 #ifndef KEYWORD_H
@@ -32,27 +32,27 @@
 
 
 /* Integer type definitions for native types that can hold integer
- * values of at least a given number of bits. These types are used
- * as loop counters to give the most natural and speedy code for
- * the current target. This is Not the C99 stdint.h, but the types
- * have similar names.
- *
- * There is a particular form of this file for each (kind of) target
- * processor. The present form is for MPC5554/gcc, where the
- * widths the integer types are the following (as observed from the
- * code of the function Check_Type_Size in harness.c):
- *
- *    Type     Octets  Bits
- *    char       1      8
- *    short      2     16
- *    int        4     32
- *    long       4     32
- *
- * This processor/compiler also has alignment concerns, so here we
- * define all telemetry data as octets and access it using memcpy()
- * instead of direct assignment.
- *
- */
+   values of at least a given number of bits. These types are used
+   as loop counters to give the most natural and speedy code for
+   the current target. This is Not the C99 stdint.h, but the types
+   have similar names.
+
+   There is a particular form of this file for each (kind of) target
+   processor. The present form is for MPC5554/gcc, where the
+   widths the integer types are the following (as observed from the
+   code of the function Check_Type_Size in harness.c):
+
+      Type     Octets  Bits
+      char       1      8
+      short      2     16
+      int        4     32
+      long       4     32
+
+   This processor/compiler also has alignment concerns, so here we
+   define all telemetry data as octets and access it using memcpy()
+   instead of direct assignment.
+
+*/
 
 /* General types */
 
@@ -94,7 +94,7 @@ typedef uint16_t code_address_t;
 
 /* Macros for accessing the DPU data memory by numeric address. */
 
-extern unsigned char *Data_Pointer (uint16_t address);
+extern unsigned char *Data_Pointer ( uint16_t address );
 
 #define DATA_POINTER(ADDR) Data_Pointer (ADDR)
 
@@ -107,7 +107,7 @@ extern unsigned char *Data_Pointer (uint16_t address);
 #define COPY(DEST,SOURCE) memcpy (&(DEST), &(SOURCE), sizeof(DEST))
 /* Copies the value of SOURCE to the location DEST. */
 
-extern unsigned short Short_Value (uskew16_t *x);
+extern unsigned short Short_Value ( uskew16_t *x );
 
 #define VALUE_OF(SOURCE) Short_Value (&(SOURCE))
 /* Returns the (integer) value of SOURCE, type uskew16_t. */
@@ -124,7 +124,7 @@ typedef code_address_t fptr_t;
 /* The function may or may not be part of the patched code.    */
 /* In the real SW this is "typedef void (*fptr_t)(void);"      */
 
-extern void Call_Patch (fptr_t func);
+extern void Call_Patch ( fptr_t func );
 /* "Call" the patch func. */
 
 #define CALL_PATCH(FUNCTION) Call_Patch (FUNCTION)
@@ -132,10 +132,10 @@ extern void Call_Patch (fptr_t func);
 
 /* Some macros for task and interrupt management */
 
-#define TASK(TASK_NUMBER)    
-#define PRIORITY(LEVEL)      
-#define INTERRUPT(SOURCE)    
-#define USED_REG_BANK(BANK)  
+#define TASK(TASK_NUMBER)
+#define PRIORITY(LEVEL)
+#define INTERRUPT(SOURCE)
+#define USED_REG_BANK(BANK)
 
 /* Macro for declaring re-entrant function */
 
@@ -148,9 +148,9 @@ extern void Call_Patch (fptr_t func);
 
 #define PROGRAM
 
-#define EXTERNAL          
-#define DIRECT_INTERNAL   
-#define INDIRECT_INTERNAL 
+#define EXTERNAL
+#define DIRECT_INTERNAL
+#define INDIRECT_INTERNAL
 
 #define LOCATION(ADDRESS)
 

@@ -192,7 +192,7 @@ void test3_initSeed()
 int test3_randomInteger()
 {
   test3_seed = ( ( test3_seed * 133 ) + 81 ) % 8095;
-  return( test3_seed );
+  return ( test3_seed );
 }
 
 
@@ -255,7 +255,7 @@ void test3_init( void )
 
 int test3_return( void )
 {
-  return( test3_result );
+  return ( test3_result );
 }
 
 
@@ -5074,5 +5074,5 @@ int main()
   test3_init();
   test3_main();
 
-  return( test3_return() - 1377313800 != 0 );
+  return ( test3_return() - 1377313800 != 0 );
 }

@@ -31,7 +31,7 @@ typedef unsigned size_t;
 #define LITTLE_ENDIAN
 #define NULL ((void*)0)
 
-extern unsigned volatile char sha_data[32743];
+extern unsigned volatile char sha_data[ 32743 ];
 
 struct SHA_MY_FILE {
   unsigned volatile char *data;
@@ -40,9 +40,9 @@ struct SHA_MY_FILE {
 };
 
 struct SHA_INFO {
-  LONG digest[5];   /* message digest */
+  LONG digest[ 5 ];   /* message digest */
   LONG count_lo, count_hi;  /* 64-bit bit count */
-  LONG data[16];    /* SHA data buffer */
+  LONG data[ 16 ];    /* SHA data buffer */
 };
 
 /*
@@ -51,7 +51,7 @@ struct SHA_INFO {
 void sha_transform( struct SHA_INFO * );
 void sha_byte_reverse( LONG *buffer, int count );
 void sha_init( void );
-size_t sha_fread( void *, size_t , size_t , struct SHA_MY_FILE * );
+size_t sha_fread( void *, size_t, size_t, struct SHA_MY_FILE * );
 void sha_update( struct SHA_INFO *, BYTE *, int );
 void sha_final( struct SHA_INFO * );
 void sha_stream( struct SHA_INFO *, struct SHA_MY_FILE * );

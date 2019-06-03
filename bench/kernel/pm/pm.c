@@ -37,10 +37,10 @@
 typedef struct pm_float_array_t {
   float        *data;
   void         *datav;
-  int          size[3];
+  int          size[ 3 ];
   unsigned int ndims;
   unsigned int rctype;
-  char padding[4];
+  char padding[ 4 ];
 } pm_float_array_t;
 
 
@@ -71,7 +71,7 @@ typedef struct pm_data_t {
   int   profile_size; /* the length of the pattern */
   int   num_templates; /* the number of library templates */
   int   elsize; /* the size of a single fp number */
-  char padding[4];
+  char padding[ 4 ];
 } pm_data_t;
 
 
@@ -96,8 +96,8 @@ int pm_kernel( pm_data_t *pmdata );
 */
 
 /* input data */
-extern float pm_lib_data[ 60 ][ 64 ];
-extern float pm_pattern_data[ 60 ][ 64 ];
+extern float pm_lib_data[  60  ][  64  ];
+extern float pm_pattern_data[  60  ][  64  ];
 
 /* some magic number */
 #define pm_MIN_NOISE 1e-10f
@@ -105,20 +105,20 @@ extern float pm_pattern_data[ 60 ][ 64 ];
 /* main data structures used by the benchmark */
 static pm_data_t pm_data;
 static pm_float_array_t pm_lib;
-static float *pm_lib_ptr[ 60 ];
+static float *pm_lib_ptr[  60  ];
 static pm_float_array_t pm_pattern;
-static float *pm_pattern_ptr[ 60 ];
+static float *pm_pattern_ptr[  60  ];
 static int pm_result;
 
 /* arrays for the pm_init_data function */
-static unsigned char pm_init_array_1[64];
-static float pm_init_array_2[21];
-static float pm_init_array_3[64];
-static float pm_init_array_4[64];
-static float pm_init_array_5[21];
-static float pm_init_array_6[21];
-static float pm_init_array_7[72];
-static float pm_init_array_8[110];
+static unsigned char pm_init_array_1[ 64 ];
+static float pm_init_array_2[ 21 ];
+static float pm_init_array_3[ 64 ];
+static float pm_init_array_4[ 64 ];
+static float pm_init_array_5[ 21 ];
+static float pm_init_array_6[ 21 ];
+static float pm_init_array_7[ 72 ];
+static float pm_init_array_8[ 110 ];
 
 
 /*
@@ -132,17 +132,17 @@ void pm_init_lib( pm_float_array_t *lib )
 
   lib->rctype = 1;
   lib->ndims = 2;
-  lib->size[0] = 60;
-  lib->size[1] = 64;
-  lib->size[2] = 0;
+  lib->size[ 0 ] = 60;
+  lib->size[ 1 ] = 64;
+  lib->size[ 2 ] = 0;
 
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
-    pm_lib_ptr[i] = pm_lib_data[i];
+    pm_lib_ptr[ i ] = pm_lib_data[ i ];
 
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
-    pm_lib_ptr[i] += do_not_optimize_away;
+    pm_lib_ptr[ i ] += do_not_optimize_away;
 
   lib->data = *pm_lib_ptr;
   lib->datav = ( void * )pm_lib_ptr;
@@ -156,17 +156,17 @@ void pm_init_pattern( pm_float_array_t *pattern )
 
   pattern->rctype = 1;
   pattern->ndims = 2;
-  pattern->size[0] = 60;
-  pattern->size[1] = 64;
-  pattern->size[2] = 0;
+  pattern->size[ 0 ] = 60;
+  pattern->size[ 1 ] = 64;
+  pattern->size[ 2 ] = 0;
 
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
-    pm_pattern_ptr[i] = pm_pattern_data[i];
+    pm_pattern_ptr[ i ] = pm_pattern_data[ i ];
 
   _Pragma( "loopbound min 60 max 60" )
   for ( i = 0; i < 60; i++ )
-    pm_pattern_ptr[i] += do_not_optimize_away;
+    pm_pattern_ptr[ i ] += do_not_optimize_away;
 
   pattern->data = *pm_pattern_ptr;
   pattern->datav = ( void * )pm_pattern_ptr;
@@ -210,8 +210,8 @@ void pm_init_data( pm_data_t *pmdata, pm_float_array_t *lib,
   float x;
 
   /* Getting the input parameters from the PCA C array structure */
-  pmdata->profile_size  = lib->size[1];
-  pmdata->num_templates = lib->size[0];
+  pmdata->profile_size  = lib->size[ 1 ];
+  pmdata->num_templates = lib->size[ 0 ];
 
   pmdata->elsize = elsize;
   pmdata->shift_ratio = 3.0f;
@@ -314,9 +314,9 @@ int pm_kernel( pm_data_t *pmdata )
   float power_ratio; /* the mean power of the pixels of a template that exceeded
                         twice test noise */
 
-  float test_noise = ( pm_pow10f( test_profile_db[0] * 0.1f )
+  float test_noise = ( pm_pow10f( test_profile_db[ 0 ] * 0.1f )
                        + /* noise level of the test pattern */
-                       pm_pow10f( test_profile_db[profile_size - 1] * 0.1f ) ) * 0.5f;
+                       pm_pow10f( test_profile_db[ profile_size - 1 ] * 0.1f ) ) * 0.5f;
 
   /* since "shift_size/2" is used a lot, so we create a var to hold it */
   int half_shift_size = ( int )( pm_ceil( ( float )( shift_size ) / 2.0f ) );
@@ -352,7 +352,7 @@ int pm_kernel( pm_data_t *pmdata )
   /* Having an array of test noise for fast copying of noise returns */
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 0; i < profile_size; i++ )
-    test_noise_db_array[i] = test_noise_db;
+    test_noise_db_array[ i ] = test_noise_db;
 
   /* Finding the maximum pixels of the test pattern */
   fptr = test_profile_db;
@@ -426,7 +426,6 @@ int pm_kernel( pm_data_t *pmdata )
       }
       fptr++;
     }
-
     *fptr2++ = num_test_exceed ?
                sum_exceed / ( float )( num_test_exceed ) :
                0.0f;
@@ -488,7 +487,7 @@ int pm_kernel( pm_data_t *pmdata )
     /* Calculates noise levels from first and last elements of the current
        template */
 
-    template_noise = ( cur_tp[0] + cur_tp[profile_size - 1] ) * 0.5f;
+    template_noise = ( cur_tp[ 0 ] + cur_tp[ profile_size - 1 ] ) * 0.5f;
     noise_shift2 = test_noise - template_noise;
 
     fptr = cur_tp;
@@ -508,7 +507,7 @@ int pm_kernel( pm_data_t *pmdata )
          template_exceed */
 
       if ( *fptr > test_noise_db_plus_3 ) {
-        template_exceed[i] = 1;
+        template_exceed[ i ] = 1;
         num_template_exceed++;
         sum_exceed += *fptr;
       }
@@ -568,7 +567,7 @@ int pm_kernel( pm_data_t *pmdata )
           _Pragma( "loopbound min 64 max 64" )
           for ( i = 0; i < profile_size; i++ ) {
             if ( *fptr++ < test_noise_db )
-              template_copy[i] = test_noise_db;
+              template_copy[ i ] = test_noise_db;
           }
         } /* else ... if (num_test_exceed) */
 
@@ -582,7 +581,7 @@ int pm_kernel( pm_data_t *pmdata )
           weighted_MSE += tmp1 * tmp1;
         }
 
-        MSE_scores[current_shift] = weighted_MSE * sumWeights_inv;
+        MSE_scores[ current_shift ] = weighted_MSE * sumWeights_inv;
 
       } /* for current_shift */
     } else { /* if (num_template_exceed) */
@@ -603,7 +602,7 @@ int pm_kernel( pm_data_t *pmdata )
           _Pragma( "loopbound min 0 max 0" )
           for ( i = 0; i < profile_size; i++ ) {
             if ( *fptr++ < test_noise_db )
-              template_copy[i] = test_noise_db;
+              template_copy[ i ] = test_noise_db;
           }
 
           fptr2 = template_copy;
@@ -618,7 +617,7 @@ int pm_kernel( pm_data_t *pmdata )
           weighted_MSE += tmp1 * tmp1;
         }
 
-        MSE_scores[current_shift] = weighted_MSE * sumWeights_inv;
+        MSE_scores[ current_shift ] = weighted_MSE * sumWeights_inv;
 
       } /* for current_shift */
     } /* else .. if (num_template_exceed) */
@@ -640,11 +639,11 @@ int pm_kernel( pm_data_t *pmdata )
 
     mag_shift_scores_flag = 1;
 
-    if ( test_exceed_means[min_MSE_index] != 0.0f ) {
+    if ( test_exceed_means[ min_MSE_index ] != 0.0f ) {
       if ( num_template_exceed ) {
         /* Compute the difference of the average shifted test profile
            power to the average template power */
-        ave_power_ratio = test_exceed_means[min_MSE_index]
+        ave_power_ratio = test_exceed_means[ min_MSE_index ]
                           - template_exceed_mean;
 
         /* Loop over all possible magnitude shifts */
@@ -656,7 +655,7 @@ int pm_kernel( pm_data_t *pmdata )
           _Pragma( "loopbound min 64 max 64" )
           for ( i = 0; i < profile_size; i++ ) {
             if ( *bptr++ )
-              template_copy[i] = cur_tp[i] + power_shift;
+              template_copy[ i ] = cur_tp[ i ] + power_shift;
           }
 
           /* Compute the weighted MSE */
@@ -669,7 +668,7 @@ int pm_kernel( pm_data_t *pmdata )
             weighted_MSE += tmp1 * tmp1;
           }
 
-          mag_shift_scores[j++] = weighted_MSE * sumWeights_inv;
+          mag_shift_scores[ j++ ] = weighted_MSE * sumWeights_inv;
 
         } /* for mag_db */
       } /* if (num_template_exceed) */
@@ -681,7 +680,7 @@ int pm_kernel( pm_data_t *pmdata )
       _Pragma( "loopbound min 64 max 64" )
       for ( i = 0; i < profile_size; i++ ) {
         if ( *fptr++ < test_noise_db )
-          template_copy[i] = test_noise_db;
+          template_copy[ i ] = test_noise_db;
       }
 
       /* Compute the weighted MSE */
@@ -694,7 +693,7 @@ int pm_kernel( pm_data_t *pmdata )
         weighted_MSE += tmp1 * tmp1;
       }
 
-      minimum_MSE_score[template_index] = weighted_MSE * sumWeights_inv;
+      minimum_MSE_score[ template_index ] = weighted_MSE * sumWeights_inv;
 
       mag_shift_scores_flag = 0;
     } /* if (num_test_exceed) */
@@ -710,7 +709,7 @@ int pm_kernel( pm_data_t *pmdata )
           min_MSE = *fptr;
       }
 
-      minimum_MSE_score[template_index] = min_MSE;
+      minimum_MSE_score[ template_index ] = min_MSE;
     }
 
   } /* for template_index */

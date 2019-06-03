@@ -156,13 +156,13 @@
    If you increase it beyond 4, you'll have to add a few more loop unrolling
    steps to FindAnagram.
 */
-
+int printf(const char * restrict format, ... );
 #include "anagram_ctype.h"
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
 #include "anagram_compare.h"
-
+int counter1 = 0;
 
 /*
   Defines
@@ -193,7 +193,7 @@ typedef struct {
   char *pchWord;                            /* the word itself */
   anagram_Quad aqMask[ anagram_MAX_QUADS ]; /* the word's mask */
   unsigned cchLength;                       /* letters in the word */
-  char padding[4];
+  char padding[ 4 ];
 } anagram_Word;
 typedef anagram_Word *anagram_PWord;
 typedef anagram_Word **anagram_PPWord;
@@ -270,7 +270,7 @@ static anagram_PWord anagram_apwSol[ anagram_MAXSOL ];
 static int anagram_cpwLast;
 
 /* buffer to write an answer */
-static char anagram_buffer[30];
+static char anagram_buffer[ 30 ];
 
 /*
   Initialization- and return-value-related functions
@@ -345,6 +345,7 @@ int anagram_return( void )
   int i;
   char const *answer = "duke rip amy";
 
+  _Pragma( "loopbound min 12 max 12" )
   for ( i = 0; i < 12; i++ )
     if ( answer[ i ] != anagram_buffer[ i ] )
       return 1;
@@ -366,11 +367,11 @@ int anagram_ch2i( int ch )
 
 int anagram_CompareFrequency( char *pch1, char *pch2 )
 {
-  return anagram_auGlobalFrequency[ ( (int) *pch1 ) ] <
-         anagram_auGlobalFrequency[ ( (int) *pch2 ) ]
+  return anagram_auGlobalFrequency[ ( ( int ) * pch1 ) ] <
+         anagram_auGlobalFrequency[ ( ( int ) * pch2 ) ]
          ? -1 :
-         anagram_auGlobalFrequency[ ( (int) *pch1 ) ] ==
-         anagram_auGlobalFrequency[ ( (int) *pch2 ) ]
+         anagram_auGlobalFrequency[ ( ( int ) * pch1 ) ] ==
+         anagram_auGlobalFrequency[ ( ( int ) * pch2 ) ]
          ? 0 : 1;
 }
 
@@ -405,7 +406,7 @@ void anagram_BuildMask( char const *pchPhrase )
 
   /* Tabulate letter frequencies in the phrase */
   anagram_cchPhraseLength = 0;
-  _Pragma( "loopbound min 11 max 12" )
+  _Pragma( "loopbound min 11 max 11" )
   while ( ( ch = *pchPhrase ++ ) != '\0' ) {
     if ( anagram_isalpha( ch ) ) {
       ch = anagram_tolower( ch );
@@ -480,7 +481,7 @@ void anagram_BuildWord( char *pchWord )
                  sizeof( unsigned char ) * anagram_ALPHABET );
 
   /* Build frequency table */
-  _Pragma( "loopbound min 3 max 636" )
+  _Pragma( "loopbound min 3 max 5" )
   while ( ( i = *pch ++ ) != '\0' ) {
     if ( !anagram_isalpha( i ) )
       continue;
@@ -533,7 +534,7 @@ void anagram_DumpWords( void )
 {
   int i, j;
   int offset = 0;
-  _Pragma( "loopbound min 3 max 3" )
+  _Pragma( "loopbound min 3 max 3" )        
   for ( i = 0; i < anagram_cpwLast; i ++ ) {
     _Pragma( "loopbound min 3 max 5" )
     for ( j = 0; anagram_apwSol[ i ]->pchWord[ j ] != '\0'; j ++ )
@@ -541,7 +542,7 @@ void anagram_DumpWords( void )
     offset += j;
 
     anagram_buffer[ offset ++ ] = ' ';
-  }
+  } 
   anagram_buffer[ offset ++ ] = '\0';
 }
 
@@ -549,6 +550,7 @@ void anagram_DumpWords( void )
 void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart,
                           int iLetter )
 {
+    counter1++;
   anagram_Quad aqNext[ anagram_MAX_QUADS ];
   register anagram_PWord pw;
   anagram_Quad qMask;
@@ -556,7 +558,7 @@ void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart,
   anagram_PPWord ppwEnd = &anagram_apwCand[ 0 ];
   ppwEnd += anagram_cpwCand;
 
-  _Pragma( "loopbound min 1 max 7" )
+  _Pragma( "loopbound min 0 max 6" )
   while ( 1 ) {
     iq = anagram_alPhrase[ anagram_achByFrequency[iLetter] ].iq;
     qMask = anagram_alPhrase[ anagram_achByFrequency[iLetter] ].uBits <<
@@ -566,7 +568,7 @@ void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart,
     iLetter ++;
   }
 
-  _Pragma( "loopbound min 0 max 114" )
+  _Pragma( "loopbound min 0 max 11" )
   while ( ppwStart < ppwEnd ) {
     pw = *ppwStart;
 
@@ -605,9 +607,8 @@ void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart,
       ppwEnd = &anagram_apwCand[ 0 ];
       ppwEnd += anagram_cpwCand;
       anagram_FindAnagram( &aqNext[ 0 ], ppwStart, iLetter );
-    } else { /* found one */
+    } else   /* found one */
       anagram_DumpWords();
-    }
     anagram_cchPhraseLength += pw->cchLength;
     -- anagram_cpwLast;
     ppwStart ++;
@@ -646,6 +647,7 @@ void _Pragma( "entrypoint" ) anagram_main( void )
     anagram_FindAnagram( anagram_aqMainMask, anagram_apwCand, 0 );
     _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" )
   }
+  printf("1: %d\n", counter1);
 }
 
 

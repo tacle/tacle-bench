@@ -80,7 +80,7 @@ void binarysearch_initSeed( void )
 long binarysearch_randomInteger( void )
 {
   binarysearch_seed = ( ( binarysearch_seed * 133 ) + 81 ) % 8095;
-  return( binarysearch_seed );
+  return ( binarysearch_seed );
 }
 
 
@@ -100,7 +100,7 @@ void binarysearch_init( void )
 
 int binarysearch_return( void )
 {
-  return( binarysearch_result );
+  return ( binarysearch_result );
 }
 
 
@@ -126,14 +126,14 @@ int binarysearch_binary_search( int x )
       fvalue = binarysearch_data[ mid ].value;
     } else
 
-    if ( binarysearch_data[ mid ].key > x )
-      /* Item not found */
-      up = mid - 1;
-    else
-      low = mid + 1;
+      if ( binarysearch_data[ mid ].key > x )
+        /* Item not found */
+        up = mid - 1;
+      else
+        low = mid + 1;
   }
 
-  return( fvalue );
+  return ( fvalue );
 }
 
 
@@ -152,5 +152,5 @@ int main( void )
   binarysearch_init();
   binarysearch_main();
 
-  return( binarysearch_return() - (-1) != 0 );
+  return ( binarysearch_return() - ( -1 ) != 0 );
 }

@@ -1,6 +1,6 @@
 /*
-problems.h for mpc5554/gcc.
-Part of the DEBIE-1 benchmark.
+  problems.h for mpc5554/gcc.
+  Part of the DEBIE-1 benchmark.
 */
 
 

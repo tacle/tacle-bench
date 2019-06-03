@@ -37,7 +37,7 @@ int  ludcmp_test( int n, double eps );
 void ludcmp_main( void );
 int main( void );
 
-double ludcmp_a[50][50], ludcmp_b[50], ludcmp_x[50];
+double ludcmp_a[ 50 ][ 50 ], ludcmp_b[ 50 ], ludcmp_x[ 50 ];
 int ludcmp_chkerr;
 
 void ludcmp_init( void )
@@ -51,21 +51,19 @@ void ludcmp_init( void )
     w = 0;
     _Pragma( "loopbound min 6 max 6" )
     for ( j = 0; j <= n; j++ ) {
-      ludcmp_a[i][j] = ( i + 1 ) + ( j + 1 );
+      ludcmp_a[ i ][ j ] = ( i + 1 ) + ( j + 1 );
 
       if ( i == j )
-        ludcmp_a[i][j] *= 10;
-      w += ludcmp_a[i][j];
+        ludcmp_a[ i ][ j ] *= 10;
+      w += ludcmp_a[ i ][ j ];
 
-      if ( x ) {
-        ludcmp_a[i][j] += x;
-      }
+      if ( x )
+        ludcmp_a[ i ][ j ] += x;
     }
 
-    ludcmp_b[i] = w;
-    if ( x ) {
-      ludcmp_b[i] += x;
-    }
+    ludcmp_b[ i ] = w;
+    if ( x )
+      ludcmp_b[ i ] += x;
   }
 }
 
@@ -76,7 +74,7 @@ int ludcmp_return( void )
 
   _Pragma( "loopbound min 6 max 6" )
   for ( i = 0; i <= n; i++ )
-    checksum += ludcmp_x[i];
+    checksum += ludcmp_x[ i ];
 
   /* allow rounding errors for the checksum */
   checksum -= 6.0;
@@ -98,7 +96,7 @@ double ludcmp_fabs( double n )
 int ludcmp_test( int n, double eps )
 {
   int             i, j, k;
-  double          w, y[100];
+  double          w, y[ 100 ];
 
 
   if ( n > 99 || eps <= 0 )
@@ -106,58 +104,58 @@ int ludcmp_test( int n, double eps )
 
   _Pragma( "loopbound min 5 max 5" )
   for ( i = 0; i < n; i++ ) {
-    if ( ludcmp_fabs( ludcmp_a[i][i] ) <= eps )
+    if ( ludcmp_fabs( ludcmp_a[ i ][ i ] ) <= eps )
       return ( 1 );
 
     _Pragma( "loopbound min 1 max 5" )
     for ( j = i + 1; j <= n; j++ ) {
-      w = ludcmp_a[j][i];
+      w = ludcmp_a[ j ][ i ];
 
       if ( i != 0 ) {
         _Pragma( "loopbound min 1 max 4" )
         for ( k = 0; k < i; k++ )
-          w -= ludcmp_a[j][k] * ludcmp_a[k][i];
+          w -= ludcmp_a[ j ][ k ] * ludcmp_a[ k ][ i ];
       }
 
-      ludcmp_a[j][i] = w / ludcmp_a[i][i];
+      ludcmp_a[ j ][ i ] = w / ludcmp_a[ i ][ i ];
     }
 
     _Pragma( "loopbound min 1 max 5" )
     for ( j = i + 1; j <= n; j++ ) {
-      w = ludcmp_a[i + 1][j];
+      w = ludcmp_a[ i + 1 ][ j ];
 
       _Pragma( "loopbound min 1 max 5" )
       for ( k = 0; k <= i; k++ )
-        w -= ludcmp_a[i + 1][k] * ludcmp_a[k][j];
+        w -= ludcmp_a[ i + 1 ][ k ] * ludcmp_a[ k ][ j ];
 
-      ludcmp_a[i + 1][j] = w;
+      ludcmp_a[ i + 1 ][ j ] = w;
     }
   }
 
-  y[0] = ludcmp_b[0];
+  y[ 0 ] = ludcmp_b[ 0 ];
 
   _Pragma( "loopbound min 5 max 5" )
   for ( i = 1; i <= n; i++ ) {
-    w = ludcmp_b[i];
+    w = ludcmp_b[ i ];
 
     _Pragma( "loopbound min 1 max 5" )
     for ( j = 0; j < i; j++ )
-      w -= ludcmp_a[i][j] * y[j];
+      w -= ludcmp_a[ i ][ j ] * y[ j ];
 
-    y[i] = w;
+    y[ i ] = w;
   }
 
-  ludcmp_x[n] = y[n] / ludcmp_a[n][n];
+  ludcmp_x[ n ] = y[ n ] / ludcmp_a[ n ][ n ];
 
   _Pragma( "loopbound min 5 max 5" )
   for ( i = n - 1; i >= 0; i-- ) {
-    w = y[i];
+    w = y[ i ];
 
     _Pragma( "loopbound min 1 max 5" )
     for ( j = i + 1; j <= n; j++ )
-      w -= ludcmp_a[i][j] * ludcmp_x[j];
+      w -= ludcmp_a[ i ][ j ] * ludcmp_x[ j ];
 
-    ludcmp_x[i] = w / ludcmp_a[i][i];
+    ludcmp_x[ i ] = w / ludcmp_a[ i ][ i ];
   }
 
   return ( 0 );

@@ -1,9 +1,9 @@
 /*
-rpt_ipoint.h for intel/linux
+  rpt_ipoint.h for intel/linux
 
-Part of the DEBIE-1 benchmark.
+  Part of the DEBIE-1 benchmark.
 
-$Id: rpt_ipoint.h,v 1.1 2008/03/28 08:22:18 niklas Exp $
+  $Id: rpt_ipoint.h,v 1.1 2008/03/28 08:22:18 niklas Exp $
 */
 
 

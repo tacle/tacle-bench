@@ -1,21 +1,21 @@
 /*
 
- This program is part of the TACLeBench benchmark suite.
- Version V 1.x
+  This program is part of the TACLeBench benchmark suite.
+  Version V 1.x
 
- Name: powerwindow_controlexclusion_private.h
+  Name: powerwindow_controlexclusion_private.h
 
- Author: CoSys-Lab, University of Antwerp
+  Author: CoSys-Lab, University of Antwerp
 
- Function: headerfile
+  Function: headerfile
 
- Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_controlexclusion_private.h
+  Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow_HeaderFiles/powerwindow_controlexclusion_private.h
 
- Changes: a brief summary of major functional changes and formatting)
+  Changes: a brief summary of major functional changes and formatting)
 
- License: GNU General Public License
+  License: GNU General Public License
 
- */
+*/
 
 #ifndef powerwindow_RTW_HEADER_controlexclusion_private_h_
 #define powerwindow_RTW_HEADER_controlexclusion_private_h_
@@ -24,7 +24,7 @@
 #endif                                 /* RTW_HEADER_controlexclusion_private_h_ */
 
 /*
- * File trailer for generated code.
- *
- * [EOF]
- */
+   File trailer for generated code.
+
+   [ EOF ]
+*/

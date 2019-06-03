@@ -88,7 +88,7 @@ int cubic_return( void )
   Main functions
 */
 
-void cubic_main( void )
+void _Pragma( "entrypoint" ) cubic_main( void )
 {
   /* solve some cubic functions */
   /* should get 3 solutions: 2, 6 & 2.5   */

@@ -35,14 +35,14 @@ typedef struct cjpeg_wrbmp_cjpeg_source_struct
 
 struct cjpeg_wrbmp_cjpeg_source_struct {
   CJPEG_WRBMP_JMETHOD( void, start_input,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo,
-                                cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo,
+                         cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
   CJPEG_WRBMP_JMETHOD( CJPEG_WRBMP_JDIMENSION, get_pixel_rows,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo,
-                                cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo,
+                         cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
   CJPEG_WRBMP_JMETHOD( void, finish_input,
-                              ( cjpeg_wrbmp_j_compress_ptr cinfo,
-                                cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
+                       ( cjpeg_wrbmp_j_compress_ptr cinfo,
+                         cjpeg_wrbmp_cjpeg_source_ptr sinfo ) );
 
   CJPEG_WRBMP_FILE *input_file;
 
@@ -56,17 +56,17 @@ typedef struct cjpeg_wrbmp_djpeg_dest_struct
 
 struct cjpeg_wrbmp_djpeg_dest_struct {
   CJPEG_WRBMP_JMETHOD( void, start_output,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo,
-                                cjpeg_wrbmp_djpeg_dest_ptr dinfo ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo,
+                         cjpeg_wrbmp_djpeg_dest_ptr dinfo ) );
   /* Emit the specified number of pixel rows from the buffer. */
   CJPEG_WRBMP_JMETHOD( void, put_pixel_rows,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo,
-                                cjpeg_wrbmp_djpeg_dest_ptr dinfo,
-                                CJPEG_WRBMP_JDIMENSION rows_supplied ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo,
+                         cjpeg_wrbmp_djpeg_dest_ptr dinfo,
+                         CJPEG_WRBMP_JDIMENSION rows_supplied ) );
   /* Finish up at the end of the image. */
   CJPEG_WRBMP_JMETHOD( void, finish_output,
-                              ( cjpeg_wrbmp_j_decompress_ptr cinfo,
-                                cjpeg_wrbmp_djpeg_dest_ptr dinfo ) );
+                       ( cjpeg_wrbmp_j_decompress_ptr cinfo,
+                         cjpeg_wrbmp_djpeg_dest_ptr dinfo ) );
 
   /* Target file spec; filled in by djpeg.c after object is created. */
   CJPEG_WRBMP_FILE *output_file;

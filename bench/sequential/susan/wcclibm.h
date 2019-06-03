@@ -8,11 +8,11 @@
 
 // Often used variables/consts
 #ifdef __STDC__
-static	const float	
+static  const float
 #else
-static	float	
+static  float
 #endif
-susan_one	   =  1.0f,
+susan_one    =  1.0f,
 susan_half   =  5.0000000000e-01f, /* 0x3f000000 */
 susan_zero   =  0.0f,
 susan_huge   = 1.0e30,
@@ -32,22 +32,23 @@ susan_twon8  =  3.9062500000e-03f; /* 0x3b800000 */
 #define log      susan___ieee754_logf
 #define sin      susan___sinf
 
-float   susan___atanf(float x);
-float   susan___copysignf(float x, float y);
-float   susan___cosf(float x);
-float   susan___fabsf(float x);
-float   susan___floorf(float x);
-float   susan___ieee754_acosf(float x);
-float   susan___ieee754_powf(float x, float y);
-int32_t susan___ieee754_rem_pio2f(float x, float *y);
-float   susan___ieee754_sqrtf(float x);
-int     susan___isinff (float x);
-float   susan___kernel_cosf(float x, float y);
-float   susan___kernel_sinf(float x, float y, int iy);
-int     susan___kernel_rem_pio2f(float *x, float *y, int e0, int nx, int prec, const int32_t *ipio2);
-float   susan___scalbnf (float x, int n);
-float   susan___ieee754_logf(float x);
-float   susan___ieee754_log10f(float x);
-float   susan___sinf(float x);
+float   susan___atanf( float x );
+float   susan___copysignf( float x, float y );
+float   susan___cosf( float x );
+float   susan___fabsf( float x );
+float   susan___floorf( float x );
+float   susan___ieee754_acosf( float x );
+float   susan___ieee754_powf( float x, float y );
+int32_t susan___ieee754_rem_pio2f( float x, float *y );
+float   susan___ieee754_sqrtf( float x );
+int     susan___isinff ( float x );
+float   susan___kernel_cosf( float x, float y );
+float   susan___kernel_sinf( float x, float y, int iy );
+int     susan___kernel_rem_pio2f( float *x, float *y, int e0, int nx, int prec,
+                                  const int32_t *ipio2 );
+float   susan___scalbnf ( float x, int n );
+float   susan___ieee754_logf( float x );
+float   susan___ieee754_log10f( float x );
+float   susan___sinf( float x );
 
 #endif // _WCCLIBM

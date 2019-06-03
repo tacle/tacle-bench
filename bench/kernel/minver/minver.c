@@ -190,7 +190,7 @@ int minver_minver( int side, double eps )
 
 void minver_init()
 {
-  int i,j;
+  int i, j;
   volatile int x = 0;
 
   _Pragma( "loopbound min 3 max 3" )
@@ -204,7 +204,7 @@ void minver_init()
 
 int minver_return()
 {
-  int i,j;
+  int i, j;
   double check_sum = 0;
 
   _Pragma( "loopbound min 3 max 3" )
@@ -214,7 +214,7 @@ int minver_return()
       check_sum += minver_a_i[ i ][ j ];
   }
   /* Avoid double comparison */
-  return (int)(check_sum*100) != 48;
+  return ( int )( check_sum * 100 ) != 48;
 }
 
 

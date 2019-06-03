@@ -1,27 +1,27 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW 
- *    Subsystem  :   DNI (DEBIE Null Interface)
- *    Module     :   taskctrl.h
- *
- * Macros and function prototypes for operations dealing with the
- * kernel, task switching, message passing. The contents of this
- * DNI version of this header file are identical to the DHI version.
- * The DNI/DHI difference is in the bodies of the operations.
- *
- * Based on the SSF DHI file taskctrl.h, revision 1.11, Mon May 17 22:51:12 1999.
- *      
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DNI (DEBIE Null Interface)
+      Module     :   taskctrl.h
+
+   Macros and function prototypes for operations dealing with the
+   kernel, task switching, message passing. The contents of this
+   DNI version of this header file are identical to the DHI version.
+   The DNI/DHI difference is in the bodies of the operations.
+
+   Based on the SSF DHI file taskctrl.h, revision 1.11, Mon May 17 22:51:12 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 /* Type definitions */
 
@@ -29,7 +29,7 @@
 #define TASKCTRL_H
 
 #include "keyword.h"
- 
+
 #define MACHINE_CYCLE     1.085
 /* The machine (processor) cycle time, in microseconds. */
 
@@ -45,32 +45,32 @@
 
 
 typedef struct {
-   unsigned char  rtx_task_number;
-   void           (*task_main_function)(void);
+  unsigned char  rtx_task_number;
+  void           ( *task_main_function )( void );
 } task_info_t;
 
 /* Function prototypes */
 
-extern void ShortDelay (uint_least8_t delay_loops);
+extern void ShortDelay ( uint_least8_t delay_loops );
 
-extern void CreateTask(task_info_t EXTERNAL *new_task);
+extern void CreateTask( task_info_t EXTERNAL *new_task );
 
-extern void WaitInterval(unsigned char time);
+extern void WaitInterval( unsigned char time );
 
-extern void WaitTimeout(unsigned char time) COMPACT REENTRANT_FUNC;
+extern void WaitTimeout( unsigned char time ) COMPACT REENTRANT_FUNC;
 
-extern void SetTimeSlice(unsigned int time_slice);
+extern void SetTimeSlice( unsigned int time_slice );
 
-extern void StartSystem(unsigned char task_number);
+extern void StartSystem( unsigned char task_number );
 
 extern void SendTaskMail (
-   unsigned char mailbox, 
-   uint16_t      message,
-   unsigned char timeout);
+  unsigned char mailbox,
+  uint16_t      message,
+  unsigned char timeout );
 
 extern unsigned char isr_send_message (
-   unsigned char mailbox,
-   uint16_t      message);
+  unsigned char mailbox,
+  uint16_t      message );
 
 #define OK     8
 #define NOT_OK 9

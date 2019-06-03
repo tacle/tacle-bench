@@ -15,7 +15,7 @@
 
   License: GNU Lesser General Public License
 
- */
+*/
 
 #include "memcpy.h"
 #include "memset.h"
@@ -45,27 +45,27 @@ struct SHA_INFO sha_info;
 #define ROT32(x,n) ((x << n) | (x >> (32 - n)))
 
 #define FUNC(n,i)      \
-    temp = ROT32(A,5) + f##n(B,C,D) + E + W[i] + CONST##n; \
+    temp = ROT32(A,5) + f##n(B,C,D) + E + W[ i ] + CONST##n; \
     E = D; D = C; C = ROT32(B,30); B = A; A = temp
 
 /* do SHA transformation */
 void sha_transform( struct SHA_INFO *sha_info )
 {
   int i;
-  LONG temp, A, B, C, D, E, W[80];
+  LONG temp, A, B, C, D, E, W[ 80 ];
 
   _Pragma( "loopbound min 16 max 16" )
   for ( i = 0; i < 16; ++i )
-    W[i] = sha_info->data[i];
+    W[ i ] = sha_info->data[ i ];
   _Pragma( "loopbound min 64 max 64" )
   for ( i = 16; i < 80; ++i )
-    W[i] = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
+    W[ i ] = W[ i - 3 ] ^ W[ i - 8 ] ^ W[ i - 14 ] ^ W[ i - 16 ];
 
-  A = sha_info->digest[0];
-  B = sha_info->digest[1];
-  C = sha_info->digest[2];
-  D = sha_info->digest[3];
-  E = sha_info->digest[4];
+  A = sha_info->digest[ 0 ];
+  B = sha_info->digest[ 1 ];
+  C = sha_info->digest[ 2 ];
+  D = sha_info->digest[ 3 ];
+  E = sha_info->digest[ 4 ];
 
 
   _Pragma( "loopbound min 20 max 20" )
@@ -80,11 +80,11 @@ void sha_transform( struct SHA_INFO *sha_info )
   _Pragma( "loopbound min 20 max 20" )
   for ( i = 60; i < 80; ++i )
     FUNC( 4, i );
-  sha_info->digest[0] += A;
-  sha_info->digest[1] += B;
-  sha_info->digest[2] += C;
-  sha_info->digest[3] += D;
-  sha_info->digest[4] += E;
+  sha_info->digest[ 0 ] += A;
+  sha_info->digest[ 1 ] += B;
+  sha_info->digest[ 2 ] += C;
+  sha_info->digest[ 3 ] += D;
+  sha_info->digest[ 4 ] += E;
 }
 
 
@@ -92,20 +92,20 @@ void sha_transform( struct SHA_INFO *sha_info )
 void sha_byte_reverse( LONG *buffer, int count )
 {
   int i;
-  BYTE ct[4], *cp;
+  BYTE ct[ 4 ], *cp;
 
   count /= sizeof( LONG );
   cp = ( BYTE * ) buffer;
   _Pragma( "loopbound min 16 max 16" )
   for ( i = 0; i < count; ++i ) {
-    ct[0] = cp[0];
-    ct[1] = cp[1];
-    ct[2] = cp[2];
-    ct[3] = cp[3];
-    cp[0] = ct[3];
-    cp[1] = ct[2];
-    cp[2] = ct[1];
-    cp[3] = ct[0];
+    ct[ 0 ] = cp[ 0 ];
+    ct[ 1 ] = cp[ 1 ];
+    ct[ 2 ] = cp[ 2 ];
+    ct[ 3 ] = cp[ 3 ];
+    cp[ 0 ] = ct[ 3 ];
+    cp[ 1 ] = ct[ 2 ];
+    cp[ 2 ] = ct[ 1 ];
+    cp[ 3 ] = ct[ 0 ];
     cp += sizeof( LONG );
   }
 }
@@ -113,16 +113,16 @@ void sha_byte_reverse( LONG *buffer, int count )
 /* initialize the SHA digest */
 void sha_init( void )
 {
-	int i;
-  sha_info.digest[0] = 0x67452301L;
-  sha_info.digest[1] = 0xefcdab89L;
-  sha_info.digest[2] = 0x98badcfeL;
-  sha_info.digest[3] = 0x10325476L;
-  sha_info.digest[4] = 0xc3d2e1f0L;
+  int i;
+  sha_info.digest[ 0 ] = 0x67452301L;
+  sha_info.digest[ 1 ] = 0xefcdab89L;
+  sha_info.digest[ 2 ] = 0x98badcfeL;
+  sha_info.digest[ 3 ] = 0x10325476L;
+  sha_info.digest[ 4 ] = 0xc3d2e1f0L;
   sha_info.count_lo = 0L;
   sha_info.count_hi = 0L;
-  for(i=0;i<16;i++)
-	  sha_info.data[i]=0;
+  for ( i = 0; i < 16; i++ )
+    sha_info.data[ i ] = 0;
 }
 
 size_t sha_fread( void *ptr, size_t size, size_t count,
@@ -134,7 +134,7 @@ size_t sha_fread( void *ptr, size_t size, size_t count,
     size * count : stream->size - stream->cur_pos;
   _Pragma( "loopbound min 0 max 8192" )
   while ( i < stream->cur_pos + number_of_chars_to_read )
-    ( ( unsigned char * )ptr )[i2++] = stream->data[i++];
+    ( ( unsigned char * )ptr )[ i2++ ] = stream->data[ i++ ];
   stream->cur_pos += number_of_chars_to_read;
   return ( number_of_chars_to_read );
 }
@@ -167,7 +167,7 @@ void sha_final( struct SHA_INFO *sha_info )
   lo_bit_count = sha_info->count_lo;
   hi_bit_count = sha_info->count_hi;
   count = ( int ) ( ( lo_bit_count >> 3 ) & 0x3f );
-  ( ( BYTE * ) sha_info->data )[count++] = 0x80;
+  ( ( BYTE * ) sha_info->data )[ count++ ] = 0x80;
   if ( count > 56 ) {
     sha_glibc_memset( ( BYTE * ) &sha_info->data + count, 0, 64 - count );
     sha_byte_reverse( sha_info->data, SHA_BLOCKSIZE );
@@ -177,8 +177,8 @@ void sha_final( struct SHA_INFO *sha_info )
     sha_glibc_memset( ( BYTE * ) &sha_info->data + count, 0, 56 - count );
 
   sha_byte_reverse( sha_info->data, SHA_BLOCKSIZE );
-  sha_info->data[14] = hi_bit_count;
-  sha_info->data[15] = lo_bit_count;
+  sha_info->data[ 14 ] = hi_bit_count;
+  sha_info->data[ 15 ] = lo_bit_count;
   sha_transform( sha_info );
 }
 
@@ -187,7 +187,7 @@ void sha_final( struct SHA_INFO *sha_info )
 void sha_stream( struct SHA_INFO *sha_info, struct SHA_MY_FILE *fin )
 {
   int i;
-  BYTE data[BLOCK_SIZE];
+  BYTE data[ BLOCK_SIZE ];
   _Pragma( "loopbound min 5 max 5" )
   while ( ( i = sha_fread( data, 1, BLOCK_SIZE, fin ) ) > 0 )
     sha_update( sha_info, data, i );
@@ -206,9 +206,9 @@ void _Pragma( "entrypoint" ) sha_main( void )
 
 int sha_return( void )
 {
-  int sum=0;
-  sum = sha_info.data[14] + sha_info.data[15];
-  return ( sum - 261944 != 0);
+  int sum = 0;
+  sum = sha_info.data[ 14 ] + sha_info.data[ 15 ];
+  return ( sum - 261944 != 0 );
 }
 
 int main ( void )

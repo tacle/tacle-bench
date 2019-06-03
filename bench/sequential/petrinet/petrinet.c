@@ -944,9 +944,9 @@ void petrinet_init( void )
     in the petrinet_main() function before being written.
   */
   /*
-  volatile long petrinet_P1_marking_member_0[ 3 ];
-  volatile long petrinet_P2_marking_member_0[ 5 ];
-  volatile long petrinet_P3_marking_member_0[ 6 ];
+    volatile long petrinet_P1_marking_member_0[ 3 ];
+    volatile long petrinet_P2_marking_member_0[ 5 ];
+    volatile long petrinet_P3_marking_member_0[ 6 ];
   */
 }
 
@@ -957,12 +957,15 @@ int petrinet_return( void )
   int checksum = 0;
   int i;
 
+  _Pragma( "loopbound min 3 max 3" )
   for ( i = 0; i < 3; ++i )
     checksum += petrinet_P1_marking_member_0[i];
 
+  _Pragma( "loopbound min 5 max 5" )
   for ( i = 0; i < 5; ++i )
     checksum += petrinet_P2_marking_member_0[i];
 
+  _Pragma( "loopbound min 6 max 6" )
   for ( i = 0; i < 6; ++i )
     checksum += petrinet_P3_marking_member_0[i];
 

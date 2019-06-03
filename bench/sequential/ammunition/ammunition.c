@@ -61,8 +61,8 @@ void ammunition_reset_str_bits( char *str, char *s )
   int i;
   _Pragma( "loopbound min 8 max 8" )
   for ( i = 0; i < 8; i++ ) {
-    str[i] = 0;
-    s[i] = 0;
+    str[ i ] = 0;
+    s[ i ] = 0;
   }
 }
 
@@ -73,26 +73,26 @@ void ammunition_reset_str_arithm( char *str, char *s, char *d, char *e,
   int i;
   _Pragma( "loopbound min 20 max 20" )
   for ( i = 0; i < 20; i++ ) {
-    str[i] = 0;
-    s[i] = 0;
+    str[ i ] = 0;
+    s[ i ] = 0;
   }
 
   _Pragma( "loopbound min 4 max 4" )
   for ( i = 0; i < 4; i++ ) {
-    d[i] = 0;
-    e[i] = 0;
+    d[ i ] = 0;
+    e[ i ] = 0;
   }
 
   _Pragma( "loopbound min 6 max 6" )
   for ( i = 0; i < 6; i++ )
-    g[i] = 0;
+    g[ i ] = 0;
 }
 
 
 int ammunition_bits_test()
 {
-  char str[8];
-  char str1[8];
+  char str[ 8 ];
+  char str1[ 8 ];
 
   int result = 0;
   unsigned int i, j;
@@ -235,7 +235,7 @@ int ammunition_arithm_test()
 
   /* Test 1 */
   int i;
-  char str [20], s[20], d[4], e[4], g[6];
+  char str [ 20 ], s[ 20 ], d[ 4 ], e[ 4 ], g[ 6 ];
 
   ammunition_integer_from_string ( 4, "-2147483649", d );
   if ( !ammunition_overflow_bit )

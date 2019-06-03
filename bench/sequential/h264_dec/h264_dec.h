@@ -16,7 +16,7 @@ typedef struct h264_dec_img_par {
   int width_cr;
   int pix_c_y;
   int pix_c_x;
-  unsigned short mpr[16][16];
+  unsigned short mpr[ 16 ][ 16 ];
   unsigned int chroma_log2_weight_denom;
   int wp_round_chroma;
   unsigned int apply_weights;

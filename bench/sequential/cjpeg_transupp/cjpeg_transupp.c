@@ -89,7 +89,7 @@ void cjpeg_transupp_initSeed( void )
 signed char cjpeg_transupp_randomInteger( void )
 {
   cjpeg_transupp_seed = ( ( ( cjpeg_transupp_seed * 133 ) + 81 ) % 256 ) - 128;
-  return( cjpeg_transupp_seed );
+  return ( cjpeg_transupp_seed );
 }
 
 
@@ -160,7 +160,7 @@ int cjpeg_transupp_return( void )
   for ( i = 0; i < 512; i++ )
     checksum += cjpeg_transupp_output_data5[ i ];
 
-  return( checksum );
+  return ( checksum );
 }
 
 
@@ -209,7 +209,7 @@ void cjpeg_transupp_do_flip_v( j_compress_ptr dstinfo )
           /* Row is within the mirrorable area. */
           _Pragma( "loopbound min 15 max 29" )
           for ( dst_blk_x = 0; dst_blk_x < compptr_width_in_blocks;
-               dst_blk_x++ ) {
+                dst_blk_x++ ) {
 
             src_ptr = cjpeg_transupp_input;
             dst_ptr = cjpeg_transupp_output_data;
@@ -427,7 +427,7 @@ void cjpeg_transupp_do_rot_270( j_compress_ptr dstinfo )
 void cjpeg_transupp_do_rot_180( j_compress_ptr dstinfo )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
-               dst_blk_y;
+           dst_blk_y;
   int ci, i, j, offset_y;
   JCOEFPTR src_ptr, dst_ptr;
 
@@ -511,7 +511,7 @@ void cjpeg_transupp_do_rot_180( j_compress_ptr dstinfo )
           /* Remaining rows are just mirrored horizontally. */
           dst_blk_x = 0;
           /* Process the blocks that can be mirrored. */
-          _Pragma( "loopbound min 14 max 28" )
+          _Pragma( "loopbound min 14 max 14" )
           do {
             dst_ptr = cjpeg_transupp_output_data4;
             src_ptr = cjpeg_transupp_input4;
@@ -534,7 +534,7 @@ void cjpeg_transupp_do_rot_180( j_compress_ptr dstinfo )
 
             dst_ptr = cjpeg_transupp_output_data4;
             src_ptr = cjpeg_transupp_input4;
-            _Pragma( "loopbound min 64 max 64" )
+            _Pragma( "loopbound min 1 max 1" )
             do {
               *dst_ptr++ = *src_ptr++;
               i++;
@@ -560,7 +560,7 @@ void cjpeg_transupp_do_rot_180( j_compress_ptr dstinfo )
 void cjpeg_transupp_do_transverse( j_compress_ptr dstinfo )
 {
   unsigned int MCU_cols, MCU_rows, comp_width, comp_height, dst_blk_x,
-               dst_blk_y;
+           dst_blk_y;
   int ci, i, j, offset_x, offset_y;
   JCOEFPTR src_ptr, dst_ptr;
 
@@ -588,7 +588,7 @@ void cjpeg_transupp_do_transverse( j_compress_ptr dstinfo )
       _Pragma( "loopbound min 1 max 8" )
       do {
         dst_blk_x = 0;
-        _Pragma( "loopbound min 10 max 10" )
+        _Pragma( "loopbound min 5 max 10" )
         do {
           offset_x = 0;
           _Pragma( "loopbound min 1 max 2" )

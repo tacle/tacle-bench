@@ -1,26 +1,26 @@
 /*
- * $Id: autopilot.h,v 1.1 2011-01-18 12:48:38 moellmer Exp $
- *  
- * Copyright (C) 2003  Pascal Brisset, Antoine Drouin
- *
- * This file is part of paparazzi.
- *
- * paparazzi is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * paparazzi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with paparazzi; see the file COPYING.  If not, write to
- * the Free Software Foundation, 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA. 
- *
- */
+   $Id: autopilot.h,v 1.1 2011-01-18 12:48:38 moellmer Exp $
+
+   Copyright (C) 2003  Pascal Brisset, Antoine Drouin
+
+   This file is part of paparazzi.
+
+   paparazzi is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   paparazzi is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with paparazzi; see the file COPYING.  If not, write to
+   the Free Software Foundation, 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
 
 #ifndef AUTOPILOT_H
 #define AUTOPILOT_H
@@ -112,12 +112,12 @@ extern struct adc_buf buf_bat;
 #endif
 
 void periodic_task( void );
-void use_gps_pos(void);
-void radio_control_task(void);
+void use_gps_pos( void );
+void radio_control_task( void );
 /*receive_gps_data_task */
 void send_gps_pos( void );
-void send_radIR(void);
-void send_takeOff(void);
+void send_radIR( void );
+void send_takeOff( void );
 /*end receive_gps_data_task*/
-void stabilisation_task(void);
+void stabilisation_task( void );
 #endif /* AUTOPILOT_H */

@@ -22,7 +22,7 @@
 */
 
 
-const char *quicksort_input_string[ 681 ] = {
+const char *quicksort_input_string[  681  ] = {
   "Kurt", "Vonneguts", "Commencement", "Address", "at", "MIT", "Ladies", "and",
   "gentlemen", "of", "the", "class", "of", "97", "Wear", "sunscreen", "If", "I",
   "could", "offer", "you", "only", "one", "tip", "for", "the", "future",
@@ -98,9 +98,10 @@ const char *quicksort_input_string[ 681 ] = {
   "it", "is", "a", "way", "of", "fishing", "the", "past", "from", "the",
   "disposal", "wiping", "it", "off", "painting", "over", "the", "ugly", "parts",
   "and", "recycling", "it", "for", "more", "than", "its", "worth", "But",
-  "trust", "me", "on", "the", "sunscreen" };
+  "trust", "me", "on", "the", "sunscreen"
+};
 
-unsigned int quicksort_input_vector[ 3000 ] = {
+unsigned int quicksort_input_vector[  3000  ] = {
   1681692777, 846930886, 1804289383, 424238335, 1957747793, 1714636915,
   596516649, 1649760492, 719885386, 1350490027, 1025202362, 1189641421,
   2044897763, 1102520059, 783368690, 1540383426, 1365180540, 1967513926,
@@ -381,7 +382,7 @@ unsigned int quicksort_input_vector[ 3000 ] = {
   880492499, 1684259683, 322334813, 1820965014, 253674535, 224048977,
   1950148346, 636600769, 2115115464, 353673391, 340563072, 542314107,
   217852623, 1776088411, 1438865740, 1999337836, 680007057, 683309587,
-  2094613281, 1925473439, 503458793, 356228371, 1279820114,330546620,
+  2094613281, 1925473439, 503458793, 356228371, 1279820114, 330546620,
   29860596, 978053418, 2097657371, 1817049764, 1594769883, 960188534,
   1353825800, 1917104697, 209473567, 1607500335, 2141153674, 1089966067,
   96617457, 2108785490, 763447433, 437180529, 503615949, 566112132,

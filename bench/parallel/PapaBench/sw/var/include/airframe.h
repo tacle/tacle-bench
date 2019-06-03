@@ -2,7 +2,7 @@
 /* Please DO NOT EDIT */
 
 #ifndef AIRFRAME_H
-#define AIRFRAME_H 
+#define AIRFRAME_H
 
 #define AIRFRAME_NAME "Twinstar trois"
 
@@ -48,24 +48,24 @@
 #define ServoSet(values) { \
   uint16_t servo_value;\
   int16_t _var_roll;\
-  servo_value = SERVO_NEUTRAL(SERVO_MOTOR_LEFT) + (int16_t)((2 * values[RADIO_GAIN1])*SERVO_MOTOR_LEFT_TRAVEL);\
-  servo_widths[SERVO_MOTOR_LEFT] = ChopServo(servo_value);\
+  servo_value = SERVO_NEUTRAL(SERVO_MOTOR_LEFT) + (int16_t)((2 * values[ RADIO_GAIN1 ])*SERVO_MOTOR_LEFT_TRAVEL);\
+  servo_widths[ SERVO_MOTOR_LEFT ] = ChopServo(servo_value);\
 \
-  servo_value = SERVO_NEUTRAL(SERVO_MOTOR_RIGHT) + (int16_t)((2 * values[RADIO_THROTTLE])*SERVO_MOTOR_RIGHT_TRAVEL);\
-  servo_widths[SERVO_MOTOR_RIGHT] = ChopServo(servo_value);\
+  servo_value = SERVO_NEUTRAL(SERVO_MOTOR_RIGHT) + (int16_t)((2 * values[ RADIO_THROTTLE ])*SERVO_MOTOR_RIGHT_TRAVEL);\
+  servo_widths[ SERVO_MOTOR_RIGHT ] = ChopServo(servo_value);\
 \
-  servo_value = SERVO_NEUTRAL(SERVO_ELEVATOR) + (int16_t)((values[RADIO_PITCH])*SERVO_ELEVATOR_TRAVEL);\
-  servo_widths[SERVO_ELEVATOR] = ChopServo(servo_value);\
+  servo_value = SERVO_NEUTRAL(SERVO_ELEVATOR) + (int16_t)((values[ RADIO_PITCH ])*SERVO_ELEVATOR_TRAVEL);\
+  servo_widths[ SERVO_ELEVATOR ] = ChopServo(servo_value);\
 \
-  _var_roll = values[RADIO_ROLL];\
+  _var_roll = values[ RADIO_ROLL ];\
   servo_value = SERVO_NEUTRAL(SERVO_AILERON_LEFT) + (int16_t)(((_var_roll > 0 ? 1 : AILERON_DIFF) * _var_roll)*SERVO_AILERON_LEFT_TRAVEL);\
-  servo_widths[SERVO_AILERON_LEFT] = ChopServo(servo_value);\
+  servo_widths[ SERVO_AILERON_LEFT ] = ChopServo(servo_value);\
 \
   servo_value = SERVO_NEUTRAL(SERVO_AILERON_RIGHT) + (int16_t)(((_var_roll > 0 ? AILERON_DIFF : 1) * _var_roll)*SERVO_AILERON_RIGHT_TRAVEL);\
-  servo_widths[SERVO_AILERON_RIGHT] = ChopServo(servo_value);\
+  servo_widths[ SERVO_AILERON_RIGHT ] = ChopServo(servo_value);\
 \
-  servo_value = SERVO_NEUTRAL(SERVO_RUDDER) + (int16_t)((values[RADIO_YAW] + values[RADIO_ROLL]*COMBI_SWITCH)*SERVO_RUDDER_TRAVEL);\
-  servo_widths[SERVO_RUDDER] = ChopServo(servo_value);\
+  servo_value = SERVO_NEUTRAL(SERVO_RUDDER) + (int16_t)((values[ RADIO_YAW ] + values[ RADIO_ROLL ]*COMBI_SWITCH)*SERVO_RUDDER_TRAVEL);\
+  servo_widths[ SERVO_RUDDER ] = ChopServo(servo_value);\
 \
 }
 #define AILERON_DIFF 0.66

@@ -35,8 +35,8 @@ int main( void );
   Declaration of global variables
 */
 
-char duff_source[100];
-char duff_target[100];
+char duff_source[ 100 ];
+char duff_target[ 100 ];
 
 
 /*
@@ -54,7 +54,7 @@ void duff_init()
   /*
     Apply volatile XOR-bitmask to entire input array.
   */
-  p = ( unsigned char * ) &duff_source[ 0 ];
+  p = ( unsigned char * ) &duff_source[  0  ];
   _Pragma( "loopbound min 400 max 400" )
   for ( i = 0; i < sizeof( duff_source ); ++i, ++p )
     *p ^= bitmask;
@@ -63,7 +63,7 @@ void duff_init()
 
 int duff_return( void )
 {
-  return ( duff_target[28] - 72 != 0 );
+  return ( duff_target[ 28 ] - 72 != 0 );
 }
 
 
@@ -77,7 +77,7 @@ void duff_initialize( char *arr, int length )
 
   _Pragma( "loopbound min 100 max 100" )
   for ( i = 0; i < length; i++ )
-    arr[i] = length - i;
+    arr[ i ] = length - i;
 }
 
 
@@ -86,9 +86,7 @@ void duff_copy( char *to, char *from, int count )
   int n = ( count + 7 ) / 8;
 
   _Pragma( "marker outside" )
-
   switch ( count % 8 ) {
-
     case 0:
       do {
         *to++ = *from++;

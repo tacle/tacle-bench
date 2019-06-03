@@ -45,8 +45,8 @@ typedef struct {
 } cjpeg_wrbmp_bmp_dest_struct;
 
 typedef cjpeg_wrbmp_bmp_dest_struct *cjpeg_wrbmp_bmp_dest_ptr;
-extern unsigned char cjpeg_wrbmp_colormap[3][256];
-unsigned char cjpeg_wrbmp_output_array[6144];
+extern unsigned char cjpeg_wrbmp_colormap[ 3 ][ 256 ];
+unsigned char cjpeg_wrbmp_output_array[ 6144 ];
 unsigned char *cjpeg_wrbmp_jpeg_stream /*= cjpeg_jpeg6b_wrbmp_output_array*/;
 int cjpeg_wrbmp_checksum;
 
@@ -62,11 +62,11 @@ cjpeg_wrbmp_bmp_dest_struct    cjpeg_wrbmp_bmp_dest;
   Forward declaration of functions
 */
 void cjpeg_wrbmp_initInput( void );
-void cjpeg_wrbmp_finish_output_bmp( cjpeg_wrbmp_j_decompress_ptr cinfo);
+void cjpeg_wrbmp_finish_output_bmp( cjpeg_wrbmp_j_decompress_ptr cinfo );
 void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
-                                        cinfo,
-                                        int map_colors, int map_entry_size,
-                                        int cMap );
+                                 cinfo,
+                                 int map_colors, int map_entry_size,
+                                 int cMap );
 int cjpeg_wrbmp_putc_modified( int character );
 void cjpeg_wrbmp_init();
 void cjpeg_wrbmp_main();
@@ -125,12 +125,12 @@ void cjpeg_wrbmp_finish_output_bmp( cjpeg_wrbmp_j_decompress_ptr cinfo )
   }
 
   if ( progress != 0 )
-     progress->completed_extra_passes++;
-  }
+    progress->completed_extra_passes++;
+}
 
 void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
-                                        cinfo,
-                                        int map_colors, int map_entry_size, int cMap )
+                                 cinfo,
+                                 int map_colors, int map_entry_size, int cMap )
 {
 
   int num_colors = cinfo->actual_number_of_colors;
@@ -143,11 +143,11 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
       _Pragma( "loopbound min 256 max 256" )
       for ( i = 0; i < num_colors; i++ ) {
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[2][i] ) );
+                                     cjpeg_wrbmp_colormap[ 2 ][ i ] ) );
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[1][i] ) );
+                                     cjpeg_wrbmp_colormap[ 1 ][ i ] ) );
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[0][i] ) );
+                                     cjpeg_wrbmp_colormap[ 0 ][ i ] ) );
 
         if ( map_entry_size == 4 )
           cjpeg_wrbmp_putc_modified( 0 );
@@ -158,11 +158,11 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
       for ( i = 0; i < num_colors; i++ ) {
 
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[2][i] ) );
+                                     cjpeg_wrbmp_colormap[ 2 ][ i ] ) );
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[1][i] ) );
+                                     cjpeg_wrbmp_colormap[ 1 ][ i ] ) );
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
-                                            cjpeg_wrbmp_colormap[0][i] ) );
+                                     cjpeg_wrbmp_colormap[ 0 ][ i ] ) );
 
         if ( map_entry_size == 4 )
           cjpeg_wrbmp_putc_modified( 0 );
@@ -195,7 +195,7 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
 
 void _Pragma( "entrypoint" ) cjpeg_wrbmp_main()
 {
-  cjpeg_wrbmp_finish_output_bmp( &cjpeg_wrbmp_jpeg_dec_1);
+  cjpeg_wrbmp_finish_output_bmp( &cjpeg_wrbmp_jpeg_dec_1 );
   cjpeg_wrbmp_write_colormap(    &cjpeg_wrbmp_jpeg_dec_1, 768, 4, 1 );
 
   cjpeg_wrbmp_finish_output_bmp( &cjpeg_wrbmp_jpeg_dec_2 );
@@ -204,15 +204,15 @@ void _Pragma( "entrypoint" ) cjpeg_wrbmp_main()
 
 int cjpeg_wrbmp_return()
 {
-	return (cjpeg_wrbmp_checksum  + (-209330) ) != 0;
+  return ( cjpeg_wrbmp_checksum  + ( -209330 ) ) != 0;
 }
 
 int main( void )
 {
-	cjpeg_wrbmp_init();
-  	cjpeg_wrbmp_main();
+  cjpeg_wrbmp_init();
+  cjpeg_wrbmp_main();
 
-    return ( cjpeg_wrbmp_return() );
+  return ( cjpeg_wrbmp_return() );
 }
 
 #endif /* BMP_SUPPORTED */

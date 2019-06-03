@@ -1,24 +1,24 @@
 /*------------------------------------------------------------------------------
- *
- *    Copyright (C) 1998 : Space Systems Finland Ltd.
- *
- * Space Systems Finland Ltd (SSF) allows you to use this version of
- * the DEBIE-I DPU software for the specific purpose and under the
- * specific conditions set forth in the Terms Of Use document enclosed
- * with or attached to this software. In particular, the software
- * remains the property of SSF and you must not distribute the software
- * to third parties without written and signed authorization from SSF.
- *
- *    System Name:   DEBIE DPU SW
- *    Subsystem  :   DAS
- *    Module     :   telem.c
- *
- * Telemetry module.
- *
- * Based on the SSF file telem.c, rev 1.28, Wed Oct 13 19:49:34 1999.
- *
- *- * --------------------------------------------------------------------------
- */
+
+      Copyright (C) 1998 : Space Systems Finland Ltd.
+
+   Space Systems Finland Ltd (SSF) allows you to use this version of
+   the DEBIE-I DPU software for the specific purpose and under the
+   specific conditions set forth in the Terms Of Use document enclosed
+   with or attached to this software. In particular, the software
+   remains the property of SSF and you must not distribute the software
+   to third parties without written and signed authorization from SSF.
+
+      System Name:   DEBIE DPU SW
+      Subsystem  :   DAS
+      Module     :   telem.c
+
+   Telemetry module.
+
+   Based on the SSF file telem.c, rev 1.28, Wed Oct 13 19:49:34 1999.
+
+  - * --------------------------------------------------------------------------
+*/
 
 #include "keyword.h"
 #include "kernobj.h"
@@ -35,7 +35,8 @@
 
 EXTERNAL telemetry_data_t    telemetry_data;
 
-EXTERNAL science_data_file_t LOCATION(SCIENCE_DATA_START_ADDRESS) science_data;
+EXTERNAL science_data_file_t LOCATION( SCIENCE_DATA_START_ADDRESS )
+science_data;
 
 uint_least16_t EXTERNAL max_events;
 /* This variable is used to speed up certain    */
@@ -51,7 +52,7 @@ unsigned char EXTERNAL *telemetry_end_pointer;
 unsigned char EXTERNAL read_memory_checksum;
 /* Checksum to be sent at the end of Read Memory sequence. */
 
-event_record_t EXTERNAL event_queue[MAX_QUEUE_LENGTH];
+event_record_t EXTERNAL event_queue[ MAX_QUEUE_LENGTH ];
 /* Holds event records before they are copied to the */
 /* Science Data memory. Normally there is only data  */
 /* from the new event whose data is beign collected, */
@@ -71,7 +72,7 @@ uint_least16_t EXTERNAL free_slot_index;
 /* Initialised to zero on power-up.                      */
 
 
-event_record_t EXTERNAL *GetFreeRecord(void)
+event_record_t EXTERNAL *GetFreeRecord( void )
 
 /* Purpose        : Returns pointer to free event record in event queue.     */
 /* Interface      : inputs      - event_queue_length, legnth of the event    */
@@ -86,19 +87,15 @@ event_record_t EXTERNAL *GetFreeRecord(void)
 /*                     -return pointer to the last record                    */
 
 {
-   if (event_queue_length < MAX_QUEUE_LENGTH)
-   {
-      return &(event_queue[event_queue_length]);
-   }
+  if ( event_queue_length < MAX_QUEUE_LENGTH )
+    return &( event_queue[ event_queue_length ] );
 
-   else
-   {
-      return &(event_queue[MAX_QUEUE_LENGTH - 1]);
-   }
+  else
+    return &( event_queue[ MAX_QUEUE_LENGTH - 1 ] );
 }
 
 
-void TM_InterruptService (void) INTERRUPT(TM_ISR_SOURCE) USED_REG_BANK(2)
+void TM_InterruptService ( void ) INTERRUPT( TM_ISR_SOURCE ) USED_REG_BANK( 2 )
 /* Purpose        : This function handles the TM interrupts.                 */
 /* Interface      : inputs  - telemetry_pointer                              */
 /*                            telemetry_end_pointer                          */
@@ -125,61 +122,54 @@ void TM_InterruptService (void) INTERRUPT(TM_ISR_SOURCE) USED_REG_BANK(2)
 /*                       mailbox                                             */
 
 {
-   unsigned char EXTERNAL tm_byte;
+  unsigned char EXTERNAL tm_byte;
 
-   CLEAR_TM_INTERRUPT_FLAG;
-   /*The interrupt flag is put down by setting high bit 3 'INT1' in port 3.  */
+  CLEAR_TM_INTERRUPT_FLAG;
+  /*The interrupt flag is put down by setting high bit 3 'INT1' in port 3.  */
 
-   if (telemetry_pointer == (unsigned char *) &telemetry_data.time)
-   {
-      COPY (telemetry_data.time, internal_time);
-   }
+  if ( telemetry_pointer == ( unsigned char * ) &telemetry_data.time )
+    COPY ( telemetry_data.time, internal_time );
 
-   if (telemetry_pointer < telemetry_end_pointer)
-   {
-      /* There are bytes left to be sent to TM. */
+  if ( telemetry_pointer < telemetry_end_pointer ) {
+    /* There are bytes left to be sent to TM. */
 
-      tm_byte = *telemetry_pointer;
-      WRITE_TM_MSB (tm_byte);
-      read_memory_checksum ^= tm_byte;
+    tm_byte = *telemetry_pointer;
+    WRITE_TM_MSB ( tm_byte );
+    read_memory_checksum ^= tm_byte;
 
+    telemetry_pointer++;
+
+    tm_byte = *telemetry_pointer;
+    WRITE_TM_LSB ( tm_byte );
+    read_memory_checksum ^= tm_byte;
+
+    telemetry_pointer++;
+  } else
+    if ( TC_state == register_TM_e )
+      /* Start to send TM data registers starting from the first ones */
+    {
+      telemetry_pointer = ( EXTERNAL unsigned char * )&telemetry_data;
+      WRITE_TM_MSB ( *telemetry_pointer );
       telemetry_pointer++;
-
-      tm_byte = *telemetry_pointer;
-      WRITE_TM_LSB (tm_byte);
-      read_memory_checksum ^= tm_byte;
-
+      WRITE_TM_LSB ( *telemetry_pointer );
       telemetry_pointer++;
-   }
-   else if (TC_state == register_TM_e)
-   /* Start to send TM data registers starting from the first ones */
-   {
-      telemetry_pointer = (EXTERNAL unsigned char *)&telemetry_data;
-      WRITE_TM_MSB (*telemetry_pointer);
-      telemetry_pointer++;
-      WRITE_TM_LSB (*telemetry_pointer);
-      telemetry_pointer++;
-   }
-   else if (TC_state == memory_dump_e)
-   {
-      WRITE_TM_MSB(0);
-      WRITE_TM_LSB(read_memory_checksum);
-      /* Last two bytes of Read Memory sequence. */
+    } else
+      if ( TC_state == memory_dump_e ) {
+        WRITE_TM_MSB( 0 );
+        WRITE_TM_LSB( read_memory_checksum );
+        /* Last two bytes of Read Memory sequence. */
 
-      Send_ISR_Mail(TCTM_MAILBOX, TM_READY);
-   }
-   else
-   /* It is time to stop sending telemetry */
-   {
-      Send_ISR_Mail (TCTM_MAILBOX, TM_READY);
-   }
+        Send_ISR_Mail( TCTM_MAILBOX, TM_READY );
+      } else
+        /* It is time to stop sending telemetry */
+        Send_ISR_Mail ( TCTM_MAILBOX, TM_READY );
 }
 
 
-dpu_time_t GetElapsedTime(unsigned int event_number)
+dpu_time_t GetElapsedTime( unsigned int event_number )
 /* Purpose        : Returns the hit time of a given event.                   */
 /* Interface      : inputs      - event_number (parameter)                   */
-/*                                science_data[event_number].hit_time, hit   */
+/*                                science_data[ event_number ].hit_time, hit   */
 /*                                time of the given event record.            */
 /*                  outputs     - return value, hit time.                    */
 /*                  subroutines - none                                       */
@@ -189,17 +179,17 @@ dpu_time_t GetElapsedTime(unsigned int event_number)
 /*                      time                                                 */
 /*                     -return the value of hit time                         */
 {
-   dpu_time_t INDIRECT_INTERNAL hit_time;
-   /* Hit time. */
+  dpu_time_t INDIRECT_INTERNAL hit_time;
+  /* Hit time. */
 
-   COPY (hit_time, science_data.event[event_number].hit_time);
+  COPY ( hit_time, science_data.event[ event_number ].hit_time );
 
-   return hit_time;
+  return hit_time;
 }
 
 
 
-unsigned int FindMinQualityRecord(void)
+unsigned int FindMinQualityRecord( void )
 
 /* Purpose        : Finds event with lowest quality from Science Data memory.*/
 /* Interface      : inputs      - science_data.event, event records          */
@@ -219,63 +209,61 @@ unsigned int FindMinQualityRecord(void)
 /*                  -return the index of the selected record.                */
 
 {
-   unsigned int INDIRECT_INTERNAL min_quality_number;
-   /* The quality number of an event which has the lowest quality */
-   /* number in the science data.                                 */
+  unsigned int INDIRECT_INTERNAL min_quality_number;
+  /* The quality number of an event which has the lowest quality */
+  /* number in the science data.                                 */
 
-   unsigned int INDIRECT_INTERNAL min_quality_location;
-   /* The location of an event which has the lowest quality number */
-   /* in the science data.                                         */
+  unsigned int INDIRECT_INTERNAL min_quality_location;
+  /* The location of an event which has the lowest quality number */
+  /* in the science data.                                         */
 
-   dpu_time_t DIRECT_INTERNAL min_time;
-   /* Elapsed time of the oldest event. */
+  dpu_time_t DIRECT_INTERNAL min_time;
+  /* Elapsed time of the oldest event. */
 
-   dpu_time_t DIRECT_INTERNAL time;
-   /* Elapsed time as previously mentioned. */
+  dpu_time_t DIRECT_INTERNAL time;
+  /* Elapsed time as previously mentioned. */
 
-   uint_least16_t DIRECT_INTERNAL i;
-   /* Loop variable. */
+  uint_least16_t DIRECT_INTERNAL i;
+  /* Loop variable. */
 
 
-   min_time             = GetElapsedTime(0);
-   min_quality_number   = science_data.event[0].quality_number;
-   min_quality_location = 0;
-   /* First event is selected and compared against */
-   /* the following events in the science_data.    */
+  min_time             = GetElapsedTime( 0 );
+  min_quality_number   = science_data.event[ 0 ].quality_number;
+  min_quality_location = 0;
+  /* First event is selected and compared against */
+  /* the following events in the science_data.    */
 
-   _Pragma("loopbound min 1260 max 1260")
-   for (i=1; i < max_events; i++)
-   {
-      time = GetElapsedTime(i);
+  _Pragma( "loopbound min 1260 max 1260" )
+  for ( i = 1; i < max_events; i++ ) {
+    time = GetElapsedTime( i );
 
-      if(science_data.event[i].quality_number < min_quality_number)
-      {
-         min_time = time;
-         min_quality_number = science_data.event[i].quality_number;
-         min_quality_location = i;
-         /* If an event in the science_data has a lower quality number than  */
-         /* any of the previous events, its quality_number and location is   */
-         /* stored into variables.                                           */
+    if ( science_data.event[ i ].quality_number < min_quality_number ) {
+      min_time = time;
+      min_quality_number = science_data.event[ i ].quality_number;
+      min_quality_location = i;
+      /* If an event in the science_data has a lower quality number than  */
+      /* any of the previous events, its quality_number and location is   */
+      /* stored into variables.                                           */
+    }
+
+    else
+      if (   ( science_data.event[ i ].quality_number == min_quality_number )
+             && ( time < min_time ) ) {
+        min_time = time;
+        min_quality_location = i;
+        /* If an event in the science_data has an equal quality number with */
+        /* any of the previous events and it's older, event's               */
+        /* quality_number and location are stored into variables.           */
       }
+  }
 
-      else if(   (science_data.event[i].quality_number == min_quality_number)
-              && (time < min_time))
-      {
-         min_time = time;
-         min_quality_location = i;
-         /* If an event in the science_data has an equal quality number with */
-         /* any of the previous events and it's older, event's               */
-         /* quality_number and location are stored into variables.           */
-      }
-   }
-
-   return min_quality_location;
+  return min_quality_location;
 }
 
 
 void IncrementCounters(
-   sensor_index_t sensor_unit,
-   unsigned char  classification)
+  sensor_index_t sensor_unit,
+  unsigned char  classification )
 
 /* Purpose        : Increments given event counters.                         */
 /* Interface      : inputs      - sensor_unit (parameter)                    */
@@ -307,36 +295,34 @@ void IncrementCounters(
 
 
 {
-   unsigned char EXTERNAL counter;
-   unsigned char EXTERNAL new_checksum;
+  unsigned char EXTERNAL counter;
+  unsigned char EXTERNAL new_checksum;
 
 
-   if (telemetry_data.SU_hits[sensor_unit] < 0xFFFF)
-   {
-      telemetry_data.SU_hits[sensor_unit]++;
-      /* SU hit counter is incremented. */
-   }
+  if ( telemetry_data.SU_hits[ sensor_unit ] < 0xFFFF ) {
+    telemetry_data.SU_hits[ sensor_unit ]++;
+    /* SU hit counter is incremented. */
+  }
 
-   if (science_data.event_counter[sensor_unit][classification] < 0xFF)
-   {
+  if ( science_data.event_counter[ sensor_unit ][ classification ] < 0xFF ) {
 
-      counter = science_data.event_counter[sensor_unit][classification];
+    counter = science_data.event_counter[ sensor_unit ][ classification ];
 
-      new_checksum =
-         science_data.counter_checksum ^ counter;
-      /* Delete effect of old counter value from the checksum. */
+    new_checksum =
+      science_data.counter_checksum ^ counter;
+    /* Delete effect of old counter value from the checksum. */
 
-      counter++;
+    counter++;
 
-      new_checksum ^= counter;
-      /* Add effect of new counter value to the checksum. */
+    new_checksum ^= counter;
+    /* Add effect of new counter value to the checksum. */
 
-      science_data.event_counter[sensor_unit][classification] = counter;
-      /* The event counter is incremented. */
+    science_data.event_counter[ sensor_unit ][ classification ] = counter;
+    /* The event counter is incremented. */
 
-      science_data.counter_checksum = new_checksum;
-      /* Event counter checksum is updated. */
-   }
+    science_data.counter_checksum = new_checksum;
+    /* Event counter checksum is updated. */
+  }
 
 }
 
@@ -345,7 +331,7 @@ void IncrementCounters(
 /*                               tm_data.h                                   */
 /*****************************************************************************/
 
-void RecordEvent(void)
+void RecordEvent( void )
 /* Purpose        : This function increments proper event counter and stores */
 /*                  the new event record to the science data memory.         */
 /* Interface      : inputs      - free_slot_index, index of next free event  */
@@ -376,135 +362,126 @@ void RecordEvent(void)
 /*                  defined earlier as described above.                      */
 
 {
-   uint_least16_t INDIRECT_INTERNAL record_index;
+  uint_least16_t INDIRECT_INTERNAL record_index;
 
-   DISABLE_INTERRUPT_MASTER;
+  DISABLE_INTERRUPT_MASTER;
 
-   record_index = free_slot_index;
+  record_index = free_slot_index;
 
-   if (record_index >= max_events && TC_state != SC_TM_e)
-   {
-      /* Science Data memory was full and Science TM was not in progress */
+  if ( record_index >= max_events && TC_state != SC_TM_e ) {
+    /* Science Data memory was full and Science TM was not in progress */
 
-      ENABLE_INTERRUPT_MASTER;
-      record_index = FindMinQualityRecord();
-      DISABLE_INTERRUPT_MASTER;
-   }
+    ENABLE_INTERRUPT_MASTER;
+    record_index = FindMinQualityRecord();
+    DISABLE_INTERRUPT_MASTER;
+  }
 
-   if (TC_state == SC_TM_e)
-   {
-      /* Science Telemetry is in progress, so the event record */
-      /* cannot be written to the Science Data memory. Instead */
-      /* it is left to the temporary queue which will be       */
-      /* copied to the Science Data memory after the Science   */
-      /* telemetry is completed.                               */
+  if ( TC_state == SC_TM_e ) {
+    /* Science Telemetry is in progress, so the event record */
+    /* cannot be written to the Science Data memory. Instead */
+    /* it is left to the temporary queue which will be       */
+    /* copied to the Science Data memory after the Science   */
+    /* telemetry is completed.                               */
 
-      if (event_queue_length < MAX_QUEUE_LENGTH)
-      {
-         /* There is still room in the queue. */
+    if ( event_queue_length < MAX_QUEUE_LENGTH ) {
+      /* There is still room in the queue. */
 
-         event_queue_length++;
-         /* Prevent the event data from being overwritten. */
-      }
-      ENABLE_INTERRUPT_MASTER;
-   }
+      event_queue_length++;
+      /* Prevent the event data from being overwritten. */
+    }
+    ENABLE_INTERRUPT_MASTER;
+  }
 
-   else
-   {
-      if (free_slot_index < max_events)
-      {
-	 /* Science Data memory was not full */
+  else {
+    if ( free_slot_index < max_events ) {
+      /* Science Data memory was not full */
 
-         record_index = free_slot_index;
-         science_data.event[record_index].quality_number = 0;
-         free_slot_index++;
-      }
+      record_index = free_slot_index;
+      science_data.event[ record_index ].quality_number = 0;
+      free_slot_index++;
+    }
 
 
-      /* Increment event counters. */
-      IncrementCounters(
-         event_queue[0].SU_number - 1,
-         event_queue[0].classification);
+    /* Increment event counters. */
+    IncrementCounters(
+      event_queue[ 0 ].SU_number - 1,
+      event_queue[ 0 ].classification );
 
-      ENABLE_INTERRUPT_MASTER;
+    ENABLE_INTERRUPT_MASTER;
 
-      if (event_queue[0].quality_number >=
-          science_data.event[record_index].quality_number)
+    if ( event_queue[ 0 ].quality_number >=
+         science_data.event[ record_index ].quality_number )
 
-      {
-         STRUCT_ASSIGN (
-            science_data.event[record_index],
-            event_queue[0],
-            event_record_t);
+    {
+      STRUCT_ASSIGN (
+        science_data.event[ record_index ],
+        event_queue[ 0 ],
+        event_record_t );
 
-         /* In this state the event data is located always to */
-         /* the first element of the queue.                   */
-      }
-   }
+      /* In this state the event data is located always to */
+      /* the first element of the queue.                   */
+    }
+  }
 }
 
 
-void ClearEvents(void)
+void ClearEvents( void )
 /* Cleares the event counters and the quality numbers of                     */
 /* the event records in the science data memory                              */
 
 {
-   DIRECT_INTERNAL uint_least8_t i;
-   /* This variable is used in the for-loop which goes through  */
-   /* the science data event counter.                           */
+  DIRECT_INTERNAL uint_least8_t i;
+  /* This variable is used in the for-loop which goes through  */
+  /* the science data event counter.                           */
 
-   DIRECT_INTERNAL uint_least8_t j;
-   /* This variable is used in the for-loop which goes through  */
-   /* the science data event counter.                           */
+  DIRECT_INTERNAL uint_least8_t j;
+  /* This variable is used in the for-loop which goes through  */
+  /* the science data event counter.                           */
 
-   /* Interrupts does not need to be disabled as long as  */
-   /* Telecommand Execution task has higher priority than */
-   /* Acquisition task.                                   */
+  /* Interrupts does not need to be disabled as long as  */
+  /* Telecommand Execution task has higher priority than */
+  /* Acquisition task.                                   */
 
-   _Pragma("loopbound min 4 max 4")
-   for(i=0;i<NUM_SU;i++)
-   {
-      telemetry_data.SU_hits[i] = 0;
+  _Pragma( "loopbound min 4 max 4" )
+  for ( i = 0; i < NUM_SU; i++ ) {
+    telemetry_data.SU_hits[ i ] = 0;
 
-      _Pragma("loopbound min 10 max 10")
-      for(j=0;j<NUM_CLASSES;j++)
-      {
-         science_data.event_counter[i][j] = 0;
-      }
-      /*event counters are cleared in science_data                           */
-   }
+    _Pragma( "loopbound min 10 max 10" )
+    for ( j = 0; j < NUM_CLASSES; j++ )
+      science_data.event_counter[ i ][ j ] = 0;
+    /*event counters are cleared in science_data                           */
+  }
 
-   _Pragma("loopbound min 0 max 10")
-   for (i=0; i < event_queue_length; i++)
-   {
-      /* Events from the event queue are copied to the Science */
-      /* Data memory.                                          */
+  _Pragma( "loopbound min 10 max 10" )
+  for ( i = 0; i < event_queue_length; i++ ) {
+    /* Events from the event queue are copied to the Science */
+    /* Data memory.                                          */
 
-      STRUCT_ASSIGN (
-         science_data.event[i],
-         event_queue[i],
-         event_record_t);
+    STRUCT_ASSIGN (
+      science_data.event[ i ],
+      event_queue[ i ],
+      event_record_t );
 
-      IncrementCounters(
-         event_queue[i].SU_number - 1,
-         event_queue[i].classification);
+    IncrementCounters(
+      event_queue[ i ].SU_number - 1,
+      event_queue[ i ].classification );
 
-      /* One more event is stored in the Science Data memory. */
-      /* NOTE that the event queue should always be smaller   */
-      /* than the space reserved for event records in the     */
-      /* Science Data memory.                                 */
-   }
+    /* One more event is stored in the Science Data memory. */
+    /* NOTE that the event queue should always be smaller   */
+    /* than the space reserved for event records in the     */
+    /* Science Data memory.                                 */
+  }
 
-   free_slot_index    = event_queue_length;
+  free_slot_index    = event_queue_length;
 
-   event_queue_length = 0;
-   /* Empty the event queue. */
+  event_queue_length = 0;
+  /* Empty the event queue. */
 
-   science_data.counter_checksum = 0;
-   science_data.not_used         = 0;
+  science_data.counter_checksum = 0;
+  science_data.not_used         = 0;
 }
 
-void ResetEventQueueLength(void)
+void ResetEventQueueLength( void )
 /* Purpose        : Empty the event queue length.                            */
 /* Interface      : inputs      - none                                       */
 /*                  outputs     - none                                       */
@@ -513,7 +490,7 @@ void ResetEventQueueLength(void)
 /* Postconditions : none.                                                    */
 /* Algorithm      : - reset event queue length.                              */
 {
-      event_queue_length = 0;
+  event_queue_length = 0;
 }
 
 

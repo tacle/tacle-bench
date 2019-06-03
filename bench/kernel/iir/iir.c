@@ -92,12 +92,12 @@ void iir_init( void )
   /*
     Apply volatile XOR-bitmask to entire input array.
   */
-  p = (unsigned char *) &iir_coefficients[ 0 ];
+  p = ( unsigned char * ) &iir_coefficients[ 0 ];
   _Pragma( "loopbound min 80 max 80" )
   for ( i = 0; i < sizeof( iir_coefficients ); ++i, ++p )
     *p ^= bitmask;
 
-  p = (unsigned char *) &iir_wi[ 0 ];
+  p = ( unsigned char * ) &iir_wi[ 0 ];
   _Pragma( "loopbound min 32 max 32" )
   for ( i = 0; i < sizeof( iir_wi ); ++i, ++p )
     *p ^= bitmask;
@@ -114,7 +114,7 @@ int iir_return( void )
   for ( f = 0 ; f < 2 * 4; f++ )
     checksum += iir_wi[ f ];
 
-  return( (int) checksum );
+  return ( ( int ) checksum );
 }
 
 
@@ -159,5 +159,5 @@ int main( void )
   iir_init();
   iir_main();
 
-  return( iir_return() - 400 != 0 );
+  return ( iir_return() - 400 != 0 );
 }

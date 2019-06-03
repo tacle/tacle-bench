@@ -35,7 +35,7 @@
 #include "audiobeamlibmath.h"
 
 
-static const int audiobeam_npio2_hw[] = {
+static const int audiobeam_npio2_hw[  ] = {
   0x3fc90f00, 0x40490f00, 0x4096cb00, 0x40c90f00, 0x40fb5300, 0x4116cb00,
   0x412fed00, 0x41490f00, 0x41623100, 0x417b5300, 0x418a3a00, 0x4196cb00,
   0x41a35c00, 0x41afed00, 0x41bc7e00, 0x41c90f00, 0x41d5a000, 0x41e23100,
@@ -82,31 +82,31 @@ int audiobeam___ieee754_rem_pio2f( float x, float *y )
   AUDIOBEAM_GET_FLOAT_WORD( hx, x );
   ix = hx & 0x7fffffff;
   if ( ix <= 0x3f490fd8 ) {
-    y[0] = x;
-    y[1] = 0;
+    y[ 0 ] = x;
+    y[ 1 ] = 0;
     return 0;
   }
   if ( ix < 0x4016cbe4 ) {
     if ( hx > 0 ) {
       z = x - audiobeam_pio2_1;
       if ( ( ix & 0xfffffff0 ) != 0x3fc90fd0 ) {
-        y[0] = z - audiobeam_pio2_1t;
-        y[1] = ( z - y[0] ) - audiobeam_pio2_1t;
+        y[ 0 ] = z - audiobeam_pio2_1t;
+        y[ 1 ] = ( z - y[ 0 ] ) - audiobeam_pio2_1t;
       } else {
         z -= audiobeam_pio2_2;
-        y[0] = z - audiobeam_pio2_2t;
-        y[1] = ( z - y[0] ) - audiobeam_pio2_2t;
+        y[ 0 ] = z - audiobeam_pio2_2t;
+        y[ 1 ] = ( z - y[ 0 ] ) - audiobeam_pio2_2t;
       }
       return 1;
     } else {
       z = x + audiobeam_pio2_1;
       if ( ( ix & 0xfffffff0 ) != 0x3fc90fd0 ) {
-        y[0] = z + audiobeam_pio2_1t;
-        y[1] = ( z - y[0] ) + audiobeam_pio2_1t;
+        y[ 0 ] = z + audiobeam_pio2_1t;
+        y[ 1 ] = ( z - y[ 0 ] ) + audiobeam_pio2_1t;
       } else {
         z += audiobeam_pio2_2;
-        y[0] = z + audiobeam_pio2_2t;
-        y[1] = ( z - y[0] ) + audiobeam_pio2_2t;
+        y[ 0 ] = z + audiobeam_pio2_2t;
+        y[ 1 ] = ( z - y[ 0 ] ) + audiobeam_pio2_2t;
       }
       return -1;
     }
@@ -117,40 +117,40 @@ int audiobeam___ieee754_rem_pio2f( float x, float *y )
     fn = ( float )n;
     r  = t - fn * audiobeam_pio2_1;
     w  = fn * audiobeam_pio2_1t;
-    if ( n < 32 && ( int )( ix & 0xffffff00 ) != audiobeam_npio2_hw[n - 1] )
-      y[0] = r - w;
+    if ( n < 32 && ( int )( ix & 0xffffff00 ) != audiobeam_npio2_hw[ n - 1 ] )
+      y[ 0 ] = r - w;
     else {
       unsigned int high;
       j  = ix >> 23;
-      y[0] = r - w;
-      AUDIOBEAM_GET_FLOAT_WORD( high, y[0] );
+      y[ 0 ] = r - w;
+      AUDIOBEAM_GET_FLOAT_WORD( high, y[ 0 ] );
       i = j - ( ( high >> 23 ) & 0xff );
       if ( i > 8 ) {
         t  = r;
         w  = fn * audiobeam_pio2_2;
         r  = t - w;
         w  = fn * audiobeam_pio2_2t - ( ( t - r ) - w );
-        y[0] = r - w;
-        AUDIOBEAM_GET_FLOAT_WORD( high, y[0] );
+        y[ 0 ] = r - w;
+        AUDIOBEAM_GET_FLOAT_WORD( high, y[ 0 ] );
         i = j - ( ( high >> 23 ) & 0xff );
         if ( i > 25 )  {
           t  = r;
           w  = fn * audiobeam_pio2_3;
           r  = t - w;
           w  = fn * audiobeam_pio2_3t - ( ( t - r ) - w );
-          y[0] = r - w;
+          y[ 0 ] = r - w;
         }
       }
     }
-    y[1] = ( r - y[0] ) - w;
+    y[ 1 ] = ( r - y[ 0 ] ) - w;
     if ( hx < 0 )  {
-      y[0] = -y[0];
-      y[1] = -y[1];
+      y[ 0 ] = -y[ 0 ];
+      y[ 1 ] = -y[ 1 ];
       return -n;
     } else   return n;
   }
   if ( ix >= 0x7f800000 ) {
-    y[0] = y[1] = x - x;
+    y[ 0 ] = y[ 1 ] = x - x;
     return 0;
   }
 
@@ -196,9 +196,11 @@ float audiobeam___kernel_sinf( float x, float y, int iy )
   }
   z =  x * x;
   v =  z * x;
-  r =  audiobeam_S2 + z * ( audiobeam_S3 + z * ( audiobeam_S4 + z * ( audiobeam_S5 + z * audiobeam_S6 ) ) );
+  r =  audiobeam_S2 + z * ( audiobeam_S3 + z * ( audiobeam_S4 + z *
+                            ( audiobeam_S5 + z * audiobeam_S6 ) ) );
   if ( iy == 0 ) return x + v * ( audiobeam_S1 + z * r );
-  else      return x - ( ( z * ( audiobeam_half * y - v * r ) - y ) - v * audiobeam_S1 );
+  else      return x - ( ( z * ( audiobeam_half * y - v * r ) - y ) - v *
+                           audiobeam_S1 );
 }
 
 
@@ -214,7 +216,7 @@ float audiobeam___copysignf( float x, float y )
 
 float audiobeam___cosf( float x )
 {
-  float y[2], z = 0.0f;
+  float y[ 2 ], z = 0.0f;
   int n, ix;
 
   AUDIOBEAM_GET_FLOAT_WORD( ix, x );
@@ -226,18 +228,18 @@ float audiobeam___cosf( float x )
     if ( ix >= 0x7f800000 ) return x - x;
 
     else {
-      y[0] = 0.0;
-      y[1] = 0.0;
+      y[ 0 ] = 0.0;
+      y[ 1 ] = 0.0;
       n = audiobeam___ieee754_rem_pio2f( x, y );
       switch ( n & 3 ) {
         case 0:
-          return  audiobeam___kernel_cosf( y[0], y[1] );
+          return  audiobeam___kernel_cosf( y[ 0 ], y[ 1 ] );
         case 1:
-          return -audiobeam___kernel_sinf( y[0], y[1], 1 );
+          return -audiobeam___kernel_sinf( y[ 0 ], y[ 1 ], 1 );
         case 2:
-          return -audiobeam___kernel_cosf( y[0], y[1] );
+          return -audiobeam___kernel_cosf( y[ 0 ], y[ 1 ] );
         default:
-          return  audiobeam___kernel_sinf( y[0], y[1], 1 );
+          return  audiobeam___kernel_sinf( y[ 0 ], y[ 1 ], 1 );
       }
     }
 }

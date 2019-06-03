@@ -4,15 +4,15 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright
+     Redistributions of source code must retain the above copyright
      notice, this list of conditions and the following disclaimer.
 
-   * Redistributions in binary form must reproduce the above copyright
+     Redistributions in binary form must reproduce the above copyright
      notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the
      distribution.
 
-   * Neither the name of the copyright holders nor the names of
+     Neither the name of the copyright holders nor the names of
      contributors may be used to endorse or promote products derived
      from this software without specific prior written permission.
 
@@ -76,7 +76,7 @@ extern "C" {
     interrupt needs to be enabled separately if interrupts for this device are
     desired.  While some devices maintain their interrupt enable bit inside
     the device's register set, external and timer interrupts have system-wide
-    configuration registers. 
+    configuration registers.
 
     Example:
 
@@ -103,7 +103,7 @@ extern "C" {
     This macro gives access to the \c GIMSK register (or \c EIMSK register
     if using an AVR Mega device or \c GICR register for others). Although this
     macro is essentially the same as assigning to the register, it does
-    adapt slightly to the type of device being used. This macro is 
+    adapt slightly to the type of device being used. This macro is
     unavailable if none of the registers listed above are defined. */
 
 /* Define common register definition if available. */
@@ -130,14 +130,14 @@ extern "C" {
 
     \code#include <arch/interrupt.h>\endcode
 
-	This function modifies the \c timsk register.
-	The value you pass via \c ints is device specific. */
+  This function modifies the \c timsk register.
+  The value you pass via \c ints is device specific. */
 #define __inline__ inline
-static __inline__ void timer_enable_int (unsigned char ints)
+static __inline__ void timer_enable_int ( unsigned char ints )
 {
-#ifdef TIMSK
-    TIMSK = ints;
-#endif
+  #ifdef TIMSK
+  TIMSK = ints;
+  #endif
 }
 
 /*@}*/

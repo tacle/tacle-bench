@@ -2,7 +2,7 @@
 #include "liftlibcontrol.h"
 
 /* Global variables */
-int lift_levelPos[16];
+int lift_levelPos[ 16 ];
 int lift_one_level;
 
 /**
@@ -80,23 +80,23 @@ void lift_ctrl_init()
   lift_loadPending = 0;
   lift_loadSensor = 0;
   i = 0;
-  lift_levelPos[i++] = 0;
-  lift_levelPos[i++] = 58;
-  lift_levelPos[i++] = 115;
-  lift_levelPos[i++] = 173;
-  lift_levelPos[i++] = 230;
-  lift_levelPos[i++] = 288;
-  lift_levelPos[i++] = 346;
-  lift_levelPos[i++] = 403;
-  lift_levelPos[i++] = 461;
-  lift_levelPos[i++] = 518;
-  lift_levelPos[i++] = 576;
-  lift_levelPos[i++] = 634;
-  lift_levelPos[i++] = 691;
-  lift_levelPos[i++] = 749;
-  lift_levelPos[i++] = 806;
-  lift_levelPos[i++] = 864;
-  lift_one_level = lift_levelPos[1];
+  lift_levelPos[ i++ ] = 0;
+  lift_levelPos[ i++ ] = 58;
+  lift_levelPos[ i++ ] = 115;
+  lift_levelPos[ i++ ] = 173;
+  lift_levelPos[ i++ ] = 230;
+  lift_levelPos[ i++ ] = 288;
+  lift_levelPos[ i++ ] = 346;
+  lift_levelPos[ i++ ] = 403;
+  lift_levelPos[ i++ ] = 461;
+  lift_levelPos[ i++ ] = 518;
+  lift_levelPos[ i++ ] = 576;
+  lift_levelPos[ i++ ] = 634;
+  lift_levelPos[ i++ ] = 691;
+  lift_levelPos[ i++ ] = 749;
+  lift_levelPos[ i++ ] = 806;
+  lift_levelPos[ i++ ] = 864;
+  lift_one_level = lift_levelPos[ 1 ];
 }
 
 void lift_ctrl_loop()
@@ -104,13 +104,13 @@ void lift_ctrl_loop()
   if ( lift_cmd == lift_CMD_NONE )
     lift_check_cmd();
   else {
-    lift_do_impulse( lift_ctrl_io_in[lift_SENS_IMPULS],
-                     lift_ctrl_io_out[lift_MOTOR_ON],
-                     lift_ctrl_io_in[lift_SENS_BOTTOM] );
+    lift_do_impulse( lift_ctrl_io_in[ lift_SENS_IMPULS ],
+                     lift_ctrl_io_out[ lift_MOTOR_ON ],
+                     lift_ctrl_io_in[ lift_SENS_BOTTOM ] );
     lift_do_cmd();
   }
   lift_check_level();
-  lift_ctrl_io_led[13] = ( lift_dbgCnt & 0x80 ) != 0;
+  lift_ctrl_io_led[ 13 ] = ( lift_dbgCnt & 0x80 ) != 0;
   ++lift_dbgCnt;
 }
 
@@ -122,32 +122,32 @@ void lift_check_level()
   if ( lift_cntValid ) {
     _Pragma( "loopbound min 14 max 14" )
     for ( lift_level = 1; lift_level < 14; ++lift_level ) {
-      if ( lift_cnt < lift_levelPos[lift_level] - middle )
+      if ( lift_cnt < lift_levelPos[ lift_level ] - middle )
         break;
     }
   } else
     lift_level = 0;
   _Pragma( "loopbound min 14 max 14" )
   for ( i = 0; i < 14; ++i )
-    lift_ctrl_io_led[i] = ( i == lift_level - 1 );
+    lift_ctrl_io_led[ i ] = ( i == lift_level - 1 );
 }
 
 
 void lift_check_cmd()
 {
   if ( lift_loadPending ) {
-    if ( lift_ctrl_io_in[lift_SENS_BOTTOM] )
+    if ( lift_ctrl_io_in[ lift_SENS_BOTTOM ] )
       lift_cmd = lift_CMD_TOP;
   } else
-    if ( lift_ctrl_io_in[lift_GO_UP] ) {
-      if ( !lift_ctrl_io_in[lift_SENS_TOP] && lift_level != 14 )
+    if ( lift_ctrl_io_in[ lift_GO_UP ] ) {
+      if ( !lift_ctrl_io_in[ lift_SENS_TOP ] && lift_level != 14 )
         lift_cmd = lift_CMD_UP;
     } else
-      if ( lift_ctrl_io_in[lift_GO_DOWN] ) {
-        if ( !lift_ctrl_io_in[lift_SENS_BOTTOM] && lift_level != 1 )
+      if ( lift_ctrl_io_in[ lift_GO_DOWN ] ) {
+        if ( !lift_ctrl_io_in[ lift_SENS_BOTTOM ] && lift_level != 1 )
           lift_cmd = lift_CMD_DOWN;
       } else
-        if ( lift_ctrl_io_in[lift_GO_LOAD] ) {
+        if ( lift_ctrl_io_in[ lift_GO_LOAD ] ) {
           if ( lift_loadLevel != 0 && lift_level < lift_loadLevel )
             lift_cmd = lift_CMD_TOP;
           else
@@ -155,12 +155,12 @@ void lift_check_cmd()
           lift_loadPending = 1;
           lift_loadSensor = 0;
         } else
-          if ( lift_ctrl_io_in[lift_GO_TOP] ) {
-            if ( !lift_ctrl_io_in[lift_SENS_TOP] )
+          if ( lift_ctrl_io_in[ lift_GO_TOP ] ) {
+            if ( !lift_ctrl_io_in[ lift_SENS_TOP ] )
               lift_cmd = lift_CMD_TOP;
           } else
-            if ( lift_ctrl_io_in[lift_GO_BOTTOM] ) {
-              if ( !lift_ctrl_io_in[lift_SENS_BOTTOM] )
+            if ( lift_ctrl_io_in[ lift_GO_BOTTOM ] ) {
+              if ( !lift_ctrl_io_in[ lift_SENS_BOTTOM ] )
                 lift_cmd = lift_CMD_BOTTOM;
             }
   if ( lift_cmd != lift_CMD_NONE )
@@ -198,12 +198,12 @@ void lift_do_cmd()
     lift_wait_for_motor_start();
   else {
     run = lift_check_run();
-    if ( lift_ctrl_io_out[lift_MOTOR_ON] && !run ) {
+    if ( lift_ctrl_io_out[ lift_MOTOR_ON ] && !run ) {
       /* motor stopped: */
       lift_cmd = 99;
       lift_timImp = 50;
     }
-    lift_ctrl_io_out[lift_MOTOR_ON] = run;
+    lift_ctrl_io_out[ lift_MOTOR_ON ] = run;
   }
 }
 
@@ -213,7 +213,7 @@ void lift_wait_for_motor_start()
   int newLevel = 0;
   --lift_timMotor;
   lift_directionUp = ( lift_cmd == lift_CMD_UP || lift_cmd == lift_CMD_TOP );
-  lift_ctrl_io_out[lift_MOTOR_UP] =  lift_directionUp;
+  lift_ctrl_io_out[ lift_MOTOR_UP ] =  lift_directionUp;
   if ( !lift_cntValid ) {
     lift_cnt = 0;   /* use relative counter */
     if ( lift_cmd == lift_CMD_UP )
@@ -230,7 +230,7 @@ void lift_wait_for_motor_start()
         newLevel = lift_level - 1;
     --newLevel; /* lift_level is one based */
     if ( newLevel >= 0 && newLevel < 14 )
-      lift_endCnt = lift_levelPos[newLevel];
+      lift_endCnt = lift_levelPos[ newLevel ];
   }
 }
 
@@ -238,21 +238,21 @@ void lift_wait_for_motor_start()
 int lift_check_run()
 {
   if ( lift_cmd == lift_CMD_UP ) {
-    if ( lift_cnt < lift_endCnt - 1 && !lift_ctrl_io_in[lift_SENS_TOP] )
+    if ( lift_cnt < lift_endCnt - 1 && !lift_ctrl_io_in[ lift_SENS_TOP ] )
       return 1;
   } else
     if ( lift_cmd == lift_CMD_DOWN ) {
-      if ( lift_cnt > lift_endCnt + 1 && !lift_ctrl_io_in[lift_SENS_BOTTOM] )
+      if ( lift_cnt > lift_endCnt + 1 && !lift_ctrl_io_in[ lift_SENS_BOTTOM ] )
         return 1;
     } else
       if ( lift_cmd == lift_CMD_TOP ) {
-        if ( lift_loadPending && lift_ctrl_io_in[lift_SENS_LOAD] ) {
+        if ( lift_loadPending && lift_ctrl_io_in[ lift_SENS_LOAD ] ) {
           /* we are at lift_load position */
           lift_loadLevel = lift_level;
           lift_loadPending = 0;
           return 0;
         }
-        if ( !lift_ctrl_io_in[lift_SENS_TOP] )
+        if ( !lift_ctrl_io_in[ lift_SENS_TOP ] )
           return 1;
         /* safe fallback if lift_load sensor does not work */
         lift_loadPending = 0;
@@ -260,7 +260,7 @@ int lift_check_run()
         if ( lift_cmd == lift_CMD_BOTTOM ) {
           if ( lift_loadPending ) {
             if ( lift_loadSensor ) {
-              if ( !lift_ctrl_io_in[lift_SENS_LOAD] ) {
+              if ( !lift_ctrl_io_in[ lift_SENS_LOAD ] ) {
                 lift_loadSensor = 0;
                 /* we are at lift_load position */
                 lift_loadPending = 0;
@@ -268,9 +268,9 @@ int lift_check_run()
                 return 0;
               }
             }
-            lift_loadSensor = lift_ctrl_io_in[lift_SENS_LOAD];
+            lift_loadSensor = lift_ctrl_io_in[ lift_SENS_LOAD ];
           }
-          if ( !lift_ctrl_io_in[lift_SENS_BOTTOM] )
+          if ( !lift_ctrl_io_in[ lift_SENS_BOTTOM ] )
             return 1;
         }
   return 0;

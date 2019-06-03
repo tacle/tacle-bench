@@ -37,18 +37,18 @@ struct g723_enc_state_t {
   short dml;  /* Long term energy estimate. */
   short ap; /* Linear weighting coefficient of 'yl' and 'yu'. */
 
-  short a[2]; /* Coefficients of pole portion of prediction filter. */
-  short b[6]; /* Coefficients of zero portion of prediction filter. */
-  short pk[2];  /*
+  short a[ 2 ]; /* Coefficients of pole portion of prediction filter. */
+  short b[ 6 ]; /* Coefficients of zero portion of prediction filter. */
+  short pk[ 2 ];  /*
         Signs of previous two samples of a partially
         reconstructed signal.
 */
-  short dq[6];  /*
+  short dq[ 6 ];  /*
         Previous 6 samples of the quantized difference
         signal represented in an internal floating point
         format.
 */
-  short sr[2];  /*
+  short sr[ 2 ];  /*
         Previous 2 samples of the quantized difference
         signal represented in an internal floating point
         format.
@@ -114,7 +114,7 @@ int main( void );
 
 struct g723_enc_state_t g723_enc_state;
 
-unsigned int g723_enc_INPUT[256] = {
+unsigned int g723_enc_INPUT[ 256 ] = {
   51, 17, 31, 53, 95, 17, 70, 22, 49, 12,  8, 39, 28, 37, 99, 54,
   77, 65, 77, 78, 83, 15, 63, 31, 35, 92, 52, 40, 61, 79, 94, 87,
   87, 68, 76, 58, 39, 35, 20, 83, 42, 46, 98, 12, 21, 96, 74, 41,
@@ -135,11 +135,11 @@ unsigned int g723_enc_INPUT[256] = {
 
 
 
-unsigned int g723_enc_OUTPUT[256];
+unsigned int g723_enc_OUTPUT[ 256 ];
 
-short g723_enc_power2[15] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
-                    0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000
-                   };
+short g723_enc_power2[ 15 ] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
+                             0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000
+                            };
 
 
 /*
@@ -147,26 +147,26 @@ short g723_enc_power2[15] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80,
    magnitude values.
 */
 
-short g723_enc_qtab_723_24[3] = {8, 218, 331};
+short g723_enc_qtab_723_24[ 3 ] = {8, 218, 331};
 
 /*
    Maps G.721 code word to reconstructed scale factor normalized log
    magnitude values.
 */
-short  g723_enc_dqlntab[16] = { -2048, 4, 135, 213, 273, 323, 373, 425,
-                               425, 373, 323, 273, 213, 135, 4, -2048
-                             };
+short  g723_enc_dqlntab[ 16 ] = { -2048, 4, 135, 213, 273, 323, 373, 425,
+                                425, 373, 323, 273, 213, 135, 4, -2048
+                              };
 
 /* Maps G.721 code word to log of scale factor multiplier. */
-short  g723_enc_witab[16] = { -12, 18, 41, 64, 112, 198, 355, 1122,
-                             1122, 355, 198, 112, 64, 41, 18, -12
-                           };
+short  g723_enc_witab[ 16 ] = { -12, 18, 41, 64, 112, 198, 355, 1122,
+                              1122, 355, 198, 112, 64, 41, 18, -12
+                            };
 /*
    Maps G.721 code words to a set of values whose long and short
    term averages are computed and then compared to give an indication
    how stationary (steady state) the signal is.
 */
-short g723_enc_fitab[16] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
+short g723_enc_fitab[ 16 ] = {0, 0, 0, 0x200, 0x200, 0x200, 0x600, 0xE00,
                             0xE00, 0x600, 0x200, 0x200, 0x200, 0, 0, 0
                            };
 
@@ -235,7 +235,7 @@ int g723_enc_abs( int num )
    g723_enc_quan()
 
    quantizes the input val against the table of size short integers.
-   It returns i if table[i - 1] <= val < table[i].
+   It returns i if table[ i - 1 ] <= val < table[ i ].
 
    Using linear search for simple coding.
 */
@@ -276,10 +276,10 @@ g723_enc_predictor_zero(
   int   i;
   int   sezi;
 
-  sezi = g723_enc_fmult( state_ptr->b[0] >> 2, state_ptr->dq[0] );
+  sezi = g723_enc_fmult( state_ptr->b[ 0 ] >> 2, state_ptr->dq[ 0 ] );
   _Pragma( "loopbound min 5 max 5" )
   for ( i = 1; i < 6; i++ )     /* ACCUM */
-    sezi += g723_enc_fmult( state_ptr->b[i] >> 2, state_ptr->dq[i] );
+    sezi += g723_enc_fmult( state_ptr->b[ i ] >> 2, state_ptr->dq[ i ] );
 
   return ( sezi );
 }
@@ -295,8 +295,8 @@ int
 g723_enc_predictor_pole(
   struct g723_enc_state_t *state_ptr )
 {
-  return ( g723_enc_fmult( state_ptr->a[1] >> 2, state_ptr->sr[1] ) +
-           g723_enc_fmult( state_ptr->a[0] >> 2, state_ptr->sr[0] ) );
+  return ( g723_enc_fmult( state_ptr->a[ 1 ] >> 2, state_ptr->sr[ 1 ] ) +
+           g723_enc_fmult( state_ptr->a[ 0 ] >> 2, state_ptr->sr[ 0 ] ) );
 }
 
 /*
@@ -482,21 +482,21 @@ g723_enc_update(
      Adaptive predictor coefficients.
   */
   if ( tr == 1 ) {      /* reset a's and b's for modem signal */
-    state_ptr->a[0] = 0;
-    state_ptr->a[1] = 0;
-    state_ptr->b[0] = 0;
-    state_ptr->b[1] = 0;
-    state_ptr->b[2] = 0;
-    state_ptr->b[3] = 0;
-    state_ptr->b[4] = 0;
-    state_ptr->b[5] = 0;
+    state_ptr->a[ 0 ] = 0;
+    state_ptr->a[ 1 ] = 0;
+    state_ptr->b[ 0 ] = 0;
+    state_ptr->b[ 1 ] = 0;
+    state_ptr->b[ 2 ] = 0;
+    state_ptr->b[ 3 ] = 0;
+    state_ptr->b[ 4 ] = 0;
+    state_ptr->b[ 5 ] = 0;
   } else {      /* update a's and b's */
-    pks1 = pk0 ^ state_ptr->pk[0];    /* UPA2 */
+    pks1 = pk0 ^ state_ptr->pk[ 0 ];    /* UPA2 */
 
-    /* update predictor pole a[1] */
-    a2p = state_ptr->a[1] - ( state_ptr->a[1] >> 7 );
+    /* update predictor pole a[ 1 ] */
+    a2p = state_ptr->a[ 1 ] - ( state_ptr->a[ 1 ] >> 7 );
     if ( dqsez != 0 ) {
-      fa1 = ( pks1 ) ? state_ptr->a[0] : -state_ptr->a[0];
+      fa1 = ( pks1 ) ? state_ptr->a[ 0 ] : -state_ptr->a[ 0 ];
       if ( fa1 < -8191 )  /* a2p = function of fa1 */
         a2p -= 0x100;
       else
@@ -504,7 +504,7 @@ g723_enc_update(
           a2p += 0xFF;
         else
           a2p += fa1 >> 5;
-      if ( pk0 ^ state_ptr->pk[1] )
+      if ( pk0 ^ state_ptr->pk[ 1 ] )
         /* LIMC */
         if ( a2p <= -12160 )
           a2p = -12288;
@@ -525,38 +525,38 @@ g723_enc_update(
     }
 
     /* TRIGB & DELAY */
-    state_ptr->a[1] = a2p;
+    state_ptr->a[ 1 ] = a2p;
 
     /* UPA1 */
-    /* update predictor pole a[0] */
-    state_ptr->a[0] -= state_ptr->a[0] >> 8;
+    /* update predictor pole a[ 0 ] */
+    state_ptr->a[ 0 ] -= state_ptr->a[ 0 ] >> 8;
     if ( dqsez != 0 )  {
       if ( pks1 == 0 )
-        state_ptr->a[0] += 192;
+        state_ptr->a[ 0 ] += 192;
       else
-        state_ptr->a[0] -= 192;
+        state_ptr->a[ 0 ] -= 192;
     }
 
     /* LIMD */
     a1ul = 15360 - a2p;
-    if ( state_ptr->a[0] < -a1ul )
-      state_ptr->a[0] = -a1ul;
+    if ( state_ptr->a[ 0 ] < -a1ul )
+      state_ptr->a[ 0 ] = -a1ul;
     else
-      if ( state_ptr->a[0] > a1ul )
-        state_ptr->a[0] = a1ul;
+      if ( state_ptr->a[ 0 ] > a1ul )
+        state_ptr->a[ 0 ] = a1ul;
 
-    /* UPB : update predictor zeros b[6] */
+    /* UPB : update predictor zeros b[ 6 ] */
     _Pragma( "loopbound min 6 max 6" )
     for ( cnt = 0; cnt < 6; cnt++ ) {
       if ( code_size == 5 )   /* for 40Kbps G.723 */
-        state_ptr->b[cnt] -= state_ptr->b[cnt] >> 9;
+        state_ptr->b[ cnt ] -= state_ptr->b[ cnt ] >> 9;
       else      /* for G.721 and 24Kbps G.723 */
-        state_ptr->b[cnt] -= state_ptr->b[cnt] >> 8;
+        state_ptr->b[ cnt ] -= state_ptr->b[ cnt ] >> 8;
       if ( dq & 0x7FFF ) {      /* XOR */
-        if ( ( dq ^ state_ptr->dq[cnt] ) >= 0 )
-          state_ptr->b[cnt] += 128;
+        if ( ( dq ^ state_ptr->dq[ cnt ] ) >= 0 )
+          state_ptr->b[ cnt ] += 128;
         else
-          state_ptr->b[cnt] -= 128;
+          state_ptr->b[ cnt ] -= 128;
       }
 
     }
@@ -564,37 +564,37 @@ g723_enc_update(
 
   _Pragma( "loopbound min 5 max 5" )
   for ( cnt = 5; cnt > 0; cnt-- )
-    state_ptr->dq[cnt] = state_ptr->dq[cnt - 1];
-  /* FLOAT A : convert dq[0] to 4-bit exp, 6-bit mantissa f.p. */
+    state_ptr->dq[ cnt ] = state_ptr->dq[ cnt - 1 ];
+  /* FLOAT A : convert dq[ 0 ] to 4-bit exp, 6-bit mantissa f.p. */
   if ( mag == 0 )
-    state_ptr->dq[0] = ( dq >= 0 ) ? 0x20 : 0xFC20;
+    state_ptr->dq[ 0 ] = ( dq >= 0 ) ? 0x20 : 0xFC20;
   else {
     exp = g723_enc_quan( mag, g723_enc_power2, 15 );
-    state_ptr->dq[0] = ( dq >= 0 ) ?
+    state_ptr->dq[ 0 ] = ( dq >= 0 ) ?
                        ( exp << 6 ) + ( ( mag << 6 ) >> exp ) :
                        ( exp << 6 ) + ( ( mag << 6 ) >> exp ) - 0x400;
 
   }
 
-  state_ptr->sr[1] = state_ptr->sr[0];
+  state_ptr->sr[ 1 ] = state_ptr->sr[ 0 ];
   /* FLOAT B : convert sr to 4-bit exp., 6-bit mantissa f.p. */
   if ( sr == 0 )
-    state_ptr->sr[0] = 0x20;
+    state_ptr->sr[ 0 ] = 0x20;
   else
     if ( sr > 0 ) {
       exp = g723_enc_quan( sr, g723_enc_power2, 15 );
-      state_ptr->sr[0] = ( exp << 6 ) + ( ( sr << 6 ) >> exp );
+      state_ptr->sr[ 0 ] = ( exp << 6 ) + ( ( sr << 6 ) >> exp );
     } else
       if ( sr > -32768 ) {
         mag = -sr;
         exp = g723_enc_quan( mag, g723_enc_power2, 15 );
-        state_ptr->sr[0] =  ( exp << 6 ) + ( ( mag << 6 ) >> exp ) - 0x400;
+        state_ptr->sr[ 0 ] =  ( exp << 6 ) + ( ( mag << 6 ) >> exp ) - 0x400;
       } else
-        state_ptr->sr[0] = 0xFC20;
+        state_ptr->sr[ 0 ] = 0xFC20;
 
   /* DELAY A */
-  state_ptr->pk[1] = state_ptr->pk[0];
-  state_ptr->pk[0] = pk0;
+  state_ptr->pk[ 1 ] = state_ptr->pk[ 0 ];
+  state_ptr->pk[ 0 ] = pk0;
 
   /* TONE */
   if ( tr == 1 )    /* this sample has been treated as data */
@@ -731,13 +731,15 @@ g723_enc_g723_24_encoder(
   /* quantize prediction difference d */
   y = g723_enc_step_size( state_ptr ); /* quantizer step size */
   i = g723_enc_quantize( d, y, g723_enc_qtab_723_24, 3 ); /* i = ADPCM code */
-  dq = g723_enc_reconstruct( i & 4, g723_enc_dqlntab[i], y ); /* quantized diff. */
+  dq = g723_enc_reconstruct( i & 4, g723_enc_dqlntab[ i ],
+                             y ); /* quantized diff. */
 
   sr = ( dq < 0 ) ? se - ( dq & 0x3FFF ) : se + dq; /* reconstructed signal */
 
   dqsez = sr + sez - se;    /* pole prediction diff. */
 
-  g723_enc_update( 3, y, g723_enc_witab[i], g723_enc_fitab[i], dq, sr, dqsez, state_ptr );
+  g723_enc_update( 3, y, g723_enc_witab[ i ], g723_enc_fitab[ i ], dq, sr, dqsez,
+                   state_ptr );
 
   return ( i );
 }
@@ -764,7 +766,7 @@ g723_enc_pack_output(
     out_buffer >>= 8;
     //fwrite(&out_byte, sizeof (char), 1, fp_out);
     //fwrite(&out_byte, 1, 1, fp_out);
-    g723_enc_OUTPUT[i] = out_byte;
+    g723_enc_OUTPUT[ i ] = out_byte;
     i =  i + 1;
   }
 
@@ -796,14 +798,14 @@ g723_enc_init_state(
 
   _Pragma( "loopbound min 2 max 2" )
   for ( cnta = 0; cnta < 2; cnta++ ) {
-    state_ptr->a[cnta] = 0;
-    state_ptr->pk[cnta] = 0;
-    state_ptr->sr[cnta] = 32;
+    state_ptr->a[ cnta ] = 0;
+    state_ptr->pk[ cnta ] = 0;
+    state_ptr->sr[ cnta ] = 32;
   }
   _Pragma( "loopbound min 6 max 6" )
   for ( cnta = 0; cnta < 6; cnta++ ) {
-    state_ptr->b[cnta] = 0;
-    state_ptr->dq[cnta] = 32;
+    state_ptr->b[ cnta ] = 0;
+    state_ptr->dq[ cnta ] = 32;
   }
   state_ptr->td = 0;
 }
@@ -815,22 +817,20 @@ void g723_enc_init()
   volatile int x = 0;
   g723_enc_init_state( &g723_enc_state );
 
-   _Pragma( "loopbound min 256 max 256" )
-  for ( i = 0; i < 256; i++ ) {
-    g723_enc_INPUT[i] += x;
-  }
+  _Pragma( "loopbound min 256 max 256" )
+  for ( i = 0; i < 256; i++ )
+    g723_enc_INPUT[ i ] += x;
 }
 
 
 int g723_enc_return()
-{ 
+{
   int i;
   int check_sum = 0;
 
-   _Pragma( "loopbound min 256 max 256" )
-  for ( i = 0; i < 256; i++ ) {
-    check_sum += g723_enc_OUTPUT[i];
-  }
+  _Pragma( "loopbound min 256 max 256" )
+  for ( i = 0; i < 256; i++ )
+    check_sum += g723_enc_OUTPUT[ i ];
 
   return ( check_sum != 24284 );
 }
@@ -856,7 +856,7 @@ void _Pragma( "entrypoint" ) g723_enc_main()
 
   _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < 256; i++ ) {
-    *in_buf = g723_enc_INPUT[i];
+    *in_buf = g723_enc_INPUT[ i ];
     code = g723_enc_g723_24_encoder( sample_short, in_coding, &g723_enc_state );
     resid = g723_enc_pack_output( code, enc_bits );
   }
