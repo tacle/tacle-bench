@@ -78,8 +78,7 @@ void lms_init( void )
   int k;
 
   lms_input[ 0 ] = 0.0;
-  _Pragma( "loopbound min 101 max 101" )
-  for ( k = 0 ; k < N ; k += 2 ) {
+  {
     double v1, v2, r;
     const double scaleFactor = 0.000000000931322574615478515625;
     do {
@@ -94,8 +93,27 @@ void lms_init( void )
 
     // remap v1 and v2 to two Gaussian numbers
     double noise = 1 / r; // approximation of sqrt(0.96) * sqrt(-log(r)/r);
-    lms_input[ k + 1 ] = lms_sinus( k )   + noise * v2;
-    lms_input[ k + 2 ] = lms_sinus( k + 1 ) + noise * v1;
+    lms_input[1] = lms_sinus(1) + noise * v2;
+  }
+
+  _Pragma( "loopbound min 100 max 100" )
+  for ( k = 2 ; k < N ; k += 2 ) {
+    double v1, v2, r;
+    const double scaleFactor = 0.000000000931322574615478515625;
+    do {
+      // generate two random numbers between -1.0 and +1.0
+      seed = seed * 1103515245 + 12345;
+      v1 = ( seed & 0x00007fffffff ) * scaleFactor - 1.0;
+      seed = seed * 1103515245 + 12345;
+      v2 = ( seed & 0x00007fffffff ) * scaleFactor - 1.0;
+      r = v1 * v1 + v2 * v2;
+    } while ( r > 1.0 );
+    // radius < 1
+
+    // remap v1 and v2 to two Gaussian numbers
+    double noise = 1 / r; // approximation of sqrt(0.96) * sqrt(-log(r)/r);
+    lms_input[ k ] = lms_sinus(k) + noise * v2;
+    lms_input[ k + 1 ] = lms_sinus(k + 1) + noise * v1;
   }
 
 }
@@ -166,9 +184,12 @@ int lms_return( void )
   double sum = 0.0;
 
   _Pragma( "loopbound min 201 max 201" )
-  for ( i = 0 ; i < N ; i++ )
-    sum += lms_output[ i ];
-  return ( int )( 1000000.0 * ( sum + 4.5052425 ) );
+  for ( i = 0 ; i < N ; i++ ) {
+      sum += lms_output[i];
+  }
+
+  return ( int )( 1000000.0 * ( sum + 4.705719 ) );
+  // How did this 'correct value' come to be? The previous calculation contained UB.
   // correct value: -4.505242517625447362661361694336
 }
 

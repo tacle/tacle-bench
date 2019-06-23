@@ -104,7 +104,7 @@ int minver_minver( int side, double eps )
 
   int work[ 500 ], i, j, k, iw;
   int r = 0;
-  double w, wmax, pivot, api, w1;
+  double w = 0, wmax, pivot, api, w1;
 
   if ( side < 2 || side > 500 || eps <= 0.0 )
     return ( 999 );

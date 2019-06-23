@@ -132,8 +132,8 @@ int dijkstra_qcount( void )
 int dijkstra_find( int chStart, int chEnd )
 {
   int ch;
-  int prev, node;
-  int cost, dist;
+  int prev, node = 0;
+  int cost, dist = 0;
   int i;
 
   _Pragma( "loopbound min 100 max 100" )
