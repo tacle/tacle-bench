@@ -12447,7 +12447,7 @@ void mpeg2_dpframe_estimate( unsigned char *ref, unsigned char *mb, int i,
 {
   int pref, ppred, delta_x, delta_y;
   int is, js, it, jt, ib, jb, it0, jt0, ib0, jb0;
-  int imins, jmins, imint, jmint, iminb, jminb, imindmv, jmindmv;
+  int imins = 0, jmins = 0, imint = 0, jmint = 0, iminb = 0, jminb = 0, imindmv = 0, jmindmv = 0;
   int vmc, local_dist;
 
 
@@ -12604,7 +12604,7 @@ void mpeg2_dpfield_estimate( unsigned char *topref, unsigned char *botref,
 {
   unsigned char *sameref, *oppref;
   int io0, jo0, io, jo, delta_x, delta_y, mvxs, mvys, mvxo0, mvyo0;
-  int imino, jmino, imindmv, jmindmv, vmc_dp, local_dist;
+  int imino = 0, jmino = 0, imindmv = 0, jmindmv = 0, vmc_dp = 0, local_dist = 0;
 
 
   /* Calculate Dual Prime distortions for 9 delta candidates */
