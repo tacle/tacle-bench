@@ -246,7 +246,7 @@ int ammunition_multiply_unsigned_integer_without_overflow_reaction
   int op1_digit_num;
   int op2_digit_num;
   int carry;
-  unsigned long int partial_sum;
+  unsigned long long int partial_sum;
   int result_digit_number;
   int overflow_flag;
   unsigned char long_result [ 2 * MAX_INTEGER_OPERAND_SIZE ];
@@ -384,8 +384,8 @@ int ammunition_divide_unsigned_integer_without_overflow_reaction
       /* Division by digit. */
       int digit_num;
       int digit;
-      unsigned long divisable;
-      unsigned long remainder;
+      unsigned long long divisable;
+      unsigned long long remainder;
 
       digit = ( ( unsigned char * ) op2 ) [ first_nonzero_digit_number ];
       ammunition_memcpy ( result, op1, ( size_t ) size );
@@ -434,7 +434,7 @@ int ammunition_divide_unsigned_integer_without_overflow_reaction
 
     _Pragma( "loopbound min 0 max 0" )
     while ( normalized_op2 [ first_nonzero_digit_number + 1 ] * q_approximation
-            > ( ( ( unsigned long int ) scaled_op1 [ scaled_op1_digit_num ]
+            > ( ( ( unsigned long long int ) scaled_op1 [ scaled_op1_digit_num ]
                   * ( UCHAR_MAX + 1 )
                   + scaled_op1 [ scaled_op1_digit_num + 1 ]
                   - q_approximation
@@ -1168,8 +1168,8 @@ ammunition_unsigned_integer_to_based_string ( int size, const void *operand,
 {
   int digit_num;
   int i;
-  unsigned long divisable;
-  unsigned long remainder;
+  unsigned long long divisable;
+  unsigned long long remainder;
   int nonzero_flag;
   int length;
   int temporary;
