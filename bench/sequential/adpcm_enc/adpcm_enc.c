@@ -267,27 +267,27 @@ int adpcm_enc_encode( int xin1, int xin2 )
 {
   int i;
   int *h_ptr, *tqmf_ptr, *tqmf_ptr1;
-  long int xa, xb;
+  long long int xa, xb;
   int decis;
 
 
   /* transmit quadrature mirror filters implemented here */
   h_ptr = adpcm_enc_h;
   tqmf_ptr = adpcm_enc_tqmf;
-  xa = ( long )( *tqmf_ptr++ ) * ( *h_ptr++ );
-  xb = ( long )( *tqmf_ptr++ ) * ( *h_ptr++ );
+  xa = ( long long )( *tqmf_ptr++ ) * ( *h_ptr++ );
+  xb = ( long long )( *tqmf_ptr++ ) * ( *h_ptr++ );
 
   /* main multiply accumulate loop for samples and coefficients */
   /* MAX: 10 */
   _Pragma( "loopbound min 10 max 10" )
   for ( i = 0; i < 10; i++ ) {
-    xa += ( long )( *tqmf_ptr++ ) * ( *h_ptr++ );
-    xb += ( long )( *tqmf_ptr++ ) * ( *h_ptr++ );
+    xa += ( long long )( *tqmf_ptr++ ) * ( *h_ptr++ );
+    xb += ( long long )( *tqmf_ptr++ ) * ( *h_ptr++ );
   }
 
   /* final mult/accumulate */
-  xa += ( long )( *tqmf_ptr++ ) * ( *h_ptr++ );
-  xb += ( long )( *tqmf_ptr ) * ( *h_ptr++ );
+  xa += ( long long )( *tqmf_ptr++ ) * ( *h_ptr++ );
+  xb += ( long long )( *tqmf_ptr ) * ( *h_ptr++ );
 
   /* update delay line tqmf */
   tqmf_ptr1 = tqmf_ptr - 2;
@@ -323,7 +323,7 @@ int adpcm_enc_encode( int xin1, int xin2 )
 
   /* invqxl: computes quantized difference signal */
   /* for invqbl, truncate by 2 lsbs, so mode = 3 */
-  adpcm_enc_dlt = ( ( long ) adpcm_enc_detl *
+  adpcm_enc_dlt = ( ( long long ) adpcm_enc_detl *
                     adpcm_enc_qq4_code4_table[ adpcm_enc_il >> 2 ] ) >> 15;
 
   /* logscl: updates logarithmic quant. scale factor in low sub band */
@@ -380,12 +380,12 @@ int adpcm_enc_encode( int xin1, int xin2 )
   else
     adpcm_enc_ih = 1;     /* 0,1 are neg codes */
 
-  decis = ( 564L * ( long )adpcm_enc_deth ) >> 12L;
+  decis = ( 564L * ( long long )adpcm_enc_deth ) >> 12L;
   if ( adpcm_enc_abs( adpcm_enc_eh ) > decis )
     adpcm_enc_ih--;     /* mih = 2 case */
 
   /* invqah: compute the quantized difference signal, higher sub-band*/
-  adpcm_enc_dh = ( ( long )adpcm_enc_deth *
+  adpcm_enc_dh = ( ( long long )adpcm_enc_deth *
                    adpcm_enc_qq2_code2_table[ adpcm_enc_ih ] ) >> 15L ;
 
   /* logsch: update logarithmic quantizer scale factor in hi sub-band*/
@@ -430,15 +430,15 @@ int adpcm_enc_encode( int xin1, int xin2 )
 int adpcm_enc_filtez( int *bpl, int *dlt )
 {
   int i;
-  long int zl;
+  long long int zl;
 
 
-  zl = ( long )( *bpl++ ) * ( *dlt++ );
+  zl = ( long long )( *bpl++ ) * ( *dlt++ );
 
   /* MAX: 5 */
   _Pragma( "loopbound min 5 max 5" )
   for ( i = 1; i < 6; i++ )
-    zl += ( long )( *bpl++ ) * ( *dlt++ );
+    zl += ( long long )( *bpl++ ) * ( *dlt++ );
 
   return ( ( int )( zl >> 14 ) ); /* x2 here */
 }
@@ -448,13 +448,13 @@ int adpcm_enc_filtez( int *bpl, int *dlt )
 /* input rlt1-2 and al1-2, output spl */
 int adpcm_enc_filtep( int rlt1, int al1, int rlt2, int al2 )
 {
-  long int pl, pl2;
+  long long int pl, pl2;
 
 
   pl = 2 * rlt1;
-  pl = ( long ) al1 * pl;
+  pl = ( long long ) al1 * pl;
   pl2 = 2 * rlt2;
-  pl += ( long ) al2 * pl2;
+  pl += ( long long ) al2 * pl2;
 
   return ( ( int )( pl >> 15 ) );
 }
@@ -464,7 +464,7 @@ int adpcm_enc_filtep( int rlt1, int al1, int rlt2, int al2 )
 int adpcm_enc_quantl( int el, int detl )
 {
   int ril, mil;
-  long int wd, decis;
+  long long int wd, decis;
 
 
   /* abs of difference signal */
@@ -474,7 +474,7 @@ int adpcm_enc_quantl( int el, int detl )
   /* MAX: 30 */
   _Pragma( "loopbound min 1 max 30" )
   for ( mil = 0; mil < 30; mil++ ) {
-    decis = ( adpcm_enc_decis_levl[ mil ] * ( long )detl ) >> 15L;
+    decis = ( adpcm_enc_decis_levl[ mil ] * ( long long )detl ) >> 15L;
     if ( wd <= decis )
       break;
   }
@@ -494,8 +494,8 @@ int adpcm_enc_quantl( int el, int detl )
 
 /*    int invqxl(int il,int detl,int *code_table,int mode) */
 /*    { */
-/*        long int dlt; */
-/*       dlt = (long)detl*code_table[ il >> (mode-1) ]; */
+/*        long long int dlt; */
+/*       dlt = (long long)detl*code_table[ il >> (mode-1) ]; */
 /*        return((int)(dlt >> 15)); */
 /*    } */
 
@@ -503,10 +503,10 @@ int adpcm_enc_quantl( int el, int detl )
 /* note that nbl is passed and returned */
 int adpcm_enc_logscl( int il, int nbl )
 {
-  long int wd;
+  long long int wd;
 
 
-  wd = ( ( long )nbl * 127L ) >> 7L; /* leak factor 127/128 */
+  wd = ( ( long long )nbl * 127L ) >> 7L; /* leak factor 127/128 */
   nbl = ( int )wd + adpcm_enc_wl_code_table[ il >> 2 ];
 
   if ( nbl < 0 )
@@ -549,7 +549,7 @@ void adpcm_enc_upzero( int dlt, int *dlti, int *bli )
   } else {
     _Pragma( "loopbound min 6 max 6" )
     for ( i = 0; i < 6; i++ ) {
-      if ( ( long )dlt * dlti[ i ] >= 0 )
+      if ( ( long long )dlt * dlti[ i ] >= 0 )
         wd2 = 128;
       else
         wd2 = -128;
@@ -575,20 +575,20 @@ void adpcm_enc_upzero( int dlt, int *dlti, int *bli )
 /* inputs: al1, al2, plt, plt1, plt2. outputs: apl2 */
 int adpcm_enc_uppol2( int al1, int al2, int plt, int plt1, int plt2 )
 {
-  long int wd2, wd4;
+  long long int wd2, wd4;
   int apl2;
 
 
-  wd2 = 4L * ( long )al1;
-  if ( ( long )plt * plt1 >= 0L )
+  wd2 = 4L * ( long long )al1;
+  if ( ( long long )plt * plt1 >= 0L )
     wd2 = -wd2;    /* check same sign */
   wd2 = wd2 >> 7;      /* gain of 1/128 */
 
-  if ( ( long )plt * plt2 >= 0L ) {
+  if ( ( long long )plt * plt2 >= 0L ) {
     wd4 = wd2 + 128;       /* same sign case */
   } else
     wd4 = wd2 - 128;
-  apl2 = wd4 + ( 127L * ( long )al2 >> 7L ); /* leak factor of 127/128 */
+  apl2 = wd4 + ( 127L * ( long long )al2 >> 7L ); /* leak factor of 127/128 */
 
   /* apl2 is limited to +-.75 */
   if ( apl2 > 12288 )
@@ -604,12 +604,12 @@ int adpcm_enc_uppol2( int al1, int al2, int plt, int plt1, int plt2 )
 /* inputs: al1, apl2, plt, plt1. outputs: apl1 */
 int adpcm_enc_uppol1( int al1, int apl2, int plt, int plt1 )
 {
-  long int wd2;
+  long long int wd2;
   int wd3, apl1;
 
 
-  wd2 = ( ( long )al1 * 255L ) >> 8L; /* leak factor of 255/256 */
-  if ( ( long )plt * plt1 >= 0L ) {
+  wd2 = ( ( long long )al1 * 255L ) >> 8L; /* leak factor of 255/256 */
+  if ( ( long long )plt * plt1 >= 0L ) {
     apl1 = ( int )wd2 + 192;  /* same sign case */
   } else
     apl1 = ( int )wd2 - 192;
@@ -629,8 +629,8 @@ int adpcm_enc_uppol1( int al1, int apl2, int plt, int plt1 )
 /* returns dh, code table is pre-multiplied by 8 */
 /*  int invqah(int ih,int deth) */
 /*  { */
-/*        long int rdh; */
-/*        rdh = ((long)deth*qq2_code2_table[ ih ]) >> 15L ; */
+/*        long long int rdh; */
+/*        rdh = ((long long)deth*qq2_code2_table[ ih ]) >> 15L ; */
 /*        return((int)(rdh )); */
 /*  } */
 
@@ -642,7 +642,7 @@ int adpcm_enc_logsch( int ih, int nbh )
   int wd;
 
 
-  wd = ( ( long )nbh * 127L ) >> 7L;   /* leak factor 127/128 */
+  wd = ( ( long long )nbh * 127L ) >> 7L;   /* leak factor 127/128 */
   nbh = wd + adpcm_enc_wh_code_table[ ih ];
 
   if ( nbh < 0 )
