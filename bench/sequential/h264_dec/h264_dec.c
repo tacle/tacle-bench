@@ -47,8 +47,8 @@ extern signed char h264_dec_mv_array[ 65 ][ 65 ][ 2 ];
 extern short h264_dec_list_imgUV[ 2 ][ 45 ][ 45 ];
 extern int h264_dec_img_m7[ 16 ][ 16 ];
 
-char h264_dec_img_mpr[ 7 ][ 7 ];
-char h264_dec_dec_picture_imgUV[ 2 ][ 64 ][ 54 ];
+signed char h264_dec_img_mpr[ 7 ][ 7 ];
+signed char h264_dec_dec_picture_imgUV[ 2 ][ 64 ][ 54 ];
 struct h264_dec_img_par h264_dec_img;
 
 
@@ -66,7 +66,7 @@ void h264_dec_init ()
 {
   unsigned int i;
   unsigned char *p;
-  volatile char bitmask = 0;
+  volatile signed char bitmask = 0;
 
   /*
     Apply volatile XOR-bitmask to entire input array.

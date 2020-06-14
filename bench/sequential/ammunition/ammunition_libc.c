@@ -145,7 +145,7 @@ int ammunition_sprintf_u( char *s, unsigned int number )
   /* How many decimal digits do we need? */
   char digits = 0;
   unsigned char writePos = 0;
-  unsigned long copyOfNumber = number;
+  unsigned long long copyOfNumber = number;
   _Pragma( "loopbound min 1 max 10" )
   do {
     digits++;
