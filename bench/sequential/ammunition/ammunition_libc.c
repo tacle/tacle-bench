@@ -85,7 +85,7 @@ void *ammunition_memmove ( void *s1, const void *s2, size_t n )
 
 int ammunition_strcmp ( const char *str1, const char *str2 )
 {
-  _Pragma( "loopbound min 1 max 4008" )
+  _Pragma( "loopbound min 1 max 11" )
   while ( *str1 && ( *str1 == *str2 ) )
     str1++, str2++;
   return *( const unsigned char * )str1 - *( const unsigned char * )str2;
@@ -99,7 +99,7 @@ int ammunition_atoi ( const char *str )
   int readingPos = 0;
   if ( str[ 0 ] == '-' || str[ 0 ] == '+' )
     readingPos++;
-  _Pragma( "loopbound min 1 max 1" )
+  _Pragma( "loopbound min 1 max 7" )
   do {
     result *= 10;
     result += str[ readingPos++ ] - 48;
