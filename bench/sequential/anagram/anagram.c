@@ -156,13 +156,11 @@
    If you increase it beyond 4, you'll have to add a few more loop unrolling
    steps to FindAnagram.
 */
-int printf(const char * restrict format, ... );
 #include "anagram_ctype.h"
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
 #include "anagram_compare.h"
-int counter1 = 0;
 
 /*
   Defines
@@ -550,7 +548,6 @@ void anagram_DumpWords( void )
 void anagram_FindAnagram( anagram_Quad *pqMask, anagram_PPWord ppwStart,
                           int iLetter )
 {
-    counter1++;
   anagram_Quad aqNext[ anagram_MAX_QUADS ];
   register anagram_PWord pw;
   anagram_Quad qMask;
@@ -647,7 +644,6 @@ void _Pragma( "entrypoint" ) anagram_main( void )
     anagram_FindAnagram( anagram_aqMainMask, anagram_apwCand, 0 );
     _Pragma( "flowrestriction 1*anagram_FindAnagram <= 51*call_find" )
   }
-  printf("1: %d\n", counter1);
 }
 
 

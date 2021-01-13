@@ -18,7 +18,6 @@
   License: See anagram.c
 
 */
-int counter2 = 0;
 #include "anagram_stdlib.h"
 #include "anagram_strings.h"
 
@@ -26,7 +25,6 @@ int counter2 = 0;
 /* This function is included here because the WCC does not */
 /* support function pointers */
 #include "anagram_compare.h"
-int printf(const char * restrict format, ... );
 
 void anagram_swapi( char *ii, char *ij, unsigned long es )
 {
@@ -74,7 +72,6 @@ void anagram_qsorts( char *a, unsigned long n, unsigned long es )
   unsigned long j;
   char *pi, *pj, *pn;
   volatile unsigned int flowfactdummy = 0;
-        counter2++;
   _Pragma( "loopbound min 0 max 3" )
   while ( n > 1 ) {
     if ( n > 10 )
@@ -121,7 +118,6 @@ void anagram_qsort( void *va, unsigned long n, unsigned long es )
   _Pragma( "marker call_qsorts" )
   anagram_qsorts( ( char * )va, n, es );
   _Pragma( "flowrestriction 1*anagram_qsorts <= 17*call_qsorts" )
-  printf("2: %d\n", counter2);
 }
 
 
