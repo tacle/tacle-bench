@@ -48,8 +48,6 @@
 /*
   Declaration of types
 */
-int printf(const char * restrict format, ... );
-int counter1 = 0;
 typedef struct huff_enc_s_tree {
   unsigned int byte; /* A byte has to be coded as an unsigned integer to
                         allow a node to have a value over 255 */
@@ -366,8 +364,6 @@ void huff_enc_qsort( char *a, unsigned long n, unsigned long es )       //wird i
   unsigned long j;
   char *pi, *pj, *pn;
   unsigned int flowfactdummy = 0;
-  counter1++;
-  printf("%d\n", counter1);
   _Pragma( "loopbound min 0 max 7" )
   while ( n > 1 ) {
     if ( n > 10 )
