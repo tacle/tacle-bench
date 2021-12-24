@@ -241,7 +241,7 @@ int fft_convert( float value )
     rnd_val = 1;
     if ( frac < 0.5f ) rnd_val = 0;
   }
-  int_val = man + rnd_val;
+  int_val = (long)man + (long)rnd_val;
 
   pm_val = int_val ;
   return ( ( int ) ( pm_val ) ) ;
