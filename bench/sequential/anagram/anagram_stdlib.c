@@ -122,7 +122,7 @@ void anagram_qsort( void *va, unsigned long n, unsigned long es )
 
 
 /* This must be redefined for each new benchmark */
-#define ANAGRAM_HEAP_SIZE 18000
+#define ANAGRAM_HEAP_SIZE 21000
 
 static char anagram_simulated_heap[ANAGRAM_HEAP_SIZE];
 static unsigned int anagram_freeHeapPos;
