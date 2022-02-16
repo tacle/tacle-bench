@@ -305,6 +305,7 @@ void anagram_ReadDict( void )
     len += strlen + 3;
   }
 
+  len ++;
   pchBase = anagram_pchDictionary = ( char * )anagram_malloc( len );
 
   _Pragma( "loopbound min 2279 max 2279" )
