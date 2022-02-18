@@ -69,17 +69,21 @@ void sha_transform( struct SHA_INFO *sha_info )
 
 
   _Pragma( "loopbound min 20 max 20" )
-  for ( i = 0; i < 20; ++i )
+  for ( i = 0; i < 20; ++i ) {
     FUNC( 1, i );
+  }
   _Pragma( "loopbound min 20 max 20" )
-  for ( i = 20; i < 40; ++i )
+  for ( i = 20; i < 40; ++i ) {
     FUNC( 2, i );
+  }
   _Pragma( "loopbound min 20 max 20" )
-  for ( i = 40; i < 60; ++i )
+  for ( i = 40; i < 60; ++i ) {
     FUNC( 3, i );
+  }
   _Pragma( "loopbound min 20 max 20" )
-  for ( i = 60; i < 80; ++i )
+  for ( i = 60; i < 80; ++i ) {
     FUNC( 4, i );
+  }
   sha_info->digest[ 0 ] += A;
   sha_info->digest[ 1 ] += B;
   sha_info->digest[ 2 ] += C;
