@@ -102,15 +102,15 @@ void powerwindow_PW_Control_PSG_BackR_initialize( void )
       ( NULL ) );
 
   /* states (dwork) */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_PSG_BackR_DWork, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_PSG_BackR_DWork, 0,
                    sizeof( powerwindow_D_Work_PW_Control_PSG_BackR ) );
 
   /* external inputs */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_PSG_BackR_U, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_PSG_BackR_U, 0,
                    sizeof( powerwindow_ExternalInputs_PW_Control_PSG_BackR ) );
 
   /* external outputs */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_PSG_BackR_Y, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_PSG_BackR_Y, 0,
                    sizeof( powerwindow_ExternalOutputs_PW_Control_PSG_BackR ) );
 
   /* Model Initialize fcn for ModelReference Block: '<S1>/ControlEx_PSG_BackR' */

@@ -85,11 +85,11 @@ void powerwindow_debounce_initialize( const powerwindow_char_T **rt_errorStatus,
   powerwindow_rtmSetErrorStatusPointer( debounce_M, rt_errorStatus );
 
   /* block I/O */
-  ( void ) memset( ( ( void * ) localB ), 0,
+  ( void ) wcclib_memset( ( ( void * ) localB ), 0,
                    sizeof( powerwindow_rtB_debounce_T ) );
 
   /* states (dwork) */
-  ( void ) memset( ( void * )localDW, 0,
+  ( void ) wcclib_memset( ( void * )localDW, 0,
                    sizeof( powerwindow_rtDW_debounce_T ) );
   localZCE->Chart_Trig_ZCE = powerwindow_POS_ZCSIG;
 }

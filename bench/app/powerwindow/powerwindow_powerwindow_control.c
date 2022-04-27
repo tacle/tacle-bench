@@ -538,11 +538,11 @@ void powerwindow_powerwindow_control_initialize( const powerwindow_char_T
       rt_errorStatus );
 
   /* block I/O */
-  ( void ) memset( ( ( void * ) localB ), 0,
+  ( void ) wcclib_memset( ( ( void * ) localB ), 0,
                    sizeof( powerwindow_rtB_PowerWindow_control ) );
 
   /* states (dwork) */
-  ( void ) memset( ( void * )localDW, 0,
+  ( void ) wcclib_memset( ( void * )localDW, 0,
                    sizeof( powerwindow_rtDW_PowerWindow_control ) );
   localZCE->stateflowcontrolmodel_Trig_ZCE = powerwindow_UNINITIALIZED_ZCSIG;
 }
