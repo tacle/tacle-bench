@@ -134,15 +134,15 @@ void powerwindow_PW_Control_DRV_initialize( void )
   /* Registration code */
 
   /* states (dwork) */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_DR_DWork, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_DR_DWork, 0,
                    sizeof( powerwindow_D_Work_powerwindow_PW_Control_D ) );
 
   /* external inputs */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_DRV_U, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_DRV_U, 0,
                    sizeof( powerwindow_ExternalInputs_powerwindow_PW_C ) );
 
   /* external outputs */
-  ( void ) memset( ( void * )&powerwindow_PW_Control_DRV_Y, 0,
+  ( void ) wcclib_memset( ( void * )&powerwindow_PW_Control_DRV_Y, 0,
                    sizeof( powerwindow_ExternalOutputs_powerwindow_PW_ ) );
 
   /* Model Initialize fcn for ModelReference Block: '<S2>/Debounce_Down_DRV' */

@@ -9,6 +9,6 @@
 
 #define NULL ( (void *) 0)
 
-void *memset( void *s, int c, size_t n );
+void *wcclib_memset( void *s, int c, size_t n );
 
 #endif // _WCCLIB
