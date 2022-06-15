@@ -72,17 +72,17 @@ void h264_dec_init ()
     Apply volatile XOR-bitmask to entire input array.
   */
   p = ( unsigned char * ) &h264_dec_mv_array[  0  ];
-  _Pragma( "loopbound min 33800 max 33800" )                    
+  _Pragma( "loopbound min 8450 max 8450" )                    
   for ( i = 0; i < sizeof( h264_dec_mv_array ); ++i, ++p )
     *p ^= bitmask;
 
   p = ( unsigned char * ) &h264_dec_list_imgUV[  0  ];
-  _Pragma( "loopbound min 16200 max 16200" )                    
+  _Pragma( "loopbound min 4050 max 4050" )                    
   for ( i = 0; i < sizeof( h264_dec_list_imgUV ); ++i, ++p )
     *p ^= bitmask;
 
   p = ( unsigned char * ) &h264_dec_img_m7[  0  ];
-  _Pragma( "loopbound min 1024 max 1024" )
+  _Pragma( "loopbound min 256 max 256" )
   for ( i = 0; i < sizeof( h264_dec_img_m7 ); ++i, ++p )
     *p ^= bitmask;
 
