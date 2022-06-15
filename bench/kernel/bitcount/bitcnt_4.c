@@ -72,8 +72,12 @@ int bitcount_ntbl_bitcnt( unsigned long x )
 
 int bitcount_btbl_bitcnt( unsigned long x )
 {
-
-  int cnt = bitcount_bits[  ( ( char * ) & x )[ 0 ] & 0xFF  ];
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  int idx = sizeof(x) - 1;
+#else
+  int idx =  0;
+#endif
+  int cnt = bitcount_bits[( ( char * ) & x )[idx] & 0xFF];
 
   if ( 0L != ( x >>= 8 ) )
     cnt += bitcount_btbl_bitcnt( x );
