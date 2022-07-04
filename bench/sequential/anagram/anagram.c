@@ -342,7 +342,7 @@ void anagram_init( void )
 int anagram_return( void )
 {
   int i;
-  char const *answer = "duke rip amy";
+  char const *answer = "duke yip arm";
 
   _Pragma( "loopbound min 12 max 12" )
   for ( i = 0; i < 12; i++ )
