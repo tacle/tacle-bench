@@ -302,9 +302,10 @@ void anagram_ReadDict( void )
     _Pragma( "loopbound min 1 max 5" )
     while ( anagram_dictionary[ i ][ strlen ] != 0 )
       strlen ++;
-    len += strlen + 2;
+    len += strlen + 3;
   }
 
+  len ++;
   pchBase = anagram_pchDictionary = ( char * )anagram_malloc( len );
 
   _Pragma( "loopbound min 2279 max 2279" )
@@ -341,7 +342,7 @@ void anagram_init( void )
 int anagram_return( void )
 {
   int i;
-  char const *answer = "duke rip amy";
+  char const *answer = "duke yip arm";
 
   _Pragma( "loopbound min 12 max 12" )
   for ( i = 0; i < 12; i++ )
