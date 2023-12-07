@@ -18,6 +18,7 @@
   Source: https://github.com/tacle/tacle-bench/blob/master/bench/app/PowerWindow/powerwindow.c
 
   Changes: a brief summary of major functional changes and formatting)
+  * 2023-12-07: Added loop bounds
 
   License: GNU General Public License
 
@@ -413,7 +414,7 @@ void powerwindow_Booleaninputarray_initialize( powerwindow_boolean_T *arrayA,
 {
 
   register int i;
-//    _Pragma( "loopbound min powerwindow_input_length max powerwindow_input_length" )
+  _Pragma( "loopbound min 977 max 977" )
   for ( i = 0; i < powerwindow_input_length; i++ )
     arrayA[ i ] = arrayB[ i ];
 }
@@ -423,7 +424,7 @@ void powerwindow_Uint8inputarray_initialize( powerwindow_uint8_T *arrayA,
 {
 
   register int i;
-//    _Pragma( "loopbound min powerwindow_input_length max powerwindow_input_length" )
+  _Pragma( "loopbound min 977 max 977" )
   for ( i = 0; i < powerwindow_input_length; i++ )
     arrayA[ i ] = arrayB[ i ];
 }
@@ -683,6 +684,7 @@ void _Pragma( "entrypoint" ) powerwindow_main( void )
   powerwindow_input_initialize_PSG_BackL();
   powerwindow_input_initialize_PSG_BackR();
 
+  _Pragma( "loopbound min 977 max 977" )
   while ( powerwindow_main_inputcyclecounter < powerwindow_input_length ) {
 
     powerwindow_init_DRV( powerwindow_main_inputcyclecounter );
