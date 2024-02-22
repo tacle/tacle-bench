@@ -1259,7 +1259,7 @@ int statemate_return()
   int index;
   _Pragma( "loopbound min 64 max 64" )
   for ( index = 63 ; index >= 0 ; index-- )
-    checksum += ( unsigned long ) ( statemate_bitlist[ index ] << index );
+    checksum += ( unsigned long ) ( statemate_bitlist[ index ] ) << index;
   return ( checksum != 32ul );
 }
 
