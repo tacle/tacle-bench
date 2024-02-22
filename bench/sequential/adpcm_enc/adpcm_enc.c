@@ -219,7 +219,8 @@ int adpcm_enc_fabs( int n )
   return f;
 }
 
-
+#pragma GCC push_options
+#pragma GCC optimize "-fwrapv"
 int adpcm_enc_sin( int rad )
 {
   int diff;
@@ -254,6 +255,7 @@ int adpcm_enc_sin( int rad )
 
   return app;
 }
+#pragma GCC pop_options
 
 
 int adpcm_enc_cos( int rad )
