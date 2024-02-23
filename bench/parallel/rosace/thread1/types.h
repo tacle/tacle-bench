@@ -50,7 +50,12 @@
 #define REAL_TYPE double
 #endif
 
+#if __STDC_VERSION__ >= 199901L
+#include <stdint.h>
+#else
 typedef unsigned long long uint64_t;
+#endif
+
 
 /* we need forward declaration only in order
  * to avoid redefinition in assemblage_vX generated headers
