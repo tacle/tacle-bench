@@ -1864,6 +1864,7 @@ void gsm_enc_Reflection_coefficients (
     temp = GSM_ABS( temp );
     if ( P[ 0 ] < temp ) {
                 
+      _Pragma( "loopbound min 1 max 8" )
       for ( i = n; i <= 8; i++ ) *r++ = 0; _Pragma( "marker inner-marker" ) 
       return; _Pragma( "flowrestriction 1*inner-marker <= 36*outer-marker" )
     }
