@@ -103,8 +103,7 @@ int dijkstra_enqueue( int node, int dist, int prev )
   if ( !last )
     dijkstra_queueHead = newItem;
   else {
-    /* TODO: where does this magic loop bound come from? */
-    _Pragma( "loopbound min 0 max 313" )
+    _Pragma( "loopbound min 0 max 1000" )
     while ( last->next )
       last = last->next;
     last->next = newItem;
@@ -149,9 +148,8 @@ int dijkstra_find( int chStart, int chEnd )
 
     if ( dijkstra_enqueue ( chStart, 0, NONE ) == OUT_OF_MEMORY )
       return OUT_OF_MEMORY;
-
-    /* TODO: where does this magic loop bound come from? */
-    _Pragma( "loopbound min 618 max 928" )
+    
+    _Pragma( "loopbound min 100 max 1000" )
     while ( dijkstra_qcount() > 0 ) {
       dijkstra_dequeue ( &node, &dist, &prev );
       _Pragma( "loopbound min 100 max 100" )
